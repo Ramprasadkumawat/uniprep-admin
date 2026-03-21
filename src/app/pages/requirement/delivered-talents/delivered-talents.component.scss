@@ -1,0 +1,321 @@
+// Header section
+.header-section {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 0;
+
+  @media (min-width: 768px) {
+    padding: 1.5rem;
+  }
+}
+
+.form-title {
+  color: #333 !important;
+  font-weight: 600;
+  font-size: 1.25rem;
+
+  @media (min-width: 768px) {
+    font-size: 1.5rem;
+  }
+
+  span {
+    color: #333 !important;
+  }
+}
+
+// Header buttons
+.how-it-works-btn {
+  border: 1px solid #ff8c00 !important;
+  color: #ff8c00 !important;
+  background-color: transparent !important;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem !important;
+
+  @media (min-width: 768px) {
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem !important;
+  }
+
+  &:hover {
+    background-color: #ff8c00 !important;
+    color: white !important;
+  }
+
+  i {
+    color: #ff8c00;
+    font-size: 0.875rem;
+
+    @media (min-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+
+  &:hover i {
+    color: white !important;
+  }
+}
+
+// Form container
+.card-body {
+  background-color: #f5f5f5;
+  padding: 1rem;
+
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
+}
+
+// Form fields - white cards
+.form-group {
+  background-color: white;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+
+  input,
+  textarea,
+  select {
+    background-color: white !important;
+  }
+
+  @media (min-width: 768px) {
+    padding: 1.25rem;
+  }
+
+  .d-flex {
+    @media (max-width: 767px) {
+      flex-direction: column;
+      gap: 0.5rem !important;
+
+      .w-25 {
+        width: 100% !important;
+      }
+
+      .flex-grow-1 {
+        width: 100%;
+      }
+
+      .salary-currency-select {
+        width: 100% !important;
+      }
+    }
+  }
+
+  .salary-currency-select {
+    width: 120px;
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  display: block;
+  color: #333;
+  font-size: 0.875rem;
+
+  @media (min-width: 768px) {
+    font-size: 0.95rem;
+  }
+
+  i {
+    font-size: 0.875rem;
+
+    @media (min-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Editor field cards
+.editor-field-card {
+  .form-label {
+    margin-bottom: 0;
+  }
+}
+
+// AI Generate button
+.ai-generate-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background-color: #218838;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  i {
+    font-size: 0.875rem;
+  }
+}
+
+// Rephrase button
+.rephrase-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background-color: #5a6268;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Character counter
+.char-counter {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+// Add More Language button
+.add-language-btn {
+  background-color: #ff8c00 !important;
+  color: white !important;
+  border: none !important;
+  white-space: wrap;
+  height: fit-content;
+  padding: 0.5rem 1rem;
+  width: 100px;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: #e67e00 !important;
+  }
+}
+
+// Language remove button and spacer for alignment
+.language-remove-btn {
+  width: 40px;
+  min-width: 40px;
+  flex-shrink: 0;
+}
+
+// Submit Talent button
+.submit-talent-btn {
+  background-color: #6c63ff !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 600 !important;
+  padding: 0.75rem 2rem !important;
+
+  &:hover:not(:disabled) {
+    background-color: #5548d9 !important;
+  }
+
+  &:disabled {
+    background-color: #cccccc !important;
+    color: #666666 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6 !important;
+  }
+}
+
+// Text colors
+.text-warning {
+  color: #ff8c00 !important;
+}
+
+.text-danger {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+::ng-deep {
+  // Editor styling
+  .p-editor-container {
+    background-color: white;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+
+    .p-editor-toolbar {
+      background-color: #f8f9fa;
+      border: none;
+      border-bottom: 1px solid #dee2e6;
+      border-radius: 6px 6px 0 0;
+      padding: 0.5rem;
+    }
+
+    .p-editor-content {
+      border: none;
+      border-radius: 0 0 6px 6px;
+      min-height: 150px;
+    }
+
+    .ql-editor {
+      min-height: 150px;
+    }
+  }
+
+  // Input fields styling
+  .p-select,
+  .p-multiselect,
+  .p-inputtext,
+  .p-inputnumber-input,
+  .p-datepicker-input {
+    background-color: white !important;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    color: #333;
+
+    &:focus {
+      border-color: #ff8c00;
+      box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, 0.25);
+      background-color: white !important;
+    }
+
+    &::placeholder {
+      color: #6c757d;
+    }
+  }
+
+  // Order ID uppercase styling
+  .order-id-uppercase {
+    text-transform: uppercase;
+  }
+
+  // Dropdown panel
+  .p-select-panel,
+  .p-dropdown-panel {
+    background-color: white !important;
+  }
+
+  .p-button.p-button-sm {
+    min-width: 40px;
+    width: 40px;
+    flex-shrink: 0;
+  }
+}
+

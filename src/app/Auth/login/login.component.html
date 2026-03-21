@@ -1,0 +1,62 @@
+<section>
+	<div id="top" class="container-fluid ps-md-0">
+		<div class="row g-0 h-full align-items-center">
+			<div class="col-md-6 offset-md-3">
+				<div class="card card-body border-0 shadow-sm p-4" style="max-width: 550px; margin: auto">
+					<img style="width: 200px; margin: auto" src="../../../assets/images/uniprep-light.svg" />
+					<h3 class="mt-2" style="color: #001631; font-size: 25px; text-align: center">Welcome</h3>
+					<h5 class="login-heading mt-3 mb-4 text-center">Login to your <span class="font-primarycolor bold">UNIPREP</span> Admin Panel.</h5>
+					<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+						<div class="form-group">
+							<label>Email Address</label>
+							<input type="email" pInputText autocomplete="username" id="floatingInput" class="form-control" placeholder="name@example.com" formControlName="email" />
+							<div *ngIf="submitted && f.email.errors" class="text-danger">
+								<div *ngIf="f.email.errors.required">Email is required</div>
+								<div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+							</div>
+						</div>
+						<br />
+						<div class="form-group">
+							<label>Password</label>
+							<div class="flex-nowrap position-relative">
+								<input [type]="password" autocomplete="current-password" pInputText id="passwordInput" class="form-control" placeholder="Password" formControlName="password" />
+								<span class="passwordvisibility" (click)="showPassword()">
+									<img src="../../../assets/icons/viewpassword.svg" *ngIf="!show" />
+									<img src="../../../assets/icons/hidepassword.svg" *ngIf="show" />
+								</span>
+							</div>
+							<div *ngIf="submitted && f.password.errors" class="text-danger">
+								<div *ngIf="f.password.errors.required">Password is required</div>
+							</div>
+						</div>
+
+						<div class="text-end mt-2">
+							<a class="small text-decoration-none uniprep-lightgray" [routerLink]="['/auth/forgot-password']">Forgot my password?</a>
+						</div>
+						<br />
+						<div class="d-grid">
+							<button class="pt-3 pb-3 btn btn-primary btn-login text-uppercase fw-bold m-0" type="submit">Sign in</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer id="footer">
+		<div class="ps-1">
+			<a>2022 © All rights reserved by UNIABROAD Ltd.</a>
+		</div>
+		<div class="pe-1">
+			<ul>
+				<!--        <li>TERMS AND CONDTIONS</li>-->
+				<!--        <li class="px-2">|</li>-->
+				<!--        <li>PRIVACY POLICY</li>-->
+				<!--        <li class="px-2">|</li>-->
+				<!--        <li>ABOUT US</li>-->
+				<!--        <li class="px-2">|</li>-->
+				<!--        <li>CONTACT US</li>-->
+			</ul>
+		</div>
+	</footer>
+</section>

@@ -1,0 +1,282 @@
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}" (onClose)="closeAccodion()">
+    <p-accordion-panel value="1" *ngIf="addsubscription">
+        <p-accordion-header>Employer Add Subscription</p-accordion-header>
+        <p-accordion-content>
+            <form [formGroup]="form" (ngSubmit)="submitForm()">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Subscription Plan</label>
+                            <p-select styleClass="w-full" formControlName="planname" [options]="subscriptionPlanList"
+                                optionValue="name" optionLabel="name" placeholder="Select"></p-select>
+                            <div *ngIf="submitted && f.planname.errors" class="text-danger text-xs">
+                                <div *ngIf="f.planname.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Actual Price</label>
+                            <input type="text" formControlName="actualprice" class="form-control" pInputText />
+                            <div *ngIf="submitted && f.actualprice.errors" class="text-danger text-xs">
+                                <div *ngIf="f.actualprice.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <div class="form-group">
+                            <label>Given Price</label>
+                            <input type="text" formControlName="givenprice" class="form-control" pInputText />
+                            <div *ngIf="submitted && f.givenprice.errors" class="text-danger text-xs">
+                                <div *ngIf="f.givenprice.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <div class="form-group">
+                            <label>Discount</label>
+                            <input type="text" formControlName="discount" class="form-control" pInputText />
+                            <div *ngIf="submitted && f.discount.errors" class="text-danger text-xs">
+                                <div *ngIf="f.discount.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Country</label>
+                            <p-select styleClass="w-full" formControlName="country" [options]="countryList"
+                                optionValue="id" optionLabel="country_name" placeholder="Select"></p-select>
+                            <div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+                                <div *ngIf="f.country.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Currency</label>
+                            <p-select styleClass="w-full" formControlName="currency" [options]="currencyoption"
+                                optionValue="id" optionLabel="name" placeholder="Select"></p-select>
+                            <div *ngIf="submitted && f.currency.errors" class="text-danger text-xs">
+                                <div *ngIf="f.currency.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Validity</label>
+                            <p-select styleClass="w-full" formControlName="validity" [options]="validityoption"
+                                optionValue="id" optionLabel="name" placeholder="Select"></p-select>
+                            <div *ngIf="submitted && f.validity.errors" class="text-danger text-xs">
+                                <div *ngIf="f.validity.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Talent Access Count</label>
+                            <input type="text" formControlName="talent_access" class="form-control" pInputText />
+                            <div *ngIf="submitted && f.talent_access.errors" class="text-danger text-xs">
+                                <div *ngIf="f.talent_access.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Document Access Count</label>
+                            <input type="text" formControlName="document_access" class="form-control" pInputText />
+                            <div *ngIf="submitted && f.document_access.errors" class="text-danger text-xs">
+                                <div *ngIf="f.document_access.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Hiring Access Count</label>
+                            <input type="text" formControlName="hiring_access" class="form-control" pInputText />
+                            <div *ngIf="submitted && f.hiring_access.errors" class="text-danger text-xs">
+                                <div *ngIf="f.hiring_access.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="mt-2 text-right">
+                        <button type="submit" class="btn btn-primary">Add Subscription</button>
+                    </div>
+                </div>
+            </form>
+        </p-accordion-content>
+    </p-accordion-panel>
+
+    <p-accordion-panel value="2" *ngIf="editsubscription">
+        <p-accordion-header>Edit Employer Subscription</p-accordion-header>
+        <p-accordion-content>
+            <form [formGroup]="editform" (ngSubmit)="editFormSubmit()">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Subscription Plan</label>
+                            <p-select styleClass="w-full" formControlName="planname" [options]="subscriptionPlanList"
+                                optionValue="name" optionLabel="name" placeholder="Select"></p-select>
+                            <div *ngIf="editFormSubmitted && ef.planname.errors" class="text-danger text-xs">
+                                <div *ngIf="ef.planname.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Actual Price</label>
+                            <input type="text" formControlName="actualprice" class="form-control" pInputText />
+                            <div *ngIf="editFormSubmitted && ef.actualprice.errors" class="text-danger text-xs">
+                                <div *ngIf="ef.actualprice.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <div class="form-group">
+                            <label>Given Price</label>
+                            <input type="text" formControlName="givenprice" class="form-control" pInputText />
+                            <div *ngIf="editFormSubmitted && ef.givenprice.errors" class="text-danger text-xs">
+                                <div *ngIf="ef.givenprice.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <div class="form-group">
+                            <label>Discount</label>
+                            <input type="text" formControlName="discount" class="form-control" pInputText />
+                            <div *ngIf="editFormSubmitted && ef.discount.errors" class="text-danger text-xs">
+                                <div *ngIf="ef.discount.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Country</label>
+                            <p-select styleClass="w-full" formControlName="country" [options]="countryList"
+                                optionValue="id" optionLabel="country_name" placeholder="Select"></p-select>
+                            <div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+                                <div *ngIf="f.country.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Currency</label>
+                            <p-select styleClass="w-full" formControlName="currency" [options]="currencyoption"
+                                optionValue="id" optionLabel="name" placeholder="Select"></p-select>
+                            <div *ngIf="submitted && f.currency.errors" class="text-danger text-xs">
+                                <div *ngIf="f.currency.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Validity</label>
+                            <p-select styleClass="w-full" formControlName="validity" [options]="validityoption"
+                                optionValue="id" optionLabel="name" placeholder="Select"></p-select>
+                            <div *ngIf="submitted && f.validity.errors" class="text-danger text-xs">
+                                <div *ngIf="f.validity.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Talent Access Count</label>
+                            <input type="text" formControlName="talent_access" class="form-control" pInputText />
+                            <div *ngIf="submitted && f.talent_access.errors" class="text-danger text-xs">
+                                <div *ngIf="f.talent_access.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Document Access Count</label>
+                            <input type="text" formControlName="document_access" class="form-control" pInputText />
+                            <div *ngIf="submitted && f.document_access.errors" class="text-danger text-xs">
+                                <div *ngIf="f.document_access.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mt-2">
+                        <div class="form-groupm">
+                            <label>Hiring Access Count</label>
+                            <input type="text" formControlName="hiring_access" class="form-control" pInputText />
+                            <div *ngIf="submitted && f.hiring_access.errors" class="text-danger text-xs">
+                                <div *ngIf="f.hiring_access.errors.required">Required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2 text-right">
+                        <button type="submit" class="btn btn-primary">Update Subscription</button>
+                    </div>
+                </div>
+            </form>
+        </p-accordion-content>
+    </p-accordion-panel>
+</p-accordion>
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex w-full align-items-center justify-content-between mobile-subscription">
+            <span class="h6 fw-bold">Employer Subscription Manager</span>
+
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary" (click)="navigateStudentSubscription()">Employer View &nbsp; <i
+                        class="pi pi-th-large"></i></button>
+                <button class="btn btn-primary" (click)="navigateSubscriptionHistory()">Update History &nbsp; <i
+                        class="pi pi-history"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <p-table size="small" [scrollable]="true" [value]="subscriptionList" [paginator]="true" [lazy]="true"
+            (onPage)="pageChange($event)" [rows]="pageSize" [totalRecords]="subscriptionCount"
+            [tableStyle]="{ 'min-width': '70rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Subscription Plan</th>
+                    <th>Actual Price</th>
+                    <th>Given Price</th>
+                    <th>Discount</th>
+                    <th>Validity</th>
+                    <th>Talent Access Count</th>
+                    <th>Document Access Count</th>
+                    <th>Hiring Access Count</th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sub>
+                <tr>
+                    <td>{{ sub.plan_name }}
+                    </td>
+                    <td>{{ sub.actualprice | number : "1.0-0" }} {{ sub.currency }}</td>
+                    <td>{{ sub.givenprice | number : "1.0-0" }} {{ sub.currency }}</td>
+                    <td>{{ sub.discount | number : "1.0-0" }} %</td>
+                    <td>{{ sub.validity | number : "2.0-0" }} Months</td>
+                    <td>{{ sub.talent_access }}
+                    </td>
+                    <td>{{ sub.document_access }}
+                    </td>
+                    <td>{{ sub.hiring_access }}
+                    </td>
+                    <td>
+                        <span (click)="editoption(sub)" style="cursor: pointer"><span
+                                style="color: var(--p-primary-500)"><i
+                                    class="fa-solid fa-pen-to-square"></i></span>&nbsp; Edit</span>
+                        <span (click)="deleteSubscription($event,sub?.id)" style="cursor: pointer"><span
+                                style="color: var(--p-primary-500)"><i class="fa-solid fa-trash"></i></span>&nbsp;
+                            Delete</span>
+                        <p-confirmpopup></p-confirmpopup>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

@@ -1,0 +1,459 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+						<p-accordion-header>Filter By</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filtersubmit()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mobile</label>
+							<input formControlName="mobile" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Country (Multiselect)</label>
+							<p-multiselect class="custom-multiselect" formControlName="country" optionValue="id" optionLabel="name" styleClass="w-full" [options]="intcountries"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Module</label>
+							<p-select formControlName="module" optionValue="id" optionLabel="module_name" styleClass="w-full" [options]="modulelist" [filter]="true" filterBy="module_name" [showClear]="true" (onChange)="getSubModulesList($event)"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Sub-Module</label>
+							<p-select formControlName="submodule" optionValue="id" optionLabel="submodule_name" styleClass="w-full" [filter]="true" filterBy="submodule_name" [showClear]="true" [options]="submodulelist"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Issue</label>
+							<p-select formControlName="issue" placeholder="Select Issue Type" optionValue="id" optionLabel="reportoption_name" styleClass="w-full" [options]="issueList"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>User Type</label>
+							<p-select styleClass="w-full" formControlName="userType" optionValue="id" optionLabel="subtypeName" [options]="leadList"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select styleClass="w-full" formControlName="actionStatus" optionValue="id" optionLabel="name" [options]="statusOptions"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3 mt-1">
+					<div class="col-12 text-right">
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" label="Reset Filter" (click)="reset()"></button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton type="submit" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" label="Filter"></button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<!-- table list -->
+
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="reports" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [rows]="pageSize" [totalRecords]="datacount" [rowsPerPageOptions]="[10, 25, 50]">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<span
+				>Ticket List<br /><span style="color: #a1a1a1; font-size: 10px">Total Tickets: {{ datacount }}</span></span
+			>
+			<button class="ps-3 pe-3 pt-2 pb-2" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" pButton (click)="reportExport()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell">No.</th>
+			<th class="border-cell">User Details</th>
+			<th class="border-cell">Status</th>
+			<th class="border-cell">User Type</th>
+			<th class="border-cell">Country</th>
+			<th class="border-cell">Report Date</th>
+			<th class="border-cell">Modules</th>
+			<th class="border-cell">Sub Modules</th>
+			<th class="border-cell">Question</th>
+			<th class="border-cell">Issue</th>
+			<th class="border-cell">View</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-report>
+		<tr>
+			<td class="border-cell">{{ report.reportId }}</td>
+			<td class="border-cell">
+				{{ report.name }}
+				<br />
+				<span>{{ report.email }}</span>
+				<br />
+				<span>{{ report.phone }}</span>
+			</td>
+			<td class="border-cell">{{ report.status }}</td>
+			<td class="border-cell">{{ report?.usertype }}</td>
+			<td class="border-cell">{{ report.country }}</td>
+			<td class="border-cell">{{ report.date }}</td>
+			<td class="border-cell">{{ report.modules }}</td>
+			<td class="border-cell">{{ report.submodule }}</td>
+			<td class="border-cell">{{ report.question }}</td>
+			<td class="border-cell">{{ report.issue }}</td>
+			<td class="border-cell">
+				<span class="expand-icon">
+					<span (click)="getQuestion(report)"> <i [class]="'pi ' + (report.expanded ? 'pi pi-minus' : 'pi pi-plus')" [ngClass]="'custom-icon'"></i></span>
+				</span>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+<!-- <p-dialog
+  [(visible)]="questionModal"
+  [modal]="true"
+  header="{{ moduleName }} - {{ cardHeader }}"
+  [style]="{ width: '90vw' }"
+>
+  <form #formElm [formGroup]="form" (ngSubmit)="submitForm()">
+    <div class="form-group pb-2">
+      <label>Question</label>
+      <input
+        type="text"
+        formControlName="question"
+        styleClass="w-full"
+        class="form-control"
+        pInputText
+      />
+      <div *ngIf="submitted && f.question.errors" class="text-danger text-xs">
+        <div *ngIf="f.question.errors.required">Required</div>
+      </div>
+    </div>
+    <div class="form-group pb-2">
+      <label>Answer</label>
+      <p-editor
+        #editor
+        formControlName="answer"
+        escape="false"
+        class="newClass"
+        [(ngModel)]="htmlValue"
+        [style]="{ height: '200px' }"
+      ></p-editor>
+      <div *ngIf="submitted && f.answer.errors" class="text-danger text-xs">
+        <div *ngIf="f.answer.errors.required">Required</div>
+      </div>
+    </div>
+    <div class="row pb-2">
+      <div class="col-md-6 col-12">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-10">
+              <label>Source Link with Video</label>
+            </div>
+            <div class="col-md-2">
+              <p-button
+                (click)="addControl()"
+                icon="pi pi-plus-circle"
+                styleClass="p-button-rounded p-button-text p-button-success"
+              ></p-button>
+            </div>
+          </div>
+          <div
+            *ngFor="let control of getVideLinkFormArray.controls; let i = index"
+            formArrayName="videolink"
+          >
+            <div [formGroupName]="i">
+              <div class="row">
+                <div class="col-md-10">
+                  <div class="form-group">
+                    <input
+                      formControlName="videolink"
+                      pInputText
+                      styleClass="w-full"
+                      class="form-control"
+                      placeholder="videolink"
+                      type="text"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <p-button
+                    (click)="remove(i)"
+                    icon="pi pi-trash"
+                    styleClass="p-button-rounded p-button-text p-button-danger"
+                  ></p-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-12">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-10">
+              <label>Source Link with image</label>
+            </div>
+            <div class="col-md-2">
+              <p-button
+                (click)="addImageControl()"
+                icon="pi pi-plus-circle"
+                styleClass="p-button-rounded p-button-text p-button-success"
+              ></p-button>
+            </div>
+          </div>
+          <div
+            *ngFor="
+              let control of getImageLinkFormArray.controls;
+              let i = index
+            "
+            formArrayName="reflink"
+          >
+            <div [formGroupName]="i">
+              <div class="row">
+                <div class="col-md-10">
+                  <div class="form-group">
+                    <input
+                      formControlName="reflink"
+                      pInputText
+                      styleClass="w-full"
+                      class="form-control"
+                      placeholder="Reference Link"
+                      type="text"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <p-button
+                    (click)="removeImage(i)"
+                    icon="pi pi-trash"
+                    styleClass="p-button-rounded p-button-text p-button-danger"
+                  ></p-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row pb-2">
+      <div class="col-md-6 col-12">
+        <div class="form-group">
+          <label>Favourite Status</label>
+          <p-select
+            optionValue="id"
+            optionLabel="name"
+            [options]="categoryDropdownList"
+            styleClass="w-full"
+            formControlName="favourite"
+          ></p-select>
+          <div
+            *ngIf="submitted && f.favourite.errors"
+            class="text-danger text-xs"
+          >
+            <div *ngIf="f.favourite.errors.required">Required</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-12">
+        <div class="form-group">
+          <label>Verified Status</label>
+          <p-select
+            optionValue="id"
+            optionLabel="name"
+            [options]="categoryDropdownList"
+            styleClass="w-full"
+            formControlName="verified"
+          ></p-select>
+          <div
+            *ngIf="submitted && f.verified.errors"
+            class="text-danger text-xs"
+          >
+            <div *ngIf="f.verified.errors.required">Required</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row pb-2">
+      <div class="col-md-6 col-12">
+        <div class="form-group">
+          <label>Formatted Status</label>
+          <p-select
+            optionValue="id"
+            optionLabel="name"
+            [options]="categoryDropdownList"
+            styleClass="w-full"
+            formControlName="formatted"
+          ></p-select>
+          <div
+            *ngIf="submitted && f.formatted.errors"
+            class="text-danger text-xs"
+          >
+            <div *ngIf="f.formatted.errors.required">Required</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <button
+          class="ps-4 pe-4 pt-1 pb-1"
+          pButton
+          type="button"
+          (click)="getEditHistory()"
+          style="
+            background-color: #0f100d;
+            border-radius: 8px;
+            border: aliceblue;
+            color: #fff;
+            font-size: 13px;
+          "
+        >
+          Edit History
+        </button>
+      </div>
+      <div class="col-md-6">
+        <div class="text-right">
+          <button
+            class="ps-4 pe-4 pt-1 pb-1"
+            pButton
+            type="button"
+            (click)="showSuggestion()"
+            *ngIf="isEditClick"
+            (click)="suggestionModal = true"
+            style="
+              background-color: #f3210e;
+              border-radius: 8px;
+              border: aliceblue;
+              color: #fff;
+              font-size: 13px;
+            "
+          >
+            Suggestions</button
+          >&nbsp;&nbsp;
+          <p-confirmpopup></p-confirmpopup>
+          <button
+            class="ps-4 pe-4 pt-1 pb-1"
+            pButton
+            type="button"
+            (click)="deleteQuestion($event)"
+            *ngIf="isEditClick"
+            style="
+              background-color: #f3900e;
+              border-radius: 8px;
+              border: aliceblue;
+              color: #fff;
+              font-size: 13px;
+            "
+          >
+            Delete</button
+          >&nbsp;&nbsp;
+          <button
+            class="ps-4 pe-4 pt-1 pb-1"
+            pButton
+            type="submit"
+            style="
+              background-color: var(--p-primary-500);
+              border-radius: 8px;
+              border: aliceblue;
+              color: #fff;
+              font-size: 13px;
+            "
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <br />
+  <p-table size="small"
+    [value]="historyList"
+    styleClass="gray-header"
+    class="mt-2"
+    *ngIf="historyModal"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th>User</th>
+        <th>Serial No.</th>
+        <th>Date</th>
+        <th>Activity Log</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>{{ user.username }}</td>
+        <td>{{ user.serial_no }}</td>
+        <td>{{ user.date | date }}</td>
+        <td>
+          <div class="fw-bold">New Value</div>
+          <div [innerHTML]="user.new_value"></div>
+          <br />
+          <div class="fw-bold">Old Value</div>
+          <div [innerHTML]="user.old_value"></div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-dialog> -->
+<p-dialog header="Suggestion" [(visible)]="suggestionModal" [modal]="true" [style]="{ width: '80vw' }">
+	<!-- Apply a box-shadow or border to the wrapper div -->
+	<div class="suggestion-content-wrapper" style="border: 1px solid #ccc; border-radius: 8px; overflow: scroll; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box">
+		<div class="d-flex gap-2 pt-2 align-items-baseline" *ngFor="let item of questionSuggestionList">
+			<div style="width: 100%">
+				<div class="d-flex">
+					<div class="flex-grow-1 p-2">
+						<div class="d-flex flex-row">
+							<div class="fw-bold mb-2" style="font-size: 16px">{{ item.role }}: {{ item.name }}</div>
+							&nbsp;
+							<p-tag severity="success" [rounded]="true" class="card-tag" *ngIf="item.actioned == 'Actioned'">
+								{{ item.actioned }}
+							</p-tag>
+							<p-tag severity="warn" [rounded]="true" class="card-tag" *ngIf="item.actioned == 'Not Actioned'">
+								{{ item.actioned }}
+							</p-tag>
+						</div>
+						<div style="font-size: 16px" *ngIf="item.sname">organization Name : {{ item.sname }}</div>
+						&nbsp;
+						<div style="font-size: 16px">Subject : {{ item.subject }}</div>
+						&nbsp;
+						<div style="color: #a1a1a1">
+							{{ item.suggestion }}
+						</div>
+					</div>
+					<div class="flex-grow-0" style="width: 20%">
+						<div class="d-flex justify-content-center mt-5">
+							<div class="text-right" *ngIf="item.actioned == 'Not Actioned'">
+								<button class="ps-4 pe-4 pt-1 pb-1" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px" (click)="actionSuggestion(item.id, item.user_id, 'Suggestion')" *ngIf="item.subject === 'Suggestion'">Action</button>
+								<button class="ps-4 pe-4 pt-1 pb-1" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px" (click)="actionSuggestion(item.id, item.user_id, 'Report')" *ngIf="item.subject !== 'Suggestion'">Action</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<hr />
+			</div>
+		</div>
+	</div>
+	<div style="height: 20%" class="mt-2">
+		<div class="pb-3">
+			<strong>Source : </strong><br />
+			<div class="mt-2">
+				<strong>{{ suggestionSourceList.country }} </strong>|<strong> {{ suggestionSourceList.module_name }} </strong>|<strong> {{ suggestionSourceList.question_id }}</strong>
+			</div>
+		</div>
+	</div>
+</p-dialog>

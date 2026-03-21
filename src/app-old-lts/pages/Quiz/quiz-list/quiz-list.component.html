@@ -1,0 +1,147 @@
+<div class="card mt-2">
+    <div class="card-header d-flex w-full align-items-center justify-content-between"
+        style="background-color: transparent">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 col-12">
+                    <div class="d-flex gap-3 align-items-center">
+                        <h5 class="mb-0">{{moduleTitle}} Modules</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body d-flex w-full align-items-center justify-content-between"
+        style="background-color: transparent">
+        <div class="container-fluid">
+            <div class="row">
+                <form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input formControlName="submodulename" type="text" class="form-control" pInputText>
+                                <div *ngIf="submitted && f.submodulename.errors" class="text-danger text-xs">
+                                    <div *ngIf="f.submodulename.errors.required">Required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>URL Slug</label>
+                                <input formControlName="urlslug" type="text" class="form-control" pInputText>
+                                <div *ngIf="submitted && f.urlslug.errors" class="text-danger text-xs">
+                                    <div *ngIf="f.urlslug.errors.required">Required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Image</label>
+                            <div class="form-group">
+                                <div class="input-wrapper">
+                                    <input type="file" (change)="onFileChange($event)" class="form-control w-100"
+                                        pInputText style="display: none;" #fileInput>
+                                    <input type="text" formControlName="image" class="form-control w-100" pInputText
+                                        readonly (click)="fileInput.click()">
+                                    <button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem;"
+                                        class="upload-button">Upload
+                                    </button>
+                                    <div *ngIf="submitted && f.image.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.image.errors.required">Required</div>
+                                    </div>
+                                </div>
+                                <img *ngIf="editImage" src="{{editImage}}" alt="image" width="200px" height="200px" />
+                            </div>
+                        </div>
+                        <div class="col-md-4" *ngIf="moduleId==='11'">
+                            <div class="form-group">
+                                <label>Quiz Level</label>
+                                <p-select formControlName="level" optionValue="id" optionLabel="name"
+                                    [options]="quizLevelList" styleClass="w-full"></p-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12 text-right">
+                            <button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="resetForm(form)"
+                                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                                type="button">Reset Field
+                            </button>&nbsp;
+
+                            <button class="ps-3 pe-3 pt-2 pb-2" pButton
+                                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                                type="submit">{{!selectedQuizId ? 'Add' : 'Update'}} Category
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-2">
+    <div class="card-header d-flex w-full align-items-center justify-content-between"
+        style="background-color: transparent">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 col-12">
+                    <div>
+                        <h5 class="mb-0">{{moduleTitle}} Modules</h5>
+                        <span style="color: #A1A1A1; font-size: 12px;">Total Categories:
+                            {{categoryCount}}</span>
+                    </div>
+                    <div>
+                        <input formControlName="id" type="text" class="form-control" hidden pInputText>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row mt-5">
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-3" *ngFor="let item of quizList">
+                <div class="card p-3">
+                    <div class="d-flex justify-content-end" *ngIf="item?.level">
+                        <span [ngSwitch]="item?.level"
+                            [ngClass]="{'basicLevelTag': item.level === 1,'intLevelTag': item.level === 2,'advLevelTag': item.level === 3}">
+                            <ng-container *ngSwitchCase=1>Basic</ng-container>
+                            <ng-container *ngSwitchCase=2>Intermediate</ng-container>
+                            <ng-container *ngSwitchDefault>Advanced</ng-container>
+                        </span>
+                    </div>
+                    <br>
+                    <div class="text-center fw-bold">{{item.submodule_name}}</div>
+                    <br>
+                    <div class="row text-center">
+                        <div class="d-flex gap-2">
+                            <div class="flex-grow-1">
+                                <button routerLink="/quiz/{{moduleName}}/{{categoryId}}/questions/{{item.id}}"
+                                    class="w-100 justify-content-center" pButton
+                                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                                    Add Quiz
+                                </button>
+                            </div>
+                            <div class="flex-grow-1">
+                                <button (click)="editQuiz(item)" class="w-100 justify-content-center" pButton
+                                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                                    Edit
+                                </button>
+                            </div>
+                            <p-confirmpopup></p-confirmpopup>
+                            <div class="flex-grow-1" *ngIf="submodulePermission === 1">
+                                <button (click)="deleteQuiz(item)" class="w-100 justify-content-center" pButton
+                                    style="background-color: red;border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-paginator (onPageChange)="pageChange($event)" [rows]="rows" [totalRecords]="categoryCount"
+        [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+</div>

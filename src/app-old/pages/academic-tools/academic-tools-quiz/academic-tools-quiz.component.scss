@@ -1,0 +1,62 @@
+.bb-1 {
+    border-bottom: 1px solid black;
+}
+
+.menuitemsTitle {
+    border-top: 1px solid grey;
+    border-right: none;
+    border-bottom: 1px solid grey;
+    border-left: none;
+}
+
+.checkBoxDiv {
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid grey;
+    border-right: 1px solid grey;
+    border-bottom: 1px solid grey;
+    border-left: none;
+}
+
+.addBtn {
+    border-radius: 25px;
+    font-size: 12px;
+    background-color: var(--p-primary-500);
+    color: white;
+    padding-right: 10px;
+}
+
+.addBtn:hover,
+.addBtn:active {
+    background-color: var(--p-primary-500);
+    color: white;
+    padding-right: 10px;
+}
+
+.removeBtn,
+.removeBtn:hover,
+.removeBtn:active {
+    border-radius: 25px;
+    font-size: 12px;
+    background-color: rgb(225, 5, 5);
+    color: white;
+    padding-right: 10px;
+}
+
+.addBtnIcon {
+    padding: 6px;
+    border-radius: 25px;
+    background-color: var(--p-primary-400);
+    color: white;
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+.removeBtnIcon {
+    padding: 6px;
+    border-radius: 25px;
+    background-color: rgba(182, 6, 6, 0.789);
+    color: white;
+    margin-left: 5px;
+    font-size: 10px;
+}

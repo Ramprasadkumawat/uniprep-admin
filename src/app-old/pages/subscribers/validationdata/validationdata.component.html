@@ -1,0 +1,145 @@
+<p-accordion value="0"styleClass="white-accordian" activeIndex="0">
+	<p-accordion-panel validator="1">
+		<p-accordion-header>Data Validator</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #addFormElm>
+				<div class="row">
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Student Type *</label>
+							<p-select formControlName="student_type" optionValue="id" optionLabel="subtypeName" styleClass="w-full" [options]="StudentType" [filter]="true" filterBy="subtypeName" [disabled]="true"></p-select>
+							<div *ngIf="submitted && f.student_type.errors" class="text-danger text-xs">
+								<div *ngIf="f.student_type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1" *ngIf="notadmin">
+						<div class="form-group">
+							<label>Source Type *</label>
+							<p-select formControlName="source_type" optionValue="id" optionLabel="name" styleClass="w-full" [options]="sourceTypes" (onChange)="changeSourceType($event)" [filter]="true" filterBy="name" [disabled]="true"></p-select>
+							<div *ngIf="submitted && f.source_type.errors" class="text-danger text-xs">
+								<div *ngIf="f.source_type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1" *ngIf="notadmin">
+						<div class="form-group">
+							<label>Institution Name</label>
+							<p-select formControlName="source_name" optionValue="id" optionLabel="source_name" styleClass="w-full" *ngIf="form.get('source_type').value != '2'" [options]="sourceName" (onChange)="changeSourceName()" [filter]="true" filterBy="source_name" appendTo="body" [disabled]="true"></p-select>
+							<p-select formControlName="source_name" optionValue="id" optionLabel="institutename" styleClass="w-full" *ngIf="form.get('source_type').value == '2'" [options]="sourceName" (onChange)="changeSourceName()" [filter]="true" filterBy="institutename" appendTo="body" [disabled]="true"></p-select>
+							<div *ngIf="submitted && f.source_name.errors" class="text-danger text-xs">
+								<div *ngIf="f.source_name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-9 mt-1">
+						<div class="form-group">
+							<label>File Upload</label>
+							<input formControlName="file" type="file" class="form-control" pInputText (change)="onFileSelect($event)" accept=".csv" />
+
+							<!-- Error handling for file validation -->
+							<div *ngIf="submitted && f.file.errors" class="text-danger text-xs">
+								<div *ngIf="f.file.errors.required">File is required.</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-3 text-right mt-3">
+						<button class="btn btn-primary" type="submit">Re Upload</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div style="background-color: #fff">
+	<div class="d-flex justify-content-between">
+		<h5 class="p-2 ps-3">Upload Details</h5>
+		<div>
+			<button class="btn btn-primary" (click)="exportFile()">Export Invalid Email ID's &nbsp; <i class="pi pi-file-export"></i></button>
+			<button class="btn btn-primary" (click)="historyShow()" style="background-color: #ff8f10 !important">History</button>
+		</div>
+	</div>
+	<div class="card-container p-3">
+		<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="datavalidatorlist" styleClass="gray-header" [lazy]="true" [totalRecords]="datacount">
+			<ng-template pTemplate="caption">
+				<div class="d-flex w-full align-items-center justify-content-between">
+					<span style="color: #a1a1a1; font-size: 15px">Valid Email ID's: {{ validmailcount }}</span>
+					<span style="color: #a1a1a1; font-size: 15px; padding-left: 20px">Invalid Email ID's: {{ inavaliemailcount }}</span>
+					<span style="color: #a1a1a1; font-size: 15px; padding-left: 20px">Total Email ID's: {{ totalemailcount }}</span>
+					<button class="btn btn-primary" style="background-color: #9bc329 !important" (click)="createAccountForEveryEmail()">Create Account for Deliverabile Emails</button>
+				</div>
+			</ng-template>
+			<ng-template pTemplate="header">
+				<tr>
+					<th class="border-cell">Sl No</th>
+					<th class="border-cell">Email Id</th>
+					<th class="border-cell">Email Format</th>
+					<th class="border-cell">Deliverability</th>
+					<th class="border-cell">Disposable Email ID</th>
+					<th class="border-cell">Actions</th>
+					<th class="border-cell">Comments</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-user>
+				<tr>
+					<td class="border-cell">{{ user.serail_no }}</td>
+					<td class="border-cell">
+						<div *ngIf="user.id === userideditclick">
+							<form action="" [formGroup]="formEmail">
+								<div class="form-group">
+									<input formControlName="email" type="email" class="form-control" pInputText />
+									<div *ngIf="submittedemail && e.email.errors" class="text-danger text-xs">
+										<div *ngIf="e.email.errors.required">Required</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<div *ngIf="user.id != userideditclick">{{ user.email }}</div>
+					</td>
+					<td class="border-cell">{{ user.email_format }}</td>
+					<td class="border-cell">{{ user.deliverable }}</td>
+					<td class="border-cell">{{ user.disposable }}</td>
+					<td class="border-cell">
+						<span *ngIf="user.status == 'Edit'">
+							<span>
+								<button class="btn btn-primary" (click)="editClick(user)" [style.background-color]="'#9BC329'" [ngClass]="{ 'btn-warning': user.id === userideditclick }">
+									{{ user.id === userideditclick ? "Validate" : "Edit" }}
+								</button>
+							</span>
+						</span>
+						<span *ngIf="user.status != 'Edit'" (click)="oneEmailvalid(user)" style="cursor: pointer">{{ user.status }}</span>
+					</td>
+					<td class="border-cell">{{ user.comments }}</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+</div>
+<p-dialog header="Upload History" [(visible)]="suggestionModal" [modal]="true" [style]="{ width: '60vw' }">
+	<div class="row">
+		<div class="col-md-12 p-1" *ngFor="let list of historylist">
+			<div class="card" style="cursor: pointer">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-2">
+							<div class="content-left" style="background-color: #fff">
+								<p><i class="fa-solid fa-file fa-3x"></i></p>
+							</div>
+						</div>
+						<div class="col-md-8">
+							<div class="content-right">
+								<h5>{{ list.file_name }}</h5>
+								<div>
+									<b>Valid Email ID's:</b><span> {{ list.valid_email_count }}</span> &nbsp;&nbsp; <b>Invalid Email ID's:</b><span> {{ list.invalid_email_count }}</span> &nbsp;&nbsp;<b>Total Email ID's:</b><span> {{ list.total_email_count }}</span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2">
+							<button class="btn btn-primary" (click)="downloadFile(list.link)" style="background-color: #9bc329 !important">View</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</p-dialog>

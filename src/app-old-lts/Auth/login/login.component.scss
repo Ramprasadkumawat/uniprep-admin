@@ -1,0 +1,212 @@
+@import "../../../assets/buttons";
+.container-fluid{
+  background: #F1F1F1;
+}
+.btn {
+  font-size: smaller !important;
+  border-radius:5px !important;
+}
+.logo{
+  height: 70px;
+}
+.signup{
+  font-size: small;
+  color: rgba(0, 0, 0, 0.378);
+}
+.text-loginslider
+{
+  position:absolute;
+  top:60%;
+  transform: translateY(-60%);
+}
+.bg-sliderimg1
+{
+  background-image:url("../../../assets/images/login-slider1.jpg");
+  background-size:cover;
+  background-position: left center;
+}
+.bg-sliderimg2
+{
+  background-image:url("../../../assets/images/login-slider2.jpg");
+  background-size:cover;
+  background-position: left center;
+}
+.bg-sliderimg3
+{
+  background-image:url("../../../assets/images/login-slider3.jpg");
+  background-size:cover;
+  background-position: left center;
+}
+.bg-sliderimg4
+{
+  background-image:url("../../../assets/images/login-slider4.jpg");
+  background-size:cover;
+  background-position: left center;
+}
+.bg-loginwebsite
+{
+  background-image:url("../../../assets/images/login-website.png");
+  background-size: contain;
+  background-position: bottom;
+  position: absolute;
+  bottom: 0;
+  height: 200px;
+  width: 80%;
+  background-repeat: no-repeat;
+}
+.bg-loginslider:before {
+  content: "";
+  background-image: url("../../../assets/images/login-banner.png");
+  background-position: right;
+  background-size:contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  display: inline-block;
+  height: -webkit-fill-available;
+  top: 0;
+  right: 0;
+  width: -webkit-fill-available;
+  }
+  .loginslider-website
+  {
+    position: absolute;
+    bottom: 2%;
+    font-size: 18px;
+    font-weight: 500;
+    color: white;
+    text-decoration: none;
+    letter-spacing: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .login-indicators
+  {
+    right: 20px;
+    text-align: right;
+    width: 150px;
+    margin: 0;
+    left: auto;
+  }
+  .login-indicators [data-bs-target]
+  {
+    background-color:var(--p-primary-500);
+  }
+  #passwordInput {
+    padding-right: 30px;
+  }
+.passwordvisibility
+{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  img {
+    width:20px;
+    height:20px;
+  }
+}
+.bg-image {
+  background-image: url("../../../assets/images/cover.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.login-heading {
+  font-weight: 300;
+  font-size: 1rem;
+}
+.text-left {
+  float: right;
+  a {
+    color: rgba(0, 0, 0, 0.378);
+  }
+}
+.btn-login {
+  font-size: 0.9rem;
+  letter-spacing: 0.05rem;
+  padding: 0.75rem 1rem;
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.loginreg-card
+{
+  width: 30vw;
+  left: 3%;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.h-100
+{
+  height:100vh !important;
+}
+
+.uniprep-lightgray {
+	color: #aaaaaa;
+}
+
+// `xxl` applies to x-large devices (large desktops, less than 1400px)
+@media (max-width: 1399.98px) {
+.loginreg-card
+{
+  width: 35vw;
+}
+}
+// `mxl` applies to large devices (desktops, less than 1300px)
+@media (max-width: 1299.98px) {
+  .loginreg-card
+{
+  width: 40vw;
+}
+}
+
+// `xl` applies to large devices (desktops, less than 1200px)
+@media (max-width: 1199.98px) {
+}
+// `lg` applies to medium devices (tablets, less than 992px)
+@media (max-width: 991.98px) {
+
+}
+// `md` applies to small devices (landscape phones, less than 768px)
+@media (max-width: 767.98px) {
+
+}
+// `sm` applies to x-small devices (portrait phones, less than 576px)
+@media (max-width: 575.98px) {
+
+}
+footer {
+  display: flex;
+  justify-content: space-between;
+  background-color: hsla(0, 0%, 100%, 0.8);
+  backdrop-filter: saturate(200%) blur(30px);
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #001631;
+}
+footer ul {
+  display: table-row;
+}
+footer ul li {
+  display: table-cell;
+  list-style-type: none;
+  margin: 10px;
+  vertical-align: middle;
+}
+section {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  #top {
+    flex: 1;
+  }
+  #footer {
+
+  }
+}

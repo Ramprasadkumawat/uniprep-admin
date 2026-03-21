@@ -1,0 +1,226 @@
+.card {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-section {
+  background-color: #f5f5f5;
+  border-radius: 8px 8px 0 0;
+  padding: 1.5rem;
+
+  h6 {
+    color: #333;
+    font-weight: 600;
+  }
+
+  i {
+    cursor: pointer;
+    color: #666;
+    font-size: 1.2rem;
+
+    &:hover {
+      color: #333;
+    }
+  }
+
+  .form-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.card-body {
+  background-color: #f5f5f5;
+  padding: 1.5rem;
+  border-radius: 0 0 8px 8px;
+
+  h5 {
+    color: #333;
+    font-weight: 600;
+  }
+}
+
+// Summary tabs
+.summary-tabs-container {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.summary-tab {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  background-color: white;
+  color: var(--p-primary-500);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+  }
+
+  &.active {
+    background-color: var(--p-primary-500);
+    color: white;
+    border-color: var(--p-primary-500);
+
+    &:hover {
+      background-color: var(--p-primary-500);
+      border-color: var(--p-primary-500);
+    }
+  }
+}
+
+// Table styles
+::ng-deep {
+  .p-datatable {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+
+    .p-datatable-thead>tr>th {
+      background-color: #f8f9fa;
+      color: #333;
+      font-weight: 600;
+      padding: 1rem;
+      border-bottom: 2px solid #dee2e6;
+    }
+
+    .p-datatable-tbody>tr>td {
+      padding: 1rem;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .p-datatable-tbody>tr:hover {
+      background-color: #f8f9fa;
+    }
+  }
+
+  .p-tag {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    &.p-tag-success {
+      background-color: #28a745;
+      color: white;
+    }
+
+    &.p-tag-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+  }
+}
+
+.profile-link {
+  color: var(--p-primary-500);
+  text-decoration: none;
+  word-break: break-all;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.view-order-link {
+  color: var(--p-primary-500);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  i {
+    font-size: 0.875rem;
+  }
+}
+
+// Talent Details Dialog
+.talent-details-dialog {
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    .form-label {
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 0.5rem;
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    input[readonly],
+    textarea[readonly] {
+      background-color: #f8f9fa;
+      cursor: not-allowed;
+    }
+
+    .remarks-display {
+      min-height: 100px;
+      padding: 0.75rem;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      color: #333;
+      word-wrap: break-word;
+    }
+
+    .language-remove-btn {
+      width: 40px;
+      min-width: 40px;
+      flex-shrink: 0;
+    }
+
+    .add-language-btn {
+      min-width: 180px;
+      flex-shrink: 0;
+    }
+
+    small.text-muted {
+      font-size: 0.75rem;
+      color: #6c757d;
+      margin-top: 0.25rem;
+      display: block;
+    }
+  }
+}
+
+// Filter form styles
+.salary-currency-select {
+  min-width: 100px;
+  width: 100px;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .filter-section {
+    padding: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .d-flex.gap-2 {
+    flex-direction: column;
+
+    .p-button {
+      width: 100%;
+    }
+  }
+
+  .salary-currency-select {
+    width: 100%;
+    min-width: 100%;
+  }
+}

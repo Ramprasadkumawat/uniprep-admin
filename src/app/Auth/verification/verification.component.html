@@ -1,0 +1,41 @@
+<section class="bg-image h-100 d-flex align-items-center">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card ms-md-5 ms-0">
+          <div class="card-body p-5 pb-4">
+            <form [formGroup]="otpForm" (ngSubmit)="onSubmit()">
+              <h3 class="login-heading mt-4 mb-2">Enter your OTP</h3>
+              <p class="fw-medium mb-4">We have sent you one time password to your E-mail address for verification</p>
+              <div style="text-align-last: center">
+                <input class="col form-control" formControlName="otp1" type="text" #otp1 maxlength="1" (keyup)="focusNextInput($event, 1)" [ngClass]="{ 'is-invalid': submitted && f.otp1.errors }" />
+                <input class="col form-control" formControlName="otp2" type="text" #otp2 maxlength="1" (keyup)="focusNextInput($event, 2)" [ngClass]="{ 'is-invalid': submitted && f.otp2.errors }" />
+                <input class="col form-control" formControlName="otp3" type="text" #otp3 maxlength="1" (keyup)="focusNextInput($event, 3)" [ngClass]="{ 'is-invalid': submitted && f.otp3.errors }" />
+                <input class="col form-control" formControlName="otp4" type="text" #otp4 maxlength="1" (keyup)="focusNextInput($event, 4)" [ngClass]="{ 'is-invalid': submitted && f.otp4.errors }" />
+                <div *ngIf="submitted && f.otp1.errors && f.otp2.errors && f.otp3.errors && f.otp4.errors" class="invalid-feedback">
+                  <div *ngIf="f.otp1.errors.required && f.otp2.errors.required && f.otp3.errors.required && f.otp4.errors.required">OTP is required</div>
+                </div>
+              </div>
+              <br />
+              <div class="d-grid">
+                <button class="pt-3 pb-3 btn btn-primary btn-login text-uppercase fw-medium h5 m-0" type="submit">Next</button>
+              </div>
+              <p class="text-center small mt-2">
+                Didn't receive the email? <span class="font-primarycolor"><a (click)="resend()">Click to resend.</a></span>
+              </p>
+              <div class="pt-5">&nbsp;</div>
+              <div class="mt-5 d-flex flex-column align-items-center justify-content-center">
+                <div class="backbtn">
+                  <a href="login"><i class="pi pi-chevron-left"></i></a>
+                </div>
+                <div>
+                  <p class="mb-0 small">Back to Sign In</p>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

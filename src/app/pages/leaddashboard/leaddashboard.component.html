@@ -1,0 +1,250 @@
+<p-accordion value="0"Class="white-accordian">
+	<p-accordion-panel value="1" header="">
+        <p-accordion-header>Advanced Filter</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterform" (ngSubmit)="submitForm()">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label class="form-label">From</label>
+									<div class="mb-3">
+										<input type="date" formControlName="createdFrom" class="form-control border-black paddingfive" />
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label class="form-label">To</label>
+									<div class="mb-3">
+										<input type="date" formControlName="createdTo" class="form-control border-black paddingfive" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Country</label>
+							<p-select class="paddingfive mt-1" formControlName="country" [options]="countries" optionValue="id" optionLabel="country" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Region</label>
+							<p-select class="paddingfive mt-1" formControlName="region" [options]="RegionOptions" optionValue="id" optionLabel="state" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Last Completed Degree</label>
+							<p-select class="paddingfive mt-1" formControlName="lastdegreecompleted" optionValue="id" optionLabel="name" styleClass="w-full" [options]="lastdegreepassingyear" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Passing Year</label>
+							<p-select formControlName="passingyear" optionValue="id" optionLabel="name" styleClass="w-full" [options]="passingyear" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Lead Status</label>
+							<p-select formControlName="leadstatus" optionValue="id" optionLabel="status_name" [options]="leadstatus" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Source</label>
+							<p-select (onChange)="getSource()" [(ngModel)]="sourceid" formControlName="source" optionValue="id" optionLabel="name" [options]="sourcetypes" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Source Name</label>
+							<p-select [options]="sourcelist" formControlName="sourcename" optionValue="id" optionLabel="name" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Program Level Looking</label>
+							<p-select [options]="programs" formControlName="programlevel" optionValue="id" optionLabel="programlevel" styleClass="w-full"></p-select>
+						</div>
+					</div>
+
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button pButton type="button" (click)="resetfilter()" label="Reset Filter"></button> &nbsp;
+							<button pButton type="submit" label="Filter Data"></button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<!-- card -->
+<div class="row mt-2">
+	<div class="col-4">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Registered Users</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ dashboardCardCount.registeredusers }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-file-lines" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-4">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Paid Users</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ dashboardCardCount.paidusers }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-file-lines" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-4">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Exhausted User</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ dashboardCardCount.exhaustedusers }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-file-lines" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-4 mt-2">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Questions Asked</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 10 </span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-file-lines" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-4 mt-2">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Unpaid Loggedin Users</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ dashboardCardCount.exhaustedusers }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-file-lines" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-4 mt-2">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Unpaid Not Loggedin Users</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 10 </span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-file-lines" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-6 mt-2">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Direct Student Lead</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 10 </span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-file-lines" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-6 mt-2">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">College Student Lead</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 10 </span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-file-lines" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row mt-2">
+	<div class="col-md-6">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<h5>Passing Year</h5>
+			<div class="card-body2">
+				<div class="">
+					<div style="width: 100%; height: 400px" id="chart-passingwisechar"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<h5>Users Daily</h5>
+			<div class="card-body2">
+				<div class="" style="width: 100%; height: 400px">
+					<p-chart type="pie" [data]="genderchart"></p-chart>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6 mt-2">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<h5>Gender</h5>
+			<div class="card-body2">
+				<div class="" style="width: 100%; height: 400px">
+					<p-chart class="w-100 h-100" type="bar" [data]="usersdailychart"></p-chart>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,107 @@
+<div class="row h-100 overflow-y-auto">
+	<div class="col-md-4 h-100 order-2 order-md-1">
+		<div class="d-flex flex-column h-100">
+			<div class="card overflow-y-auto">
+				<div class="card-header">
+					<div style="font-size: large">
+						<a style="font-size: 1.2rem; font-weight: 600">Messages</a>
+					</div>
+					<hr style="color: var(--p-primary-500)" />
+					<div class="d-flex justify-content-between">
+						<div style="font-size: 0.9rem; font-weight: 600">
+							Total Chat Users -
+							<span style="color: var(--p-primary-500)">{{ chatLists.length || 0 }}</span>
+						</div>
+						<div style="font-size: 0.9rem; font-weight: 600">
+							Total Questions -
+							<span style="color: var(--p-primary-500)">{{ totalquestions || 0 }}</span>
+						</div>
+					</div>
+					<div class="d-flex justify-content-between">
+						<div style="font-size: 0.9rem; font-weight: 600">
+							Total Replied -
+							<span style="color: var(--p-primary-500)">{{ totalReplied || 0 }}</span>
+						</div>
+						<div style="font-size: 0.9rem; font-weight: 600">
+							Total Unreplied -
+							<span style="color: var(--p-primary-500)">{{ totalUnreplied || 0 }}</span>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<p-tabs activeIndex="1" value="1" value="tabIndex">
+						<p-tablist>
+							<p-tab value="1">All Chats</p-tab>
+							<p-tab value="2">Unreplied Chats</p-tab>
+						</p-tablist>
+						<p-tabpanels>
+							<p-tabpanel value="1">
+								<ng-template pTemplate="header">All Chats</ng-template>
+								<br />
+								<div *ngFor="let chats of chatLists">
+									<div class="discussion message-active row" (click)="loadUserChat(chats)">
+										<span class="name notification"
+											>{{ chats.name }}<span class="notification badge" *ngIf="chats?.replied_count != 0">{{ chats.replied_count }}</span></span
+										><br />
+										<span class="message">{{ chats.email }}</span>
+									</div>
+								</div>
+							</p-tabpanel>
+							<p-tabpanel value="2">
+								<ng-template pTemplate="header">Unreplied Chats</ng-template>
+								<br />
+								<div *ngFor="let chats of unrepliedChats">
+									<div class="discussion message-active row" (click)="loadUserChat(chats)">
+										<span class="name notification"
+											>{{ chats.name }}<span class="notification badge" *ngIf="chats?.replied_count != 0">{{ chats.replied_count }}</span></span
+										><br />
+										<span class="message">{{ chats.email }}</span>
+									</div>
+								</div>
+							</p-tabpanel>
+						</p-tabpanels>
+					</p-tabs>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-8 chatscreen order-md-2 order-1 card h-100" *ngIf="chatUserName">
+		<span class="chatwindow m-3">{{ chatUserName }}</span>
+		<hr />
+		<div class="card-body overflow-y-auto">
+			<section class="chat overflow-y-auto">
+				<div *ngFor="let message of messages; let index = index">
+					<div class="chat-section-container" *ngIf="message.id">
+						<div class="chat-section mt-2">
+							<div class="photo receiver-bg">
+								<ng-container>
+									<span class="name"> {{ message.name.slice(0, 1) }}</span>
+								</ng-container>
+							</div>
+							<div>
+								<span class="full-name">{{ message.name }}</span
+								><br />
+								<span class="msg-info1">{{ message.created_time }}</span>
+							</div>
+						</div>
+						<span *ngIf="message.input == 3" class="msg-info" style="padding-left: 3rem">Question - {{ message.id }} <span style="color: red" *ngIf="message.is_replied == 0">(Not Replied)</span></span>
+						<span *ngIf="message.input == 4" class="msg-info" style="padding-left: 3rem">Replying for Question - {{ message.reply_for }}</span>
+						<br />
+						<div class="chat-section msg-bottom">
+							<div class="checkbox-container" *ngIf="message.input == 3">
+								<input type="checkbox" (change)="checkboxchange($event, message)" />
+							</div>
+							<div [ngClass]="message.input == 3 ? 'messages' : 'response-msg'" [innerHTML]="message.message"></div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div class="card-footer flex-shrink-0">
+			<div class="field col-12">
+				<p-editor [style]="{ height: '10vh' }" [(ngModel)]="textMessage" [modules]="modules" placeholder="Reply"></p-editor>
+				<button pButton class="btn btn-sm btn-primary" (click)="sendMessage()" style="float: right" [disabled]="!textMessage || !replyButtonVisiblity">Reply</button>
+			</div>
+		</div>
+	</div>
+</div>

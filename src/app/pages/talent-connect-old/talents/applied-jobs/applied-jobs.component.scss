@@ -1,0 +1,90 @@
+/* app.component.scss */
+:host ::ng-deep {
+    .p-button-text {
+      width: 40px;
+      height: 40px;
+    }
+    
+    .p-inputtext {
+      width: 300px;
+    }
+  }
+  
+  .bg-success {
+    background-color: #5cb85c !important;
+  }
+  
+  .bg-warning {
+    background-color: #f0ad4e !important;
+  }
+  
+  .bg-dark {
+    background-color: #343a40 !important;
+  }
+
+  .card-text {
+    font-size: 12px;
+    color: lightgrey;
+  }
+
+  :host ::ng-deep {
+    .white-accordian .p-accordion-header-link {
+      background-color: white;
+      border: none;
+      border-bottom: 1px solid #dee2e6;
+      padding: 1rem;
+      font-weight: 600;
+      color: #212529;
+    }
+    
+    .white-accordian .p-accordion-content {
+      border: none;
+      padding: 1.5rem 1rem;
+    }
+    
+    .p-dropdown, .p-calendar {
+      width: 100%;
+    }
+    
+    .p-dropdown .p-dropdown-label,
+    .p-calendar .p-inputtext {
+      padding: 0.5rem 0.75rem;
+    }
+    
+    .p-dropdown-panel .p-dropdown-items {
+      padding: 0.5rem;
+    }
+    
+    .p-datepicker {
+      padding: 0.5rem;
+    }
+    
+    /* Adjust the close (X) button */
+    .p-accordion-header-link .p-accordion-toggle-icon {
+      color: #343a40;
+    }
+  }
+  
+  /* Custom styling for form elements */
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  /* Button styling */
+  .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+  }
+  
+  .btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+  }

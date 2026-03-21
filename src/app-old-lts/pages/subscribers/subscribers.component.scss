@@ -1,0 +1,55 @@
+.row-details {
+    padding: 10px;
+    background-color: #fff;
+  }
+  .expand-icon {
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  .custom-icon {
+    background-color: var(--p-primary-500);
+    color: #fff;
+    border-radius: 50%;
+    padding: 4px;
+  }
+  .border-cell {
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-width:1px !important;
+  }
+  
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  overflow: hidden;
+}
+
+.stats-containers {
+  border-top: 1px solid #ccc;
+  overflow: hidden;
+}
+
+
+.stats-box {
+  flex: 1;
+  border-left: 1px solid #ccc;
+}
+
+.stats-header {
+  padding: 8px;
+  font-weight: bold;
+}
+
+.stats-header.total {
+  color: #0052af;
+}
+
+.talent-counts {
+  color: #414141;
+  font-size: 10px;
+  white-space: nowrap;
+}
+  

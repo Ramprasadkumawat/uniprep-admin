@@ -1,0 +1,190 @@
+<div style="width: 100%; height: 80vh; overflow: auto; overflow-x: hidden">
+	<p-accordion styleClass="white-accordian" (onClose)="activeIndex = -1" (onOpen)="activeIndex = 1" value="{{activeIndex}}">
+		<p-accordion-panel value="1">
+			<p-accordion-header>{{ title }}</p-accordion-header
+			><p-accordion-content>
+				<form [formGroup]="form" (ngSubmit)="submitForm()" (keydown.enter)="formEnter($event)">
+					<input formControlName="id" type="hidden" class="form-control" pInputText />
+					<div class="row">
+						<div class="col-12">
+							<div class="row">
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Subject Name</label>
+										<!-- <input formControlName="subject" type="text" class="form-control" pInputText /> -->
+										<p-select placeholder="Select Subject" [editable]="true" optionValue="id" formControlName="subject" [filter]="true" (onChange)="onSubjectSelect($event)" [filterBy]="'subject_name'" (keydown.enter)="onEnterKeyPress('subject')" optionLabel="subject_name" styleClass="w-full" [options]="subject"></p-select>
+										<div *ngIf="submitted && f.subject.errors" class="text-danger text-xs">
+											<div *ngIf="f.subject.errors.required">Subject Name Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Specialization Name</label>
+										<!-- <input formControlName="specialization" type="text" class="form-control" pInputText /> -->
+										<p-select placeholder="Select Specialization" [editable]="true" (onChange)="onSpecializationSelect($event)" optionValue="id" formControlName="specialization" [filter]="true" (keydown.enter)="onEnterKeyPress('specialization')" [filterBy]="'specialisation_name'" optionLabel="specialisation_name" styleClass="w-full" [options]="specialization"></p-select>
+										<div *ngIf="submitted && f.specialization.errors" class="text-danger text-xs">
+											<div *ngIf="f.specialization.errors.required">Specialization Name Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Country</label>
+										<p-select placeholder="Select Country" optionValue="id" formControlName="country" [filter]="true" [filterBy]="'country'" optionLabel="country" styleClass="w-full" [options]="country"></p-select>
+										<div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+											<div *ngIf="f.country.errors.required">Country Name Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Job Option Name</label>
+										<!-- <input formControlName="job_option" type="text" class="form-control" pInputText /> -->
+										<p-select placeholder="Select Job Option" [editable]="true" optionValue="id" formControlName="job_option" [filter]="true" (keydown.enter)="onEnterKeyPress('job_option')" [filterBy]="'job_option_name'" optionLabel="job_option_name" styleClass="w-full" [options]="jobOption"></p-select>
+										<div *ngIf="submitted && f.job_option.errors" class="text-danger text-xs">
+											<div *ngIf="f.job_option.errors.required">Job Option Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Average Salary for the Country</label>
+										<input formControlName="average_salary" type="text" class="form-control" pInputText />
+										<div *ngIf="submitted && f.average_salary.errors" class="text-danger text-xs">
+											<div *ngIf="f.average_salary.errors.required">Salary Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Average Salary by INR</label>
+										<input formControlName="inr_average_salary" type="text" class="form-control" pInputText />
+										<div *ngIf="submitted && f.inr_average_salary.errors" class="text-danger text-xs">
+											<div *ngIf="f.inr_average_salary.errors.required">INR Salary Required</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="reset()">Reset Field</button>&nbsp;
+							<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">{{ btntxt }}</button>
+						</div>
+					</div>
+				</form>
+			</p-accordion-content>
+		</p-accordion-panel>
+		<p-accordion-panel value="2">
+			<p-accordion-header>Filter Career Option</p-accordion-header>
+			<p-accordion-content>
+				<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()">
+					<div class="row">
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label>Subject</label>
+								<p-select placeholder="Select Subject" (onChange)="subjectChange($event)" optionValue="id" formControlName="subject" [filter]="true" [filterBy]="'subject_name'" optionLabel="subject_name" styleClass="w-full" [options]="subject"></p-select>
+							</div>
+						</div>
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label>Specialization</label>
+								<p-multiselect [options]="specialization" styleClass="w-100" formControlName="specialization" optionValue="id" defaultLabel="Select Specialization" display="chip" [showClear]="true" optionLabel="specialisation_name"> </p-multiselect>
+							</div>
+						</div>
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">Job Options</label>
+								<p-select placeholder="Select Job Option" optionValue="id" formControlName="job_option" [filter]="true" [filterBy]="'job_option_name'" optionLabel="job_option_name" styleClass="w-full" [options]="jobOption"></p-select>
+							</div>
+						</div>
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">Country</label>
+								<p-select placeholder="Select Country" optionValue="id" formControlName="country" [filter]="true" [filterBy]="'country'" optionLabel="country" styleClass="w-full" [options]="country"></p-select>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="filterReset()">Reset Field</button>&nbsp;
+							<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">Filter</button>
+						</div>
+					</div>
+				</form>
+			</p-accordion-content>
+		</p-accordion-panel>
+	</p-accordion>
+	<p-table size="small" scrollHeight="600px" [scrollable]="true" styleClass="p-datatable-gridlines" [value]="careerListData" [totalRecords]="totalCareerCount" [tableStyle]="{ 'min-width': '40rem' }" sortMode="multiple" [globalFilterFields]="['subject_name', 'specialisation_name', 'country', 'salary']">
+		<ng-template pTemplate="caption">
+			<div class="d-flex w-full align-items-center justify-content-between">
+				<div>
+					<span>Career Option List</span> <br />
+					<span class="text-muted text-small">Total Careers : {{ totalCareerCount }}</span>
+				</div>
+				<div>
+					<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" pButton (click)="jobsiteRedirect()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Job sites &nbsp; <i class="fa-solid fa-user-graduate"></i></button>
+
+					<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" pButton (click)="fileUploadModal = true" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Import &nbsp; <i class="pi pi-file-export"></i></button>
+
+					<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" (click)="exportTable()" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Export &nbsp;<i class="pi pi-file"></i></button>
+				</div>
+			</div>
+		</ng-template>
+		<ng-template pTemplate="header">
+			<tr>
+				<th pSortableColumn="subject_name" class="border-cell">Subject Name<p-sortIcon field="subject_name"></p-sortIcon></th>
+				<th pSortableColumn="specialisation_name" class="border-cell">Specialization<p-sortIcon field="specialisation_name"></p-sortIcon></th>
+				<th pSortableColumn="job_option_name" class="border-cell">Country<p-sortIcon field="job_option_name"></p-sortIcon></th>
+				<th pSortableColumn="country" class="border-cell">Job Option<p-sortIcon field="country"></p-sortIcon></th>
+				<th pSortableColumn="salary" class="border-cell">Avg Salary<p-sortIcon field="salary"></p-sortIcon></th>
+				<th pSortableColumn="inr_salary" class="border-cell">Salary in INR<p-sortIcon field="inr_salary"></p-sortIcon></th>
+				<th class="border-cell">Job Sites</th>
+				<th class="border-cell">Actions</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-career>
+			<tr>
+				<td>{{ career.subject_name }}</td>
+				<td>{{ career.specialisation_name }}</td>
+				<td>{{ career.country }}</td>
+				<td>{{ career.job_option_name }}</td>
+				<td>{{ career.salary }}</td>
+				<td>{{ career.inr_salary }}</td>
+				<td>
+					<div class="row">
+						<ng-container *ngFor="let jobs of career.jobsite_data">
+							<div class="col-md-6">
+								<div class="joblogos">
+									<a target="_blank" title="{{ !jobs.job_site_url.startsWith('http://') && !jobs.job_site_url.startsWith('https://') ? 'http://' + jobs.job_site_url : jobs.job_site_url }}" href="{{ !jobs.job_site_url.startsWith('http://') && !jobs.job_site_url.startsWith('https://') ? 'http://' + jobs.job_site_url : jobs.job_site_url }}"> <img alt="{{ jobs.job_site_name }}" class="img-responsive" src="{{ storage_path }}JobSite/{{ jobs.job_site_logo }}" /></a>
+								</div>
+							</div>
+						</ng-container>
+					</div>
+				</td>
+				<td>
+					<div class="view-btn m-1" style="cursor: pointer">
+						<a (click)="editCareer(career); $event.preventDefault()"><i class="fa-solid fa-pen"></i> Edit</a>
+					</div>
+				</td>
+			</tr>
+		</ng-template>
+	</p-table>
+	<div class="card-footer">
+		<p-paginator [rows]="pageSize" [totalRecords]="totalCareerCount" (onPageChange)="pageChange($event)" [rowsPerPageOptions]="[100, 500, 1000]"></p-paginator>
+	</div>
+	<p-dialog header="File Upload" [(visible)]="fileUploadModal" [modal]="true" [style]="{ width: '50vw' }">
+		<label for="file" class="reading-drop-container">
+			<i class="pi pi-upload reading-drop-title"></i>
+			<input type="file" id="file" class="d-none" (change)="onFileChange($event)" accept=".csv" /><br />
+			<span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+			<span class="reading-sm-font">Please maintain the format of uploading to stop failures</span> </label
+		><br />
+		<div class="text-center">
+			<button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="uploadFile()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Upload</button>
+		</div>
+	</p-dialog>
+	<p-scrollTop #scrollTopButton target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>
+</div>

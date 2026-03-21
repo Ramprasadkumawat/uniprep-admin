@@ -1,0 +1,247 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Companies</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Position</label>
+							<p-select fluid appendTo="body" styleClass="w-full" formControlName="position" [options]="dropdownData?.positions || []" placeholder="Select the job" optionLabel="position_title" [filter]="true" filterBy="position_title" [showClear]="true" optionValue="id"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select fluid appendTo="body" styleClass="w-full" formControlName="location" [options]="workLocation" placeholder="City, Country" optionLabel="work_location" [virtualScroll]="true" [virtualScrollItemSize]="40" [filter]="true" filterBy="work_location" [showClear]="true" optionValue="id"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Work Mode</label>
+							<p-select formControlName="workmode" fluid appendTo="body" styleClass="w-full" [options]="dropdownData?.workmode" placeholder="Select Work Mode" optionLabel="work_mode" [filter]="true" filterBy="work_mode" [showClear]="true" optionValue="id"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-0 mt-md-3">
+						<div class="form-group">
+							<label>Employment Type</label>
+							<p-select fluid appendTo="body" styleClass="w-full" formControlName="employment_type" [options]="dropdownData?.employmenttype" placeholder="Select Work Mode" optionLabel="employment_type" [filter]="true" filterBy="employment_type" [showClear]="true" optionValue="id"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-0 mt-md-3">
+						<div class="form-group">
+							<label>Salary Offer</label>
+							<input class="form-control w-100" pInputText formControlName="salaryoffer" />
+						</div>
+					</div>
+					<div class="col-md-4 mt-0 mt-md-3">
+						<div class="form-group">
+							<label>Job Status</label>
+							<p-select
+								formControlName="status"
+								optionValue="id"
+								optionLabel="name"
+								styleClass="w-full"
+								[options]="[
+									{ id: 1, name: 'Actively Hiring' },
+									{ id: 2, name: 'Hiring Closed' },
+									{ id: 3, name: 'Future Hiring' }
+								]"
+								placeholder="Select status"></p-select>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="btn btn-danger" type="button" (click)="this.getJobsList(); filterForm.reset()">Reset Filter</button>
+							<button class="btn btn-primary" type="submit">Filter Companies</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="container-fluid p-0">
+	<!-- Header -->
+	<div class="header-section p-3 bg-white border-bottom">
+		<div class="d-flex justify-content-between align-items-center">
+			<div class="d-flex align-items-center">
+				<p-button (click)="goBack()" icon="pi pi-arrow-left" class="btn-primary br-5 me-3" styleClass="p-button-rounded p-button-text text-white"></p-button>
+				<div>
+					<h4 class="mb-0">{{ companyName | uppercase }} Job Postings</h4>
+					<small class="text-muted">Total Categories: {{ totalCategories.toString().padStart(2, "0") }}</small>
+				</div>
+			</div>
+
+      <div class="d-flex align-items-center">
+        <!-- <span class="p-input-icon-left me-3" style="width: 350px">
+          <div></div>
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="searchText"
+            placeholder="Search"
+            class="w-100"
+          />
+        </span> -->
+
+				<button pButton pRipple type="button" label="Import" icon="pi pi-upload" class="p-button-primary me-2"></button>
+				<button pButton pRipple type="button" label="Export" icon="pi pi-download" class="p-button-primary"></button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Job Listings -->
+	<div class="job-listings p-3 bg-white">
+		<div class="row">
+			<div *ngFor="let job of jobPostings" class="col-md-6 col-lg-4 mb-3">
+				<div class="card shadow-sm h-100">
+					<!-- Job Header -->
+					<div class="card-header bg-white border-0 pt-3">
+						<div class="d-flex align-items-start">
+							<div class="company-logo me-3">
+								<img [src]="job?.company_logo" alt="Company Logo" class="img-fluid" width="70" />
+							</div>
+							<div class="flex-grow-1">
+								<div class="d-flex justify-content-between align-items-start">
+									<h5 class="mb-1">{{ job?.position_title }}</h5>
+									<span class="badge rounded-pill" [ngClass]="getStatusBadgeClass(job?.status)"></span>
+									<!-- {{ job.statusValue }} -->
+								</div>
+								<p class="mb-1 text-muted">{{ job?.company_name }}</p>
+								<small class="text-muted">Job Id: {{ job?.job_id }}</small>
+							</div>
+						</div>
+					</div>
+
+					<!-- Job Body -->
+					<div class="card-body">
+						<div class="row mb-3">
+							<!-- Total Applied -->
+							<div class="col-6">
+								<div class="d-flex align-items-center">
+									<i class="fa-solid fa-user text-warning me-2"></i>
+									<div>
+										<small class="text-muted d-block">Total Applied</small>
+										<strong>{{ job?.appliedCount }}</strong>
+									</div>
+								</div>
+							</div>
+
+							<!-- Status Button -->
+							<div class="col-6 text-end">
+								<button pButton pRipple type="button" [label]="getStatusText(job?.status)" [icon]="'fa-solid ' + getStatusIcon(job?.status)" [class]="getStatusButtonClass(job?.status)" class="p-button-sm"></button>
+							</div>
+						</div>
+
+						<div class="row mb-2">
+							<!-- Work Location -->
+							<div class="col-6">
+								<div class="d-flex align-items-center mb-3">
+									<i class="pi pi-map-marker text-success me-2"></i>
+									<div>
+										<small class="text-muted d-block">Work Location</small>
+										<strong>{{ job?.work_location }}</strong>
+									</div>
+								</div>
+							</div>
+
+							<!-- Available Vacancies -->
+							<div class="col-6">
+								<div class="d-flex align-items-center mb-3">
+									<i class="fa-solid fa-users text-primary me-2"></i>
+									<div>
+										<small class="text-muted d-block">Available Vacancies</small>
+										<strong>{{ job?.available_vacancies }}</strong>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row mb-2">
+							<!-- Start Date -->
+							<div class="col-6">
+								<div class="d-flex align-items-center mb-3">
+									<i class="fa-solid fa-calendar text-primary me-2"></i>
+									<div>
+										<small class="text-muted d-block">Start Date</small>
+										<strong>{{ job?.start_date }}</strong>
+									</div>
+								</div>
+							</div>
+
+							<!-- Due Date -->
+							<div class="col-6">
+								<div class="d-flex align-items-center mb-3">
+									<i class="fa-solid fa-calendar-times text-danger me-2"></i>
+									<div>
+										<small class="text-muted d-block">Due Date</small>
+										<strong>{{ job?.due_date }}</strong>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row mb-2">
+							<!-- Work Mode -->
+							<div class="col-6">
+								<div class="d-flex align-items-center mb-3">
+									<i class="fa-solid fa-building text-warning me-2"></i>
+									<div>
+										<small class="text-muted d-block">Work Mode</small>
+										<strong>{{ job?.work_mode }}</strong>
+									</div>
+								</div>
+							</div>
+
+							<!-- Employment Type -->
+							<div class="col-6">
+								<div class="d-flex align-items-center mb-3">
+									<i class="fa-solid fa-briefcase text-danger me-2"></i>
+									<div>
+										<small class="text-muted d-block">Employment Type</small>
+										<strong>{{ job?.employment_type }}</strong>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row mb-2">
+							<!-- Salary Offer -->
+							<div class="col-6">
+								<div class="d-flex align-items-center mb-3">
+									<i class="fa-solid fa-money-bill text-success me-2"></i>
+									<div>
+										<small class="text-muted d-block">Salary Offer</small>
+										<strong>{{ job?.salary_offer }}</strong>
+									</div>
+								</div>
+							</div>
+
+							<!-- Company Size -->
+							<div class="col-6">
+								<div class="d-flex align-items-center mb-3">
+									<i class="fa-solid fa-users text-secondary me-2"></i>
+									<div>
+										<small class="text-muted d-block">Company Size</small>
+										<strong>{{ job?.size }}</strong>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Posted Date -->
+						<div class="text-muted text-end mt-2">
+							<small>Posted On: {{ job?.posted_at }}</small>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="position-static mt-auto">
+		<p-paginator (onPageChange)="pageChange($event)" [rows]="perPage" [totalRecords]="totalCategories" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+	</div>
+</div>

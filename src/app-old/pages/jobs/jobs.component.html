@@ -1,0 +1,491 @@
+<div class="card readingcard">
+    <div class="card-body overflow-y-auto">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="filter-section mb-4" *ngIf="isFilterExpanded">
+                        <div class="filter-header">
+                            <h4 class="filter-title mb-0">Filter Jobs</h4>
+                        </div>
+                        <div class="filter-content">
+                            <div class="filter-form-container bg-white p-3 rounded">
+                                <form [formGroup]="jobFilterForm">
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Job ID</label>
+                                            <input pInputText class="w-100" placeholder="Job ID"
+                                                formControlName="jobId" />
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Job Title</label>
+                                            <input pInputText class="w-100" placeholder="Job Title"
+                                                formControlName="jobTitle" />
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Created Date (From)</label>
+                                            <p-datepicker [showIcon]="true" [readonlyInput]="true"
+                                                placeholder="Select Date" dateFormat="dd/mm/yy" styleClass="w-100"
+                                                [style]="{'width':'100%'}" appendTo="body"
+                                                formControlName="createdDateFrom">
+                                            </p-datepicker>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Created Date (To)</label>
+                                            <p-datepicker [showIcon]="true" [readonlyInput]="true"
+                                                placeholder="Select Date" dateFormat="dd/mm/yy" styleClass="w-100"
+                                                [style]="{'width':'100%'}" appendTo="body"
+                                                formControlName="createdDateTo">
+                                            </p-datepicker>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Job Created By</label>
+                                            <p-select [virtualScroll]="true" [virtualScrollItemSize]="50"
+                                                formControlName="jobCreatedBy" [options]="jobCreatedBy || []"
+                                                placeholder="Select job created by" optionLabel="label"
+                                                optionValue="value" styleClass="w-100" [filter]="true" dataKey="id"
+                                                filterBy="label" [showClear]="true" fluid appendTo="body">
+                                            </p-select>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Company</label>
+                                            <input pInputText class="w-100" placeholder="Company"
+                                                formControlName="company" />
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Hiring Type</label>
+                                            <p-multiSelect formControlName="hiringType" class="w-100"
+                                                placeholder="Hiring Type" [options]="hiringType" optionLabel="type"
+                                                optionValue="id"></p-multiSelect>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label>Institute Country</label>
+                                            <p-multiSelect fluid appendTo="body" class="w-100"
+                                                formControlName="instituteCountry" [options]="instituteCountry || []"
+                                                placeholder="Select Country" optionLabel="country" optionValue="id"
+                                                [filter]="true" filterBy="country" dataKey="id"
+                                                virtualScrollItemSize="50" [virtualScroll]="true">
+                                            </p-multiSelect>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-3">
+                                            <label>Institute</label>
+                                            <p-multiSelect fluid appendTo="body" class="w-100"
+                                                formControlName="institute" [options]="institute || []"
+                                                placeholder="Select a Institute" optionLabel="institutename"
+                                                optionValue="id" [filter]="true" filterBy="institutename" dataKey="id"
+                                                [virtualScroll]="true" [virtualScrollItemSize]="50">
+                                            </p-multiSelect>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Job Start Date (From)</label>
+                                            <p-datepicker [showIcon]="true" [readonlyInput]="true"
+                                                placeholder="Select Date" dateFormat="dd/mm/yy" styleClass="w-100"
+                                                [style]="{'width':'100%'}" appendTo="body"
+                                                formControlName="jobStartDateFrom">
+                                            </p-datepicker>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Job Start Date (To)</label>
+                                            <p-datepicker [showIcon]="true" [readonlyInput]="true"
+                                                placeholder="Select Date" dateFormat="dd/mm/yy" styleClass="w-100"
+                                                [style]="{'width':'100%'}" appendTo="body"
+                                                formControlName="jobStartDateTo">
+                                            </p-datepicker>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Application Deadline (From)</label>
+                                            <p-datepicker [showIcon]="true" [readonlyInput]="true"
+                                                placeholder="Select Date" dateFormat="dd/mm/yy" styleClass="w-100"
+                                                [style]="{'width':'100%'}" appendTo="body"
+                                                formControlName="applicationDeadlineFrom">
+                                            </p-datepicker>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Application Deadline (To)</label>
+                                            <p-datepicker [showIcon]="true" [readonlyInput]="true"
+                                                placeholder="Select Date" dateFormat="dd/mm/yy" styleClass="w-100"
+                                                [style]="{'width':'100%'}" appendTo="body"
+                                                formControlName="applicationDeadlineTo">
+                                            </p-datepicker>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Work Location</label>
+                                            <p-multiSelect fluid appendTo="body" class="w-100"
+                                                formControlName="workLocation" [options]="workLocation"
+                                                placeholder="City, Country" optionLabel="work_location" optionValue="id"
+                                                [virtualScroll]="true" [virtualScrollItemSize]="50" [filter]="true"
+                                                filterBy="work_location" [showClear]="false"
+                                                dataKey="id"></p-multiSelect>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Work Mode</label>
+                                            <p-multiSelect class="w-100" placeholder="Onsite / Remote"
+                                                formControlName="workMode" [options]="workMode" optionLabel="work_mode"
+                                                optionValue="id"></p-multiSelect>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Work Type</label>
+                                            <p-multiSelect class="w-100" placeholder="Work Type"
+                                                formControlName="workType" [options]="workType"
+                                                optionLabel="employment_type" optionValue="id"></p-multiSelect>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Min Education Requirement</label>
+                                            <p-multiSelect class="w-100" placeholder="Education Level"
+                                                formControlName="minEducation" [options]="minimumEducation"
+                                                optionLabel="minimum_education" optionValue="id"></p-multiSelect>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Gender Requirement</label>
+                                            <p-select class="w-100" placeholder="Any Gender"
+                                                formControlName="genderRequirement" [options]="gender"
+                                                optionLabel="gender" optionValue="id"></p-select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Experience Level</label>
+                                            <p-multiSelect class="w-100" placeholder="Experience Level"
+                                                formControlName="experienceLevel" [options]="experienceLevel"
+                                                optionLabel="experienceLevel" optionValue="id"></p-multiSelect>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Language</label>
+                                            <p-multiSelect class="w-100" placeholder="Language"
+                                                formControlName="language" [options]="languages" optionLabel="language"
+                                                optionValue="language"></p-multiSelect>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row g-3 mt-2">
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Language Proficiency</label>
+                                            <p-multiSelect class="w-100" placeholder="Language Proficiency"
+                                                formControlName="languageProficiency" [options]="languageProficiency"
+                                                optionLabel="proficiencylevel"
+                                                optionValue="proficiencylevel"></p-multiSelect>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Salary Offered (From)</label>
+                                            <p-inputNumber class="w-100" placeholder="Min Salary"
+                                                formControlName="salaryOfferedFrom"></p-inputNumber>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Salary Offered (To)</label>
+                                            <p-inputNumber class="w-100" placeholder="Max Salary"
+                                                formControlName="salaryOfferedTo"></p-inputNumber>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <label class="form-label">Interview Format</label>
+                                            <p-multiSelect class="w-100" placeholder="Interview Format"
+                                                formControlName="interviewFormat" [options]="interviewFormat"
+                                                optionLabel="interviewformat" optionValue="id"
+                                                appendTo="body"></p-multiSelect>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Introduction Video</label>
+                                            <p-select class="w-100" placeholder="Required / Not Required"
+                                                formControlName="introductionVideo" [options]="introVideo"
+                                                optionLabel="value" optionValue="id" appendTo="body"></p-select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Verified Talent Requirement</label>
+                                            <p-select class="w-100" placeholder="Yes / No"
+                                                formControlName="verifiedTalentRequirement" [options]="introVideo"
+                                                optionLabel="value" optionValue="id" appendTo="body"></p-select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Job Status</label>
+                                            <p-select class="w-100" placeholder="Select Job Status"
+                                                formControlName="status" [options]="jobStatus" optionLabel="label"
+                                                optionValue="value" appendTo="body"></p-select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Talent Creation</label>
+                                            <p-select class="w-100" placeholder="Select Talent Creation"
+                                                formControlName="talentCreation" [options]="talentCreation"
+                                                optionLabel="label" optionValue="value" appendTo="body"></p-select>
+                                        </div>
+
+                                    </div>
+                                    <div class="row g-3 mt-2">
+                                        <div class="col-md-3">
+                                            <label>User Registration</label>
+                                            <p-select class="w-100" placeholder="Select User Registration"
+                                                formControlName="userRegistration" [options]="userRegistration"
+                                                optionLabel="label" optionValue="value" appendTo="body"></p-select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Application</label>
+                                            <p-select class="w-100" placeholder="Select Application"
+                                                formControlName="application" [options]="application"
+                                                optionLabel="label" optionValue="value" appendTo="body"></p-select>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end mt-3">
+                                        <p-button type="button" label="Reset" icon="pi pi-refresh"
+                                            styleClass="p-button-outlined" (click)="resetFilters()"></p-button>
+                                        <p-button type="button" label="Filter Data" icon="pi pi-filter"
+                                            (click)="applyFilters()" styleClass="ms-2"></p-button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jobs Table -->
+                <div class="col-md-12">
+                    <div class="card bg-white">
+                        <div class="card-header d-flex align-items-center justify-content-between bg-transparent">
+                            <div class="d-flex align-items-center gap-3">
+                                <h5 class="mb-1">Jobs</h5>
+                                <div class="d-flex gap-3">
+                                    <button type="button" class="count-btn">Total Jobs: {{ totalJobs +
+                                        totalJobsExhausted }}</button>
+                                    <button type="button" class="refresh-btn" (click)="refreshData()" pTooltip="Refresh"
+                                        tooltipPosition="top">
+                                        <i class="pi pi-refresh"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button pButton type="button" icon="pi pi-filter" label="Filter"
+                                    class="p-button-primary" (click)="isFilterExpanded = !isFilterExpanded"></button>
+                                <button pButton type="button" class="p-button-primary" label="Import"
+                                    icon="pi pi-file-import" (click)="showImportDialog = !showImportDialog">
+                                </button>
+                                <button pButton type="button" icon="pi pi-file-export" class="p-button-primary"
+                                    label="Export" (click)="exportJobs()"></button>
+                            </div>
+                        </div>
+                        <div class="summary-cards mb-4 mt-2 p-2">
+                            <div class="summary-cards-row">
+                                <div class="summary-card-wrapper" *ngFor="let card of summaryCards; let i = index">
+                                    <div class="summary-card" [ngClass]="card.class" [class.active]="selectedTab === i"
+                                        (click)="selectTab(i)">
+                                        <div class="card-content">{{ card.label }}: {{ card.value }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-container bg-white rounded">
+                            <p-table #dt [value]="filteredJobs" [paginator]="true" [rows]="pageSize"
+                                [rowsPerPageOptions]="[25, 50, 100]" styleClass="p-datatable-gridlines"
+                                [scrollable]="true" scrollDirection="horizontal"
+                                [totalRecords]="totalJobs + totalJobsExhausted" [tableStyle]="{ 'min-width': '150rem' }"
+                                [lazy]="true" (onLazyLoad)="onPageChange($event)"
+                                [loading]="isLoading">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th pSortableColumn="position">Job Details <p-sortIcon
+                                                field="position"></p-sortIcon></th>
+                                        <th pSortableColumn="hiring_type_name">Hiring Type <p-sortIcon
+                                                field="hiring_type_name"></p-sortIcon></th>
+                                        <th pSortableColumn="company_name">Company Name <p-sortIcon
+                                                field="company_name"></p-sortIcon></th>
+                                        <th pSortableColumn="worklocation">Work Location <p-sortIcon
+                                                field="worklocation"></p-sortIcon></th>
+                                        <th pSortableColumn="salary_offer">Salary Offered <p-sortIcon
+                                                field="salary_offer"></p-sortIcon></th>
+                                        <th pSortableColumn="start_date">Start Date <p-sortIcon
+                                                field="start_date"></p-sortIcon></th>
+                                        <th pSortableColumn="due_date">Due Date <p-sortIcon
+                                                field="due_date"></p-sortIcon></th>
+                                        <th pSortableColumn="status">Job Status <p-sortIcon field="status"></p-sortIcon>
+                                        </th>
+                                        <th pSortableColumn="total_applied">Total Count <p-sortIcon
+                                                field="total_applied"></p-sortIcon></th>
+                                        <th pSortableColumn="created_by">Job Created By <p-sortIcon
+                                                field="created_by"></p-sortIcon></th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-job>
+                                    <tr>
+                                        <td><strong>{{ job.position }}</strong><br>
+                                            Job ID: {{ job.job_id }}<br>
+                                            Created Date: {{ job.created_at | date }}<br>
+                                            Created By: {{ job.created_by }}</td>
+                                        <td>
+                                            <strong>{{ job.hiring_type_name }}</strong>
+                                            <ng-container *ngIf="job.hiring_type_name === 'Campus Hire'">
+                                                <br />
+                                                Institute:
+                                                <ng-container *ngIf="job.institutename; else noInstitute">
+                                                    {{ job.institutename | slice:0:30 }}
+                                                    <ng-container *ngIf="job.institutename.length > 30">
+                                                        <br />
+                                                        {{ job.institutename | slice:30 }}
+                                                    </ng-container>
+                                                </ng-container>
+                                                <ng-template #noInstitute>
+                                                    N/A
+                                                </ng-template>
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            {{ job.company_name }}
+                                            <ng-container *ngIf="job.hiring_type === 'Co-Hire' && job?.cohire_company_name">
+                                                <br />
+                                                {{ job.cohire_company_name | lowercase }}
+                                            </ng-container>
+                                        </td>
+                                        <td>{{ job.worklocation }}</td>
+                                        <td>{{ job.currency_code }} {{ job.salary_offer || 'N/A' }}</td>
+                                        <td>{{ job.start_date }}</td>
+                                        <td>{{ job.due_date }}</td>
+                                        <td>
+                                            <span class="status-badge"
+                                                [ngClass]="[0, 3].includes(job.status) ? 'status-reject' : 'status-approved'">
+                                                {{ [0, 3].includes(job.status) ? 'Exhausted' : 'Active' }}
+                                            </span>
+                                        </td>
+                                        <td>Total Application: <span style="cursor: pointer;color: #007BFF;"
+                                                (click)="goToViewTalentApplicants(job.id)">{{ job.total_applied || 0
+                                                }}</span><br>
+                                            Total User Registration: <span style="cursor: pointer;color: #007BFF;"
+                                                (click)="goToViewUser(job.id)">{{ job.total_registered || 0
+                                                }}</span><br>
+                                            Total Talent Creation: <span style="cursor: pointer;color: #007BFF;"
+                                                (click)="goToViewTalent(job.id)">{{ job.total_creation || 0 }}</span>
+                                        </td>
+                                        <td>{{ job.created_by }}</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button type="button" class="view-order-link action-link-btn"
+                                                    (click)="getJobDetails(job.id, 'view', job, $event)">
+                                                    <i class="pi pi-eye me-1"></i>View
+                                                </button>
+                                                <button type="button" class="edit-btn"
+                                                    (click)="getJobDetails(job.id, 'edit', job, $event)"
+                                                    [pTooltip]="'Edit'" tooltipPosition="top">
+                                                    <i class="pi pi-pencil"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="6" class="text-center">No jobs found</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p-confirmPopup [style]="{ 'z-index': '999999 !important' }"></p-confirmPopup>
+    </div>
+</div>
+
+
+<p-dialog [(visible)]="viewJob" [modal]="true" [style]="{width: '80vw'}">
+
+    <ng-template pTemplate="header">
+        <div class="d-flex justify-content-between align-items-center w-100">
+            <span class="fw-semibold fs-5">View Job</span>
+
+            <button class="count-btn" (click)="actionMenu.toggle($event)" [pTooltip]="'Share'" tooltipPosition="top">
+                <i class="pi pi-share-alt"></i>
+            </button>
+
+        </div>
+    </ng-template>
+          
+    <uni-add-job [jobData]="jobData" [isViewMode]="isViewMode" (jobSaved)="onJobSavedFromDialog()"
+        (editModeChanged)="onEditModeChanged($event)">
+    </uni-add-job>
+
+</p-dialog>
+
+<p-popover #actionMenu appendTo="body">
+    <div class="list-none p-0 m-0 d-flex flex-column gap-1 bg-white border rounded shadow-sm px-3 py-2"
+        style="min-width:150px;cursor:pointer">
+
+        <div (click)="shareViaWhatsapp(onPopOverTriggeredJobId)">
+            <i class="pi pi-whatsapp me-2"></i> WhatsApp
+        </div>
+
+        <div (click)="shareViaMail(onPopOverTriggeredJobId)">
+            <i class="pi pi-envelope me-2"></i> Email
+        </div>
+
+        <div (click)="shareViaFacebook(onPopOverTriggeredJobId)">
+            <i class="pi pi-facebook me-2"></i> Facebook
+        </div>
+
+        <div (click)="shareViaTwitter(onPopOverTriggeredJobId)">
+            <i class="pi pi-twitter me-2"></i> Twitter
+        </div>
+
+        <div (click)="shareViaInstagram(onPopOverTriggeredJobId)">
+            <i class="pi pi-instagram me-2"></i> Instagram
+        </div>
+
+        <div (click)="shareViaLinkedIn(onPopOverTriggeredJobId)">
+            <i class="pi pi-linkedin me-2"></i> LinkedIn
+        </div>
+
+        <div (click)="copyLink(onPopOverTriggeredJobId)">
+            <i class="pi pi-copy me-2"></i> Copy Link
+        </div>
+    </div>
+</p-popover>
+
+<p-dialog [(visible)]="showImportDialog" [modal]="true">
+    <ng-template pTemplate="header">
+        <span class="fw-semibold fs-5">Import Job</span>
+    </ng-template>
+
+    <div class="d-flex flex-column align-items-center justify-content-center gap-3 text-center">
+        <p class="text-muted mb-0">
+            Download the sample CSV to see the required format before importing.
+        </p>
+        <div class="d-flex gap-2">
+            <a href="../../../assets/files/job.csv" download class="p-button p-button-text">
+                <i class="pi pi-download me-2"></i>
+                <span>Sample CSV</span>
+            </a>
+            <button pButton type="button" class="p-button-primary" (click)="fileInput.click()">
+                <i class="pi pi-file-import me-2"></i>
+                <span>Import</span>
+            </button>
+        </div>
+    </div>
+
+    <input type="file" #fileInput hidden accept=".csv" (change)="importJobs($event)" />
+</p-dialog>

@@ -1,0 +1,25 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "category_name": "Numerical Reasoning",
+            "icon": "https://api.uniprep.ai/uniprepapi/storage/app/public/submoduleicons/DocumentChecklist.png"
+        },
+        {
+            "id": 2,
+            "category_name": "Numerical Reasoning",
+            "icon": "https://api.uniprep.ai/uniprepapi/storage/app/public/submoduleicons/DocumentChecklist.png"
+        },
+        {
+            "id": 2,
+            "category_name": "Numerical Reasoning",
+            "icon": "https://api.uniprep.ai/uniprepapi/storage/app/public/submoduleicons/DocumentChecklist.png"
+        },
+        {
+            "id": 2,
+            "category_name": "Numerical Reasoning",
+            "icon": "https://api.uniprep.ai/uniprepapi/storage/app/public/submoduleicons/DocumentChecklist.png"
+        }
+    ],
+    "count": 4
+}

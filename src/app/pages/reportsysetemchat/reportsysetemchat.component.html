@@ -1,0 +1,195 @@
+<div class="header pt-5 pb-8">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card" style="height: 400px;">
+                            <div class="card-header">
+                                <h4>Filter By</h4>
+                            </div>
+                            <div class="card-body">
+                                <form action="" (ngSubmit)="onFilterSubmit()">
+                                    <div class="row">
+                                        <div class="col-md-6 mt-1">
+                                            <div class="form-group">
+                                                <label>From</label>
+                                                <p-datepicker formControlName="createdFrom" styleClass="w-full"
+                                                    appendTo="body" dateFormat="yy-mm-dd"></p-datepicker>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 mt-1">
+                                            <div class="form-group">
+                                                <label>To</label>
+                                                <p-datepicker formControlName="createdTo" styleClass="w-full"
+                                                    appendTo="body" dateFormat="yy-mm-dd"></p-datepicker>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mt-2">
+                                            <div class="form-groupm">
+                                                <label>Status</label>
+                                                <p-select styleClass="w-full" formControlName="messagestatus"
+                                                    optionValue="id" optionLabel="name" [options]="statusList"
+                                                    placeholder="Status"></p-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-5" style="text-align: center;">
+                                        <button class="btn" type="button"
+                                            style="background-color:var(--p-primary-500); color: #fff;"
+                                            (click)="resetFilter()">Reset
+                                            Filter</button>
+                                        <button class="btn" type="submit"
+                                            style="background-color:var(--p-primary-500); color: #fff;">Filter
+                                            Data</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="card" style="height: 400px;">
+                            <div class="card-header">
+                                <h5>Tickets</h5>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            <input [(ngModel)]="searchdata" type="text" id="input-username"
+                                                class="form-control" placeholder="Search Chat"
+                                                (keyup)="performSearch()">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body" style="overflow: auto;">
+                                <div class="card-header" *ngFor="let list of chatreportuser"
+                                    [ngClass]="{'active': list.user_id === ticketchatuserid}"
+                                    (click)="chatTicketInUser(list.user_id,list.type ,list.name)">
+                                    <div style="display: flex; justify-content: space-between; cursor: pointer;">
+                                        <h4>{{list.name}}&nbsp; <span class="circle"
+                                                style="font-size: 11px;">{{list.ticket_count}}</span><br><span
+                                                style="font-size: 11px;">{{list.email}}</span></h4>
+                                        <span style="font-size: 11px;">10:30</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="card" style="height: 800px;">
+                    <div class="card-header">
+                        <div style="display: flex; justify-content: space-between;">
+                            <div>
+                                <h4>{{chatSelectingUserName}}</h4>
+                                <span style="font-size: 10px;">User is typing...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" style="height: 500px; overflow: auto;">
+                        <div class="row justify-content-between">
+                            <div class="col-md-12 col-12 text-md-center text-end">
+                                <button class="btn btn-outline-light theme-blue px-3 py-3" (click)="setActiveButton(3)"
+                                    [ngStyle]="button3Style">General Report</button>
+                                <button class="btn btn-outline-light theme-blue px-3 py-3" (click)="setActiveButton(1)"
+                                    [ngStyle]="button1Style">Q&A Report</button>
+                                <button class="btn btn-outline-light theme-blue px-3 py-3" (click)="setActiveButton(2)"
+                                    [ngStyle]="button2Style">Chat Report</button>
+                                <button class="btn btn-outline-light theme-blue px-3 py-3" (click)="setActiveButton(6)"
+                                    [ngStyle]="button6Style">Company Report</button>
+                                <button class="btn btn-outline-light theme-blue px-3 py-3" (click)="setActiveButton(4)"
+                                    [ngStyle]="button4Style">Scholarship Report</button>
+                                <button class="btn btn-outline-light theme-blue px-3 py-3" (click)="setActiveButton(5)"
+                                    [ngStyle]="button5Style">Investor Report</button>
+                                <button class="btn btn-outline-light theme-blue px-3 py-3" (click)="setActiveButton(7)"
+                                    [ngStyle]="button7Style">Pitch Deck Report</button>
+                                <button class="btn btn-outline-light theme-blue px-3 py-3" (click)="setActiveButton(8)"
+                                    [ngStyle]="button8Style">Learning Hub Report</button>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between mt-3">
+                            <div class="col-md-12 col-12 text-md-start text-start">
+                                <button [ngClass]="{'activeticets': item.ticket_no === chatticketno}"
+                                    *ngFor="let item of ticketlistforchat; let i = index"
+                                    class="btn btn-outline-dark theme-blue px-3 py-3 me-2 mt-1" style="color: black; "
+                                    (click)="tickWiseChatList(item.user_id,item.ticket_no)">Ticket {{ i + 1 }}</button>
+                            </div>
+                        </div>
+                        <!-- chat code -->
+                        <div class="card-header mt-4" *ngFor="let chat of getChatList">
+                            <div>
+                                <div style="display: flex;justify-content: left;">
+                                    <div>
+                                        <!-- <img width="37" height="37" src="{{tickets.icon}}" alt=""> -->
+                                    </div>
+                                    &nbsp;
+                                    <div>
+                                        <h3 style="color: var(--p-primary-500);" class="font-weight-bold ms-2">
+                                            {{chat.username}}</h3>
+                                    </div>&nbsp;&nbsp;&nbsp;
+                                    <!-- <div><span class="p-2"
+                                            >
+                                        </span></div>&nbsp;&nbsp;&nbsp; -->
+                                    <div><span class="p-2"
+                                            style="background-color: #EBEDF2; border-radius: 20px; color: var(--p-primary-500);">
+                                            {{chat.messageDate}}</span></div>
+                                </div>
+                                <div *ngIf="chat.adminmessage==0" class="ps-4 mt-3" style="display: flex;">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div><span class="p-2"
+                                            style="background-color: red; border-radius: 20px; color: #FFFFFF;">{{chat.priority}}Priority</span>
+                                    </div>&nbsp;&nbsp;
+                                    <div><span class="p-2"
+                                            style="background-color: #FFF0DF; border-radius: 20px; color:#001631;">{{chat.reportoption}}</span>
+                                    </div>
+                                </div>
+                                <div class="p-2" style="display: flex;justify-content: left;">
+                                    <!-- <div> <input [(ngModel)]="selectedIndex === index" type="checkbox" name="" id=""
+                                            (change)="questionSelectedCheckBox($event,index,tickets)">
+                                    </div> &nbsp; -->
+                                    <div><span class="font-weight-bold ms-2 mt-2">{{chat.message}}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <form [formGroup]="submitForm" (ngSubmit)="sendMessage()">
+                            <div class="row">
+                                <div class="col-md-12 mt-2">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="input-status">Tickets Status</label>
+                                        <p-select styleClass="w-full" formControlName="status" optionValue="id"
+                                            optionLabel="name" [options]="statusList" placeholder="Status"></p-select>
+                                        <div
+                                            *ngIf="submitForm.get('status').invalid && (submitForm.get('status').dirty || submitForm.get('status').touched)">
+                                            <div *ngIf="submitForm.get('status').errors.required" class="text-danger">
+                                                Status is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mt-2">
+                                    <div class="form-group">
+                                        <textarea class="form-control z-depth-1" formControlName="textarea" rows="3"
+                                            cols="3" placeholder="Type Your Message"></textarea>
+                                        <div
+                                            *ngIf="submitForm.get('textarea').invalid && (submitForm.get('textarea').dirty || submitForm.get('textarea').touched)">
+                                            <div *ngIf="submitForm.get('textarea').errors.required" class="text-danger">
+                                                Message is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="" style="text-align: right;">
+                                <button class="btn" type="submit"
+                                    style="background-color:var(--p-primary-500); color: #fff;">Submit
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

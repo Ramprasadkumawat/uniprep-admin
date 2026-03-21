@@ -1,0 +1,565 @@
+
+<div class="rt-tabs" *ngIf="editingCompanyId">
+    <div *ngFor="let tab of tabList" [ngClass]="tab.name == selectedTab.name ? 'p-tab-active' : ''" (click)="selectTab(tab)" role="button" class="p-tab">{{ tab.name }}</div>
+</div>
+<div class="card readingcard p-2 mb-4" *ngIf="!editingCompanyId">
+    <div class="card-header border-0 bg-white header-section">
+        <div class="row justify-content-center">
+            <div class="col-md-12 d-flex gap-2">
+                <div class="select-title bg-white d-flex justify-content-between align-items-center" style="width: 100%">
+                    <div>
+                        <h5 class="mb-0 form-title text-dark">
+                            <span> {{ !editingCompanyId? 'Create Company': isViewMode? 'View Company': 'Update Company' }}</span>
+                        </h5>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center">
+                        <button pButton type="button" class="how-it-works-btn p-2 px-4 py-2">Guidelines</button>
+                        <button pButton type="button" class="how-it-works-btn p-2 px-4 py-2">How it works ?</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card readingcard p-4">
+    <div class="col-md-12 mb-3 mt-2" *ngIf="selectedTab.name === 'View Company'">
+        <form [formGroup]="companyForm" (ngSubmit)="submitCompany()">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="company-logo-wrapper">
+                        <div class="logo-upload-box" *ngIf="!logoPreview" (click)="logoInput.click()" [class.disabled-logo]="isViewMode">
+                            <div class="logo-upload-card">
+                                <i class="pi pi-image logo-icon"></i>
+                                <button type="button" class="upload-btn">Upload Company Logo</button>
+                            </div>
+                            <input #logoInput type="file" accept="image/*" hidden (change)="onLogoChange($event)" />
+                        </div>
+                        <div class="logo-upload-box has-image" *ngIf="logoPreview">
+                            <div class="logo-upload-card">
+                                <img [src]="logoPreview" height="100" width="100"/>
+                                <button type="button" class="change-btn mt-1" (click)="logoInput.click()" *ngIf="!isViewMode">Change Logo</button>
+                                <button type="button" class="remove-btn " (click)="removeLogo()" *ngIf="!isViewMode">Remove Logo</button>
+                            </div>
+                            <input #logoInput type="file" accept="image/*" hidden (change)="onLogoChange($event)" [disabled]="isViewMode" />
+                        </div>
+                    </div>
+                    <small class="text-danger" *ngIf="companyForm.get('companyLogo')?.invalid && companyForm.get('companyLogo')?.touched">Company Logo is required.</small>
+                </div>
+            </div>
+            <div class="row mt-3" *ngIf="!editingCompanyId">
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>User Name</label>
+                    <input pInputText class="w-100" placeholder="Enter User Name" formControlName="userName" />
+                    <small class="text-danger" *ngIf="companyForm.get('userName')?.invalid && companyForm.get('userName')?.touched">User Name is required.</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Email ID</label>
+                    <input pInputText class="w-100" placeholder="Enter Email" formControlName="email" />
+                    <small class="text-danger" *ngIf="companyForm.get('email')?.invalid && companyForm.get('email')?.touched">Valid email is required.</small>
+                </div>
+            </div>
+            <div class="row mt-3" *ngIf="!editingCompanyId">
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Contact Number</label>
+                    <ngx-intl-tel-input class="w-100" [cssClass]="'form-control p-2 fs-6 w-100 border border-gray rounded-start-0'" [preferredCountries]="['in']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [selectedCountryISO]=" preferredCountry" formControlName="contactNumber" customPlaceholder=" Enter Contact Number" appendTo="body"></ngx-intl-tel-input>
+                    <small class="text-danger" *ngIf="companyForm.get('contactNumber')?.invalid && companyForm.get('contactNumber')?.touched">Contact Number is required.</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Gender</label>
+                    <p-select formControlName="gender" class="w-100" placeholder="Gender" [options]="genderOptions" optionLabel="type" optionValue="id" [filter]="true" [filterBy]="'type'"></p-select>
+                    <small class="text-danger" *ngIf="companyForm.get('gender')?.invalid && companyForm.get('gender')?.touched">Gender is required.</small>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6" *ngIf="!editingCompanyId">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Designation</label>
+                    <input pInputText class="w-100" placeholder="Enter Designation" formControlName="designation" />
+                    <small class="text-danger" *ngIf="companyForm.get('designation')?.invalid && companyForm.get('designation')?.touched">Designation is required.</small>
+                </div>
+                <div class="col-md-6" *ngIf="!editingCompanyId">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Country</label>
+                    <p-select class="w-100" placeholder="Select Country" [showClear]="true" appendTo="body" formControlName="country" [options]="countries" optionLabel="country_name" optionValue="id" [virtualScroll]="true" [virtualScrollItemSize]="50" [filter]="true" filterBy="country_name"></p-select>
+                    <small class="text-danger" *ngIf="companyForm.get('country')?.invalid && companyForm.get('country')?.touched">Country is required.</small>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Company Name</label>
+                    <input pInputText type="text" formControlName="company" class="w-100" placeholder="Enter Company Name" />
+                    <small class="text-danger" *ngIf="companyForm.get('company')?.invalid && companyForm.get('company')?.touched">Company Name is required.</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Company Size</label>
+                    <p-select formControlName="companySize" class="w-100" placeholder="Company Size" [options]="companySizes" optionLabel="size" optionValue="id" [filter]="true" [filterBy]="'size'"></p-select>
+                    <small class="text-danger" *ngIf="companyForm.get('companySize')?.invalid && companyForm.get('companySize')?.touched">Company Size is required.</small>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Service Type</label>
+                    <p-multiSelect formControlName="serviceType" class="w-100" placeholder="Select Service Type" [options]="serviceTypes" optionLabel="service_type" optionValue="id" [virtualScroll]="true" [virtualScrollItemSize]="50" [filter]="true" [filterBy]="'service_type'"></p-multiSelect>
+                    <small class="text-danger" *ngIf="companyForm.get('serviceType')?.invalid && companyForm.get('serviceType')?.touched">Service Type is required.</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Headquarters Location</label>
+                    <p-select [options]="headQuartersList.length > 0 ? headQuartersList : []" formControlName="headquartersLocation" appendTo="body" [optionLabel]="headQuartersList.length > 0 ? 'city_name' : 'city_state'" [optionValue]="headQuartersList.length > 0 ? 'city_id' : 'id'" [virtualScroll]="true" [virtualScrollItemSize]="50" placeholder="Select Headquarter Location" [style]="{ width: '100%' }" [filter]="true" [filterBy]="headQuartersList.length > 0 ? 'city_name,country_name' : 'city_state'" />
+                    <small class="text-danger" *ngIf="companyForm.get('headquartersLocation')?.invalid && companyForm.get('headquartersLocation')?.touched">Headquarters Location is required.</small>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Source Type</label>
+                    <p-select formControlName="source_type" class="w-100" placeholder="Select Source Type" [options]="sourceTypes" optionLabel="label" optionValue="value" appendTo="body" (onChange)="onSourceTypeChange($event.value)"></p-select>
+                    <small class="text-danger" *ngIf="companyForm.get('source_type')?.invalid && companyForm.get('source_type')?.touched">Source Type is required.</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Source Name</label>
+                    <p-select formControlName="source_name" class="w-100" placeholder="Select Source Name" [options]="sourceNameOptions" optionLabel="label" optionValue="value" appendTo="body" [disabled]="companyForm.get('source_type')?.value === 'Direct'"></p-select>
+                    <small class="text-danger" *ngIf="companyForm.get('source_name')?.invalid && companyForm.get('source_name')?.touched">Source Name is required.</small>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Global Presence</label>
+                    <p-multiSelect class="w-100" placeholder="Global Presence" formControlName="globalPresence" [options]="globalPresence" optionLabel="country" optionValue="id" [virtualScroll]="true" [virtualScrollItemSize]="50" [filter]="true" [filterBy]="'country'"></p-multiSelect>
+                    <small class="text-danger" *ngIf="companyForm.get('globalPresence')?.invalid && companyForm.get('globalPresence')?.touched">Global Presence is required.</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Website</label>
+                    <div class="copy-container">
+                        <input pInputText class="w-100 copy-input" placeholder="Enter Website" formControlName="website" />
+                        <button pButton type="button" class="copy-button" (click)="copyWebsite()"><i class="pi pi-copy"></i></button>
+                    </div>
+                    <small class="text-danger" *ngIf="companyForm.get('website')?.invalid && companyForm.get('website')?.touched">Website is required.</small>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Year Founded</label>
+                    <p-datepicker appendTo="body" placeholder="Select Year Founded" formControlName="yearFounded" view="year" dateFormat="yy" fluid class="w-100" [maxDate]="maxYear" />
+                    <small class="text-danger" *ngIf="companyForm.get('yearFounded')?.invalid && companyForm.get('yearFounded')?.touched">Year Founded is required.</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Company LinkedIn Profile</label>
+                    <div class="copy-container">
+                        <input pInputText class="w-100 copy-input" placeholder="Company LinkedIn Profile" formControlName="linkedin" />
+                        <button pButton type="button" class="copy-btn" icon="pi pi-copy" (click)="copyLinkedin()"></button>
+                    </div>
+                    <small class="text-danger" *ngIf="companyForm.get('linkedin')?.invalid && companyForm.get('linkedin')?.touched">LinkedIn profile is required.</small>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <h4>Company Insights</h4>
+                    <div class="justify-content-between d-flex mb-2">
+                        <label class="font-medium"><i class="pi pi-check-circle text-warning me-2"></i>About Company</label>
+                        <button *ngIf="!isNotEmptyHtml(companyForm.get('aboutCompany')?.value) && !isViewMode" type="button" class="btn btn-sm ms-3 text-small text-white" style="background-color: oklch(62.7% 0.194 149.214);" (click)="aiGenerate('AI generate')"><i class="pi pi-star"></i>AI Generate</button>
+                        <button *ngIf="isNotEmptyHtml(companyForm.get('aboutCompany')?.value) && !isViewMode" type="button" class="btn bg-secondary btn-sm ms-3 text-small text-white" (click)="aiGenerate('Rephrase')">Rephrase</button>
+                    </div>
+                    <p-editor [readonly]="isViewMode" (mouseover)="onFocusInput('aboutCompany')" (mouseout)="resetMessageBox()" formControlName="aboutCompany" placeholder="Enter the company description" (ngModelChange)="checkMaximumWordsInFields(companyForm.get('aboutCompany'), 2000)"></p-editor>
+                    <small class="text-danger" *ngIf="companyForm.get('aboutCompany')?.invalid && companyForm.get('aboutCompany')?.touched">Company insight is required.</small>
+                    <small class="text-danger" *ngIf="getWordCountUsingControl(companyForm.get('aboutCompany')) > 2000">Please provide company information (max 2000 characters) </small>
+                    <div class="text-end mt-1">
+                        <small>{{getWordCountUsingControl(companyForm.get("aboutCompany"))}}/2000</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3" *ngIf="editingCompanyId">
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Talent Credit</label>
+                    <input pInputText class="w-100" placeholder="Talent Credit" formControlName="talentCredit" />
+                    <small class="text-danger" *ngIf="companyForm.get('talentCredit')?.hasError('decreasingValue')">Talent credit cannot be less than {{ initialTalentCredit }}</small>
+                </div>
+                <div class="col-md-6">
+                    <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Subscription</label>
+                    <p-select formControlName="subscriptions" class="w-100" placeholder="Subscription" appendTo="body" [options]="subscriptions" optionLabel="label" optionValue="id" [filter]="true" filterBy="label"></p-select>
+                </div>
+            </div>
+            <div class="text-end mt-4 d-flex justify-content-end gap-2">
+                <button pButton *ngIf="!editingCompanyId" type="submit" class="create-btn" label="Create Company" icon="pi pi-plus"></button>
+                <button pButton *ngIf="editingCompanyId && !isViewMode" type="submit" class="update-btn" label="Update Company" icon="pi pi-check"></button>
+                <p-button *ngIf="editingCompanyId && isViewMode" type="button" label="Edit Company" icon="pi pi-pencil" (onClick)="enableEditMode()"></p-button>
+            </div>
+        </form>
+    </div>
+    <div *ngIf="selectedTab.name === 'User Details'" class="table-container bg-white rounded mt-3">
+        <p-table [value]="users" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[25, 50, 100]"
+            [totalRecords]="users.length" styleClass="p-datatable-gridlines" [scrollable]="true"
+            scrollDirection="horizontal" [tableStyle]="{ 'min-width': '120rem' }" [lazy]="true"
+            (onLazyLoad)="onPageChangeUser($event)">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="name">User Name <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+                    <th pSortableColumn="phone">Contact No <p-sortIcon field="phone"></p-sortIcon></th>
+                    <th pSortableColumn="gender">Gender <p-sortIcon field="gender"></p-sortIcon></th>
+                    <th pSortableColumn="company_designation">Designation <p-sortIcon field="company_designation"></p-sortIcon></th>
+                    <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user>
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.phone }}</td>
+                    <td>{{ user.gender === 'F' ? 'Female' : user.gender === 'M' ? 'Male' : user.gender === 'O' ? 'Other' : '-' }}</td>
+                    <td>{{ user.company_designation }}</td>
+                    <td>
+                        <button class="btn btn-sm" [disabled]="user.status === 2" [ngClass]="{
+                            'btn-danger': user.status === 3,
+                            'btn-success': user.status === 1,
+                            'btn-secondary': user.status === 2
+                          }">
+                            {{
+                            user.status === 1
+                            ? 'Approved'
+                            : user.status === 2
+                            ? 'Waiting for Approval'
+                            : user.status === 3
+                            ? 'Rejected'
+                            : 'Rejected'
+                            }}
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="6" class="text-center">No users found</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div *ngIf="selectedTab.name === 'Transaction History'" class="table-container bg-white rounded mt-3">
+        <p-table [value]="transactions" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[25, 50, 100]"
+            styleClass="p-datatable-gridlines" [scrollable]="true" scrollDirection="horizontal"
+            [tableStyle]="{ 'min-width': '120rem' }" [lazy]="true"
+            (onLazyLoad)="onPageChangeTransactionHistory($event)">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="payment_link">Transaction ID <p-sortIcon field="payment_link"></p-sortIcon></th>
+                    <th pSortableColumn="updated_at">Payment Date <p-sortIcon field="updated_at"></p-sortIcon></th>
+                    <th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+                    <th pSortableColumn="amount">Amount <p-sortIcon field="amount"></p-sortIcon></th>
+                    <th pSortableColumn="description">Description <p-sortIcon field="description"></p-sortIcon></th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-tx>
+                <tr>
+                    <td>{{ tx.payment_link || 'N/A' }}</td>
+                    <td>{{ tx.updated_at || 'N/A' }}</td>
+                    <td>{{ tx.status === 1 ? 'Paid' : tx.status === 0 ? 'Unpaid' : 'N/A' }}</td>
+                    <td>{{ tx.currency + ' ' + tx.amount || 'N/A' }}</td>
+                    <td>{{ tx.description || 'N/A' }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-success" (click)="downloadInvoice(tx.invoice_url)">Download</button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8" class="text-center">No transactions found</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div *ngIf="selectedTab.name === 'Remarks'" class="table-container bg-white rounded mt-3">
+        <div class="d-flex justify-content-between">
+            <h3>Remarks</h3>
+            <p-button label="Add Remarks" (onClick)="showRemarksDialog = true"></p-button>
+        </div><br>
+        <p-table [value]="remarks" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[25, 50, 100]"
+            [totalRecords]="remarks.length" styleClass="p-datatable-gridlines" [scrollable]="true"
+            scrollDirection="horizontal" [tableStyle]="{ 'min-width': '120rem' }" [lazy]="true"
+            (onLazyLoad)="onPageChangeRemark($event)">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="status">Remark Status <p-sortIcon field="status"></p-sortIcon></th>
+                    <th pSortableColumn="followup_required">Follow Up Required <p-sortIcon field="followup_required"></p-sortIcon></th>
+                    <th pSortableColumn="followup_date">Follow Up Date <p-sortIcon field="followup_date"></p-sortIcon></th>
+                    <th pSortableColumn="followup_time">Follow Up Time <p-sortIcon field="followup_time"></p-sortIcon></th>
+                    <th pSortableColumn="remarks">Remarks <p-sortIcon field="remarks"></p-sortIcon></th>
+                    <th pSortableColumn="admin_name">Remark Added By <p-sortIcon field="admin_name"></p-sortIcon></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-r>
+                <tr>
+                    <td>{{ r.status || 'N/A' }}</td>
+                    <td>{{ r.followup_required || 'N/A' }}</td>
+                    <td>{{ r.followup_date || 'N/A' }}</td>
+                    <td> {{ r.followup_time || 'N/A' }}</td>
+                    <td>{{ r.remarks || 'N/A' }}</td>
+                    <td>
+                        <div class="company-details-cell">
+                            <strong class="company-name">{{ r.admin_name|| 'N/A'
+                                }}</strong>
+                            <div class="company-meta">
+                                <span class="meta-item">Email: {{ r.admin_email || 'N/A' }}</span>
+                                <span class="meta-item">Phone: {{ r.admin_phone || 'N/A' }}</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="6" class="text-center">No remarks found</td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+
+        <p-dialog header="Add Remarks" [(visible)]="showRemarksDialog" [modal]="true" [style]="{width: '500px'}"
+            [closable]="true">
+
+            <form [formGroup]="remarksForm" (ngSubmit)="saveRemarks()">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label><i class="pi pi-check-circle text-warning me-2"></i>Remark Status</label>
+                        <p-select formControlName="status" class="w-100" [options]="remarkStatusList"
+                            placeholder="Select Status" optionValue="value" optionLabel="label" [filter]="true"
+                            filterBy="label"></p-select>
+                        <small class="text-danger"
+                            *ngIf="remarksForm.get('status')?.invalid && remarksForm.get('status')?.touched">
+                            Status is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label><i class="pi pi-check-circle text-warning me-2"></i>Follow Up</label>
+                        <p-select formControlName="followup_required" class="w-100" [options]="yesNoList"
+                            placeholder="Select" optionValue="value" optionLabel="label" [filter]="true"
+                            filterBy="label"></p-select>
+                        <small class="text-danger"
+                            *ngIf="remarksForm.get('followup_required')?.invalid && remarksForm.get('followup_required')?.touched">
+                            Follow Up is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label><i class="pi pi-check-circle text-warning me-2"></i>Follow Up Date</label>
+                        <input pInputText type="date" formControlName="followup_date" class="w-100" />
+                        <small class="text-danger"
+                            *ngIf="remarksForm.get('followup_date')?.invalid && remarksForm.get('followup_date')?.touched">
+                            Follow Up Date is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label><i class="pi pi-check-circle text-warning me-2"></i>Follow Up Time</label>
+                        <input pInputText type="time" formControlName="followup_time" class="w-100" />
+                        <small class="text-danger"
+                            *ngIf="remarksForm.get('followup_time')?.invalid && remarksForm.get('followup_time')?.touched">
+                            Follow Up Time is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label><i class="pi pi-check-circle text-warning me-2"></i>Remarks</label>
+                        <textarea pInputTextarea rows="4" formControlName="remarks"
+                            placeholder="Type your remarks here..." class="w-100"></textarea>
+                        <small class="text-danger"
+                            *ngIf="remarksForm.get('remarks')?.invalid && remarksForm.get('remarks')?.touched">
+                            Remarks are required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <p-button type="submit" label="Add Remarks" icon="pi pi-plus"></p-button>
+                </div>
+            </form>
+
+        </p-dialog>
+    </div>
+
+    <div *ngIf="selectedTab.name === 'Payment Link'" class="table-container bg-white rounded mt-3">
+        <div class="d-flex justify-content-between">
+            <h3>Payment Link</h3>
+            <p-button label="Generate Payment Link" (onClick)="showPaymentDialog = true"></p-button>
+        </div><br>
+
+        <p-table [value]="payments" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[25, 50, 100]"
+            styleClass="p-datatable-gridlines" [scrollable]="true" scrollDirection="horizontal"
+            [tableStyle]="{ 'min-width': '120rem' }" (onLazyLoad)="onPageChangePayment($event)" [lazy]="true">
+
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="currency">
+                        Currency
+                        <p-sortIcon field="currency"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="amount">
+                        Total Amount
+                        <p-sortIcon field="amount"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="is_payment_completed">
+                        Status
+                        <p-sortIcon field="is_payment_completed"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="payment_date">
+                        Payment Date
+                        <p-sortIcon field="payment_date"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="description">
+                        Description
+                        <p-sortIcon field="description"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="payment_link">
+                        Payment Link
+                        <p-sortIcon field="payment_link"></p-sortIcon>
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-p>
+                <tr>
+                    <td>{{ p.currency || 'N/A' }}</td>
+                    <td>{{ p.amount || 'N/A' }}</td>
+                    <td>
+                        <span class="badge"
+                            [ngClass]="{ 'bg-success': p.is_payment_completed === 1,'bg-danger': p.is_payment_completed === 0, }">
+                            {{
+                            p.is_payment_completed === 1
+                            ? 'Paid'
+                            : p.is_payment_completed === 0
+                            ? 'Unpaid'
+                            : 'N/A'
+                            }}
+                        </span>
+                    </td>
+                    <td>{{ p.payment_date || 'N/A' }}</td>
+                    <td>{{ p.description || 'N/A' }}</td>
+                    <td>{{ p.payment_link || 'N/A' }}</td>
+                    <td *ngIf="p.is_payment_completed === 1 || p.invoice_url === null">
+                        <button *ngIf="p.invoice_url" class="btn btn-sm btn-success"
+                            (click)="downloadInvoice(p.invoice_url)">
+                            Download
+                        </button>
+                        <span *ngIf="!p.invoice_url">-</span>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8" class="text-center">No payment link found</td>
+                </tr>
+            </ng-template>
+
+        </p-table>
+
+        <p-dialog header="Generate Payment Link" [(visible)]="showPaymentDialog" [modal]="true"
+            [style]="{width: '500px'}" [closable]="true">
+
+            <form [formGroup]="paymentForm" (ngSubmit)="generatePaymentLink()">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label><i class="pi pi-check-circle text-warning me-2"></i>Currency</label>
+                        <p-select formControlName="currency" [options]="currencyList" optionValue="currency_code"
+                            optionLabel="currency_code" placeholder="Select Currency" class="w-100" [filter]="true"
+                            filterBy="currency_code" [virtualScroll]="true" [virtualScrollItemSize]="20"></p-select>
+                        <small class="text-danger"
+                            *ngIf="paymentForm.get('currency')?.invalid && paymentForm.get('currency')?.touched">
+                            Currency is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label>
+                            <i class="pi pi-check-circle text-warning me-2"></i>Total Amount
+                        </label>
+                        <input pInputText class="w-100" formControlName="total_amount" type="number"
+                            placeholder="Enter Total Amount" />
+                        <small class="text-danger"
+                            *ngIf="paymentForm.get('total_amount')?.invalid && paymentForm.get('total_amount')?.touched">
+                            Total Amount is required.
+                        </small>
+                    </div>
+                </div>
+
+
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <label><i class="pi pi-check-circle text-warning me-2"></i>Description</label>
+                        <textarea pInputTextarea rows="4" formControlName="description"
+                            placeholder="Describe the payment link you are generating" class="w-100"></textarea>
+                        <small class="text-danger"
+                            *ngIf="paymentForm.get('description')?.invalid && paymentForm.get('description')?.touched">
+                            Description is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <p-button type="submit" label="Generate Link"></p-button>
+                </div>
+
+                <div class="row mt-3" *ngIf="generatedLink">
+                    <div class="col-md-12">
+                        <div class="copy-container">
+                            <input pInputText class="copy-input" [value]="generatedLink" readonly />
+
+                            <button pButton type="button" class="copy-btn" label="Copy URL" (click)="copyLink()">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </p-dialog>
+
+    </div>
+
+    <div *ngIf="selectedTab.name === 'Invites'" class="table-container bg-white rounded mt-3">
+        <p-table #dtInvites [value]="invites" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[25, 50, 100]" styleClass="p-datatable-gridlines" [scrollable]="true"
+            scrollDirection="horizontal" [tableStyle]="{ 'min-width': '80rem' }"
+            (onLazyLoad)="onPageChangeInvites($event)" [lazy]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                    <th pSortableColumn="invite_email">Email ID <p-sortIcon field="invite_email"></p-sortIcon></th>
+                    <th pSortableColumn="phone">Phone number <p-sortIcon field="phone"></p-sortIcon></th>
+                    <th pSortableColumn="invite_status">Invite Status <p-sortIcon field="invite_status"></p-sortIcon></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-invite>
+                <tr>
+                    <td>{{ invite.name || 'N/A' }}</td>
+                    <td>{{ invite.invite_email || 'N/A' }}</td>
+                    <td>{{ invite.phone || 'N/A' }}</td>
+                    <td>{{ invite.invite_status || 'N/A' }}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="4" class="text-center">No invites found</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div *ngIf="selectedTab.name === 'Share'" class="table-container bg-white rounded mt-3">
+        <p-card class="action-card" *ngFor="let item of shareItems">
+            <div class="card-content">
+                <div class="left">
+                    <span class="icon">
+                        <i class="pi pi-check"></i>
+                    </span>
+                    <span class="title">{{ item.title }}</span>
+                </div>
+                <button pButton class="share-btn" label="{{ item.button }}"></button>
+            </div>
+        </p-card>
+    </div>
+</div>

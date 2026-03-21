@@ -1,0 +1,70 @@
+<p-accordion>
+	<p-accordion-panel selected="true">
+		<p-accordion-header>Add Question</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="questionForm" (ngSubmit)="addquestion()">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-grop">
+							<label>Country</label>
+							<select type="text" class="form-control" formControlName="country">
+								<option *ngFor="let item of countries" value="{{ item.id }}">{{ item.country }}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-md-6">
+						<div class="form-grop">
+							<label>Module</label>
+							<select type="text" class="form-control" formControlName="module" [(ngModel)]="ModuleId" (change)="getSubmodules()">
+								<option *ngFor="let item of modules" value="{{ item.id }}">{{ item.module_name }}</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-grop">
+							<label>Sub Module</label>
+							<select type="text" class="form-control" formControlName="submodule">
+								<option *ngFor="let item of submodules" value="{{ item.id }}">{{ item.submodule_name }}</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-md-12">
+						<div class="form-grop">
+							<label>Question</label>
+							<input type="text" class="form-control" formControlName="question" />
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-md-12">
+						<div class="form-grop">
+							<label>Answer</label>
+							<textarea type="text" rows="6" class="form-control" formControlName="answer"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-md-6">
+						<div class="form-grop">
+							<label>Video Link</label>
+							<input type="text" class="form-control" formControlName="videoLink" />
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-grop">
+							<label>Source link with image</label>
+							<input type="text" class="form-control" formControlName="imageLink" />
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3 justify-content-end">
+					<a class="btn btn-primary" style="width: 250px">Add Question</a>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>

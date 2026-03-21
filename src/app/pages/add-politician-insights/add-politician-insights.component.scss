@@ -1,0 +1,28 @@
+input[type="text"] {
+    padding-right: 120px;
+    /* Adjust the value to make space for the button */
+}
+
+.upload-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 35%;
+    /* Adjust the width as needed */
+    height: 100%;
+    /* Adjust the height as needed */
+    background-color: var(--p-primary-500);
+    border: none;
+    color: white;
+    font-size: 14px;
+    padding: 11px;
+    cursor: pointer;
+}
+
+.sm-font {
+    font-size: 12px;
+}
+
+.paddingfive {
+    padding: 5px;
+}

@@ -1,0 +1,509 @@
+<p-accordion value="0" styleClass="white-accordian">
+  <p-accordion-panel value="1">
+    <p-accordion-header>Filter Companies</p-accordion-header>
+    <p-accordion-content>
+      <form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()" #filterFormElm>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Company Name</label>
+              <input type="text" pInputText class="form-control" placeholder="Enter the company name" formControlName="companyname" [ngClass]="{ 'is-invalid': submitted && f.companyname.errors }" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Industry Type</label>
+              <p-select formControlName="industrytype" optionValue="id" optionLabel="industry_name" styleClass="w-full" [options]="industryTypeList" placeholder="Select Type" [filter]="true" [showClear]="true"> </p-select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label>Company Size</label>
+              <p-select formControlName="companysize" optionValue="id" optionLabel="size" styleClass="w-full" [options]="companySizeList" placeholder="Select Size" [filter]="true" [showClear]="true"> </p-select>
+            </div>
+          </div>
+          <div class="col-md-4 mt-0 mt-md-3">
+            <div class="form-group">
+              <label>Headquarters Location</label>
+              <p-select formControlName="hq" optionValue="city_id" optionLabel="country_name" styleClass="w-full" [options]="headQuartersList" placeholder="Select Headquarters" [filter]="true" [showClear]="true" [virtualScroll]="true" [virtualScrollItemSize]="50">
+                <ng-template let-country pTemplate="item">
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="dropdownimg">
+                      <img [src]="country.flag" class="img-fluid" style="width: 25px; height: 25px; border-radius: 50%" />
+                    </div>
+                    <div>
+                      <span *ngIf="country.city_name !== null"> {{ country.city_name }}, </span>{{ country.country_name }}
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template pTemplate="selectedItem" let-selectedOption>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="dropdownimg">
+                      <img [src]="selectedOption.flag" class="img-fluid" style="width: 25px; height: 25px" />
+                    </div>
+                    <div>
+                      <span *ngIf="selectedOption.city_name !== null"> {{ selectedOption.city_name }}, </span>{{ selectedOption.country_name }}
+                    </div>
+                  </div>
+                </ng-template>
+              </p-select>
+            </div>
+          </div>
+          <div class="col-md-4 mt-0 mt-md-3">
+            <div class="form-group">
+              <label>Global Presence</label>
+              <p-select formControlName="globalpresence" optionValue="id" optionLabel="country" styleClass="w-full" [options]="globalPresenceList" placeholder="Select Global Presence"></p-select>
+            </div>
+          </div>
+          <div class="col-md-4 mt-0 mt-md-3">
+            <div class="form-group">
+              <label>Founded Year</label><br />
+              <p-datepicker appendTo="body" placeholder="Select the year your company was founded" fluid formControlName="yearfounded" view="year" dateFormat="yy" class="w-100"></p-datepicker>
+            </div>
+          </div>
+          <!-- <div class="col-md-4 mt-0 mt-md-3">
+          <div class="form-group">
+            <label>Company Type</label>
+            <p-select
+              formControlName="companytype"
+              optionValue="id"
+              optionLabel="type"
+              styleClass="w-full"
+              [options]="companyTypesList"
+              placeholder="Select Type"
+            ></p-select>
+          </div>
+        </div> -->
+          <div class="row mt-3">
+            <div class="col-12 text-right">
+              <button class="btn btn-danger" type="button" (click)="this.getCompaniesList(); filterForm.reset()">Reset Filter</button>
+              <button class="btn btn-primary" type="submit" (click)="this.getCompaniesList(this.filterForm.value)">Filter Companies</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </p-accordion-content>
+  </p-accordion-panel>
+</p-accordion>
+<!-- employer-verification.component.html -->
+<div class="employer-verification-container">
+  <div class="header-section p-3 bg-white border-bottom">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div class="d-flex gap-2">
+        <div>
+          <h4 class="mb-0">Companies</h4>
+          <small class="text-muted">Total Companies: {{ totalCompanies.toString().padStart(2, "0") }}</small>
+        </div>
+        <div class="my-auto">
+          <div class="p-inputgroup p-0 rounded-3 my-auto">
+            <input pInputText placeholder="search" class="p-0" />
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-search"> </i>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center">
+        <div class="me-3">
+          <span *ngIf="selectedCard === 'list'">Selected : {{ selectedCount }}</span>
+          <span *ngIf="selectedCard === 'card'" class="my-auto">
+            <button pButton class="btn-primary me-2" label="Select All" (click)="oncardSelectAll()"></button>
+            <span class="my-auto">Selected : {{ selectedCardIds.length }}</span>
+          </span>
+          <button pButton type="button" class="p-button-success p-button-raised ms-2" (click)="verifyselectedcompany()">Verify Selected</button>
+        </div>
+        <p-selectButton [options]="viewOptions" [(ngModel)]="selectedCard" optionLabel="label" optionValue="value"></p-selectButton>
+      </div>
+      <div class="btn-group">
+        <button pButton class="btn-primary me-2" icon="pi pi-upload" label="Import"></button>
+        <button (click)="export()" pButton class="btn-primary" icon="pi pi-download" label="Export"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- List View -->
+<div *ngIf="selectedCard === 'list'" class="list-view">
+  <p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="companiesList" [tableStyle]="{ 'min-width': '80rem' }" [(selection)]="selectedCompanies" (selectionChange)="onSelectionChange()" dataKey="id" [rowHover]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th>Company Name</th>
+        <th>Company Size</th>
+        <th>Industry Type</th>
+        <th>Location</th>
+        <th>Completion</th>
+        <th>Open Jobs</th>
+        <th>Talent Connect</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-company>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="company"></p-tableCheckbox>
+        </td>
+        <td>
+          <div class="d-flex align-items-center">
+            <div class="logo-small me-2">
+              <img [src]="company?.company_logo" alt="Company Logo" width="24" height="24" />
+            </div>
+            <div>
+              <div class="fw-bold">
+                {{ company?.company_name }}
+                <i *ngIf="company?.verified" class="pi pi-check-circle text-success"></i>
+              </div>
+              <div class="text-muted small">Founded: {{ company?.founded_year }}</div>
+              <div class="text-muted small">{{ company?.website }}</div>
+              <div class="text-muted small">{{ company?.linkedin_link }}</div>
+            </div>
+          </div>
+        </td>
+        <td>{{ company?.size }}</td>
+        <td>{{ company?.industry_type }}</td>
+        <td>{{ company?.HQ_city }} {{ company?.HQ_country }}</td>
+        <td>
+          <p-progressBar [value]="company?.percentage_completed" [showValue]="false"></p-progressBar>
+          <div class="text-center">{{ company?.percentage_completed }}%</div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center">
+            {{ company?.jobs }}
+            <i class="pi pi-external-link ms-2" (click)="navigateToJobs(company)"></i>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex align-items-center">
+            {{ company?.talent_connect }}
+            <i (click)="navigatetoTalents(company)" class="pi pi-external-link ms-2"></i>
+          </div>
+        </td>
+        <td>
+          <div class="d-flex flex-column gap-2" style="font-size: 15px">
+            <span *ngIf="!company?.verified" (click)="verifyCompany(company)" style="cursor: pointer"><i class="pi pi-check"></i>&nbsp; Verify</span>
+            <span style="cursor: pointer" (click)="viewCompanyInfo(company)"><i class="pi pi-info-circle"></i>&nbsp;View Company Info</span>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Card View -->
+<div *ngIf="selectedCard === 'card'" class="card-view p-3">
+  <div class="row g-3">
+    <div *ngFor="let company of companiesList" class="col-xxl-3 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12">
+      <div class="card h-100">
+        <div class="card-body">
+          <!-- Header -->
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="d-flex gap-3">
+              <!-- Company Logo -->
+              <div class="company-logo border rounded overflow-hidden">
+                <img [src]="company?.company_logo" alt="Company Logo" class="img-fluid" width="80" />
+              </div>
+
+              <!-- Company Name and Info -->
+              <div>
+                <div class="d-flex align-items-center">
+                  <h5 class="mb-0 fw-bold truncate">{{ company?.company_name }}</h5>
+                  <i *ngIf="company?.verified" class="pi pi-check-circle ms-2 text-warning"></i>
+                </div>
+                <p class="text-muted small mb-1">Founded: {{ company?.founded_year }}</p>
+
+                <!-- Profile Completion -->
+                <div>
+                  <div class="d-flex justify-content-between small mb-1">
+                    <span>Profile Completion: {{ company?.percentage_completed }}%</span>
+                  </div>
+                  <p-progressBar [value]="company?.percentage_completed" [showValue]="false" [style]="{ height: '6px' }" styleClass="profile-progress"></p-progressBar>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bookmark Icon -->
+            <div>
+              <p-checkbox [ngModel]="selectedCardIds.includes(company.id)" (onChange)="onSelectCard(company.id, $event)" [binary]="true"></p-checkbox>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="row g-3 mb-4">
+            <!-- Open Jobs -->
+            <div class="col-6">
+              <div class="d-flex align-items-center">
+                <div class="stats-icon me-2">
+                  <i class="pi pi-briefcase text-primary"></i>
+                </div>
+                <div>
+                  <p class="text-muted mb-0 small">Open Jobs</p>
+                  <p class="fw-bold mb-0">
+                    {{ company?.jobs.toString().padStart(2, "0") }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Talent Connect -->
+            <div class="col-6">
+              <div class="d-flex align-items-center">
+                <div class="stats-icon me-2">
+                  <i class="pi pi-users text-success"></i>
+                </div>
+                <div>
+                  <p class="text-muted mb-0 small">Talent Connect</p>
+                  <p class="fw-bold mb-0">{{ company?.talent_connect }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6">
+              <div class="d-flex align-items-center">
+                <div class="stats-icon me-2">
+                  <i class="pi pi-building text-warning"></i>
+                </div>
+                <div>
+                  <p class="text-muted mb-0 small">Company Size</p>
+                  <p class="fw-bold mb-0">{{ company?.size }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Industry -->
+            <div class="col-6">
+              <div class="d-flex align-items-center">
+                <div class="stats-icon me-2">
+                  <i class="pi pi-chart-bar text-secondary"></i>
+                </div>
+                <div>
+                  <p class="text-muted mb-0 small">Industry</p>
+                  <p class="fw-bold mb-0">{{ company?.industry_type }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="d-flex align-items-center">
+                <div class="stats-icon me-2">
+                  <i class="pi pi-map-marker text-success"></i>
+                </div>
+                <div>
+                  <p class="text-muted mb-0 small">Headquarters Location</p>
+                  <p class="fw-bold mb-0">{{ company?.HQ_city }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Action Buttons -->
+          <div class="d-flex gap-2">
+            <button fluid (click)="navigatetoTalents(company)" pButton severity="warn" size="small" type="button" label="Talent Connect"></button>
+            <button fluid (click)="navigateToJobs(company)" pButton type="button" size="small" label="Open jobs"></button>
+            <button fluid *ngIf="!company?.verified" (click)="verifyCompany(company)" pButton type="button" severity="success" size="small" label="Verify"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="footer-section p-3 align-items-center">
+  <p-paginator (onPageChange)="pageChange($event)" [rows]="perPage" [totalRecords]="totalCompanies" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+</div>
+<p-dialog [(visible)]="displayProfileModal" [modal]="true" [style]="{ width: '80vw' }" [closable]="true" [dismissableMask]="true" [breakpoints]="{ '960px': '95vw' }">
+  <div class="card readingcard">
+    <div class="card-body text-center flex-fill overflow-y-auto">
+      <div class="container-fluid">
+        <div class="static-profile">
+          <div class="dataCard">
+            <div class="card-body">
+              <div class="text-end">
+                <button pButton type="button" class="p-button-success p-button-raised" (click)="verifyCompany(companyDetails)">Verify Account</button>
+              </div>
+              <div class="d-flex justify-content-between align-items-start">
+                <img [src]="companyDetails?.company_logo" class="rounded-circle me-3" width="80" height="80" alt="Company Logo" />
+                <div class="row w-75 alignleft">
+                  <div class="col-md-12 col-12">
+                    <div class="d-flex justify-content-between align-items-center" style="width: 100%">
+                      <div>
+                        <h5 class="mb-0">
+                          <span>{{ companyDetails?.company_name }} </span>
+                        </h5>
+                        <p class="text-muted smallText">Founded: {{ companyDetails?.founded_year | date : "yyyy" }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 full-width-section">
+                      <div class="bottom-section">
+                        <div class="progress-container">
+                          <div>
+                            <div class="text-muted small mb-1">
+                              Profile Completion:
+                              {{ companyDetails?.percentage_completed }}%
+                            </div>
+                            <p-progressBar [value]="companyDetails?.percentage_completed" [showValue]="false" styleClass="mb-3" [style]="{ height: '10px' }" [style.color]="'var(--p-secondary-500)'"></p-progressBar>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="readingcard mt-4">
+          <div class="dataCard">
+            <div class="card-body flex-fill overflow-y-auto">
+              <div class="d-flex justify-content-between align-items-start">
+                <h4 class="m-3">About Organization</h4>
+                <div class="row w-75 alignleft">
+                  <div class="col-md-4 col-6 mb-3">
+                    <small class="fw-semibold uniprep-primary">Industry Type</small>
+                    <div class="scroll-box">
+                      <p class="mb-0">
+                        {{ companyDetails?.industry_type || "Not specified" }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-6 mb-3">
+                    <small class="fw-semibold uniprep-primary">Company Size</small>
+                    <p class="mb-0">
+                      {{ companyDetails?.size || "Not specified" }}
+                    </p>
+                  </div>
+                  <div class="col-md-4 col-6 mb-3">
+                    <small class="fw-semibold uniprep-primary">Company Type</small>
+                    <p class="mb-0">
+                      {{ companyDetails?.company_type || "Not specified" }}
+                    </p>
+                  </div>
+                  <div class="col-md-4 col-6 mb-3">
+                    <small class="fw-semibold uniprep-primary">Headquarters Location</small>
+                    <p class="mb-0">{{ companyDetails?.HQ_city }} {{ companyDetails?.HQ_country }}</p>
+                  </div>
+                  <div class="col-md-4 col-6 mb-3">
+                    <small class="fw-semibold uniprep-primary">Department</small>
+                    <div class="scroll-box">
+                      <p class="mb-0">
+                        {{ companyDetails?.departments || "Not specified" }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-6 mb-3">
+                    <small class="fw-semibold uniprep-primary">Work Mode</small>
+                    <div class="scroll-box">
+                      <p class="mb-0">
+                        {{ companyDetails?.workmode || "Not specified" }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-6 mb-3">
+                    <small class="fw-semibold uniprep-primary">Global Presence</small>
+                    <div class="scroll-box">
+                      <p class="mb-0">
+                        {{ companyDetails?.globalpresence || "Not specified" }}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-6 mb-3" *ngIf="companyDetails?.website">
+                    <small class="fw-semibold uniprep-primary">Official Website</small>
+                    <p class="mb-0">
+                      {{ companyDetails?.website || "Not specified" }}
+                    </p>
+                  </div>
+                  <div class="col-md-8 col-8 mb-3" *ngIf="companyDetails?.linkedin_link">
+                    <small class="fw-semibold uniprep-primary">LinkedIn Profile</small>
+                    <p class="mb-0">
+                      {{ companyDetails?.linkedin_link || "Not specified" }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="readingcard mt-4">
+          <div class="dataCard">
+            <div class="card-body flex-fill overflow-y-auto">
+              <div class="d-flex justify-content-between align-items-start">
+                <h4 class="m-3">Company Insights</h4>
+                <div class="row w-75 alignleft">
+                  <div class="col-md-12 col-12 mb-3" *ngIf="companyDetails?.mission">
+                    <small class="fw-semibold uniprep-primary">About Company</small>
+                    <p>{{ companyDetails?.insight || "Not specified" }}</p>
+                  </div>
+                  <div class="col-md-6 col-6 mb-3" *ngIf="companyDetails?.worklifebalancepolicies">
+                    <small class="fw-semibold uniprep-primary">Work Life Balance Policies</small>
+                    <br />
+                    <div class="scroll-box">
+                      <ng-container *ngIf="companyDetails?.worklifebalancepolicies">
+                        <ng-container *ngFor="let policy of companyDetails?.worklifebalancepolicies">
+                          <span class="tag orangeTag">{{ policy }}</span>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-6 mb-3" *ngIf="companyDetails?.benefits">
+                    <small class="fw-semibold uniprep-primary">Employee Benefits & Perks</small>
+                    <br />
+                    <div class="scroll-box">
+                      <ng-container *ngIf="companyDetails?.benefits">
+                        <ng-container *ngFor="let benefit of companyDetails?.benefits">
+                          <span class="tag">{{ benefit }}</span>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-6 mb-3">
+                    <small class="fw-semibold uniprep-primary">Work Location & Mode</small>
+                    <div class="scroll-box">
+                      <p class="mb-0">
+                        {{ companyDetails?.work_mode || "Not specified" }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="readingcard mt-4">
+          <div class="dataCard">
+            <div class="card-body flex-fill overflow-y-auto">
+              <div class="d-flex justify-content-between align-items-start">
+                <h4 class="m-3">Hiring & Recruitment</h4>
+                <div class="row w-75 alignleft">
+                  <div class="col-md-12 col-12 mb-3" *ngIf="companyDetails?.hiringprocessstages">
+                    <small class="fw-semibold uniprep-primary">Hiring Process Stages</small><br />
+                    <ng-container *ngFor="let stage of companyDetails?.hiringprocessstages">
+                      <span class="tag orangeTag">{{ stage }}</span>
+                    </ng-container>
+                  </div>
+                  <div class="col-md-6 col-6 mb-3">
+                    <small class="fw-semibold uniprep-primary">Estimated Hiring Decision Timeframe</small>
+                    <p class="mb-0">
+                      {{ companyDetails?.hiringdecisiontimeframe || "Not specified" }}
+                    </p>
+                  </div>
+                  <div class="col-md-6 col-6 mb-3">
+                    <small class="fw-semibold uniprep-primary">Interview Format</small>
+                    <div class="scroll-box">
+                      <p class="mb-0">
+                        {{ companyDetails?.interviewformat || "Not specified" }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

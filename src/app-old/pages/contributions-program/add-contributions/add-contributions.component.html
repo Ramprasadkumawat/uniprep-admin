@@ -1,0 +1,101 @@
+<!-- filter-->
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Contributors</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()">
+				<div class="row">
+					<div class="col-md-3 mb-2">
+						<div class="form-group">
+							<label>Name</label>
+							<input type="text" formControlName="name" class="form-control" pInputText placeholder="Search Contributor Name" />
+						</div>
+					</div>
+					<div class="col-md-3 mb-2">
+						<div class="form-group">
+							<label>State</label>
+							<p-select formControlName="state" optionLabel="state" styleClass="w-full" [options]="regionList" placeholder="Select State" [filter]="true" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mb-2">
+						<div class="form-group">
+							<label>City</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="district" styleClass="w-full" [options]="locationList" placeholder="Select City" [filter]="true" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mb-2">
+						<div class="form-group">
+							<label>Constributor Tier</label>
+							<p-select formControlName="contributiontier" optionValue="id" optionLabel="contributiontier" styleClass="w-full" [options]="contributionTierList" [filter]="true" placeholder="Select Constributor Tier" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Total Students</label>
+							<p-select formControlName="totalstudent" optionValue="value" optionLabel="label" styleClass="w-full" [options]="studentList" [filter]="true" [showClear]="true" placeholder="Select Students"> </p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="button" (click)="resetFilter()">Reset Filter</button>
+						<button class="btn btn-primary" type="submit">Filter Data</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<!--View Contributorss-->
+<div class="card">
+	<div class="row">
+		<div class="d-flex col-sm-5 col-md-6 justify-content-between">
+			<div class="d-flex align-items-center">
+				<div class="d-flex flex-column px-2">
+					<span style="font-size: 20px">Contributors</span>
+					<span class="text-xs" style="color: rgb(205, 203, 203)">Total Count:{{ contributionsCount }}</span>
+				</div>
+			</div>
+		</div>
+		<div class="d-flex col-sm-5 col-md-6 justify-content-end">
+			<div class="p-2">
+				<button class="btn btn-primary" (click)="exportContributior()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+			</div>
+		</div>
+	</div>
+	<div class="mb-2">
+		<div class="row p-2">
+			<div *ngFor="let item of contributionsList" class="col-12 col-md-3 col-lg-3 mb-2">
+				<div class="card shadow-sm" role="button" [routerLink]="['/contributors', item.id]">
+					<div class="p-2">
+						<img *ngIf="item.image; else noImage" [src]="item.image" alt="Profile background" class="card-img-top" style="height: 100px; object-fit: cover; border-radius: 15px" />
+						<ng-template #noImage>
+							<div class="no-image position-relative">
+								<i class="fa fa-solid fa-image-slash"></i>
+								<span class="p-badge text-xs active-sts-badge p-badge-danger"> Card Inactive </span>
+							</div>
+						</ng-template>
+					</div>
+					<div class="card-body pt-2 mt-1">
+						<div class="mb-2">
+							<span class="p-badge p-badge-info">{{ item.contributiontier }}</span>
+						</div>
+						<h5 class="card-title mb-1">{{ item.name }}</h5>
+						<p class="text-muted small mb-3">{{ item.designation ? item.designation + ", " : "" }} {{ item.location }}</p>
+						<div class="d-flex align-items-center mb-3">
+							<i class="fa-solid fa-user-graduate me-2" style="font-size: 30px; color: #65d3a9"></i>
+							<div>
+								<div class="small text-muted">Total Students</div>
+								<div class="fw-bold">{{ item.totalstudent }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="w-100 d-flex justify-content-end" style="text-align: right">
+			<p-paginator (onPageChange)="pageChange($event)" [rows]="pageSize" [first]="first" [totalRecords]="contributionsCount" [rowsPerPageOptions]="[10, 20, 50, 100]"></p-paginator>
+		</div>
+	</div>
+</div>

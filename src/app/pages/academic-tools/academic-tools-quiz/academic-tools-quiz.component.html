@@ -1,0 +1,615 @@
+<div class="card mt-2">
+    <div class="d-flex">
+        <p-button (click)="goBack()" icon="pi pi-arrow-left"
+            styleClass="p-button-rounded p-button-text text-dark"></p-button>
+        <div class="card-header d-flex w-full align-items-center justify-content-between"
+            style="background-color: #fff;">
+            <span>{{quizCategory?.category_name}} List <br><span style="color: #A1A1A1; font-size: 10px;">Total
+                    Sub-Categories:{{totalQuizCount}}</span></span>
+            <div class=" text-right p-1">
+                <button *ngIf="quizCategory?.academic_category_type_id == 1" (click)="streamadd='block'"
+                    class="ps-3 pe-3 pt-2 pb-2" pButton
+                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">
+                    Add Streams
+                    &nbsp; <i class="fa-solid fa-plus"></i></button>&nbsp;
+                <button (click)="selectAddQuestionType()" class="ps-3 pe-3 pt-2 pb-2" pButton
+                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">New
+                    Question
+                    &nbsp; <i class="fa-solid fa-plus"></i></button>&nbsp;
+                <button class="ps-3 pe-3 pt-2 pb-2" (click)="newquestionaddimport = 'block'" pButton
+                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">Import
+                    &nbsp;
+                    <i class="pi pi-file-export"></i></button>&nbsp;
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="row gap-4 mt-5 d-flex">
+            <div class="card" style="width: 23%;" *ngFor="let quiz of quizList let i = index" [attr.data-index]="i">
+                <div class="container-fluid p-4">
+                    <h5 style="font-size: 13px;">Question {{i + 1}}</h5>
+                    <p class="mt-3 fw-bold" style="color: #001631; font-size: 14px;">{{quiz.question}}</p>
+                    <div class="p-1 mt-1" style="text-align: center; display: flex; justify-content: flex-start;">
+                        <button (click)="editQuestion(quiz)" class="px-3 py-2" pbutton
+                            style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                            Edit
+                        </button>&nbsp;&nbsp;&nbsp;
+                        <button (click)="viewQuestion(quiz)" class="px-3 py-2" pButton
+                            style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                            View
+                        </button>&nbsp;&nbsp;
+                        <button (click)="deletequiz(quiz)" pButton
+                            style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                            <i class="fa-solid fa-trash"></i>
+                            &nbsp;
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="totalQuizCount"
+        [rowsPerPageOptions]="[50, 100, 200,500]"></p-paginator>
+</div>
+<ng-container *ngIf="newquestionadd">
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':'block'}" id="top-layer"
+        style="backdrop-filter: brightness(0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content p-2" style="width: 150%;">
+                <span (click)="closeAddQuizPopUp()"
+                    style="color: var(--p-primary-500); text-align: right; cursor: pointer;"><i
+                        class="fa-solid fa-xmark"></i></span>
+                <form [formGroup]="form" (ngSubmit)="onSubmit()" #formElm>
+                    <div class="modal-body">
+                        <span style="color: #001631; font-size: 20px;">{{currentModuleName}} Quiz</span>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <div class="form-group">
+                                    <label>Current Module</label>
+                                    <input formControlName="currentModule" type="text" class="form-control" pInputText>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="form-group">
+                                    <label>Question</label>
+                                    <input formControlName="question" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.question.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.question.errors.required">Required</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 1</label>
+                                    <input formControlName="option1" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option1.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option1.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 2</label>
+                                    <input formControlName="option2" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option2.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option2.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 3</label>
+                                    <input formControlName="option3" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option3.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option3.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 4</label>
+                                    <input formControlName="option4" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option4.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option4.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="form-group">
+                                    <label>Answer</label>
+                                    <p-select formControlName="answer" optionValue="id" optionLabel="name"
+                                        styleClass="w-full" [options]="answerOptionSelection"
+                                        placeholder="Select"></p-select>
+                                    <div *ngIf="submitted && f.answer.errors" class="text-danger text-xs">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group  d-flex flex-column">
+                                    <label>Source Summary</label>
+                                    <textarea rows="5" cols="30" pInputTextarea formControlName="summary">
+                                            </textarea>
+                                    <div *ngIf="submitted && f.summary.errors" styleClass="w-full"
+                                        class="text-danger text-xs">
+                                        <div *ngIf="f.summary.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1 d-flex flex-column justify-content-between">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <p-select formControlName="status" optionValue="id" optionLabel="name"
+                                        [options]="statusData" styleClass="w-full"></p-select>
+                                    <div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.status.errors.required">Required</div>
+                                    </div>
+                                </div>
+                                <div class="p-3 mb-4 mt--4 text-right">
+                                    <button type="submit" class="ps-3 pe-3 pt-2 pb-2" pButton
+                                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">{{addOrUpdate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':submitafter}"
+    style="backdrop-filter: brightness(0.5);">
+    <div class="modal-dialog">
+        <div class="modal-content p-2">
+            <span (click)="closeViewPopUp()"
+                style="color: var(--p-primary-500); text-align: right; cursor: pointer;"><i
+                    class="fa-solid fa-xmark"></i></span>
+            <form>
+                <div class="modal-body">
+                    <div class="container-fluid p-2">
+                        <h5 style="font-size: 15px;">Question {{viewQuizData?.id}}</h5>
+                        <p class="mt-3" style="color: #001631; font-size: 14px;">{{viewQuizData?.question}}</p>
+                        <h6 style="font-size: 15px;">Options</h6>
+                        <tbody>
+                            <tr class="card p-2 mt-3 " multiple="multiple"
+                                [ngClass]="{'card-selected mat-elevation-z4': viewQuizData?.answer === 1}">
+                                {{viewQuizData?.option1}}
+                            </tr>
+                            <tr class="card p-2 mt-3" multiple="multiple"
+                                [ngClass]="{'card-selected mat-elevation-z4': viewQuizData?.answer === 2}">
+                                {{viewQuizData?.option2}}
+                            </tr>
+                            <tr class="card p-2 mt-3" multiple="multiple selection"
+                                [ngClass]="{'card-selected mat-elevation-z4': viewQuizData?.answer === 3}">
+                                {{viewQuizData?.option3}}
+                            </tr>
+                            <tr class="card p-2 mt-3" multiple="multiple"
+                                [ngClass]="{'card-selected mat-elevation-z4': viewQuizData?.answer === 4}">
+                                {{viewQuizData?.option4}}
+                            </tr>
+                            <tr *ngIf="viewQuizData?.option5" class="card p-2 mt-3" multiple="multiple"
+                                [ngClass]="{'card-selected mat-elevation-z4': viewQuizData?.answer === 5}">
+                                {{viewQuizData?.option5}}
+                            </tr>
+                            <tr *ngIf="viewQuizData?.option6" class="card p-2 mt-3" multiple="multiple"
+                                [ngClass]="{'card-selected mat-elevation-z4': viewQuizData?.answer === 6}">
+                                {{viewQuizData?.option6}}
+                            </tr>
+                        </tbody>
+                        <span class="mt-2" style="font-size: 14px; color: #001631;" *ngIf="viewQuizData?.summary">
+                            Source Summary <br> {{viewQuizData?.summary}}
+                        </span>
+                    </div>
+                </div>
+                <div class="p-3 mb-4 mt--4" style="text-align: center;">
+                    <button class="ps-4 pe-4 pt-1 pb-1" pButton (click)="toEditFromView(viewQuizData)"
+                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">Edit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':newquestionaddimport}" id="top-layer"
+    style="backdrop-filter: brightness(0.5);">
+    <div class="modal-dialog">
+        <div class="modal-content p-2" style="width: 150%;">
+            <span (click)="newquestionaddimport = 'none'"
+                style="color: var(--p-primary-500); text-align: right; cursor: pointer;"><i
+                    class="fa-solid fa-xmark"></i></span>
+            <div>
+                <label for="file" class="reading-drop-container">
+                    <i class="pi pi-upload reading-drop-title"></i>
+                    <input type="file" id="file" class="d-none" (change)="onFileChange($event)"
+                        (click)="$event['target']['value']=''" accept=".csv"><br />
+                    <div class="reading-sm-font" *ngIf="selectedFile?.name">{{selectedFile.name}}</div>
+                    <div *ngIf="!selectedFile?.name" class="d-flex flex-column gap-1 text-center">
+                        <span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+                        <span class="reading-sm-font">Please maintain the format of uploading to stop failures</span>
+                    </div>
+                </label><br />
+                <div class="text-center">
+                    <button class="btn btn-primary" (click)="uploadFile()">
+                        <i class="fa-solid fa-upload"></i> Upload
+                    </button>
+                    <button class="btn btn-primary" (click)="downloadSampleCSV()">
+                        <i class="fa-solid fa-download"></i> Download Sample Doc
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="newstreamquestionadd">
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':'block'}" id="top-layer"
+        style="backdrop-filter: brightness(0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content p-2" style="width: 150%;">
+                <span (click)="closeAddQuizPopUp()"
+                    style="color: var(--p-primary-500); text-align: right; cursor: pointer;"><i
+                        class="fa-solid fa-xmark"></i></span>
+                <form [formGroup]="form" (ngSubmit)="onSubmit()" #formElm>
+                    <div class="modal-body">
+                        <span style="color: #001631; font-size: 20px;">{{currentModuleName}} Quiz</span>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <div class="form-group">
+                                    <label>Current Module</label>
+                                    <input formControlName="currentModule" type="text" class="form-control" pInputText>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="form-group">
+                                    <label>Question</label>
+                                    <input formControlName="question" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.question.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.question.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 1</label>
+                                    <input formControlName="option1" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option1.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option1.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Stream</label>
+                                    <p-select formControlName="option1_type_id" optionValue="id" optionLabel="name"
+                                        [options]="streamList" styleClass="w-full" placeholder="Select"
+                                        (onChange)="onStreamChange('option1_type_id',$event)"></p-select>
+                                    <div *ngIf="submitted && f.option1_type_id.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option1_type_id.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 2</label>
+                                    <input formControlName="option2" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option2.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option2.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Stream</label>
+                                    <p-select formControlName="option2_type_id" optionValue="id" optionLabel="name"
+                                        [options]="streamList" styleClass="w-full" placeholder="Select"
+                                        (onChange)="onStreamChange('option2_type_id',$event)"></p-select>
+                                    <div *ngIf="submitted && f.option2_type_id.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option2_type_id.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 3</label>
+                                    <input formControlName="option3" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option3.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option3.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Stream</label>
+                                    <p-select formControlName="option3_type_id" optionValue="id" optionLabel="name"
+                                        [options]="streamList" styleClass="w-full" placeholder="Select"
+                                        (onChange)="onStreamChange('option3_type_id',$event)"></p-select>
+                                    <div *ngIf="submitted && f.option3_type_id.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option3_type_id.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 4</label>
+                                    <input formControlName="option4" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option4.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option4.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Stream</label>
+                                    <p-select formControlName="option4_type_id" optionValue="id" optionLabel="name"
+                                        [options]="streamList" styleClass="w-full" placeholder="Select"
+                                        (onChange)="onStreamChange('option4_type_id',$event)"></p-select>
+                                    <div *ngIf="submitted && f.option4_type_id.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option4_type_id.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="form.get('option5')" class="row align-items-end">
+                                <div class="col-md-5 mt-1">
+                                    <div class="form-group">
+                                        <label>Option 5</label>
+                                        <input formControlName="option5" type="text" class="form-control" pInputText>
+                                        <div *ngIf="submitted && f.option5.errors" class="text-danger text-xs">
+                                            <div *ngIf="f.option5.errors.required">Required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 mt-1">
+                                    <div class="form-group">
+                                        <label>Stream</label>
+                                        <p-select formControlName="option5_type_id" optionValue="id"
+                                            optionLabel="name" [options]="streamList" styleClass="w-full"
+                                            placeholder="Select"
+                                            (onChange)="onStreamChange('option5_type_id',$event)"></p-select>
+                                        <div *ngIf="submitted && f.option5_type_id.errors" class="text-danger text-xs">
+                                            <div *ngIf="f.option5_type_id.errors.required">Required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mt-1">
+                                    <button class="removeBtn" pButton type="button"
+                                        (click)="removeOption('option5')">Delete <i
+                                            class="fa-solid fa-trash removeBtnIcon"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div *ngIf="form.get('option6')" class="row align-items-end">
+                                <div class="col-md-5 mt-1">
+                                    <div class="form-group">
+                                        <label>Option 6</label>
+                                        <input formControlName="option6" type="text" class="form-control" pInputText>
+                                        <div *ngIf="submitted && f.option6.errors" class="text-danger text-xs">
+                                            <div *ngIf="f.option6.errors.required">Required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 mt-1">
+                                    <div class="form-group">
+                                        <label>Stream</label>
+                                        <p-select formControlName="option6_type_id" optionValue="id"
+                                            optionLabel="name" [options]="streamList" styleClass="w-full"
+                                            placeholder="Select"
+                                            (onChange)="onStreamChange('option6_type_id',$event)"></p-select>
+                                        <div *ngIf="submitted && f.option6_type_id.errors" class="text-danger text-xs">
+                                            <div *ngIf="f.option6_type_id.errors.required">Required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 mt-1">
+                                    <button class="removeBtn" pButton type="button"
+                                        (click)="removeOption('option6')">Delete <i
+                                            class="fa-solid fa-trash removeBtnIcon"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center mt-3"
+                                *ngIf="!form.get('option5')||!form.get('option6')">
+                                <button class="addBtn" pButton type="button" (click)="addOption()">Add More<i
+                                        class="fa-light fa-plus addBtnIcon"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <p-select formControlName="status" optionValue="id" optionLabel="name"
+                                        [options]="statusData" styleClass="w-full"></p-select>
+                                    <div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.status.errors.required">Required</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="p-3 mb-4 mt--4 text-right">
+                                <button type="submit" class="ps-3 pe-3 pt-2 pb-2" pButton
+                                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">{{addOrUpdate}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="newRecommendationsQuestionadd">
+    <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':'block'}" id="top-layer"
+        style="backdrop-filter: brightness(0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content p-2" style="width: 150%;">
+                <span (click)="closeAddQuizPopUp()"
+                    style="color: var(--p-primary-500); text-align: right; cursor: pointer;"><i
+                        class="fa-solid fa-xmark"></i></span>
+                <form [formGroup]="form" (ngSubmit)="onSubmit()" #formElm>
+                    <div class="modal-body">
+                        <span style="color: #001631; font-size: 20px;">{{currentModuleName}} Quiz</span>
+                        <div class="row mt-3">
+                            <div class="col-md-12 mt-1">
+                                <div class="form-group">
+                                    <label>Current Module</label>
+                                    <input formControlName="currentModule" type="text" class="form-control" pInputText>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="form-group">
+                                    <label>Question</label>
+                                    <input formControlName="question" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.question.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.question.errors.required">Required</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 1</label>
+                                    <input formControlName="option1" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option1.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option1.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Recommendation</label>
+                                    <p-select formControlName="option1_type_id" optionValue="id" optionLabel="name"
+                                        [options]="recommandationList" styleClass="w-full"
+                                        [readonly]="true"></p-select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 2</label>
+                                    <input formControlName="option2" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option2.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option2.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Recommendation</label>
+                                    <p-select formControlName="option2_type_id" optionValue="id" optionLabel="name"
+                                        [options]="recommandationList" styleClass="w-full"
+                                        [readonly]="true"></p-select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 3</label>
+                                    <input formControlName="option3" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option3.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option3.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Recommendation</label>
+                                    <p-select formControlName="option3_type_id" optionValue="id" optionLabel="name"
+                                        [options]="recommandationList" styleClass="w-full"
+                                        [readonly]="true"></p-select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Option 4</label>
+                                    <input formControlName="option4" type="text" class="form-control" pInputText>
+                                    <div *ngIf="submitted && f.option4.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.option4.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mt-1">
+                                <div class="form-group">
+                                    <label>Recommendation</label>
+                                    <p-select formControlName="option4_type_id" optionValue="id" optionLabel="name"
+                                        [options]="recommandationList" styleClass="w-full"
+                                        [readonly]="true"></p-select>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-1">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <p-select formControlName="status" optionValue="id" optionLabel="name"
+                                        [options]="statusData" styleClass="w-full"></p-select>
+                                    <div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.status.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-3 mb-4 mt-4 text-right">
+                                <button type="submit" class="ps-3 pe-3 pt-2 pb-2" pButton
+                                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">{{addOrUpdate}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':streamadd}" id="top-layer"
+    style="backdrop-filter: brightness(0.5);">
+    <div class="modal-dialog">
+        <div class="modal-content py-2">
+            <div class="bb-1">
+                <div class="py-2 px-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <span style="color: #001631; font-size: 20px;font-weight: bold;">Add Stream</span>
+                        <span (click)="streamadd='none'"
+                            style="color: var(--p-primary-500); text-align: right; cursor: pointer;"><i
+                                class="fa-solid fa-xmark"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 py-2 px-4 bb-1">
+                <div style=" font-size: 16px;">Category</div>
+                <div style="color: #001631; font-size: 14px;font-weight: bold;">Stream Selector - Science</div>
+            </div>
+            <div class="row py-2 px-4">
+                <div class="col-md-12 mt-1">Stream Name</div>
+                <div class="col-md-10 mt-1">
+                    <input type="text" pInputText [(ngModel)]="streamValue" class="form-control" />
+                </div>
+                <div class="col-md-2 mt-1">
+                    <button (click)="addStream()" class="ps-3 pe-3 pt-2 pb-2" pButton
+                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">Add
+                    </button>
+                </div>
+            </div>
+            <div class="row mt-1 mb-1" style="background-color: #cfd1d3bd;margin: 0px;">
+                <div class="col-md-2 text-center checkBoxDiv"><p-checkbox [(ngModel)]="selectAll" [binary]="true"
+                        inputId="binary" class="streamCheckBox" (onChange)="selectAllStreams($event)"></p-checkbox>
+                </div>
+                <div class="col-md-10 menuitemsTitle py-3 px-5">MENU ITEMS </div>
+            </div>
+            <div class="col-md-12 mt-1">
+                <div *ngFor="let item of streamList" class="row py-2 align-items-center bb-1" style="margin:0px;">
+                    <div class="col-md-2 text-center d-flex justify-content-center">
+                        <p-checkbox class="streamCheckBox" [(ngModel)]="item.selected"
+                            onChange="selectStream(item,$event)" [binary]="true" inputId="binary"></p-checkbox>
+                    </div>
+                    <div class="col-md-10 py-1 px-5" style="color: #001631;">{{item.name}}</div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button (click)="deleteSelected()" class="btn btn-danger" pButton
+                    style="background-color: #FF0000; border-radius: 6px; padding: 10px 20px;">Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

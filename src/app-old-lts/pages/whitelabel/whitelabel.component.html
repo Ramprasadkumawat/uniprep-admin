@@ -1,0 +1,368 @@
+<p-accordion styleClass="white-accordian" value="0">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Add Whitelabel</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #addFormElm>
+				<div class="row">
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Home Country</label>
+							<p-select [filter]="true" filterBy="name" placeholder="Select" class="custom-multiselect" formControlName="coutryname" optionValue="id" optionLabel="name" styleClass="w-full" [options]="intcountries"></p-select>
+							<div *ngIf="submitted && f.coutryname.errors" class="text-danger text-xs">
+								<div *ngIf="f.coutryname.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Organization Type</label>
+							<p-select (onChange)="getOrganizationNmae()" placeholder="Select" styleClass="w-full" formControlName="orgtype" [options]="organizationtype" optionValue="id" optionLabel="mitypename" [filter]="true" filterBy="mitypename"></p-select>
+							<div *ngIf="submitted && f.orgtype.errors" class="text-danger text-xs">
+								<div *ngIf="f.orgtype.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Organization Name</label>
+							<p-select [filter]="true" filterBy="institutename" placeholder="Select" class="custom-multiselect" formControlName="organizationname" optionValue="id" optionLabel="institutename" styleClass="w-full" [options]="organizationName"></p-select>
+							<div *ngIf="submitted && f.organizationname.errors" class="text-danger text-xs">
+								<div *ngIf="f.organizationname.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Fetched Contact Name</label>
+                        <p-select [filter]="true" filterBy="institutename" placeholder="Select"  class="custom-multiselect"  formControlName="fetchname" optionValue="id" optionLabel="institutename" styleClass="w-full" [options]="organizationName"></p-select>
+                        <div *ngIf="submitted && f.fetchname.errors" class="text-danger text-xs">
+                            <div *ngIf="f.fetchname.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div> -->
+					<!-- <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Fetched Contact Email</label>
+                        <p-select [filter]="true" filterBy="institutename" placeholder="Select"  class="custom-multiselect"  formControlName="fetchemail" optionValue="id" optionLabel="institutename" styleClass="w-full" [options]="organizationName"></p-select>
+                        <div *ngIf="submitted && f.fetchemail.errors" class="text-danger text-xs">
+                            <div *ngIf="f.fetchemail.errors.required">Required</div>
+                            <div *ngIf="f.fetchemail.errors.email">
+                                Email must be a valid email address
+                              </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Fetched Contact Number</label>
+                        <p-select [filter]="true" filterBy="institutename" placeholder="Select"  class="custom-multiselect"  formControlName="fetchnumber" optionValue="id" optionLabel="institutename" styleClass="w-full" [options]="organizationName"></p-select>
+                        <div *ngIf="submitted && f.fetchnumber.errors" class="text-danger text-xs">
+                            <div *ngIf="f.fetchnumber.errors.required">Required</div>
+                            <div *ngIf="f.fetchnumber.errors.minlength">Minimum 10 numbers Required</div>
+                        </div>
+                    </div>
+                </div> -->
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Domain Type</label>
+							<p-select (onChange)="domainTypeChangr()" formControlName="domaintype" optionValue="id" optionLabel="name" styleClass="w-full" [options]="domaintype"></p-select>
+							<div ngModal *ngIf="submitted && f.organizationname.errors" class="text-danger text-xs">
+								<div *ngIf="f.organizationname.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4" *ngIf="!Dnsvalueshow">
+						<div class="form-group">
+							<label>Domain Name</label>
+							<input (keydown)="preventPeriod($event)" style="height: 40px !important" formControlName="domainname" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.domainname.errors" class="text-danger text-xs">
+								<div *ngIf="f.domainname.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4" *ngIf="Dnsvalueshow">
+						<div class="form-group">
+							<label>Domain Name</label>
+							<input style="height: 40px !important" formControlName="domainname" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.domainname.errors" class="text-danger text-xs">
+								<div *ngIf="f.domainname.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<label>Organization Logo(.svg)</label>
+						<div class="form-group" (dragover)="onDragOver($event)">
+							<div class="input-wrapper">
+								<input type="file" (change)="onFileChange($event)" formControlName="image" accept=".svg" style="display: none; color: black" #fileInput />
+								<input style="height: 40px !important" type="text" (change)="onFileChange($event)" formControlName="image" class="form-control" pInputText readonly [value]="form.controls.image.value ? form.controls.image.value.name : ''" (click)="fileInput.click()" />
+								<button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem" class="upload-button" (click)="fileInput.click()">Upload</button>
+								<div *ngIf="submitted && f.image.errors" class="text-danger text-xs">
+									<div *ngIf="f.image.errors.required">Required</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<label>Organization Icon (.svg)</label>
+						<div class="form-group" (dragover)="onDragOver($event)">
+							<div class="input-wrapper">
+								<input type="file" (change)="onFileChangeIcon($event)" formControlName="icon" accept=".svg" style="display: none; color: black" #fileInputicon />
+								<input style="height: 40px !important" type="text" (change)="onFileChangeIcon($event)" formControlName="icon" class="form-control" pInputText readonly [value]="form.controls.icon.value ? form.controls.icon.value.name : ''" (click)="fileInputicon.click()" />
+								<button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem" class="upload-button" (click)="fileInputicon.click()">Upload</button>
+								<div *ngIf="submitted && f.icon.errors" class="text-danger text-xs">
+									<div *ngIf="f.icon.errors.required">Required</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>DNS/CNAME Value</label>
+							<input style="height: 40px !important" formControlName="cname" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.cname.errors" class="text-danger text-xs">
+								<div *ngIf="f.cname.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 mt-3">
+						<h5>Email Configuration</h5>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mail Protocol</label>
+							<input style="height: 40px !important" formControlName="mail_protocol" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.mail_protocol.errors" class="text-danger text-xs">
+								<div *ngIf="f.mail_protocol.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mail Host</label>
+							<input style="height: 40px !important" formControlName="mail_host" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.mail_host.errors" class="text-danger text-xs">
+								<div *ngIf="f.mail_host.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mail Port</label>
+							<input style="height: 40px !important" formControlName="mail_port" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.mail_port.errors" class="text-danger text-xs">
+								<div *ngIf="f.mail_port.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mail ID/ Username</label>
+							<input style="height: 40px !important" formControlName="mail_id" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.mail_id.errors" class="text-danger text-xs">
+								<div *ngIf="f.mail_id.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Password</label>
+							<input style="height: 40px !important" formControlName="password" type="password" class="form-control" pInputText />
+							<div *ngIf="submitted && f.password.errors" class="text-danger text-xs">
+								<div *ngIf="f.password.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mail Encryption</label>
+							<input style="height: 40px !important" formControlName="mail_encryption" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.mail_encryption.errors" class="text-danger text-xs">
+								<div *ngIf="f.mail_encryption.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mail From Address</label>
+							<input style="height: 40px !important" formControlName="mail_from_address" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.mail_from_address.errors" class="text-danger text-xs">
+								<div *ngIf="f.mail_from_address.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mail Name</label>
+							<input style="height: 40px !important" formControlName="mail_name" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.mail_name.errors" class="text-danger text-xs">
+								<div *ngIf="f.mail_name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button (click)="textSMTP()" class="btn btn-warning" type="button">
+							Test Mail (SMTP)
+							<i class="pi pi-info-circle" pTooltip="Before submit whitelabel record check SMTP configuration with this Test Mail (SMTP) button." tooltipPosition="top"></i>
+						</button>
+						<button (click)="resetForm()" class="btn btn-primary" type="button">Reset</button>
+						<button class="btn btn-primary" type="submit">{{ btntxt }}</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+	<p-accordion-panel value="2">
+		<p-accordion-header>Filter Whitelabel</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filterSubmitForm()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Country Name</label>
+							<p-select placeholder="Select" class="custom-multiselect" formControlName="coutryname" optionValue="id" optionLabel="name" styleClass="w-full" [options]="intcountries"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Organization Type</label>
+							<p-select (onChange)="getOrganizationNmae()" placeholder="Select" styleClass="w-full" formControlName="orgtype" [options]="organizationtype" optionValue="id" optionLabel="mitypename" [filter]="true" filterBy="organizationtype"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Organization Name</label>
+							<p-select [filter]="true" filterBy="institutename" placeholder="Select" class="custom-multiselect" formControlName="organizationname" optionValue="id" optionLabel="institutename" styleClass="w-full" [options]="organizationName"></p-select>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Domain Type</label>
+							<p-select placeholder="Select" formControlName="domaintype" optionValue="id" optionLabel="name" styleClass="w-full" [options]="domaintype"></p-select>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button (click)="resetFilterForm()" class="btn btn-primary" type="button">Reset</button>
+							<button class="btn btn-primary" type="submit">Filter</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="Whitlabellist" styleClass="gray-header" [lazy]="true" [totalRecords]="totalcount">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<div>
+				<h4>Whitelabel List</h4>
+				<span style="color: #a1a1a1; font-size: 10px">Total List: {{ totalcount }}</span>
+			</div>
+			<div class="text-right p-1">
+				<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" (click)="fileUploadModal = true" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Import &nbsp;<i class="pi pi-file"></i></button>
+				<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" (click)="exportTable()" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Export &nbsp;<i class="pi pi-file"></i></button>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell">Country</th>
+			<th class="border-cell">Org. Name</th>
+			<!-- <th class="border-cell">Org. Contact Details</th> -->
+			<th class="border-cell">Domain Type</th>
+			<th class="border-cell">Domain / DNS</th>
+			<th class="border-cell">Domain Logo</th>
+			<th class="border-cell">Icon</th>
+			<th class="border-cell">Partner Type</th>
+			<th class="border-cell">Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-user>
+		<tr>
+			<td class="border-cell">{{ user.countryname }}</td>
+			<td class="border-cell">{{ user.orgname }}</td>
+			<!-- <td class="border-cell"> 
+                <span>{{user.contactname}}</span><br>
+                <span>{{user.contactemail}}</span><br>
+                <span>{{user.contactnumber}}</span>
+            </td> -->
+			<td class="border-cell">{{ user.domaintype == 1 ? "Uniprep Domain" : "Custamized Doman" }}</td>
+			<td class="border-cell">
+				<span>{{ user.domainname }}</span
+				><br />
+				{{ user.cname }}
+			</td>
+			<td class="border-cell"><img height="50" width="50" src="{{ user.organizationlogo }}" alt="" /></td>
+			<td class="border-cell"><img height="50" width="50" src="{{ user.icon }}" alt="" /></td>
+			<td class="border-cell">{{ user.orgtype }}</td>
+			<td class="border-cell">
+				<span (click)="editcountrydetails(user)" style="cursor: pointer"
+					><span style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span>&nbsp; Edit</span
+				>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+<div class="card-footer">
+	<p-paginator [rows]="8" [totalRecords]="totalcount" (onPageChange)="pageChange($event)" [rowsPerPageOptions]="[50, 100, 200, 500]"></p-paginator>
+</div>
+<p-dialog header="File Upload" [(visible)]="fileUploadModal" [modal]="true" [style]="{ width: '50vw' }">
+	<label for="file" class="reading-drop-container">
+		<i class="pi pi-upload reading-drop-title"></i>
+		<input type="file" id="file" class="d-none" (change)="onFileChangeImport($event)" accept=".csv" /><br />
+		<!-- <span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+        <span class="reading-sm-font">Please maintain the format of uploading to stop failures</span> -->
+		<div class="reading-sm-font" *ngIf="importFile?.name">{{ importFile.name }}</div>
+		<div *ngIf="!importFile?.name" class="d-flex flex-column gap-1 text-center">
+			<span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+			<span class="reading-sm-font">Please maintain the format of uploading to stop failures</span>
+		</div> </label
+	><br />
+	<div class="text-center">
+		<button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="uploadFile()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Upload</button>
+	</div>
+</p-dialog>
+<!-- pop-up -->
+<!-- <div [ngStyle]="{ display: confirmationpopup }" class="modal modal-bg" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document" >
+                <div class="modal-content card ">
+                    <div class="modal-body">
+                        <img src="{{uploadedeimages}}" alt="">
+                        <h1>hi</h1>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{ display: confirmationpopup }" style="backdrop-filter: brightness(0.5)">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="card cardcss p-4" style="width: -webkit-fill-available !important">
+				<div style="text-align: center">
+					<h4>Whitelabel Confirmation</h4>
+					<div class="mt-3">
+						<span><img height="70" width="70" src="{{ domainlogoconfirmation }}" alt="" /></span>
+					</div>
+					<div class="mt-3" style="font-size: large">
+						<span>Domain Name: {{ domainameconfirm }}</span>
+					</div>
+					<div style="font-size: large">
+						<span>Domain Login: {{ domainloginconfirm }}</span>
+					</div>
+					<div style="font-size: large">
+						<span>Domain Register: {{ domainregisterconfirm }}</span>
+					</div>
+					<div style="font-size: large" class="mt-4">
+						<span>Domain Type:{{ domaintypeconfirm == 1 ? "Uniprep Domain" : "customised domain" }}</span>
+					</div>
+					<div><p>Please confirm to continue with the automated domain creation process</p></div>
+				</div>
+				<div style="font-size: large; text-align: center" class="mt-3">
+					<button (click)="confirmationSubmit()" class="btn btn-primary" type="button">Confirm</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

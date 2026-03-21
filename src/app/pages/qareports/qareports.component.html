@@ -1,0 +1,62 @@
+<div class="card">
+    <div>
+        <h1 class="tabletitle">QA Reports</h1>
+    </div>
+    <table>
+        <thead>
+            <tr style="font-weight: 600;" class="titlerow">
+                <td width="5">Sl. No</td>
+                <td width="5">Report No</td>
+                <td width="20">User Details</td>
+                <td width="10">Plan Name</td>
+                <td width="10">Report Date</td>
+                <td width="10">Modules</td>
+                <td width="10">Sub-Modules</td>
+                <td width="10">Question No</td>
+                <td width="10">Issue</td>
+                <td width="10">Info</td>
+            </tr>
+        </thead>
+        <tbody  *ngFor="let report of qareportdata; let i = index">
+            <tr>
+                <td> {{i + 1}} </td>
+                <td> {{report.reportId}} </td>
+                <td> {{report.name}} <br> {{report.email}} <br>{{report.phone}}</td>
+                <td>{{report.subscription}}</td>
+                <td>{{report.date}}</td>
+                <td>{{report.modules}}</td>
+                <td>{{report.submodule}}</td>
+                <td>{{report.question}}</td>
+                <td>{{report.issue}}</td>
+                <td (click)="showComment(report.reportId)"><i class="fa-solid fa-circle-plus fa-2xl" style="color: var(--p-primary-500);"></i></td>
+            </tr>
+            <tr id="{{report.reportId}}" class="messageblock">
+                <td class="" colspan="7" >
+                    <div class="commentblock">
+                    <h3 class="reportcommenttitle">Report Message</h3>
+                        <p class="reportcomment">
+                            {{report.comment}}
+                        </p>
+                    </div>
+                </td>
+                <td class="" colspan="3">
+                    <div class="commentblock">
+                        <div>
+                            <label>Set Status</label><br>
+                            <select class="form-control" style="width: 100%;">
+                                <option value="1">Active</option>
+                                <option value="2">Hold</option>
+                                <option value="3">Closed</option>
+                                <option value="4">Resolved</option>
+                            </select>
+                        </div>
+                        <div>
+                            <a class="btn btn-primary">Change Status</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>

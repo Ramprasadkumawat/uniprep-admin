@@ -1,0 +1,54 @@
+.input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+input[type="url"] {
+    padding-right: 30px;
+    /* Adjust the value to make space for the icon */
+}   
+.upload-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 35%;
+    /* Adjust the width as needed */
+    height: 100%;
+    /* Adjust the height as needed */
+    background-color: var(--p-primary-500);
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.sm-font {
+    font-size: 12px;
+}
+
+.border-black {
+    border: 1px solid #707070 !important;
+    border-radius: 10px;
+}
+.basicLevelTag{
+    padding: 0px 10px !important;
+    background-color: green !important;
+    color: white !important;
+    border-radius: 20px !important;
+    font-size: 12px;
+}
+.intLevelTag{
+    background-color:orange;
+    color: white !important;
+    border-radius: 20px !important;
+    padding: 0px 10px !important;
+    font-size: 12px;
+}
+.advLevelTag{
+    background-color:red;
+    color: white !important;
+    border-radius: 20px !important;
+    padding: 0px 10px !important;
+    font-size: 12px;
+}

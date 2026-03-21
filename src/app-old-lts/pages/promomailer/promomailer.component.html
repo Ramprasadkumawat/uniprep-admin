@@ -1,0 +1,1079 @@
+<div class="accordion  mt-3" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" #accordionButtonHello
+        data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false"
+        data-bs-parent="#accordionPanelsStayOpenExample1" aria-controls="panelsStayOpen-collapseOne">
+        <h5 class="mb-0">Advanced Filter</h5>
+      </button>
+    </h2>
+    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+      <div class="accordion-body">
+        <div class="container-fluid px-0">
+
+          <div class="row">
+            <div class="col-md-6 col-7 ">
+              <label style="color:var(--p-primary-500); font-weight: 500">Type</label>
+              <button class="btn btn-outline-light  px-3 py-2 me-2" (click)="setActiveButton(1);"
+                [ngStyle]="button1Style">
+                My Leads
+              </button>
+              <button class="btn btn-outline-light  px-3 py-2" (click)="setActiveButton(2)" [ngStyle]="button2Style">
+                Partners
+              </button>
+              <button class="btn btn-outline-light  px-3 py-2" (click)="setActiveButton(3);customFormVisible=true"
+                [ngStyle]="button3Style">
+                Custom Users
+              </button>
+            </div>
+          </div>
+
+          <!-- <div class="row" *ngIf="myLeadFormVisible" > -->
+          <form [formGroup]="myLeadFilterForm" (ngSubmit)="submitLeadData(myLeadFilterForm)" *ngIf="myLeadFormVisible">
+            <div class="row">
+              <div class="col-md-3">
+
+                <div class="form-group">
+                  <label class="form-label" style="font-size: medium; font-weight: 500">Source Type</label>
+                  <p-select formControlName="sourcetype" appendTo="body" [filter]="true" filterBy="name"
+                    display="chip" optionValue="id" optionLabel="name" styleClass="w-full" [options]="sourcetypes"
+                    placeholder="Select Source Type" (onChange)="getSource($event)"></p-select>
+
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label" style="font-size: medium; font-weight: 500">Source Name(Dropdown with
+                    search)</label>
+                  <p-select formControlName="source_name" appendTo="body" [filter]="true" filterBy="name"
+                    display="chip" optionValue="id" optionLabel="name" styleClass="w-full" [options]="sourcelist"
+                    [filter]="true" placeholder="Select Source Name" filterBy="name"></p-select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label" style="font-size: medium; font-weight: 500">Program Level Looking</label>
+                  <p-multiselect formControlName="programlevel" styleClass="w-full" appendTo="body" [filter]="true"
+                    filterBy="programlevel" display="chip" optionValue="id" optionLabel="programlevel"
+                    [options]="programLevels" defaultLabel="Select Program Level"></p-multiselect>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label" style="font-size: medium; font-weight: 500">Home Country</label>
+                <p-select formControlName="country" optionValue="id" styleClass="w-full" appendTo="body"
+                  [filter]="true" display="chip" optionLabel="country" [options]="countries" [filter]="true"
+                  filterBy="country" placeholder="Select" (onChange)="changeCountry()"></p-select>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="form-label" style="font-size: medium; font-weight: 500">Region</label>
+                  <p-select formControlName="region" optionValue="id" appendTo="body" [filter]="true" display="chip"
+                    optionLabel="state" [options]="regions" styleClass="w-full" filterBy="state"
+                    placeholder="Select Region" (onChange)="changeRegion($event)"></p-select>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label" style="font-size: medium; font-weight: 500">Location</label>
+                <p-select formControlName="location" optionValue="id" appendTo="body" optionLabel="district"
+                  styleClass="w-full" [options]="locations" placeholder="Select Location"></p-select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label" style="font-size: medium; font-weight: 500">Lead Status</label>
+
+                <p-multiselect [options]="statuses" optionValue="id" appendTo="body" styleClass="w-full"
+                  formControlName="leadstatus" defaultLabel="Select Status" optionLabel="status_name"></p-multiselect>
+
+              </div>
+              <div class="col-md-3">
+                <label class="form-label" style="font-size: medium; font-weight: 500">Last Degree Passing Year</label>
+                <p-select formControlName="passingyear" optionValue="year" appendTo="body" optionLabel="label"
+                  placeholder="Select Passing Year" styleClass="w-full" [options]="years" [filter]="true"
+                  filterBy="name"></p-select>
+              </div>
+              <div class="col-md-3">
+                <label class="form-label" style="font-size: medium; font-weight: 500">Lead Type</label>
+                <p-select formControlName="lead_type" optionValue="id" appendTo="body" optionLabel="name"
+                  placeholder="Select Lead Type" styleClass="w-full" [options]="leadList" [filter]="true"
+                  filterBy="name"></p-select>
+              </div>
+              <div class="col-md-12">
+                <div class="d-flex justify-content-end align-items-center">
+                  <a class="btn btnalingnment" (click)="resetFilter()">Reset Filter</a>
+                  <input class="btn btnalingnment" type="submit" value="Filter Data" />
+                </div>
+              </div>
+
+            </div>
+          </form>
+          <!-- </div> -->
+          <div class="row" *ngIf="partnersFormVisible">
+            <form [formGroup]="partnersFilterForm" (ngSubmit)="submitPartnersData(partnersFilterForm)"
+              *ngIf="partnersFormVisible">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="form-label" style="font-size: medium; font-weight: 500">Home Country</label>
+                    <p-select formControlName="country" optionValue="id" styleClass="w-full" appendTo="body"
+                      [filter]="true" display="chip" optionLabel="country" [options]="countries" [filter]="true"
+                      filterBy="country" placeholder="Select" (onChange)="changeCountry()"></p-select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="form-label" style="font-size: medium; font-weight: 500">Region</label>
+                    <p-select formControlName="region" optionValue="id" appendTo="body" [filter]="true" display="chip"
+                      optionLabel="state" [options]="regions" styleClass="w-full" filterBy="state"
+                      placeholder="Select Region" (onChange)="changeRegion($event)"></p-select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="form-label" style="font-size: medium; font-weight: 500">Location</label>
+                    <p-select formControlName="location" optionValue="id" appendTo="body" optionLabel="district"
+                      styleClass="w-full" [options]="locations" placeholder="Select Location"></p-select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="form-label" style="font-size: medium; font-weight: 500">Source Type</label>
+                    <p-select formControlName="usertype" optionValue="id" optionLabel="type" styleClass="w-full"
+                      appendTo="body" [options]="userTypes" (onChange)="changeSourceType($event)" [filter]="true"
+                      filterBy="type"></p-select>
+                  </div>
+                </div>
+                <!-- <div class="col-md-4" *ngIf="partnersFilterForm.value.usertype==7 || partnersFilterForm.value.usertype==4 || partnersFilterForm.value.usertype==9"> -->
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="form-label" style="font-size: medium; font-weight: 500">Source Name</label>
+                    <p-select formControlName="source_name" optionValue="id" optionLabel="institutename"
+                      styleClass="w-full" appendTo="body" [options]="sourceName" [filter]="true"
+                      filterBy="institutename"></p-select>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label class="form-label" style="font-size: medium; font-weight: 500">Status</label>
+                    <p-select formControlName="partner_status" optionValue="id" appendTo="body" optionLabel="name"
+                      styleClass="w-full" [options]="partnerStatus" [filter]="true" filterBy="name"></p-select>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="d-flex justify-content-end align-items-center">
+                    <a class="btn btnalingnment" (click)="resetFilter()">Reset Filter</a>
+                    <input class="btn btnalingnment" type="submit" value="Filter Data" />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="row" *ngIf="customFormVisible">
+            <form [formGroup]="customUsersForm" class=" p-3" *ngIf="customFormVisible">
+              <h3>Add Emails</h3>
+              <div class="row">
+                <div class="container-fluid col-lg-12 dynamic-textarea"
+                  style="border: 1px solid #00000080;height:184px;border-radius: 5px;">
+                  <textarea class="col-lg-12 container-fluid dynamic-textarea text-left" formControlName="nameemail"
+                    style="border:none;overflow:hidden;outline: none;height:180px;" [(ngModel)]="value"></textarea>
+                </div>
+              </div><br>
+              <h3>Upload</h3>
+              <div class="row">
+                <div class="card col-lg-12" style="border-color:#00000080;height:252px">
+                  <label for="file" class="reading-drop-container">
+                    <i class="fa fa-solid fa-upload reading-drop-title" style="color: var(--p-primary-500);
+"></i>
+                    <span class="reading-sm-font">Upload your documents here</span>
+                    <input type="file" id="file" hidden (change)="onFileChange($event)" accept=".csv"><br />
+                    <span class="reading-sm-font">Only .csv file formats are supported for
+                      uploads</span>
+                  </label>
+                </div>
+              </div><br>
+              <div class="row ">
+                <div class="col-6 text-left">
+                </div>
+                <div class="col-6 text-right">
+                  <button class="btn" style="background-color: var(--p-primary-500);
+ color: white;" (click)="resetFilter()">Reset&nbsp;<span>
+                      <i style="color:white;" class="fa fa-refresh mr-2"></i></span></button>
+                  <button type="button" class="btn btn-primary" (click)="submitCustomUsers()">Add Emails
+                    <span><i style="color:white" class="fas fa-filter mr-2"></i></span></button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <p-tabs styleClass="active-bg-black customtab" activeIndex="1" value="1">
+    <p-tablist>
+			<p-tab value="1">New Email</p-tab>
+			<p-tab value="2">Schedules Drafts</p-tab>
+			<p-tab value="3">History</p-tab>
+			<p-tab value="4">Unsubscribers</p-tab>
+		</p-tablist>
+    <p-tabpanels>
+    <p-tabpanel value="1" header="New Email">
+      <div class="container-fluid ">
+        <form [formGroup]="promomailConfiguration" (ngSubmit)="sendpromomail();">
+          <div>
+            <h4>New Email</h4>
+          </div>
+          <label>Recipient Type</label>
+          <div class="col-12" style="display: flex; padding: 0 !important">
+
+            <div class="col-5 ">
+
+              <p-multiselect class="w-full multiselection" [disabled]="true" formControlName="type"
+                placeholder="Recipient Type" [(ngModel)]="selectedmailertype" [options]=" selectedData">
+              </p-multiselect>
+            </div>&nbsp;
+            <div class="col-7" style="align-self: center">
+              <p-multiselect class="w-full multiselection" [disabled]="true" formControlName="Emailids"
+                placeholder="Select Email" [options]="tempEmailIds">
+              </p-multiselect>
+            </div>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="form-control-label" for="input-mailsubject">Subject line</label>
+                <input type="text" formControlName="Subject" class="form-control" id="mailsub"
+                  placeholder="Subject line" />
+
+                <div *ngIf="submitted && f.Subject.errors" class="invalid-feedback">
+                  <div *ngIf="f.Subject.errors.required">
+                    Subject is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 mt-2" [class]="fullscreen" #fileInput #fullscreeneditor>
+              <div class=" flex-shrink-0">
+                <div class="field col-12" [class]="fullscreen" #fileInput #fullscreeneditor>
+                  <i class="fa-solid fa-paperclip mb-2" matTooltip="Attach file" style="
+                  float: right;
+                  position: inherit;
+                  padding: 1rem;
+              " (click)="openuploadpopup()"></i>
+                  <p-editor [(ngModel)]="htmlContent" [modules]="modules" placeholder="Reply" formControlName="Content">
+                    <ng-template pTemplate="header">
+                      <!-- <i class="pi pi-paperclip mr-2" style="cursor: pointer" (click)="fileInput.click()"></i> -->
+                      <!-- <i [ngClass]="screensize" class="pi mr-2" style="cursor: pointer" (click)="fullscreentoggle()"></i> -->
+                    </ng-template>
+                  </p-editor><br>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4 col-lg-12" style=" position: relative;">
+            <div class="row" style="padding-left: 0px; padding-right: 0px">
+              <div class="col-md-12 d-flex justify-content-start align-items-center">
+                <div class="form-group mb-2">
+                  <button mat-button class="btn btn-seco" type="button" style="background-color: #F0780C; color: white"
+                    (click)="scheduleLater()">
+                    Schedule&nbsp;<span> <i class=" fa-solid fa-clock ml-2" style="color: white"></i></span>
+                  </button>
+                </div>
+                <div class="d-flex flex-grow-1 justify-content-start align-items-center ml-3">
+                  <div *ngIf="campaignvisibility" class="d-flex">
+                    <div class="form-group mb-2 mr-2 position-relative">
+                      <input type="date" formControlName="scheduled_date" class="form-control"
+                        placeholder="Send Date" />
+
+                    </div>
+                    <div class="form-group mb-2 mr-2" style="position: relative; display: inline-block;">
+                      <input type="time" formControlName="scheduled_time" class="form-control" placeholder="Time" />
+
+                    </div>
+                  </div>
+                </div>
+                <button mat-button class="btn btn-primary send-button" type="submit" style="float:right;">
+                  Send Email&nbsp;<span><i class=" fa-solid fa-check ml-2"></i></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </p-tabpanel>
+    <p-tabpanel value="2" header="Scheduled Drafts">
+      <div class="container-fluid col-lg-12">
+        <div class="row mt-0">
+          <div class="col-md-8">
+            <h2 class="uniapply-primary fw-semibold"
+              style="font-size: 1.5rem;color:var(--p-primary-500);margin-left: 10px;">
+              Scheduled Drafts
+            </h2>
+          </div>
+          <!-- <div class="col-md-2">
+          </div> -->
+          <div class="col-md-4 text-right ">
+            <button type="button" class="btn" style="background-color:var(--p-primary-500);color: white; "
+              (click)="filterDraftsDialogVisible=true">Filter &nbsp;<span><i style="color: white;"
+                  class="fa-solid fa-filter mr-2"></i></span></button>
+                  <button type="button" class="btn mt-4" (click)="deleteSelectedDrafts()"
+              style="background-color:black;color: white;transform: translateY(-10px);">Delete Selected</button>
+          </div>
+
+
+          <div class="container-fluid pb-2 mr-0 col-lg-12">
+            <div class="row " style="margin-right: 10px;margin-left: 10px;">
+              <div *ngFor="let data of draftsdata" class=" col-lg-12 card card-stats mb-4 "
+                style="height: 90px;border-radius:0.5px;border:0.5px 0.5px solid #4444447A">
+                <table class="table mb-0">
+                  <tbody>
+                    <tr>
+                      <td class="align-middle" style="width: 5px;">
+                        <input type="checkbox" [value]="data.id" (change)="onCheckboxChange($event)" />
+                      </td>
+                      <td class="align-middle" style="width: 141px;">
+                        <button type="button" class="btn card-title text-white w-100"
+                          style="background-color:var(--p-primary-500);">
+                          <i class="fas fa-solid fa-user"></i> Users ({{data.usercount}})
+                        </button>
+                      </td>
+                      <td class="align-middle"
+                        style="max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        <div class="d-flex">
+                          <p class="mb-0" [innerHTML]="data.subject | slice:0:50">{{ data.subject.length > 50 ? '...' :
+                            '' }}</p>
+                        </div>
+                        <div *ngFor="let file of data.attachment" class="mt-1">
+                          <button class="btn btn-outline-danger btn-sm">
+                            <i class="fa-solid fa-image"></i> {{ file }}
+                          </button>
+                        </div>
+                      </td>
+                      <td class="align-middle text-center" style="width: 150px;">
+                        <p class="mb-1 fw-semibold" style="font-size: 10px;">Scheduled Date</p>
+                        <p class="mb-0" style="font-size: 14px;">
+                          <i class="fa-solid fa-calendar" style="color:var(--p-primary-500);"></i> {{data.scheduleddate}}
+                        </p>
+                      </td>
+                      <td class="align-middle text-center" style="width: 150px;">
+                        <p class="mb-1 fw-semibold" style="font-size: 10px;">Scheduled Time</p>
+                        <p class="mb-0" style="font-size: 14px;">
+                          <i class="fa-solid fa-clock" style="color:var(--p-primary-500);"></i> {{data.scheduledtime}}
+                        </p>
+                      </td>
+                      <td class="align-middle text-center" style="width: 40px;">
+                        <i class="fa-solid fa-edit" (click)="updatePromoEmail(data.id)"
+                          style="cursor: pointer;color:var(--p-primary-500);"></i>
+                      </td>
+                      <td class="align-middle text-center" style="width: 40px;">
+                        <i class="fa-solid fa-trash text-danger" (click)="draftsaction(data.id)" style="cursor: pointer;"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-tabpanel>
+    <p-tabpanel value="3" header="History">
+      <div class="container-fluid col-lg-12">
+        <div class="row ">
+          <div class="col-12 d-flex justify-content-between">
+            <h2 class="mb-0 mt-5 uniapply-primary fw-semibold"
+              style="font-size: 1.5rem;color:var(--p-primary-500);margin-left: 10px;"> Reading Progressions</h2>
+            <div class="col-6 text-right ">
+              <button class="mt-5 text-small custom-button" style="border-radius: .3rem;width: 100px;height: 39px;">Opened<br>{{ totalOpened }}</button>&nbsp;
+              <button class="mt-5 text-small custom-button" style="border-radius: .3rem;height: 39px;">Unsubscribed<br>{{totalUnsubscribed}}</button>&nbsp;
+              <button type="button" class="btn mt-0" (click)="filterHistoryVisible=true"
+                style="background-color:var(--p-primary-500);color: white;transform: translateY(-10px);" (click)="filterUnsubscribersVisible=true">Filter &nbsp;<span><i style="color: white;"
+                  class="fa-solid fa-filter mr-2"></i></span></button>
+              <button type="button" class="btn mt-0"
+                style="background-color:black;color: white;transform: translateY(-10px);">Delete Selected</button>
+            </div>
+          </div>
+          <!-- <div class="row ">            
+            <div class="col">
+              <i class=" fa fa-sharp fa-solid fa-rotate-right" (click)="refresh()" style="cursor: pointer;"></i>
+            </div>
+          </div> -->
+          <div class="container-fluid pb-2">
+            <div class="row" style="margin-right: 10px;margin-left: 10px; border-radius: 0.5px; border: 0.5px 0.5px 0.5px 0.5px solid #4444447A">
+              <div *ngFor="let data of messageHistory" class="col-lg-12 card mb-4"
+                >
+                <table class="table mb-0">
+                  <tbody>
+                    <tr>
+                      <td class="align-middle" style="width: 5px;">
+                        <input type="checkbox" [value]="data.id" (change)="onCheckboxHistoryChange($event)" />
+                      </td>
+                      <td class="align-middle" style="width: 150px;">
+                        <button type="button" class="btn card-title text-white w-100"
+                          style="background-color:var(--p-primary-500);">
+                          <i class="fa-solid fa-user"></i> Users ({{data.usercount}})
+                        </button>
+                      </td>
+                      <td style="max-width: 380px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        <p class="mb-0" [innerHTML]="data.subject | slice:0:50">{{ data.subject.length > 50 ? '...' : ''
+                          }}</p>
+                        <div *ngFor="let file of data.attachmentName">
+                          <button class="btn btn-outline-danger btn-sm">
+                            <i class="fa-solid fa-image"></i> {{ file }}
+                          </button>
+                        </div>
+                      </td>
+                      <td class="text-end" style="width: 100px;">
+                        <p class="mb-0 fw-semibold" style="font-size: 10px;">Not Opened</p>
+                        <p class="mb-0 fw-semibold"
+                          style="font-size: 14px; color:var(--p-primary-500); cursor: pointer;">
+                          {{ data.notOpened || 0 }}
+                        </p>
+                      </td>
+                      <td class="text-end" style="width: 100px;">
+                        <p class="mb-0 fw-semibold" style="font-size: 10px;">Opened</p>
+                        <p class="mb-0 fw-semibold"
+                          style="font-size: 14px; color:var(--p-primary-500); cursor: pointer;">
+                          {{ data.opened || 0 }}
+                        </p>
+                      </td>
+                      <td class="text-end" style="width: 100px;">
+                        <p class="mb-0 fw-semibold" style="font-size: 10px;">Unsubscribed</p>
+                        <p class="mb-0 fw-semibold"
+                          style="font-size: 14px; color:var(--p-primary-500); cursor: pointer;">
+                          {{ data.unsubscribed || 0 }}
+                        </p>
+                      </td>
+                      <td class="text-end" style="width: 150px;">
+                        <p class="mb-0 fw-semibold" style="font-size: 10px;">Sent Date</p>
+                        <p class="mb-0 fw-semibold" style="font-size: 14px; color:var(--p-primary-500);">
+                          <i class="fa-solid fa-calendar"></i> {{ data.senddate }}
+                        </p>
+                      </td>
+                      <td class="text-end" style="width: 150px;">
+                        <p class="mb-0 fw-semibold" style="font-size: 10px;">Sent Time</p>
+                        <p class="mb-0 fw-semibold" style="font-size: 14px; color:var(--p-primary-500);">
+                          <i class="fa-solid fa-clock"></i> {{ data.sendtime }}
+                        </p>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-tabpanel>
+    <p-tabpanel value="4" header="Unsubscribers">
+      <!-- <div class="row  ml-4 mr-4">
+        <label style=" color: black;font-weight: 800;">Unsubscribers</label>
+        <div class="col-md-2">
+         
+          <label class="font-weight" style=" color: #8898aa !important;font-weight: 600;">Total : <span>{{
+              unsubscribedCount }}</span></label>
+        </div>
+        <div class="col-md-6">
+          <div class="p-input-icon-right w-80 ">
+            <input class="w-100 px-5 py-2 form-control" type="text" 
+              id="searchInput" />
+            <i class="pi pi-search" style="font-weight: 400"></i>
+          </div>
+        </div>
+        <div class="col-md-4 text-right ">
+         &nbsp;
+          <button type="button" class="btn" style="background-color:var(--p-primary-500);color: white; "
+            (click)="filterUnsubscribersVisible=true">Filter<span><i style="color: white;"
+                class="fa fa-filter mr-2"></i></span></button>
+        </div>
+      </div> -->
+      <!-- <div class="container-fluid pb-3"> -->
+        <div style="width: 100%; height: 80vh; overflow: auto; overflow-x: hidden;">
+        <!-- <div class="row">
+          <div class="col">
+            <div class="card shadow">
+              <div class="table-responsive"> -->
+                <p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="unsubscribers" dataKey="name"  [tableStyle]="{ 'min-width': '40rem', 'width': '100%' }">
+                  <ng-template pTemplate="caption">
+                    <!-- <div class="d-flex w-full align-items-center justify-content-between">
+                      <span>Unsubscribers <br /><span style="color: #a1a1a1; font-size: 10px"
+                          >Total : {{ unsubscribedCount }}</span></span>
+                          <div class="p-input-icon-right w-80 ">
+                            <input class="w-100 px-5 py-2 form-control" type="text" 
+                              id="searchInput" />
+                            <i class="pi pi-search" style="font-weight: 400"></i>
+                          </div> 
+                      <button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton >
+                        Export &nbsp; <i class="pi pi-file-export"></i>
+                      </button>
+                      <button type="button" class="btn" style="background-color:var(--p-primary-500);color: white; "
+                      (click)="filterUnsubscribersVisible=true">Filter<span><i style="color: white;"
+                          class="fa fa-filter mr-2"></i></span></button>
+                    </div> -->
+                    <div class="row  ml-4 mr-4">
+                      <div class="col-sm-2"> 
+                      <label style=" color: black;font-weight: 800;">Unsubscribers</label><br>
+                                            
+                        <label class="font-weight" style=" color: #8898aa !important;font-weight: 600;">Total : <span>{{
+                            unsubscribedCount }}</span></label>
+                      </div>
+                      <div class="col-md-6 mt-0">
+                        <div class="p-input-icon-right w-80 ">
+                          <input class="w-100 px-5 py-2 form-control" type="text" (click)="valuesearchClick()"
+                          [(ngModel)]="valueUnsubscribersFilter" (input)="performSearch($event)"
+                            id="searchInput" />
+                          <i class="pi pi-search" style="font-weight: 400"></i>
+                        </div>
+                      </div>
+                      <div class="col-md-4 mt-0 text-right ">
+                      
+                       <button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton >
+                        Export &nbsp; <i class="pi pi-file-export"></i>
+                      </button>
+                        <button type="button" class="btn" style="background-color:var(--p-primary-500);color: white; "
+                          (click)="filterUnsubscribersVisible=true">Filter &nbsp;<span><i style="color: white;"
+                            class="fa-solid fa-filter mr-2"></i></span></button>
+                      </div>
+                    </div> 
+                  </ng-template>
+                  <ng-template pTemplate="header">
+                    <tr>
+                     
+                      <th pSortableColumn="name" style="background-color: var(--p-primary-200);color:black">Name
+                        <p-sortIcon field="name"></p-sortIcon>
+                      </th>
+                      <th pSortableColumn="email" style="background-color: var(--p-primary-200);color:black">Email
+                        <p-sortIcon field="email"></p-sortIcon>
+                      </th>
+                      <th pSortableColumn="roletype" style="background-color: var(--p-primary-200);color:black">Role Type
+                        <p-sortIcon field="roletype"></p-sortIcon>
+                      </th>
+                      <th pSortableColumn="usertype" style="background-color: var(--p-primary-200);color:black">User Type
+                        <p-sortIcon field="usertype"></p-sortIcon>
+                      </th>
+                      <th pSortableColumn="unsubscribeddate" style="background-color: var(--p-primary-200);color:black">Date
+                        <p-sortIcon field="unsubscribeddate"></p-sortIcon>
+                      </th>
+                      <th pSortableColumn="unsubscribedtime" style="background-color: var(--p-primary-200);color:black">Time
+                        <p-sortIcon field="unsubscribedtime" ></p-sortIcon>
+                      </th>            
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-user>
+                    <tr>
+                    
+                      <td>{{user.name}}</td>
+                      <td>{{user.email}}</td> 
+                      <td>{{user.roletype}}</td> 
+                      <td>{{user.usertype}}</td> 
+                      <td>{{user.unsubscribeddate}}</td>
+                      <td>{{user.unsubscribedtime}}</td> 
+
+                    </tr>
+                  </ng-template>
+                </p-table>
+                 
+              <!-- </div>
+             
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</div>
+
+<p-dialog [(visible)]="isMyLeadDialog" [modal]="true" [style]="{width: '1100px'}" [resizable]="false"
+  [draggable]="false">
+  <div class="d-flex justify-content-between align-items-center w-100">
+    <h3 class="m-0">Add People</h3>
+
+    <div class="col-md-6 text-right">
+      <div class="p-input-icon-right w-80 mt-3">
+        <input class="form-control px-5 py-2" type="text" (click)="searchClick()" [(ngModel)]="valueMyLeadFilter"
+          (input)="searchPeopleList($event)" id="searchMylead" />
+        <i class="pi pi-search" style="font-weight: 400"></i>
+      </div>
+    </div>
+  </div>
+  <div style="max-height: 320px; overflow-y: auto;">
+    <p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="leadpeopleList" dataKey="name" [(selection)]="selectedLeads">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3rem;background-color: var(--p-primary-200);color:black">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th pSortableColumn="name" style="background-color: var(--p-primary-200);;color:black">USERNAME
+            <p-sortIcon></p-sortIcon>
+          </th>
+          <th pSortableColumn="email" style="background-color: var(--p-primary-200);;color:black">EMAILID
+            <p-sortIcon></p-sortIcon>
+          </th>
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="user"></p-tableCheckbox>
+          </td>
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-6 text-left">
+    </div>
+    <div class="col-6 text-right">
+      <!-- <button class="btn btn-sm btn-primary px-4 py-2" type="button" style="color: white;"
+      (click)="resetSelectedList()">Reset&nbsp;<span>
+        <i style="color: white ;" class="fa fa-refresh mr-2"></i></span></button> -->
+      <button type="button" class="btn btn-sm btn-primary px-4 py-2" (click)="applyLeadFilter()">Select Users
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
+
+<p-dialog [(visible)]="isPartnerDialog" [modal]="true" [style]="{width: '1100px'}" [resizable]="false"
+  [draggable]="false">
+  <div class="d-flex justify-content-between align-items-center w-100">
+    <h3 class="m-0">Add People</h3>
+    <div class="col-md-6 text-right">
+      <div class="p-input-icon-right w-80 mt-3">
+        <input class="form-control px-5 py-2" type="text" (click)="searchClick()" [(ngModel)]="valuePartnerFilter"
+          (input)="searchPeopleList($event)" id="searchMylead" />
+        <i class="pi pi-search" style="font-weight: 400"></i>
+      </div>
+    </div>
+  </div>
+  <div style="max-height: 320px; overflow-y: auto;">
+    <p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="partnerpeopleList" dataKey="name" [(selection)]="selectedPartner">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3rem;background-color: var(--p-primary-200);color:black">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th pSortableColumn="name" style="background-color: var(--p-primary-200);;color:black">USERNAME
+            <p-sortIcon></p-sortIcon>
+          </th>
+          <th pSortableColumn="email" style="background-color: var(--p-primary-200);;color:black">EMAILID
+            <p-sortIcon></p-sortIcon>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="user"></p-tableCheckbox>
+          </td>
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-6 text-left">
+    </div>
+    <div class="col-6 text-right">
+      <!-- <button class="btn btn-sm btn-primary px-4 py-2" type="button" style="color: white;"
+      (click)="resetSelectedList()">Reset&nbsp;<span>
+        <i style="color: white ;" class="fa fa-refresh mr-2"></i></span></button> -->
+      <button type="button" class="btn btn-sm btn-primary px-4 py-2" (click)="applyPartnerFilter()">Select Users
+      </button>
+    </div>
+  </div>
+</p-dialog>
+<p-dialog [(visible)]="isCustomDialog" [style]="{width: '1100px'}" [resizable]="false" [draggable]="false">
+  <div class="row d-flex mb-2">
+    <div class="col-md-6">
+      <h3 class=" mt-3">Add People</h3>
+      <label class="font-weight" style=" color: #8898aa !important;font-weight: 600;">Total :
+        <span>{{customUserpeopleCount}}</span></label>
+    </div>
+    <div class="col-md-6 text-right">
+      <div class="p-input-icon-right w-60 mt-3">
+        <input class="w-100 px-5 py-2 form-control" type="text" (click)="searchClick()"
+          [(ngModel)]="valueCustomUserFilter" (input)="searchPeopleList($event)" />
+        <i class="pi pi-search" style="font-weight: 400"></i>
+      </div>
+    </div>
+  </div>
+  <div style="max-height: 320px; overflow-y: auto;">
+    <p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="accumulatedEmails" dataKey="name" [(selection)]="selectedCustomUser">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3rem">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+          <th pSortableColumn="name">USERNAME <p-sortIcon></p-sortIcon> </th>
+          <th pSortableColumn="email">EMAILID <p-sortIcon></p-sortIcon> </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-user>
+        <tr>
+          <td>
+            <p-tableCheckbox [value]="user"></p-tableCheckbox>
+          </td>
+          <td>{{user.name}}</td>
+          <td>{{user.email}}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-6 text-left">
+    </div>
+    <div class="col-6 text-right">
+      <!-- <button class="btn btn-sm btn-primary px-4 py-2" type="button" style="color: white;"
+      (click)="resetSelectedList()">Reset&nbsp;<span>
+        <i style="color: white ;" class="fa fa-refresh mr-2"></i></span></button> -->
+
+      <button type="button" class="btn btn-sm btn-primary px-4 py-2" (click)="applyCustomUserFilter()">Select Users
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
+<!-- uploadvisibility -->
+<div class="modal" tabindex="-1" role="dialog" style="overflow-y: scroll" [ngStyle]="{ display: uploadvisibility }">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Upload</h5>
+        <button type="button" class="close" (click)="closeuploadpopup()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label class="form-control-label" for="input-license">Select File</label>
+        <div class="uploadcontainer" appDnd (fileDropped)="otheronFileDropped($event,'Additional Document')">
+          <input type="file" #fileDropRef id="fileDropRef" multiple
+            (change)="otherfileBrowseHandler($event, 'Additional Document')" />
+          <svg xmlns="http://www.w3.org/2000/svg" width="63" height="64" viewBox="0 0 63 64">
+            <g fill="#3B454F" fill-rule="nonzero">
+              <path
+                d="M42.656 15.135a1.953 1.953 0 0 1-1.391-.578L31.5 4.795l-9.765 9.762a1.97 1.97 0 1 1-2.785-2.785L30.106.616a1.97 1.97 0 0 1 2.785 0l11.157 11.156a1.97 1.97 0 0 1-1.392 3.363z" />
+              <path
+                d="M31.5 36.791a1.97 1.97 0 0 1-1.969-1.969V2.01a1.97 1.97 0 0 1 3.938 0v32.812a1.97 1.97 0 0 1-1.969 1.969z" />
+              <path
+                d="M55.781 63.041H7.22A7.225 7.225 0 0 1 0 55.822V41.385a4.599 4.599 0 0 1 4.594-4.594h7.234a4.567 4.567 0 0 1 4.402 3.276l2.814 9.382a.658.658 0 0 0 .628.467h23.656a.658.658 0 0 0 .628-.467l2.814-9.385a4.572 4.572 0 0 1 4.402-3.273h7.234A4.599 4.599 0 0 1 63 41.385v14.437a7.225 7.225 0 0 1-7.219 7.219zM4.594 40.729a.656.656 0 0 0-.657.656v14.437a3.286 3.286 0 0 0 3.282 3.282H55.78a3.286 3.286 0 0 0 3.282-3.282V41.385a.656.656 0 0 0-.657-.656h-7.234a.65.65 0 0 0-.628.467L47.73 50.58a4.628 4.628 0 0 1-4.402 3.274H19.672a4.567 4.567 0 0 1-4.402-3.276l-2.814-9.382a.65.65 0 0 0-.628-.467H4.594z" />
+            </g>
+          </svg>
+
+          <h3>Drag and drop file here</h3>
+          <h3>or</h3>
+          <label for="fileDropRef">Browse for file</label>
+        </div>
+        <div class="files-list">
+          <div class="single-file" *ngFor="let file of otherfiles; let i = index">
+            <div class="file-icon" style="width: 50px">
+              <img id="Capa_1" style="width: 35px;" src="../../assets/images/docs.png">
+            </div>
+            <div class="info">
+              <h4 class="name">
+                {{ file?.name }}
+              </h4>
+              <p class="size">
+                <!-- {{ otherformatBytes(file?.size) }} -->
+              </p>
+              <!-- <app-progress [progress]="file?.progress"></app-progress> -->
+            </div>
+
+            <div class="delete" (click)="otherdeleteFile(i)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18">
+                <path fill="#B1B1B1" fill-rule="nonzero"
+                  d="M1 16c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v10zm3.17-7.83a.996.996 0 0 1 1.41 0L7 9.59l1.42-1.42a.996.996 0 1 1 1.41 1.41L8.41 11l1.42 1.42a.996.996 0 1 1-1.41 1.41L7 12.41l-1.42 1.42a.996.996 0 1 1-1.41-1.41L5.59 11 4.17 9.58a.996.996 0 0 1 0-1.41zM10.5 1L9.79.29C9.61.11 9.35 0 9.09 0H4.91c-.26 0-.52.11-.7.29L3.5 1H1c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1h-2.5z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="files-list" *ngIf="otherfilespreview.length>0">
+          <div class="single-file" *ngFor="let file of otherfilespreview; let i = index">
+            <div class="file-icon" style="width: 50px">
+              <img id="Capa_1" style="width: 35px;" src="../../assets/img/images/docs.png">
+            </div>
+            <div class="info">
+              <h4 class="name">
+                <a [href]="file?.file">
+                  {{ file?.name }}
+                </a>
+              </h4>
+
+            </div>
+
+            <!-- <div class="delete" (click)="otherdeletepreviewFile(file?.name)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18">
+                <path fill="#B1B1B1" fill-rule="nonzero"
+                  d="M1 16c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v10zm3.17-7.83a.996.996 0 0 1 1.41 0L7 9.59l1.42-1.42a.996.996 0 1 1 1.41 1.41L8.41 11l1.42 1.42a.996.996 0 1 1-1.41 1.41L7 12.41l-1.42 1.42a.996.996 0 1 1-1.41-1.41L5.59 11 4.17 9.58a.996.996 0 0 1 0-1.41zM10.5 1L9.79.29C9.61.11 9.35 0 9.09 0H4.91c-.26 0-.52.11-.7.29L3.5 1H1c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1h-2.5z" />
+              </svg>
+            </div> -->
+          </div>
+        </div>
+        <!-- <div class="files-list" *ngIf="otherdraftsfilespreview.length>0">
+          <div class="single-file" *ngFor="let file of otherdraftsfilespreview; let i = index">
+            <div class="file-icon" style="width: 50px">
+              <img id="Capa_1" style="width: 35px;" src="../../assets/img/images/docs.png">
+            </div>
+            <div class="info">
+              <h4 class="name">
+                <a [href]="file?.url">
+                  {{ file?.name }}
+                </a>
+              </h4>
+
+            </div>
+
+            <div class="delete" (click)="otherdraftspreviewdeleteFile(file?.name)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18">
+                <path fill="#B1B1B1" fill-rule="nonzero"
+                  d="M1 16c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v10zm3.17-7.83a.996.996 0 0 1 1.41 0L7 9.59l1.42-1.42a.996.996 0 1 1 1.41 1.41L8.41 11l1.42 1.42a.996.996 0 1 1-1.41 1.41L7 12.41l-1.42 1.42a.996.996 0 1 1-1.41-1.41L5.59 11 4.17 9.58a.996.996 0 0 1 0-1.41zM10.5 1L9.79.29C9.61.11 9.35 0 9.09 0H4.91c-.26 0-.52.11-.7.29L3.5 1H1c-.55 0-1 .45-1 1s.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1h-2.5z" />
+              </svg>
+            </div>
+          </div>
+        </div> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success mb-1" (click)="closeuploadpopup()">
+          Ok
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- filter scheduled drafts -->
+<p-dialog header="Filter List" [style]="{ width: '20vw' }" [(visible)]="filterDraftsDialogVisible" [draggable]="false"
+  [modal]="true" [resizable]="false" class="filterDialog">
+  <form role="form" [formGroup]="filterDraftsForm" (ngSubmit)="submitFilteredDrafts()">
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          From Date</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <input type="date" id="input-actionedfrom" formControlName="fromdate"
+              class="form-control form-control-alternative">
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          To Date</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <input type="date" id="input-actionedfrom" formControlName="todate"
+              class="form-control form-control-alternative">
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">Sent Time</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <input type="time" id="input-actionedfrom" formControlName="senttime"
+              class="form-control form-control-alternative">
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          Sent By</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <p-select styleClass="w-full" appendTo="body" [filter]="true" filterBy="email" display="chip"
+              [options]="getSendername" optionValue="id" optionLabel="email" formControlName="sentby"></p-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          Sent To(Email IDs)</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <textarea formControlName="sentto" style="width:300px"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          Recipients(Role)</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <p-select styleClass="w-full" appendTo="body" [filter]="true" filterBy="option" display="chip"
+              formControlName="recipients" [options]="dropdownOptions" optionValue="id" optionLabel="option"
+              placeholder="Select Role Type"></p-select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <button type="submit" class="btn btn-primary w-100 border-none">
+          Filter
+        </button>
+      </div>
+      <div class="col-6 justify-content-center" style="text-align: center;">
+        <button class=" btn btn-dark w-100" style="cursor: pointer;color:white"
+          (click)="resetDraftsFilterDialog()">Reset </button>
+      </div>
+    </div>
+  </form>
+</p-dialog>
+<!-- History Filter -->
+<p-dialog header="Filter Result" [style]="{ width: '20vw' }" [(visible)]="filterHistoryVisible" [draggable]="false"
+  [modal]="true" [resizable]="false" class="filterDialog">
+  <form role="form" [formGroup]="filterHistoryForm" (ngSubmit)="submitFilteredHistory()">
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          From Date</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <input type="date" id="input-actionedfrom" formControlName="fromdate"
+              class="form-control form-control-alternative">
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          To Date</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <input type="date" id="input-actionedfrom" formControlName="todate"
+              class="form-control form-control-alternative">
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">Recipients</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <input type="time" id="input-actionedfrom" formControlName="recipients"
+              class="form-control form-control-alternative">
+
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          Sent By</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <p-select styleClass="w-full" appendTo="body" [filter]="true" filterBy="email" display="chip"
+              [options]="getSendername" optionValue="id" optionLabel="email" formControlName="sentby"></p-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          Sent To</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <textarea formControlName="sentto" style="width:300px"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <button type="submit" class="btn btn-primary w-100 border-none">
+          Filter
+        </button>
+      </div>
+      <div class="col-6  justify-content-center" style="text-align: center;">
+        <button class="btn btn-dark w-100 border-none" style="cursor: pointer;color:white"
+          (click)="resetHistoryFilter()">Reset </button>
+      </div>
+    </div>
+  </form>
+</p-dialog>
+<p-dialog header="Filter Result" [style]="{ width: '20vw' }" [(visible)]="filterUnsubscribersVisible"
+  [draggable]="false" [modal]="true" [resizable]="false" class="filterDialog">
+  <form role="form" [formGroup]="filterUnsubscribersForm" (ngSubmit)="submitFilteredUnsubscribers()">
+    <div class="row">
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          Name</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <p-select styleClass="w-full" appendTo="body" [filter]="true" filterBy="name" display="chip"
+              [options]="unsubscriberName" optionValue="name" optionLabel="name" formControlName="name"></p-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          Email Id</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <p-select styleClass="w-full" appendTo="body" [filter]="true" filterBy="email" display="chip"
+              [options]="getSenderEmail" optionValue="email" optionLabel="email" formControlName="email"></p-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">Role Type</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <p-select styleClass="w-full" appendTo="body" [filter]="true" filterBy="roletype" display="chip"
+              [options]="getRoleType" optionValue="roletype" optionLabel="roletype"
+              formControlName="roletype"></p-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          User Type</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <p-select styleClass="w-full" appendTo="body" [filter]="true" filterBy="usertype" display="chip"
+              [options]="getUserType" optionValue="usertype" optionLabel="usertype"
+              formControlName="usertype"></p-select>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          Date</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <input type="date" id="input-date" formControlName="unsubscribeddate" class="form-control form-control-alternative">
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <label class="form-label" style="font-size: medium; font-weight: 500">
+          Time</label>
+        <div class="form-group">
+          <div class="mb-3">
+            <input type="time" id="input-time" formControlName="unsubscribedtime" class="form-control form-control-alternative">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <button type="submit" class="btn btn-primary w-100 border-none">
+          Filter
+        </button>
+      </div>
+      <div class="col-6  justify-content-center" style="text-align: center;">
+        <button class="btn btn-dark w-100 border-none" style="cursor: pointer;color:white"
+          (click)="resetUnsubscribersFilter()">RESET </button>
+      </div>
+    </div>
+  </form>
+</p-dialog>

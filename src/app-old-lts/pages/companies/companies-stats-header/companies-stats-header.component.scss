@@ -1,0 +1,107 @@
+.companies-stats-wrapper {
+  background-color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+  padding: 1rem 1.25rem;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+/* SECTION */
+
+.stats-section {
+  flex: 1;
+}
+
+/* TITLE */
+
+.companies-stats-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
+
+/* GRID */
+
+.companies-stats-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+
+/* EACH STAT */
+
+.companies-stat {
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+}
+
+/* LABEL */
+
+.stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #8a8a8a;
+}
+
+/* VALUE */
+
+.stat-value {
+  font-size: 12px;
+  color: #444;
+  font-weight: 500;
+}
+
+/* DIVIDER */
+
+.stats-divider {
+  width: 1px;
+  background: #e5e7eb;
+}
+
+/* TITLE COLORS */
+
+.total-title {
+  color: #2563eb;
+}
+
+.today-title {
+  color: #16a34a;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 992px) {
+
+  .companies-stats-wrapper {
+    flex-direction: column;
+  }
+
+  .stats-divider {
+    display: none;
+  }
+
+  .companies-stat {
+    min-width: 120px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .companies-stats-wrapper {
+    padding: 0.75rem;
+  }
+
+  .companies-stats-title {
+    font-size: 0.85rem;
+  }
+
+  .stat-value {
+    font-size: 11px;
+  }
+
+}

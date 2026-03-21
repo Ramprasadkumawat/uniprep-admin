@@ -1,0 +1,38 @@
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="coupenlists" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)"
+[lazy]="true" [totalRecords]="datacount" [rows]="pageSize" [rowsPerPageOptions]="[10, 25, 50]">
+    <ng-template pTemplate="caption">
+        <div class="d-flex w-full align-items-center justify-content-between">
+            <div>
+                <span>Coupon Code</span> <br/>
+            </div>
+            <!-- <button pButton>Export &nbsp; <i class="pi pi-file"></i></button> -->
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="border-cell">Coupon</th>
+            <!-- <th class="border-cell">Source</th> -->
+            <th class="border-cell">Source Type</th>
+            <th class="border-cell">User</th>
+            <th class="border-cell">Coupon Value</th>
+            <th class="border-cell">Status</th>
+            <th class="border-cell">Validity</th>
+            <th class="border-cell">Start Date</th>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-coupenlists let-expanded="expanded">
+        <tr>
+            <td class="border-cell">{{coupenlists.couponcodename}}</td>
+            <!-- <td class="border-cell">{{coupenlists.status==1?"Active":"Deactive"}}</td> -->
+            <td class="border-cell">{{coupenlists.usertype==14?"Employee":coupenlists.usertype==13?"Freelacer":coupenlists.usertype==9?"Marketing Representative":"Marketing Intern"}}</td>
+            <td class="border-cell">{{coupenlists.username}}</td>
+            <td class="border-cell">{{coupenlists.discountpercentage}}%</td>
+            <td class="border-cell">{{coupenlists.status==1?"Active":"Deactive"}}</td>
+       
+            <td class="border-cell"> {{coupenlists.validityTo}}</td>
+            <td class="border-cell"> <br>{{coupenlists.validityFrom}}</td>
+  
+        </tr>
+    </ng-template>
+</p-table>

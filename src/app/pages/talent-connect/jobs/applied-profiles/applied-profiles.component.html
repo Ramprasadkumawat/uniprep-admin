@@ -1,0 +1,99 @@
+<p-accordion value="0"styleClass="white-accordian">
+		<p-accordion-panel value="1">
+		<p-accordion-header>Filter Employees</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Name</label>
+							<p-select formControlName="username" optionValue="id" optionLabel="full_name" styleClass="w-full" [options]="studentList" placeholder="Select Username" [filter]="true" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="work_location" styleClass="w-full" [options]="locations" placeholder="Select Location" [filter]="true" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Interview Stage</label>
+							<p-select formControlName="stage" optionValue="id" optionLabel="hiringstage" styleClass="w-full" [options]="interviewStages" placeholder="Select Stage" [filter]="true" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="btn btn-danger" type="button" (click)="getCandidatesList(); filterForm.reset()">Reset Filter</button>
+							<button class="btn btn-primary" type="submit" (click)="getCandidatesList(filterForm.value)">Filter Employers</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="container-fluid p-0">
+	<!-- Header -->
+	<div class="header-section p-3 bg-white border-bottom">
+		<div class="d-flex justify-content-between align-items-center">
+			<div class="d-flex align-items-center">
+				<button pButton pRipple type="button" icon="pi pi-arrow-left" class="p-button-rounded p-button-primary me-3" [routerLink]="'/talent-connect/jobs'"></button>
+				<div>
+					<h4 class="mb-0">{{ candidates[0]?.company_name }} Job Postings</h4>
+					<small class="text-muted">Total Categories: {{ totalCandidates.toString().padStart(2, "0") }}</small>
+				</div>
+			</div>
+
+            <div class="d-flex align-items-center">
+                <button pButton pRipple type="button" label="Export" icon="pi pi-download"
+                    class="p-button-primary"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Job Listings -->
+    <div class="job-listings p-3 bg-white">
+        <div class="row">
+            <div class="col-md-4 mb-3" *ngFor="let candidate of candidates">
+                <div class="card rounded-4 h-100">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <!-- Profile Image -->
+                      <div class="me-3">
+                        <img src="{{candidate.dp_image}}" class="rounded" alt="candidate profile" width="80" height="80">
+                      </div>
+                      
+                      <!-- Candidate Info -->
+                      <div>
+                        <h5 class="card-title mb-1">{{candidate.name}}</h5>
+                        <p class="card-text mb-1 text-muted">Applied For: {{candidate.position}}</p>
+                        <p class="card-text mb-1 text-muted">Job ID: {{candidate.job_id}}</p>
+                        
+                        <div class="d-flex align-items-center mt-2 card-text ">
+                          <i class="pi pi-map-marker text-success"></i>
+                          <span class="ms-1 ">{{candidate.worklocation}}</span>
+                        </div>
+                        
+                        <div class="mt-2">
+                          <span class="p-badge rounded-2 text-white" [ngStyle]="{'color':candidate.color_code}">
+                            {{candidate.stage}}
+                          </span>
+                        </div>
+                        
+                        <div class="small text-muted card-text" style="color: var(--p-secondary-500)">
+                          {{candidate.matching_skills}}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+        <hr>
+        <div class="w-100 bg-white">
+            <p-paginator *ngIf="totalCandidates >= 0" (onPageChange)="pageChange($event)" [rows]="pageSize" [totalRecords]="totalCandidates"
+                    [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+        </div>
+        </div>
+    </div>

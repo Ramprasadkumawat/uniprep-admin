@@ -1,0 +1,114 @@
+// Add More Language button
+.add-language-btn {
+  background-color: #ff8c00 !important;
+  color: white !important;
+  border: none !important;
+  white-space: nowrap;
+  height: fit-content;
+  padding: 0.5rem 1rem;
+
+  &:hover {
+    background-color: #e67e00 !important;
+  }
+}
+
+.how-it-works-btn {
+  border: 1px solid #ff8c00 !important;
+  color: #ff8c00 !important;
+  background-color: transparent !important;
+  border-radius: 8px;
+  font-weight: 500;
+
+  &:hover {
+    background-color: #ff8c00 !important;
+    color: white !important;
+  }
+
+  i {
+    color: #ff8c00;
+  }
+
+  &:hover i {
+    color: white !important;
+  }
+}
+
+.badge-custom-future {
+  background: #0052b4 !important;
+}
+
+::ng-deep .p-editor .p-editor-content .ql-editor {
+  height: 200px !important;
+}
+
+.job-btn {
+  background-color: #ff8c00 !important;
+  color: white !important;
+  border: none !important;
+  font-weight: 600 !important;
+
+  &:hover {
+    background-color: #e67e00 !important;
+  }
+}
+
+::ng-deep .job-live-dialog .p-dialog-header {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  border: none;
+}
+
+::ng-deep .job-live-dialog .p-dialog-content {
+  border-radius: 16px;
+}
+
+.dialog-content {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.image-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem;
+  width: 260px;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.image-card img {
+  width: 100%;
+  display: block;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.credit-text {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+
+  span {
+    color: #e67e22;
+    font-weight: 700;
+  }
+}
+
+.share-btn {
+  background-color: #e67e22 !important;
+  border-color: #e67e22 !important;
+  color: #fff !important;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  color: #666;
+}

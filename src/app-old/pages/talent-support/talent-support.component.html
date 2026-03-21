@@ -1,0 +1,192 @@
+<p-accordion value="0" styleClass="white-accordian">
+    <p-accordion-panel value="1">
+        <p-accordion-header>Talent Support</p-accordion-header>
+        <p-accordion-content>
+            <form [formGroup]="filterForm" (ngSubmit)="filter()">
+                <!-- First Row -->
+                <div class="row mt-3">
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Talent Requirement Plan</label>
+                        <p-select class="w-100" [options]="talentRequirementPlans" optionLabel="label"
+                            optionValue="value" formControlName="requirementplan" placeholder="Select Requirement Plan">
+                        </p-select>
+                    </div>
+
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Job Title</label>
+                        <p-select class="w-100" [options]="positionOptions" optionLabel="position_title"
+                            optionValue="position_title" formControlName="jobtitle" placeholder="Select Job Title">
+                        </p-select>
+                    </div>
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Preferred Location</label>
+                        <p-multiselect class="w-100" [options]="locations" optionLabel="work_location" optionValue="id"
+                            formControlName="location" placeholder="Select location" [filter]="true"
+                            (onFilter)="onLocationSearch($event)">
+                        </p-multiselect>
+                    </div>
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Preferred Work Type</label>
+                        <p-multiselect class="w-100" [options]="workType" optionLabel="employment_type" optionValue="id"
+                            formControlName="worktype" placeholder="Select work type">
+                        </p-multiselect>
+                    </div>
+                </div>
+
+
+                <!-- Second Row -->
+                <div class="row">
+
+
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Preferred Work Mode</label>
+                        <p-select class="w-100" [options]="workMode" formControlName="workmode"
+                            placeholder="Select work mode">
+                        </p-select>
+                    </div>
+                    <div class="col-12 col-lg-6 mb-3">
+                        <label class="fw-bold mb-2 d-block">Current Gross Salary /Month</label>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-12 col-sm-4">
+                                <p-select formControlName="currency" [filter]="true" filterBy="currency_code"
+                                    [options]="currencyOptions" placeholder="Select Currency"
+                                    optionLabel="currency_code" optionValue="currency_code">
+                                </p-select>
+
+                            </div>
+                            <div class="col-12 col-sm-4">
+                                <p-input-number formControlName="currentsalary"
+                                    placeholder="Current Gross Salary /Month">
+                                </p-input-number>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-end mt-1 gap-2">
+                    <button pButton type="button" label="Reset Filter" class="p-button-outlined btn-danger"
+                        (click)="resetFilter()"></button>
+                    <button pButton type="submit" label="Filter" class="p-button-primary"></button>
+                </div>
+            </form>
+        </p-accordion-content>
+    </p-accordion-panel>
+</p-accordion>
+
+<div class="employer-verification-container">
+    <div class="header-section p-3 bg-white border-bottom">
+        <div class="d-flex justify-content-between align-items-center pb-3">
+            <div class="d-flex gap-2">
+                <div>
+                    <h4 class="mb-0">Talent Support</h4>
+                    <small class="text-muted">Total Transactions:
+                        {{ totalEmployeeCount.toString().padStart(2, "0") }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="width: 100%; height: 80vh; overflow: auto; overflow-x: hidden" class="mt-2 table-employer bg-white">
+    <p-table size="small" scrollHeight="600px" [value]="employeesList" [tableStyle]="{ 'min-width': '110rem' }"
+        dataKey="id" [rowHover]="true" [scrollable]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="employername">
+                    Talent Name <p-sortIcon field="talentname"></p-sortIcon>
+                </th>
+                <th pSortableColumn="is_payment_completed ">
+                    Payment Status <p-sortIcon field="is_payment_completed "></p-sortIcon>
+                </th>
+                <th pSortableColumn="amount">
+                    Amount <p-sortIcon field="amount"></p-sortIcon>
+                </th>
+                <th pSortableColumn="actions">
+                    Actions <p-sortIcon field="actions"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-employee>
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img [src]="employee?.profile_image" class="rounded-circle mr-2" width="40" height="40" />
+                        <div>
+                            {{ employee?.talentname }} <br />
+                            <small class="text-muted">Profile Updated On {{ employee?.updated_at }}</small>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    {{ employee?.is_payment_completed == 1 ? 'Paid' : 'Unpaid' }}
+                </td>
+                <td>{{ employee?.amount }}</td>
+                <td>
+                    <div class="d-flex flex-column gap-2" style="font-size: 15px">
+                        <span style="cursor: pointer" (click)="openInfoDialog(employee)"><i
+                                class="pi pi-briefcase"></i>&nbsp;View
+                            Info</span>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-scrollTop target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>
+
+    <div class="footer-section p-3 d-flex justify-content-center">
+        <p-paginator (onPageChange)="pageChange($event)" [rows]="perPage" [totalRecords]="totalEmployeeCount"
+            [rowsPerPageOptions]="[10, 50, 100]"></p-paginator>
+    </div>
+</div>
+
+<p-dialog header="Requirement Details" [(visible)]="showInfoDialog" [modal]="true" [style]="{ width: '900px' }">
+    @if (selectedRequirement?.length > 0) {
+    <p-table [value]="selectedRequirement" styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '100%' }"
+        [rowHover]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Job Title</th>
+                <th>Talent Requirement Plan</th>
+                <th>Work Mode</th>
+                <th>Work Type</th>
+                <th>Location</th>
+                <th>Currency</th>
+                <th>Current Salary</th>
+                <th>Comments</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-req>
+            <tr>
+                <td>{{ req.position_title || 'N/A' }}</td>
+                <td>{{ req.talent_requirement_plan }}</td>
+                <td>{{ req.preferred_work_mode || 'Any' }}</td>
+                <td>{{ req.work_type || 'Any' }}</td>
+                <td>{{ req.location }}</td>
+                <td>{{ req.currency }}</td>
+                <td>{{ req.current_salary}}</td>
+                <td>
+                    <span *ngIf="!req?.comments">
+                        -
+                    </span>
+                    <ng-container *ngIf="req?.comments">
+                        <span *ngIf="!req.showFull">
+                            {{ req.comments | slice:0:20 }}
+                            <span *ngIf="req.comments.length > 20">...</span>
+                            <a *ngIf="req.comments.length > 20" class="text-primary cursor-pointer"
+                                (click)="req.showFull = true">more</a>
+                        </span>
+
+                        <span *ngIf="req.showFull">
+                            {{ req.comments }}
+                            <a class="text-primary cursor-pointer" (click)="req.showFull = false">less</a>
+                        </span>
+                    </ng-container>
+                </td>
+
+            </tr>
+        </ng-template>
+    </p-table>
+    } @else {
+    <p class="text-center text-muted m-3">No requirements found for this talent.</p>
+    }
+</p-dialog>

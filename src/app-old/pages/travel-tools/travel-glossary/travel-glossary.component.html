@@ -1,0 +1,145 @@
+<p-accordion styleClass="white-accordian" (onClose)="activeIndex = -1" activeIndexChange="activeIndex = $event.index" value="{{activeIndex}}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>{{ glossaryName }}</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<input type="hidden" formControlName="id" />
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Glossary Term</label>
+							<input formControlName="glossaryterm" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.glossaryterm.errors" class="text-danger text-xs">
+								<div *ngIf="f.glossaryterm.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Alpahabet</label>
+							<p-select formControlName="alphabet" optionValue="name" optionLabel="name" styleClass="w-full" [options]="category_dropdown" placeholder="Select"></p-select>
+							<div *ngIf="submitted && f.alphabet.errors" class="text-danger text-xs">
+								<div *ngIf="f.alphabet.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select placeholder="Select" optionValue="id" formControlName="status" optionLabel="name" styleClass="w-full" [options]="statuses"></p-select>
+							<div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+								<div *ngIf="f.status.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-1">
+					<div class="col-md-8">
+						<div class="form-group">
+							<label>Summary</label>
+							<textarea class="form-control" formControlName="summary" pInputTextarea></textarea>
+							<div *ngIf="submitted && f.summary.errors" class="text-danger text-xs">
+								<div *ngIf="f.summary.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<!-- <button pButton label="Reset Field" (click)="reset()" type="button" class="m-1"></button>
+                    <button pButton type="submit" class="m-1">{{ btntxt }}</button> -->
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="reset()">Reset Field</button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">{{ btntxt }}</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+
+	<p-accordion-panel value="2">
+		<p-accordion-header>Filter Course</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filterSubmitForm()">
+				<input type="hidden" formControlName="id" />
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Alpahabet</label>
+							<p-select formControlName="alphabet" optionValue="name" optionLabel="name" styleClass="w-full" [options]="category_dropdown" placeholder="Select"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select placeholder="Select" optionValue="id" formControlName="status" optionLabel="name" styleClass="w-full" [options]="statuses"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<!-- <button pButton label="Reset Field" (click)="reset()" type="button" class="m-1"></button>
+                    <button pButton type="submit" class="m-1">{{ btntxt }}</button> -->
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="resetFilter()">Reset Field</button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">Filter</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<br />
+<p-table size="small" scrollHeight="600px" [scrollable]="true" #table [value]="startupglossarylists" styleClass="gray-header" [lazy]="true">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<div>
+				<span>Travel Glossary</span> <br />
+				<span class="text-muted text-small">Total Count : {{ datacount }}</span>
+			</div>
+			<!-- <button pButton>Export &nbsp; <i class="pi pi-file"></i></button> -->
+			<div>
+				<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" pButton (click)="fileUploadModal = true" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Import &nbsp; <i class="pi pi-file-export"></i></button>
+				<button type="button" class="ps-3 pe-2 pt-2 pb-2" (click)="exportTable()" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Export &nbsp; <i class="pi pi-file"></i></button>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell">Glossary</th>
+			<th class="border-cell">Summary</th>
+			<th class="border-cell">Alphabet</th>
+			<th class="border-cell">Status</th>
+			<th class="border-cell">Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-glossary let-expanded="expanded">
+		<tr>
+			<td class="border-cell">{{ glossary.glossaryterm }}</td>
+			<td class="border-cell">{{ glossary.summary }}</td>
+			<td class="border-cell">{{ glossary.alphabet }}</td>
+			<td class="border-cell">{{ glossary.status == 1 ? "Active" : "Deactive" }}</td>
+			<td class="border-cell">
+				<span style="display: inline-flex">
+					<div style="cursor: pointer" class="view-btn m-1">
+						<a (click)="editInvestor(glossary)"><i class="fa-solid fa-pen"></i> Edit</a>
+					</div>
+					<!-- <div style="cursor: pointer;" class="view-btn m-1"><span (click)="deleted(faq.id)"><i class="fa-solid fa-trash text-danger"></i> Delete</span></div> -->
+				</span>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+<div class="card-footer">
+	<p-paginator [rows]="8" [totalRecords]="datacount" (onPageChange)="pageChange($event)" [rowsPerPageOptions]="[10, 25, 50, 100]"></p-paginator>
+</div>
+<p-dialog header="File Upload" [(visible)]="fileUploadModal" [modal]="true" [style]="{ width: '50vw' }">
+	<label for="file" class="reading-drop-container">
+		<i class="pi pi-upload reading-drop-title"></i>
+		<input type="file" id="file" class="d-none" (change)="onFileChange($event)" accept=".csv" /><br />
+		<span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+		<span class="reading-sm-font">Please maintain the format of uploading to stop failures</span> </label
+	><br />
+	<div class="text-center">
+		<button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="uploadFile()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Upload</button>
+	</div>
+</p-dialog>
+<p-confirmDialog></p-confirmDialog>

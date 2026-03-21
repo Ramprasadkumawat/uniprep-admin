@@ -1,0 +1,479 @@
+<p-accordion styleClass="white-accordian" activeIndexChange="indexChange($event)" value="{{activeIndex}}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Add Organization</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Organization Name</label>
+							<input placeholder="Enter organization name" formControlName="inst_name" type="text" class="form-control"
+								pInputText />
+							<div *ngIf="submitted && f.inst_name.errors" class="text-danger text-xs">
+								<div *ngIf="f.inst_name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Organization Email ID</label>
+							<input placeholder="Enter organization email ID" formControlName="email" type="text" class="form-control"
+								pInputText />
+							<div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
+								<div *ngIf="f.email.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Organization Contact Number</label>
+							<div class="w-100 position-relative">
+								<ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']"
+									[enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+									[maxLength]="10" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+									[phoneValidation]="false" [selectedCountryISO]="preferredCountry" name="phone"
+									formControlName="phone_number" customPlaceholder="Enter organization phone number"
+									(keyup)="onChangeContact($event)"> </ngx-intl-tel-input>
+							</div>
+							<div *ngIf="submitted && f.phone_number.errors" class="text-danger text-xs">
+								<div *ngIf="f.phone_number.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Website</label>
+							<input placeholder="Enter organization Website" formControlName="website" type="text" class="form-control"
+								pInputText />
+							<div *ngIf="submitted && f.website.errors" class="text-danger text-xs">
+								<div *ngIf="f.website.errors.required">Required</div>
+								<div *ngIf="f.website.errors.pattern">Enter a valid URL (e.g., https://example.com)</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Organization Type</label>
+							<p-select placeholder="Select organization type" styleClass="w-full" formControlName="Institute_type"
+								optionLabel="mitypename" optionValue="id" [options]="instituteDropDownList"></p-select>
+							<div *ngIf="submitted && f.Institute_type.errors" class="text-danger text-xs">
+								<div *ngIf="f.Institute_type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Country</label>
+							<p-select formControlName="home_country" (onChange)="changeCountry($event)" [filter]="true"
+								filterBy="country" placeholder="Select organization country" optionValue="id" optionLabel="country"
+								styleClass="w-full" [options]="homeCountries"> </p-select>
+
+							<div *ngIf="submitted && f.home_country.errors" class="text-danger text-xs">
+								<div *ngIf="f.home_country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select [virtualScrollItemSize]="38" [virtualScroll]="true" formControlName="location" optionValue="id"
+								optionLabel="work_location" styleClass="w-100" [options]="locationList" placeholder="Select State"
+								[filter]="true" filterBy="work_location" [appendTo]="'body'"> </p-select>
+							<div *ngIf="submitted && f.location.errors" class="text-danger text-xs">
+								<div *ngIf="f.location.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Organization Representative Name</label>
+							<input placeholder="Enter the name of the representative" formControlName="org_rep_name" type="text"
+								class="form-control" pInputText />
+							<div *ngIf="submitted && f.org_rep_name.errors" class="text-danger text-xs">
+								<div *ngIf="f.org_rep_name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Representative Designation</label>
+							<input placeholder="Enter the designation of the representative" formControlName="org_rep_designation"
+								type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.org_rep_designation.errors" class="text-danger text-xs">
+								<div *ngIf="f.org_rep_designation.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton
+							style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff"
+							(click)="formReset()" type="button">Reset Field</button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton
+							style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff"
+							type="submit">{{ btnTxt }}</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+	<p-accordion-panel value="2">
+		<p-accordion-header>Filter Organization</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filterFormValue()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Organization Name</label>
+							<input placeholder="Enter organization Name" formControlName="inst_name" type="text" class="form-control"
+								pInputText />
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input placeholder="Enter organization email ID" formControlName="email" type="text" class="form-control"
+								pInputText />
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Contact Number</label>
+							<div class="w-100 position-relative">
+								<ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']"
+									[enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
+									[maxLength]="10" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+									[phoneValidation]="false" [selectedCountryISO]="preferredCountry" name="phone"
+									formControlName="phone_number" customPlaceholder="Enter organization phone number"
+									(keyup)="onChangeContact($event)"> </ngx-intl-tel-input>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Country</label>
+							<p-multiselect formControlName="home_country" (onChange)="changeCountryFilter($event)" [filter]="true"
+								filterBy="country" placeholder="Select organization country" optionValue="id" optionLabel="country"
+								styleClass="w-full" [options]="visibleHomeCountries" [virtualScroll]="true" [virtualScrollItemSize]="38"
+								[lazy]="true" (onLazyLoad)="loadHomeCountriesLazy($event)">
+							</p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select [virtualScrollItemSize]="38" [virtualScroll]="true" formControlName="location" optionValue="id"
+								optionLabel="work_location" styleClass="w-100" [options]="locationListFilter" placeholder="Select State"
+								[filter]="true" filterBy="work_location" [appendTo]="'body'"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Source Type</label>
+							<p-select styleClass="w-full" [(ngModel)]="instituteTypeId" formControlName="Institute_type"
+								placeholder="Select the source type" optionLabel="mitypename" optionValue="id"
+								[options]="instituteDropDownList"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Co-Branding</label>
+							<p-select styleClass="w-full" formControlName="co_branding" placeholder="Status yes/No"
+								optionLabel="label" optionValue="value" [options]="coBranding"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Remarks Added By</label>
+							<p-multiselect [filter]="true" [showClear]="true" [showToggleAll]="true" [display]="'chip'"
+								styleClass="w-full" formControlName="assign_to" placeholder="Select Remarks Added By"
+								optionLabel="name" optionValue="id" [options]="assignToDropdownList"> </p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Registered Users</label>
+							<p-select styleClass="w-full" formControlName="registered_user" placeholder="Count above 0, Yes/No"
+								optionLabel="label" optionValue="value" [options]="coBranding"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Paid Users</label>
+							<p-select styleClass="w-full" formControlName="paid_users" placeholder="Count above 0, Yes/No"
+								optionLabel="label" optionValue="value" [options]="coBranding"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div><label class="form-label">Users</label></div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="mb-3">
+										<p-datepicker placeholder="From Date" formControlName="fromDate"
+											dateFormat="dd-mm-yy"></p-datepicker>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="mb-3">
+										<p-datepicker placeholder="To Date" formControlName="toDate" dateFormat="dd-mm-yy"></p-datepicker>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div><label class="form-label">Remarks Date</label></div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="mb-3">
+										<p-datepicker placeholder="From Date" formControlName="fromDateFollowUp"
+											dateFormat="dd-mm-yy"></p-datepicker>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="mb-3">
+										<p-datepicker placeholder="To Date" formControlName="toDateFollowUp"
+											dateFormat="dd-mm-yy"></p-datepicker>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div><label class="form-label">OnBoarded</label></div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="mb-3">
+										<p-datepicker placeholder="From Date" formControlName="onBoardedFrom"
+											dateFormat="dd-mm-yy"></p-datepicker>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="mb-3">
+										<p-datepicker placeholder="To Date" formControlName="onBoardedFromTo"
+											dateFormat="dd-mm-yy"></p-datepicker>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Status</label>
+							<p-multiselect [filter]="true" [showClear]="true" [showToggleAll]="true" [display]="'chip'"
+								styleClass="w-full" formControlName="remarks" placeholder="Select Remarks Status" optionLabel="label"
+								optionValue="value" [options]="statusOptions"> </p-multiselect>
+						</div>
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton
+							style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff"
+							(click)="resetField()" type="button">Reset Field</button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton
+							style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff"
+							type="submit">Filter</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<div class="card">
+	<div class="card-header">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<span>
+				<h6 class="mb-0 fw-bold">Organization Details</h6>
+				<span> Total Organization : {{ datacount }}</span>&nbsp;<span> Total Leads : {{ leadsDatacount
+					}}</span>&nbsp;<span> Total Paid Leads : {{ paidLeadsDatacount }}</span>&nbsp;<span> Total Revenue : {{
+					totalRevenueCount }}</span>
+			</span>
+			<div class="form-group">
+				<div class="search-container">
+					<input [(ngModel)]="inputValue" (ngModelChange)="onInputChange($event)" type="text" placeholder="Search"
+						class="search-input" />
+					<i class="pi pi-search search-icon"></i>
+				</div>
+			</div>
+			<div class="text-right p-1">
+				<button (click)="openImportPopUp()" class="ps-3 pe-2 pt-2 pb-2" pButton
+					style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Import
+					&nbsp;<i class="fa-solid fa-file-csv"></i></button>&nbsp;
+				<button (click)="exportList()" class="ps-3 pe-2 pt-2 pb-2" pButton
+					style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Export
+					&nbsp;<i class="pi pi-file-export"></i></button>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		<!-- list -->
+		<p-table size="small" scrollHeight="600px" [scrollable]="true" class="custom-table" [value]="instituteList"
+			styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [rows]="pageSize"
+			[totalRecords]="datacount" [rowsPerPageOptions]="[10, 50, 100, 500]">
+			<ng-template pTemplate="header">
+				<tr>
+					<th class="border-cell">Organization Name</th>
+					<th class="border-cell">Location</th>
+					<th class="border-cell">Source Type</th>
+					<th class="border-cell">Co-Branding</th>
+					<th class="border-cell">Registered Users.</th>
+					<th class="border-cell">Paid Users</th>
+					<th class="border-cell">Revenue</th>
+					<th class="border-cell">Remarks Added By</th>
+					<th class="border-cell">Remarks</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-user>
+				<tr>
+					<td class="border-cell">
+						<span style="cursor: pointer; text-decoration: underline" (click)="openOrganizationDetails(user.id)"><b>{{
+								user.institutename }}</b></span><br />
+						{{ user.country_code }} {{ user.phone }}<br />
+						<a href="http://{{ user.website }}" target="_blank">{{ user.website }}</a><br />
+						{{ user.organization_email }}
+					</td>
+					<td class="border-cell">
+						<span>{{ user.location_name }} </span>
+					</td>
+					<td class="border-cell">{{ user.institutetypeName }}</td>
+					<td class="border-cell">{{ user.co_branding == 1 ? "Yes" : "No" }}</td>
+					<td class="border-cell">
+						<span style="cursor: pointer" (click)="redirectStudentList(user.id)">{{ user.leadCount }} </span>
+					</td>
+					<td class="border-cell">
+						<span style="cursor: pointer" (click)="redirectPaidStudentList(user.id)">{{ user.paid_count }}</span>
+					</td>
+					<td class="border-cell">{{ user.revenue }}</td>
+					<td class="border-cell">
+						<span *ngIf="user.name">{{ user.name }} </span>
+						<span *ngIf="!user.name">Not Assigned</span>
+					</td>
+					<td class="border-cell">
+						<span *ngIf="user.status_option" class="badge rounded-pill mb-2 px-3 py-2 text-white"
+							[ngStyle]="{ 'background-color': getStatusColor(user.status_option), 'font-size': '0.85rem' }">
+							{{ user.status_option }}
+						</span>
+						<span *ngIf="!user.status_option">No Status</span><br />
+						<span *ngIf="user.follow_date" class="text-muted" style="font-size: 0.85rem">
+							Follow Up{{ user.follow_date }} |
+							{{ "1970-01-01T" + user.follow_time | date : "hh:mm a" }}
+						</span>
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+		<p-confirmDialog></p-confirmDialog>
+	</div>
+</div>
+
+<div [ngStyle]="{ display: continueImportPopUp }" class="modal modal-bg" role="dialog" tabindex="-1">
+	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+		<div class="modal-content card">
+			<!-- <div class="modal-header">
+
+      </div> -->
+			<div class="modal-body">
+				<div class="flex justify-content-between">
+					<div>
+						<h5>File Upload</h5>
+					</div>
+					<div>
+						<span (click)="closeImportPopUp()" style="cursor: pointer"><i class="fa-solid fa-xmark"></i></span>
+					</div>
+				</div>
+				<form action="" [formGroup]="dragForm" (ngSubmit)="dragSubmit()">
+					<div class="row mt-3">
+						<div class="col-6"><button class="ps-3 pe-3 pt-2 pb-2"
+								style="background-color: #001631; border-radius: 8px; border: aliceblue; color: #fff"
+								(click)="downloadSampleReport()">Sample Report</button>&nbsp;</div>
+						<div class="col-6 text-right">
+							<!-- <button class="ps-3 pe-3 pt-2 pb-2"
+                                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                                (click)="downloadReadme()">Download Read Me</button> -->
+						</div>
+					</div>
+					<label for="file" *ngIf="isShowBoxDisplay" class="reading-drop-container mt-2" (drop)="onFileDrop($event)"
+						(dragover)="onDragOver($event)">
+						<i class="pi pi-upload reading-drop-title"></i>
+						<input type="file" id="file" class="d-none" formControlName="dragExcel" (change)="onFileSelected($event)"
+							accept=".csv" /><br />
+						<span style="text-align: center" class="reading-sm-font">Drag and drop .csv files here or click to
+							upload</span>
+						<span style="text-align: center">Please maintain the format of uploading to prevent failures</span>
+					</label><br />
+
+					<div class="progress mb-2" *ngIf="isProgressDisplay">
+						<div class="progress w-100">
+							<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0"
+								aria-valuemax="100" [ngStyle]="{ width: this.progress }">{{ progress }}</div>
+						</div>
+					</div>
+
+					<div class="" *ngIf="isFileDisplay && selectedFile != null">
+						<div class="row p-1">
+							<div class="col-2 text-center" style="margin-top: 30px !important">
+								<a style="cursor: pointer; font-size: 80px" (click)="previewFile()"><i
+										class="fa fa-solid fa-file-csv"></i></a>
+							</div>
+							<div class="col-2 text-center" style="margin-top: 80px !important; margin-left: 20px">
+								<a style="cursor: pointer; font-size: 20px" (click)="previewFile()"><i
+										class="fa fa-solid fa-eye"></i></a>
+							</div>
+							<div class="col-2 text-center" style="margin-top: 80px !important; margin-left: 20px">
+								<a style="cursor: pointer; font-size: 20px" (click)="deleteFile()"><i
+										class="fa fa-solid fa-trash"></i></a>
+							</div>
+						</div>
+					</div>
+
+					<div class="text-center">
+						<button type="submit" class="ps-4 pe-4 pt-2 pb-2" pButton
+							style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Upload</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- success upload -->
+<div [ngStyle]="{ display: successPopUp }" class="modal modal-bg" role="dialog" tabindex="-1">
+	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+		<div class="modal-content card">
+			<!-- <div class="modal-header">
+
+      </div> -->
+			<div class="modal-body">
+				<div class="flex justify-content-between">
+					<div>
+						<h5>File Upload</h5>
+					</div>
+					<div>
+						<span (click)="closeSuccess()" style="cursor: pointer"><i class="fa-solid fa-xmark"></i></span>
+					</div>
+				</div>
+				<div class="mt-3" style="text-align: center">
+					<span><i class="fa-solid fa-circle-check fa-5x custom-icon"></i></span>
+				</div>
+				<div class="mt-4" style="text-align: center">
+					<h4>Bulk imports are successful</h4>
+					<span>{{ importDataCount }} rows of the table have been <br />successfully added.</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

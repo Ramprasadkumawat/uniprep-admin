@@ -1,0 +1,70 @@
+<div class="card h-100">
+	<div class="card-header">
+		<h5 class="mb-0">Prompt Editor</h5>
+	</div>
+	<div class="card-body overflow-y-md-hidden overflow-y-auto h-100">
+		<div class="row h-100">
+			<!-- Module Selector -->
+			<div class="col-md-3 h-100 overflow-y-auto">
+				<div class="row">
+					<div class="col-md-12 flex-shrink-1">
+						<div class="form-group">
+							<label class="mb-2 text-small fw-bold">Module Name</label>
+							<p-select optionLabel="module_name" styleClass="w-full" class="text-small" (onChange)="moduleChange($event)" placeholder="Select Module Name" [options]="moduleNameList" [filter]="true" filterBy="module_name" [showClear]="true" ></p-select>
+						</div>
+					</div>
+					<div class="col-md-12 form-group">
+						<label class="mb-2 text-small fw-bold mt-3">Available Variables</label>
+						<table class="table table-bordered text-small">
+							<thead class="table-dark">
+								<tr>
+									<th class="text-start">Variable</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let variable of currentVariableList">
+									<td>
+										<span class="fw-semibold">{{ variable.name }}</span><br />
+										<span>{{ variable.value }}</span>
+										<i class="fa-solid fa-copy copy-icons" (click)="copyVariable(variable.value)"></i><br />
+										<input type="text" class="form-control text-small" [(ngModel)]="variable.userValue" placeholder="Enter value" />
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-9 row h-100" [ngClass]="{'fullscreen-mode': isFullscreen}">
+				<!-- Prompt Editor (Fullscreen Toggle) -->
+				<div class="col-md-6 d-flex flex-column h-100">
+					<div class="d-flex justify-content-between align-items-center mb-2">
+						<label class="fw-bold">Your Prompt</label>
+						<div>
+							<p-confirmpopup></p-confirmpopup>
+							<!-- Fullscreen Toggle Button -->
+							<button class="btn btn-warning m-0 me-2" (click)="toggleFullscreen()" pButton>
+								<i class="fa-solid" [ngClass]="isFullscreen ? 'fa-compress' : 'fa-expand'"></i>
+							</button>
+							<button class="btn btn-danger m-0" (click)="updatePrompts($event)" pButton label="Update Prompt"></button>
+						</div>
+					</div>
+					<textarea class="form-control text-small h-100" [(ngModel)]="promptText"></textarea>
+				</div>
+
+				<!-- Response Viewer -->
+				<div class="col-md-6 d-flex flex-column h-100">
+					<div class="d-flex justify-content-between align-items-center mb-2">
+						<label class="fw-bold">Prompt Response</label>
+						<button class="btn btn-primary m-0" (click)="checkResponse()" pButton label="Check Response"></button>
+					</div>
+					<div class="card h-100 overflow-y-auto">
+						<div class="card-body">
+							<div class="available-variables chatgpt-response" [innerHTML]="responseText"></div>
+						</div>
+					</div>
+				</div> <!-- End col -->
+			</div>
+		</div> <!-- End Row -->
+	</div> <!-- End Card Body -->
+</div> <!-- End Card -->

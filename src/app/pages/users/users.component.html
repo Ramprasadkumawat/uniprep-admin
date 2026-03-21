@@ -1,0 +1,436 @@
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}">
+	<p-accordion-panel value="1" *ngIf="Adduserform">
+		<p-accordion-header>Add User</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>User Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText (keypress)="onKeyPress($event)" />
+							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+								<div *ngIf="f.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText />
+							<div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
+								<div *ngIf="f.email.errors.required">Required</div>
+								<div *ngIf="f.email.errors.email">Should be a valid email address</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Contact No</label>
+							<div class="w-100 position-relative">
+								<ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [phoneValidation]="false" [selectedCountryISO]="preferredCountry" name="phone" formControlName="phone" customPlaceholder="Enter Contact Number" (keyup)="onChangeContact($event)"> </ngx-intl-tel-input>
+							</div>
+							<div *ngIf="submitted && f.phone.errors" class="text-danger text-xs">
+								<div *ngIf="f.phone.errors.required">Required</div>
+								<!--  <div *ngIf="f.phone.errors?.validatePhoneNumber?.valid === false">Minimum 10 numbers Required</div> -->
+							</div>
+							<!-- <p-inputnumber formControlName="phone" mode="decimal" inputId="withoutgrouping" [useGrouping]="false" class="w-full" [maxlength]="10"> </p-inputnumber>
+                        <div *ngIf="submitted && f.phone.errors" class="text-danger text-xs">
+                            <div *ngIf="f.phone.errors.required">Required</div>
+                            <div *ngIf="f.phone.errors.minlength">Minimum 10 numbers Required</div>
+                        </div> -->
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Gender</label>
+							<p-select formControlName="gender" optionValue="code" optionLabel="name" styleClass="w-full" [options]="genderoption" [filter]="true" filterBy="name"></p-select>
+							<div *ngIf="submitted && f.gender.errors" class="text-danger text-xs">
+								<div *ngIf="f.gender.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Home Country</label>
+							<p-select styleClass="w-full" formControlName="hm_country" [options]="home_countries" optionValue="id" optionLabel="country" [filter]="true" filterBy="country" (onChange)="changeCountry($event)"></p-select>
+							<div *ngIf="submitted && f.hm_country.errors" class="text-danger text-xs">
+								<div *ngIf="f.hm_country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Region</label>
+							<p-select formControlName="region" optionValue="id" optionLabel="state" styleClass="w-full" [options]="region" (onChange)="changeRegion($event)" [filter]="true" filterBy="state" [readonly]="form.get('hm_country')?.value == 122 ? false : true"></p-select>
+							<div *ngIf="submitted && f.region.errors" class="text-danger text-xs">
+								<div *ngIf="f.region.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="district" styleClass="w-full" [options]="locations" [filter]="true" filterBy="district" [readonly]="form.get('hm_country')?.value == 122 ? false : true"></p-select>
+							<div *ngIf="submitted && f.location.errors" class="text-danger text-xs">
+								<div *ngIf="f.location.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2" *ngIf="isadmin">
+						<div class="form-group">
+							<label>Source</label>
+							<p-select formControlName="usertype" optionValue="id" optionLabel="type" [filter]="true" filterBy="type" styleClass="w-full" [options]="userTypes" (onChange)="checkUserType($event)"></p-select>
+							<div *ngIf="submitted && f.usertype.errors" class="text-danger text-xs">
+								<div *ngIf="f.usertype.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2" *ngIf="show1 && isadmin">
+						<div class="form-group">
+							<label>{{ companyname }}</label>
+							<p-select formControlName="source" optionValue="id" optionLabel="institutename" styleClass="w-full" [options]="sourceName" [filter]="true" filterBy="institutename" appendTo="body"></p-select>
+							<div *ngIf="submitted && f.source.errors" class="text-danger text-xs">
+								<div *ngIf="f.source.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2" *ngIf="show2">
+						<div class="form-group">
+							<label>Designation</label>
+							<input formControlName="designation" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.designation.errors" class="text-danger text-xs">
+								<div *ngIf="f.designation.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="flex flex-wrap gap-3">
+						<div class="flex align-items-center gap-2">
+							<p-radioButton name="demo_user" [value]="0" formControlName="demo_user" inputId="trail1"></p-radioButton>
+							<label for="trail1" class="ml-2">Normal User</label>
+						</div>
+						<div class="flex align-items-center gap-2">
+							<p-radioButton name="demo_user" [value]="1" formControlName="demo_user" inputId="trail2"></p-radioButton>
+							<label for="trail2">3 Day Demo User</label>
+						</div>
+						<div class="flex align-items-center gap-2">
+							<p-radioButton name="demo_user" [value]="2" formControlName="demo_user" inputId="trail3"></p-radioButton>
+							<label for="trail3">30 Days Demo User</label>
+						</div>
+						<!--                    <div class="flex align-items-center gap-2">-->
+						<!--                        <p-radioButton name="demo_user" [value]="3" formControlName="demo_user" inputId="trail4"></p-radioButton>-->
+						<!--                        <label for="trail4">365 Days Demo User</label>-->
+						<!--                    </div>-->
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="submit">Add User</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content></p-accordion-panel
+	>
+	<p-accordion-panel value="2" *ngIf="EditFormshow">
+		<p-accordion-header>Edit User</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="Editform" (ngSubmit)="submitEditForm()" #editFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>User Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText (keypress)="onKeyPress($event)" />
+							<div *ngIf="editsubmitted && e.name.errors" class="text-danger text-xs">
+								<div *ngIf="e.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText readonly />
+							<div *ngIf="editsubmitted && e.email.errors" class="text-danger text-xs">
+								<div *ngIf="e.email.errors.required">Required</div>
+								<div *ngIf="e.email.errors.email">Should be a valid email address</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Contact No</label>
+							<div class="w-100 position-relative">
+								<ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="15" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [phoneValidation]="false" [selectedCountryISO]="preferredCountry" name="phone" formControlName="phone" customPlaceholder="Enter Contact Number" (keyup)="onChangeContact($event)"> </ngx-intl-tel-input>
+							</div>
+							<div *ngIf="submitted && f.phone.errors" class="text-danger text-xs">
+								<div *ngIf="f.phone.errors.required">Required</div>
+								<!--  <div *ngIf="f.phone.errors?.validatePhoneNumber?.valid === false">Minimum 10 numbers Required</div> -->
+							</div>
+							<!-- <p-inputnumber formControlName="phone" mode="decimal" inputId="withoutgrouping" [useGrouping]="false" class="w-full" [maxlength]="10"> </p-inputnumber>
+                        <div *ngIf="editsubmitted && e.phone.errors" class="text-danger text-xs">
+                            <div *ngIf="e.phone.errors.required">Required</div>
+                            <div *ngIf="e.phone.errors.minlength">Minimum 10 numbers Required</div>
+                        </div> -->
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Gender</label>
+							<p-select formControlName="gender" optionValue="code" optionLabel="name" styleClass="w-full" [options]="genderoption" [filter]="true" filterBy="name"></p-select>
+							<div *ngIf="submitted && f.gender.errors" class="text-danger text-xs">
+								<div *ngIf="f.gender.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Home Country</label>
+							<p-select styleClass="w-full" formControlName="hm_country" [options]="home_countries" optionValue="id" optionLabel="country" [filter]="true" filterBy="country" (onChange)="changeCountryEdit($event)"></p-select>
+							<div *ngIf="submitted && f.hm_country.errors" class="text-danger text-xs">
+								<div *ngIf="f.hm_country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Region</label>
+							<p-select formControlName="region" optionValue="id" optionLabel="state" styleClass="w-full" [options]="region" (onChange)="changeRegion($event)" [filter]="true" filterBy="state" [readonly]="Editform.get('hm_country')?.value == 122 ? false : true"></p-select>
+							<div *ngIf="submitted && e.region.errors" class="text-danger text-xs">
+								<div *ngIf="e.region.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="district" styleClass="w-full" [options]="locations" [filter]="true" filterBy="district" [readonly]="Editform.get('hm_country')?.value == 122 ? false : true"></p-select>
+							<div *ngIf="submitted && e.location.errors" class="text-danger text-xs">
+								<div *ngIf="e.location.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2" *ngIf="isadmin">
+						<div class="form-group">
+							<label>Source</label>
+							<p-select formControlName="usertype" optionValue="id" optionLabel="type" [filter]="true" filterBy="type" styleClass="w-full" [options]="userTypes" (onChange)="checkUserType($event)"></p-select>
+							<div *ngIf="submitted && e.usertype.errors" class="text-danger text-xs">
+								<div *ngIf="e.usertype.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2" *ngIf="show1 && isadmin">
+						<div class="form-group">
+							<label>{{ companyname }}</label>
+							<p-select formControlName="source" optionValue="id" optionLabel="institutename" styleClass="w-full" [options]="sourceName" [filter]="true" filterBy="institutename" appendTo="body"></p-select>
+							<div *ngIf="submitted && e.source.errors" class="text-danger text-xs">
+								<div *ngIf="e.source.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2" *ngIf="show2">
+						<div class="form-group">
+							<label>Designation</label>
+							<input formControlName="designation" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && e.designation.errors" class="text-danger text-xs">
+								<div *ngIf="e.designation.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="flex flex-wrap gap-3">
+						<div class="flex align-items-center gap-2">
+							<p-radioButton name="demo_user" [value]="0" formControlName="demo_user" inputId="trail1" [disabled]="true"></p-radioButton>
+							<label for="trail1" class="ml-2">Normal User</label>
+						</div>
+						<div class="flex align-items-center gap-2">
+							<p-radioButton name="demo_user" [value]="1" formControlName="demo_user" inputId="trail2" [disabled]="true"></p-radioButton>
+							<label for="trail2">3 Day Demo User</label>
+						</div>
+						<div class="flex align-items-center gap-2">
+							<p-radioButton name="demo_user" [value]="2" formControlName="demo_user" inputId="trail3" [disabled]="true"></p-radioButton>
+							<label for="trail3">30 Days Demo User</label>
+						</div>
+						<!--                    <div class="flex align-items-center gap-2">-->
+						<!--                        <p-radioButton name="demo_user" [value]="3" formControlName="demo_user" inputId="trail4" [disabled]="true"></p-radioButton>-->
+						<!--                        <label for="trail4">365 Days Demo User</label>-->
+						<!--                    </div>-->
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button type="submit" class="btn btn-primary">Update User</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+	<p-accordion-panel value="3">
+		<p-accordion-header>Filter Users</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filter()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Username</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Contact No</label>
+							<p-inputnumber formControlName="phone" mode="decimal" inputId="withoutgrouping" [useGrouping]="false" class="w-full" [maxlength]="10"> </p-inputnumber>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Home Country</label>
+							<p-select styleClass="w-full" formControlName="hm_country" [options]="home_countries" optionValue="id" optionLabel="country" [filter]="true" filterBy="country" (onChange)="changeCountryFilter($event)"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Region</label>
+							<p-select formControlName="region" optionValue="id" optionLabel="state" styleClass="w-full" appendTo="body" [options]="region" (onChange)="changeRegion($event)" [filter]="true" filterBy="state" [readonly]="filterForm.get('hm_country')?.value == 122 ? false : true"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="district" styleClass="w-full" [options]="locations" [filter]="true" filterBy="district" [readonly]="filterForm.get('hm_country')?.value == 122 ? false : true"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Source Type</label>
+							<p-select formControlName="usertype" optionValue="id" optionLabel="type" styleClass="w-full" [options]="userTypes" (onChange)="changeSourceType($event)" [filter]="true" filterBy="type"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2" *ngIf="filterForm.value.usertype == 7 || filterForm.value.usertype == 4 || filterForm.value.usertype == 9">
+						<div class="form-group">
+							<label>Source Name</label>
+							<p-select formControlName="source_name" optionValue="id" optionLabel="institutename" styleClass="w-full" [options]="sourceName" [filter]="true" filterBy="institutename"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="button" (click)="resetFilter()">Reset Filter</button>&nbsp;
+						<button class="btn btn-primary" type="submit">Filter Data</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<br />
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="users" [paginator]="true" (onPage)="pageChange($event)" [first]="first" [lazy]="true" [rows]="pageSize" [totalRecords]="usersCount" [tableStyle]="{ 'min-width': '110rem' }">
+	<ng-template pTemplate="caption">
+		<div class="row">
+			<div class="d-flex col-sm-5 col-md-6 justify-content-between">
+				<div class="d-flex align-items-center">
+					<div class="d-flex flex-column">
+						<span style="font-size: 20px">Users List</span>
+						<span class="text-xs" style="color: rgb(205, 203, 203)">Total Users:{{ usersCount }}</span>
+					</div>
+				</div>
+			</div>
+			<div class="d-flex col-sm-5 col-md-6 justify-content-end">
+				<!-- <div class="p-2">
+                    <button class="p-2" pButton (click)="OpenImport()">Import&nbsp;<i class="fa-solid fa-file-csv"></i></button>
+                </div> -->
+				<div class="p-2">
+					<button class="btn btn-primary" (click)="exportFile()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+				</div>
+			</div>
+		</div>
+		<!-- <div [ngStyle]="{ display: ContinueImport }" class="modal modal-bg" role="dialog" tabindex="-1">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document" >
+                <div class="modal-content card ">
+                    <div class="modal-body">
+                        <div class="d-flex">
+                            <div class="d-flex col-sm-5 col-md-6 justify-content-start" >
+                                <div><h5>File Upload</h5></div>
+                            </div>
+                            <div class="d-flex col-sm-5 col-md-6  justify-content-end" >
+                                <span (click)="CloseImport()" style="cursor: pointer;"><i class="fa-solid fa-xmark"></i></span>
+                            </div>
+                        </div>
+                        
+                        <form  [formGroup]="dragform" (ngSubmit)="dragsubmit()">
+                            <div class="row mt-3">
+                                <div class="col-6">
+                                    <button class="ps-4 pe-4 pt-2 pb-2" pButton
+                                        style="background-color: #001631; color: #fff;"
+                                        type="button">Download Report</button>&nbsp;
+
+                                </div>
+                                <div class="col-6 text-right">
+                                    <button class="ps-3 pe-3 pt-2 pb-2" pButton
+                                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                                        type="button">Download Read Me</button>
+                                </div>
+                            </div>
+                            <label for="file" class="reading-drop-container mt-2" (drop)="onFileDrop($event)" (dragover)="onDragOver($event)">
+                                <i class="pi pi-upload reading-drop-title"></i>
+                                <input type="file" id="file" class="d-none" formControlName="dragexcel" (change)="onFileSelected($event)" accept=".csv"><br />
+                                <span style="text-align: center;" class="reading-sm-font">Drag and drop .csv files here or click to upload</span>
+                                <span  style="text-align: center;">Please maintain the format of uploading to prevent failures</span>
+                            </label><br />
+                            <div class="text-center">
+                                <button type="submit" class="ps-4 pe-4 pt-2 pb-2" pButton
+                                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                                    Upload
+                                </button>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th>User Name</th>
+			<th>Email ID</th>
+			<th>Mobile</th>
+			<th>Source Type</th>
+			<th>Location</th>
+			<th>Creation Date</th>
+			<th>Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-user>
+		<tr>
+			<td>{{ user.name }}</td>
+			<td>{{ user.email }}</td>
+			<td>{{ user.phone }}</td>
+			<td>{{ user.user_type_name }}</td>
+			<td>{{ user.state }}, {{ user.district }}</td>
+			<td>{{ user.created_at | date }}</td>
+			<td>
+				<span style="cursor: pointer"
+					><span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-lock"></i></span>&nbsp; Proxy</span
+				>
+				<span style="cursor: pointer"
+					><span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span>&nbsp; Activity</span
+				>
+				<span style="cursor: pointer" (click)="edit(user)"
+					><span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span>&nbsp; Edit</span
+				>
+				<p-confirmpopup></p-confirmpopup>
+				<span style="cursor: pointer" (click)="removeUser($event, user.id)"
+					>&nbsp;&nbsp;<span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-trash"></i></span> &nbsp;Delete</span
+				>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>

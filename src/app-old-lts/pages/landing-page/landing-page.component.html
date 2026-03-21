@@ -1,0 +1,220 @@
+<div class="container-fluid p-0">
+    <div class="card-body">
+        <form [formGroup]="landingPageForm">
+          <p-accordion value="0"activeIndex="0">
+            <p-accordion-panel value="1">
+              <p-accordion-header>{{id ? 'Update': 'Add'}} Landing Page</p-accordion-header><p-accordion-content>
+              <div class="row g-3">
+                <!-- Feature Name -->
+                <div class="col-md-4">
+                  <label for="feature_name" class="form-label">Feature Name <span class="text-danger">*</span></label>
+                  <input pInputText id="featureName" formControlName="feature_name" placeholder="Enter Feature Name" class="w-100" 
+                         [ngClass]="{'ng-invalid ng-dirty': f.feature_name.touched && f.feature_name.errors}" />
+                  <small *ngIf="f.feature_name.touched && f.feature_name.errors?.required" class="p-error">
+                    Feature name is required.
+                  </small>
+                </div>
+                
+                <div class="col-md-4">
+                  <label for="slug" class="form-label">Feature Slug <span class="text-danger">*</span></label>
+                  <input pInputText id="slug" formControlName="slug" placeholder="Enter Feature Slug" class="w-100" 
+                         [ngClass]="{'ng-invalid ng-dirty': f.feature_name.touched && f.feature_name.errors}" />
+                  <small *ngIf="f.slug.touched && f.slug.errors?.required" class="p-error">
+                    Feature slug is required.
+                  </small>
+                </div>
+                
+                <!-- Category -->
+                <div class="col-md-4">
+                  <label for="category" class="form-label">Category <span class="text-danger"><span class="text-danger">*</span></span></label>
+                  <p-select id="category"
+                    formControlName="category"
+                    [options]="categories"
+                    optionLabel="category"
+                    optionValue="id"
+                    placeholder="Categories"
+                    [showClear]="true"
+                    styleClass="w-100"
+                    (ngModelChange)="onCategoryChange($event)"
+                    [ngClass]="{'ng-invalid ng-dirty': f.category.touched && f.category.errors}">
+                  </p-select>
+                  <small *ngIf="f.category.touched && f.category.errors?.required" class="p-error">
+                    Category is required.
+                  </small>
+                </div>
+                
+                <!-- Tag -->
+                <div class="col-md-4">
+                  <label for="tag" class="form-label">Tag <span class="text-danger"><span class="text-danger">*</span></span></label>
+                  <p-select id="tag" 
+                    formControlName="tag" 
+                    [options]="tagList"
+                    optionLabel="tag_title" 
+                    placeholder="Enter the tag" 
+                    styleClass="w-100" 
+                    optionValue="tag_title"
+                    [showClear]="true"
+                    [ngClass]="{'ng-invalid ng-dirty': f.tag.touched && f.tag.errors}">
+                  </p-select>
+                  <small *ngIf="f.tag.touched && f.tag.errors?.required" class="p-error">
+                    Tag is required.
+                  </small>
+                </div>
+                
+                <!-- Status -->
+                <div class="col-md-4">
+                  <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                  <p-select id="status"
+                    formControlName="status"
+                    [options]="statuses"
+                    optionLabel="status"
+                    optionValue="id"
+                    placeholder="Select your status"
+                    [showClear]="true"
+                    styleClass="w-100"
+                    [ngClass]="{'ng-invalid ng-dirty': f.status.touched && f.status.errors}">
+                  </p-select>
+                  <small *ngIf="f.status.touched && f.status.errors?.required" class="p-error">
+                    Status is required.
+                  </small>
+                </div>
+                
+                <!-- Icon -->
+                <div class="col-md-4">
+                  <label for="icon" class="form-label">Icon <span class="text-danger">*</span></label>
+                  <input pInputText id="icon" formControlName="icon" placeholder="Emoji" class="w-100"
+                         [ngClass]="{'ng-invalid ng-dirty': f.icon.touched && f.icon.errors}" />
+                  <small *ngIf="f.icon.touched && f.icon.errors?.required" class="p-error">
+                    Icon is required.
+                  </small>
+                  <small *ngIf="f.icon.touched && f.icon.errors?.invalidEmoji" class="p-error">
+                    Icon is valid format.
+                  </small>
+                </div>
+                
+                <!-- Order Number -->
+                <div class="col-md-4">
+                  <label for="orderNumber" class="form-label">Order Number <span class="text-danger">*</span></label>
+                  <p-inputnumber id="orderNumber" formControlName="order_no" placeholder="1" class="w-100"
+                         [ngClass]="{'ng-invalid ng-dirty': f.order_no.touched && f.order_no.errors}" ></p-inputnumber>
+                  <small *ngIf="f.order_no.touched && f.order_no.errors?.required" class="p-error">
+                    Order number is required.
+                  </small>
+                  <small *ngIf="f.order_no.touched && f.order_no.errors?.pattern" class="p-error">
+                    Please enter a valid number.
+                  </small>
+                </div>
+                
+                <!-- Description -->
+                <div class="col-md-8">
+                  <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                  <textarea pInputTextarea
+                    id="description"
+                    formControlName="description"
+                    placeholder="Enter feature description"
+                    class="w-100"
+                    rows="1"
+                    [ngClass]="{'ng-invalid ng-dirty': f.description.touched && f.description.errors}">
+                  </textarea>
+                  <small *ngIf="f.description.touched && f.description.errors?.required" class="p-error">
+                    Description is required.
+                  </small>
+                  <small *ngIf="f.description.touched && f.description.errors?.maxlength" class="p-error">
+                    Description cannot exceed 500 characters.
+                  </small>
+                </div>
+                
+                <!-- Filter Buttons -->
+                <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                  <button 
+                  pButton 
+                  type="button" 
+                  label="Reset Fields" 
+                  class="p-button-danger mt-auto "
+                  (click)="resetLandingPageFields();">
+                </button>
+                  <button pButton
+                    type="button"
+                    label="{{id ? 'Update': 'Add'}} Landing Page"
+                    class="p-button-primary"
+                    (click)="submitLandingPage()">
+                  </button>
+                </div>
+              </div>
+            </p-accordion-content></p-accordion-panel>
+          </p-accordion>
+        </form>
+    </div>
+  
+  <!-- Landing Pages List -->
+  <div class="card">
+    <div class="card-header bg-white py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="mb-0">Landing Pages</h5>
+          <small class="text-muted">Total Page: {{totalRecords}}</small>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span class="p-input-icon-left me-3">
+            <input pInputText type="text" placeholder="Search" (input)="searchLandingPage($event);"/>
+          </span>
+          <button pButton type="button" label="Add Category and Tags" icon="pi pi-plus" [routerLink]="['/landing-page/category']" class="p-button-secondary"></button>
+          <uni-bulk-upload uploadApiUrl="/landingpageimport" sampleFileUrl="/assets/files/management.csv" (uploadSuccess)="getLandingDataList();"></uni-bulk-upload>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card-body">
+      <div class="row g-4">
+        <!-- Landing Page Cards -->
+        <div class="col-md-4" *ngFor="let page of landingPages" [routerLink]="['/landing-page', page.feature_urlslug]">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body h-100">
+              <div class="d-flex flex-column justify-content-between">
+                <div class="d-flex justify-content-end mb-2">
+                  <div class="badge bg-success px-2 py-1 rounded-pill">Page {{page.status_name}}</div>
+                </div>
+                
+                <div class="d-flex align-items-start mb-3">
+                  <div class="me-3 fs-4">{{page.icon}}
+                    <!-- <i [class]="page.icon"></i> -->
+                  </div>
+                  <div>
+                    <h5 class="mb-0">{{ page.feature_name }}</h5>
+                    <div class="d-flex align-items-center mt-1">
+                      <small class="text-muted me-2" *ngIf="page.order_no">Order: {{ page.order_no }}</small>
+                      <span class="badge bg-primary rounded-pill">{{ page.category_name }}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <p class="text-muted mb-3 truncate description" style="font-size: 12px;">{{ page.description }}</p>
+              </div>   
+              <div>
+                
+                <button 
+                  pButton 
+                  type="button" 
+                  label="Edit" 
+                  class="p-button-primary w-100 mt-auto"
+                  (click)="editLandingPage(page); $event.stopPropagation();">
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pagination -->
+      <div class="d-flex justify-content-end align-items-center mt-4">        
+        <p-paginator 
+          [first]="first" 
+          [rows]="pageSize" 
+          [totalRecords]="totalRecords" 
+          [rowsPerPageOptions]="[10, 25]"
+          (onPageChange)="onPageChange($event)">
+        </p-paginator>
+      </div>
+    </div>
+  </div>
+</div>

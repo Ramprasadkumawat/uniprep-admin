@@ -1,0 +1,134 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+						<p-accordion-header>Filter By</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filtersubmit()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Student Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Mobile</label>
+							<input formControlName="phone" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Country Chosen</label>
+							<p-select styleClass="w-full" formControlName="country" [options]="countries" placeholder="Select" optionValue="id" optionLabel="country"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-1">
+						<div class="form-group">
+							<label>Region</label>
+							<p-select styleClass="w-full" formControlName="region" [options]="region" placeholder="Select" optionValue="id" optionLabel="region"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-1">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select styleClass="w-full" formControlName="location_id" [options]="locations" placeholder="Select" optionValue="id" optionLabel="district"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-1">
+						<div class="form-group">
+							<label>Lead Status</label>
+							<p-select styleClass="w-full" formControlName="lead_status" [options]="leadList" placeholder="Select" optionValue="id" optionLabel="status_name"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-1">
+						<div class="form-group">
+							<label>Last Degree Passing Year</label>
+							<p-datepicker appendTo="body" view="year" styleClass="w-full" [maxDate]="today" dateFormat="yy" inputId="yearpicker" formControlName="last_degree_passing_year" placeholder="Select"></p-datepicker>
+						</div>
+					</div>
+					<div class="col-md-3 mt-1">
+						<div class="form-group">
+							<label>Lead Type</label>
+							<p-select formControlName="lead_type" optionValue="id" optionLabel="subtypeName" styleClass="w-full" placeholder="Select" [options]="leadType"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-1" *ngIf="adminuser">
+						<div class="form-group">
+							<label>Source Name</label>
+							<p-select formControlName="source" optionValue="id" optionLabel="name" styleClass="w-full" placeholder="Select" [options]="sourceTypes"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-1" *ngIf="adminuser">
+						<div class="form-group">
+							<label>User Type</label>
+							<p-select formControlName="user_type" optionValue="id" optionLabel="type" styleClass="w-full" placeholder="Select" [options]="userTypes"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-1">
+						<div class="form-group">
+							<label>Program Level Looking</label>
+							<p-select formControlName="programlevel_id" optionValue="id" optionLabel="programlevel" placeholder="Select" styleClass="w-full" [options]="programLevels"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button pButton class="btn btn-primary" type="button" (click)="resetFilter()" label="Reset Filter"></button>&nbsp;
+						<button class="btn btn-primary" pButton label="Filter Data"></button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<br />
+
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="users" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [rows]="pageSize" [totalRecords]="usersCount" [first]="first" [tableStyle]="{ 'min-width': '100rem' }" [rowsPerPageOptions]="[50, 100, 200]">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<span
+				>Leads List <br /><span style="color: #a1a1a1; font-size: 10px">Total Users: {{ usersCount }}</span></span
+			>
+			<button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" (click)="exportFile()" pButton>Export &nbsp; <i class="pi pi-file-export"></i></button>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell">User Details</th>
+			<th class="border-cell">Country Chosen</th>
+			<th class="border-cell">Location</th>
+			<th class="border-cell">Leads Status</th>
+			<th class="border-cell">subscription</th>
+			<th class="border-cell">Last Degree Passing Year</th>
+			<th class="border-cell">Source Type</th>
+			<th class="border-cell">Lead Type</th>
+			<th class="border-cell">Program Level Looking</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-user>
+		<tr>
+			<td>
+				<span (click)="redirectpage(user.user_id)" style="cursor: pointer">{{ user.name }}</span>
+				<br />
+				<span class="text-muted text-small">{{ user.email }}</span>
+				<br />
+				<span class="text-muted text-small">{{ user.phone }}</span>
+			</td>
+			<td class="border-cell">{{ user.country_choosen }}</td>
+			<td class="border-cell">{{ user.location }}</td>
+			<td class="border-cell">{{ user.login_lead_status }}</td>
+			<td class="border-cell">{{ user.final_amount }}</td>
+			<td class="border-cell">{{ user.last_degree_passing_year }}</td>
+			<td class="border-cell">{{ user.source_type }}</td>
+			<td class="border-cell">{{ user.student_type }}</td>
+			<td class="border-cell">{{ user.program_level_looking }}</td>
+		</tr>
+	</ng-template>
+</p-table>

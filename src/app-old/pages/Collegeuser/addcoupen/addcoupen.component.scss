@@ -1,0 +1,20 @@
+// table {
+//     border-collapse: collapse;
+//   }
+
+//   td:first-child {
+//     border-right: 1px solid #ccc;
+//   }
+.card {
+    border: none;
+  }
+.vertical-line {
+    width: 1px;
+    height: 120px; /* Adjust the height as needed */
+    background-color: var(--p-primary-400); /* Adjust the color as needed */
+  }
+  .border-cell {
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-width:1px !important;
+  }

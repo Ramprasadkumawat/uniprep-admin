@@ -1,0 +1,115 @@
+// @import "../../uniprep-assets/breakpoints";
+
+section {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  /* Ensure the #page element fills the entire viewport */
+  #page {
+    display: flex;
+    flex-direction: column;    
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* Ensure the header and footer stay fixed */
+  uni-header,
+  footer {
+    flex: 0 0 auto;
+  }
+
+  uni-list-sub-modules {
+    flex: 1;
+    overflow: hidden; /* Hide overflowing content initially */
+  }
+
+  /* Adjust the #page-container to take remaining space */
+  #page-container {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* Ensure content can shrink */
+    overflow-y: auto; /* Allow scrolling within #page-container */
+    background: #efefef;
+    border-radius: 20px;
+    padding: 1rem;
+  }
+
+  #sidenav {
+    transition: transform 0.05s ease-in-out;
+    position: relative;
+    transition: width 150ms ease-in-out;
+    flex: 1 1 auto !important;
+    overflow-y: hidden;
+    width: 15%;
+    height: 100vh !important;
+    margin-right: 5px;
+  }
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+.unsidebarClass {
+  cursor: no-drop;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px; /* Adjust the height as needed */
+}
+
+.thatDevice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thisDevice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #858585;
+  font-weight: 400;
+}
+
+.dangericon {
+  font-size: 6em; /* Adjust the font-size to make the icon bigger */
+  color: rgb(250, 7, 7); /* Set the color to black */
+}
+
+.multiDeviceLogoutPopup
+{
+  background: #00000080;
+}
+
+.notesize
+{
+  font-size: 0.7rem;
+}
+
+.subscriptionExhausted {
+  backdrop-filter: blur(2px);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.text-right-close {
+  text-align: right;
+  margin: 10px;
+}
+.btncontinue {
+  background: #f89634;
+  padding: 5px 5px 5px 0px;
+  .btnarrowspan {
+    float: right;
+    background: #d57e26;
+    border-radius: 100px !important;
+    padding: 2px 8px 6px 9px;
+  }
+}

@@ -1,0 +1,289 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Category</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="onClickSubmitFilter()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-6">
+								<label class="form-label">From</label>
+								<div class="input-group">
+									<input type="date" formControlName="from" class="form-control border-black paddingfive" />
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">To</label>
+								<div class="input-group">
+									<input type="date" formControlName="to" class="form-control border-black paddingfive" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--                <div class="col-md-4">-->
+					<!--                    <div class="form-group">-->
+					<!--                        <label>Sub-Module</label>-->
+					<!--                        <p-multiselect class=" paddingfive " styleClass="w-full mt-2" [options]="listOfSubmodules"-->
+					<!--                            optionValue="id" formControlName="filter_category_id" placeholder="Select Submodule"-->
+					<!--                            optionLabel="category" selectedItemsLabel="{0} items selected"-->
+					<!--                            [maxSelectedLabels]="0"></p-multiselect>-->
+					<!--                    </div>-->
+					<!--                </div>-->
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Favourite</label>
+							<p-select class="" optionValue="id" optionLabel="name" [options]="categoryDropdownList" styleClass="w-full mt-2" formControlName="favourite"></p-select>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-12 text-right">
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton (click)="resetFilter()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" label="Reset Filter"></button>&nbsp;
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit" label="Filter"></button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<div class="card mt-2">
+	<div class="card-header row w-full m-0" style="background-color: #fff">
+		<div class="col-lg-5 d-lg-flex gap-3">
+			<div class="d-flex">
+				<p-button (click)="goBack()" icon="pi pi-arrow-left" styleClass="p-button-rounded p-button-text text-dark"></p-button>
+				<div>
+					<span
+						>{{ moduleName }} - {{ cardHeader }} <br />
+						<span style="color: #a1a1a1; font-size: 10px">Total Questions: {{ questionList.length }}</span>
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-7 d-sm-flex gap-2 mt-sm-0 mt-2 justify-content-lg-end">
+			<button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" pButton (click)="openQuestionForm()" style="background-color: #9bc329; border-radius: 8px; border: aliceblue; color: #fff">New Question &nbsp; <i class="fa-solid fa-plus"></i></button>
+			<!--			<button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" pButton (click)="navigateSuggestedQuestion()" style="background-color: #c9040a; border-radius: 8px; border: aliceblue; color: #fff">Q&A Request &nbsp; <i class="fa-solid fa-plus"></i></button>-->
+			<button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" pButton (click)="fileUploadModal = true" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Import &nbsp; <i class="pi pi-file-export"></i></button>
+		</div>
+	</div>
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-12 mb-2">
+				<div class="d-flex gap-3 justify-content-end" [ngClass]="{ 'd-none': deletePermission === 0 }">
+					<button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" (click)="selectAllCheckboxes()" pButton>
+						<i class="fa-solid {{ selectAllQuestion ? 'fa-xmark' : 'fa-check' }} me-2"></i>
+						{{ selectAllQuestion ? "Deselect All" : "Select All" }}
+					</button>
+					<button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" (click)="DeleteSelectedCheckBoxes()" pButton><i class="fa-solid fa-trash me-2"></i> Delete Selected</button>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6 col-sm-6 mb-3" *ngFor="let item of questionList; let i = index">
+				<div class="card h-100">
+					<div class="card-body h-100 d-flex flex-column justify-content-between">
+						<div>
+							<div class="d-flex justify-content-between">
+								<div class="d-flex gap-2">
+									<input type="checkbox" [ngClass]="{ 'd-none': deletePermission === 0 }" [(ngModel)]="item.isChecked" [value]="item.id" style="transform: scale(1.5)" />
+									<div class="fw-bold sm-font pt-1">Question {{ first + i + 1 }}</div>
+								</div>
+								<p-rating [(ngModel)]="item.favourite" (click)="rating(item.id, item.favourite)" [stars]="1" cancel="false"> </p-rating>
+							</div>
+							<div class="pb-1 fw-bold">
+								{{ item.english }}
+							</div>
+						</div>
+						<div>
+							<div class="row pb-2">
+								<div class="col-6">
+									<button class="ps-4 pe-4 pt-1 pb-1" pButton (click)="openEditQuestion(item)" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px; width: 100%; display: flex; justify-content: center">Edit</button>
+								</div>
+								<div class="col-6">
+									<button class="ps-4 pe-4 pt-1 pb-1" pButton (click)="openViewQuestion(item)" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px; width: 100%; display: flex; justify-content: center">View</button>
+								</div>
+							</div>
+							<div style="color: #a1a1a1; font-size: 10px">Last Updated: {{ item.updated_at | date }}</div>
+							<div style="color: #a1a1a1; font-size: 10px">Last Updated By: {{ item.updated_user_name }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<p-paginator (onPageChange)="pageChange($event)" [first]="first" [rows]="rows" [totalRecords]="totalQuestionCount" [rowsPerPageOptions]="[50, 30, 20, 10]"></p-paginator>
+		</div>
+	</div>
+</div>
+<p-dialog class="d-flex" [(visible)]="questionModal" [modal]="true" header="{{ moduleName }} - {{ cardHeader }}" [style]="{ width: '90vw', height: '40vh' }">
+	<form class="d-flex flex-column" #formElm [formGroup]="form" (ngSubmit)="submitForm()" style="height: 100%">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="form-group pb-2">
+					<label>Language</label>
+					<p-select optionValue="id" optionLabel="language" [options]="languageList" styleClass="w-full" formControlName="language" (onChange)="changelanguageType()"></p-select>
+					<div *ngIf="submitted && f.language.errors" class="text-danger text-xs">
+						<div *ngIf="f.language.errors.required">Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="form-group pb-2">
+					<label>Proficiency</label>
+					<p-select optionValue="id" optionLabel="type" [options]="proficiencyList" styleClass="w-full" formControlName="proficiency"></p-select>
+					<div *ngIf="submitted && f.proficiency.errors" class="text-danger text-xs">
+						<div *ngIf="f.proficiency.errors.required">Required</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group pb-2 d-flex flex-column">
+			<label>Question in English </label>
+			<input type="text" formControlName="question" styleClass="w-full" class="form-control" pInputText />
+			<div *ngIf="submitted && f.question.errors" class="text-danger text-xs">
+				<div *ngIf="f.question.errors.required">Required</div>
+			</div>
+		</div>
+		<div class="form-group pb-2 d-flex flex-column flex-grow-1">
+			<label>Answer in English</label>
+			<input type="text" formControlName="answer" styleClass="w-full" class="form-control" pInputText />
+			<div *ngIf="submitted && f.answer.errors" class="text-danger text-xs">
+				<div *ngIf="f.answer.errors.required">Required</div>
+			</div>
+		</div>
+		<!--<div class="form-group pb-2 d-flex flex-column">
+			<label>Question in Translated English</label>
+			<input type="text" formControlName="translatequestion" styleClass="w-full" class="form-control" pInputText />
+			<div *ngIf="submitted && f.translatequestion.errors" class="text-danger text-xs">
+				<div *ngIf="f.translatequestion.errors.required">Required</div>
+			</div>
+		</div>
+		<div class="form-group pb-2 d-flex flex-column flex-grow-1">
+			<label>Answer  in Translated English</label>
+            <input type="text" formControlName="translatequestionanswer" styleClass="w-full" class="form-control" pInputText />
+			<div *ngIf="submitted && f.translatequestionanswer.errors" class="text-danger text-xs">
+				<div *ngIf="f.translatequestionanswer.errors.required">Required</div>
+			</div>
+		</div>
+        <div class="form-group pb-2 d-flex flex-column">
+			<label>Question in selected Language</label>
+			<input type="text" formControlName="selectedquestion" styleClass="w-full" class="form-control" pInputText />
+			<div *ngIf="submitted && f.selectedquestion.errors" class="text-danger text-xs">
+				<div *ngIf="f.selectedquestion.errors.required">Required</div>
+			</div>
+		</div>
+		<div class="form-group pb-2 d-flex flex-column flex-grow-1">
+			<label>Answer in selected Language</label>
+            <input type="text" formControlName="selectedquestionanswer" styleClass="w-full" class="form-control" pInputText />
+			<div *ngIf="submitted && f.selectedquestionanswer.errors" class="text-danger text-xs">
+				<div *ngIf="f.selectedquestionanswer.errors.required">Required</div>
+			</div>
+		</div>-->
+		<div class="d-flex justify-content-between">
+			<div>
+				<button class="ps-4 pe-4 pt-1 pb-1" pButton type="button" (click)="getEditHistory()" style="background-color: #0f100d; border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Edit History</button>
+			</div>
+			<div>
+				<button class="ps-4 pe-4 pt-1 pb-1" pButton type="button" (click)="showSuggestion()" *ngIf="isEditClick" (click)="suggestionModal = true" style="background-color: #f3210e; border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Suggestions</button>&nbsp;&nbsp;
+				<p-confirmpopup></p-confirmpopup>
+				<button class="ps-4 pe-4 pt-1 pb-1 d-none" pButton type="button" (click)="deleteQuestion($event)" *ngIf="isEditClick" [ngClass]="{ 'd-none': deletePermission === 0 }" style="background-color: #f3900e; border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Delete</button>&nbsp;&nbsp;
+				<button class="ps-4 pe-4 pt-1 pb-1" pButton type="submit" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Submit</button>
+			</div>
+		</div>
+	</form>
+	<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="historyList" styleClass="gray-header" class="mt-2" *ngIf="historyModal">
+		<ng-template pTemplate="header">
+			<tr>
+				<th>User</th>
+				<th>Serial No.</th>
+				<th>Date</th>
+				<th>Activity Log</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-user>
+			<tr>
+				<td>{{ user.username }}</td>
+				<td>{{ user.serial_no }}</td>
+				<td>{{ user.date | date }}</td>
+				<td>
+					<div class="fw-bold">New Value</div>
+					<div [innerHTML]="user.new_value"></div>
+					<br />
+					<div class="fw-bold">Old Value</div>
+					<div [innerHTML]="user.old_value"></div>
+				</td>
+			</tr>
+		</ng-template>
+	</p-table>
+</p-dialog>
+<p-dialog [(visible)]="viewQuestionModal" [modal]="true" header="{{ moduleName }} - {{ cardHeader }}" [style]="{ width: '80vw' }">
+	<div *ngIf="questionListData">
+		<div style="color: var(--p-primary-500)">Question</div>
+		<br />
+		<div class="row">
+			<div class="col-lg-10 fw-bold" style="font-size: 16px">{{ questionListData.english }}</div>
+			<!--			<div class="col-lg-2">-->
+			<!--				<button class="ps-4 pe-4 pt-1 pb-1" pButton (click)="reviewBy(questionListData.id)" style="background-color: var(&#45;&#45;uniprep-primary); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Reviewed By</button>-->
+			<!--			</div>-->
+		</div>
+		<br />
+		<div class="answercard">
+			<div style="color: var(--p-primary-500)">Answer</div>
+			<br />
+			<div style="white-space: pre-wrap !important" [innerHTML]="questionListData.englishanswer"></div>
+		</div>
+	</div>
+</p-dialog>
+<p-dialog header="Reviewed By" [(visible)]="reviewedByModal" [modal]="true" [style]="{ width: '40vw' }">
+	<ng-template pTemplate="header">
+		<span class="text-xl font-bold ms-2">Reviewed</span>
+	</ng-template>
+	<div class="container-fluid">
+		<div class="row justify-content-center align-items-center">
+			<div class="col-md-3" *ngFor="let review of reviewedByOrgList">
+				<img src="{{ review.logo }}" [alt]="review.organizationname" class="w-2 shadow-2 img-fluid" />
+			</div>
+		</div>
+	</div>
+</p-dialog>
+
+<p-dialog header="Suggestion" [(visible)]="suggestionModal" [modal]="true" [style]="{ width: '60vw' }">
+	<div class="d-flex gap-2 pt-2 align-items-baseline" *ngFor="let item of suggestion">
+		<div style="width: 100%">
+			<div class="d-flex gap-2 pb-2">
+				<div class="fw-bold" style="font-size: 16px">Review User: {{ item.name }}</div>
+				<p-tag severity="success" [rounded]="true" class="card-tag" *ngIf="item.action == 'Actioned'">{{ item.action }}</p-tag>
+				<p-tag severity="warn" [rounded]="true" class="card-tag" *ngIf="item.action == 'Not Actioned'">{{ item.action }}</p-tag>
+			</div>
+			<div class="pb-3">{{ item.sname }}</div>
+			<div style="color: #a1a1a1" class="container-bottom pb-3">
+				{{ item.suggestion }}
+			</div>
+			<div class="text-right" *ngIf="item.action == 'Not Actioned'">
+				<button class="ps-4 pe-4 pt-1 pb-1" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px" (click)="actionSuggestion(item.id)">Action</button>
+			</div>
+			<br />
+		</div>
+	</div>
+	<div class="text-right"></div>
+</p-dialog>
+<p-dialog header="File Upload" [(visible)]="fileUploadModal" [modal]="true" [style]="{ width: '50vw' }">
+	<div class="d-flex justify-content-center">
+		<!-- <div class="col-md-6 col-12">
+			<div class="w-full">
+				<a href="assets/files/Export-UK-All-Modules.csv" download class="ps-4 pe-4 pt-2 pb-2 w-full d-flex justify-content-center align-items-initial no-underline" style="background-color: #000000; border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px"> <i class="pi pi-file-export"></i>&nbsp;&nbsp;Download Report</a>
+			</div>
+		</div> -->
+
+		<div>
+			<a href="assets/files/samplelanguage.csv" download class="ps-4 pe-4 pt-2 pb-2 w-full d-flex justify-content-center align-items-initial no-underline" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px"> <i class="pi pi-file-export"></i>&nbsp;&nbsp;Download Sample</a>
+		</div>
+	</div>
+	<br />
+	<label for="file" class="reading-drop-container">
+		<i class="pi pi-upload reading-drop-title"></i>
+		<input type="file" id="file" class="d-none" (change)="onFileChange($event)" accept=".csv" /><br />
+		<span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+		<span class="reading-sm-font">Please maintain the format of uploading to stop failures</span> </label
+	><br />
+	<div class="text-center">
+		<button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="uploadFile()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Upload</button>
+	</div>
+</p-dialog>

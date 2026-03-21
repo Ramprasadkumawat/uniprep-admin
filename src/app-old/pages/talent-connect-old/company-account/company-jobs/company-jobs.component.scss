@@ -1,0 +1,62 @@
+.header-section {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .company-logo {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .card {
+    border-radius: 8px;
+    transition: transform 0.2s;
+    
+    &:hover {
+      transform: translateY(-5px);
+    }
+  }
+  
+  .badge {
+    font-size: 0.7rem;
+    padding: 0.35em 0.65em;
+  }
+  
+  :host ::ng-deep {
+    .p-button.p-button-sm {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.75rem;
+    }
+    
+    .p-button.p-button-success {
+      background-color: #8bc34a;
+      border-color: #8bc34a;
+    }
+    
+    .p-button.p-button-danger {
+      background-color: #f44336;
+      border-color: #f44336;
+    }
+    
+    .p-inputtext {
+      padding: 0.5rem 0.75rem;
+    }
+  }
+  
+  .bg-success {
+    background-color: #8bc34a !important;
+  }
+  
+  .bg-danger {
+    background-color: #f44336 !important;
+  }
+  
+  .bg-light {
+    background-color: #f5f7fa !important;
+  }
+  

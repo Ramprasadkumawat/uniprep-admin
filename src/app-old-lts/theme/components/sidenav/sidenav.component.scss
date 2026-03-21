@@ -1,0 +1,84 @@
+.app-title {
+    justify-content: start;
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+.menutitle
+{
+    padding:0.5rem;
+}
+
+.submenuitem
+{
+    font-size:0.8rem;
+    padding:0px;
+}
+
+#menu-items {
+    user-select: none;
+    padding: 0;
+    list-style-type: none;
+    overflow: auto;
+    max-height: 90vh;
+    padding-bottom: 10px;
+    .menu-item {
+        color: #222b45;
+        cursor: pointer;
+        .system-main__apps-submenu
+            {
+                padding-left: 3rem;
+            }
+        .system-main__apps {
+            font-size: 0.9rem;
+            &.header {
+                font-weight: 500;
+                color: #344767;
+                opacity: 0.6 !important;
+                text-transform: uppercase;
+            }
+            font-weight: 500;
+            color: #001631;
+            padding: 10px 15px;
+            margin: 0.5rem;
+            display: flex;
+            text-decoration: none;
+            align-items: center;
+            .system-main__icon
+            {
+                margin-right: 10px;
+                color:var(--p-primary-500);
+            }
+            .system-main__icon .pi {
+                font-size: 0.9rem;
+                padding: 10px;
+                border-radius: 0.5rem;
+                margin-right: 0.4rem !important;
+            }
+        }
+        &.active {
+            .system-main__apps {
+                color: #fff;
+                background-color: var(--p-primary-500);
+                border-radius: 10px;
+            }
+            background-color: transparent;
+            border-right: none;
+            .system-main__icon
+            {
+                color:white !important;
+            }
+            .system-main__icon .pi {
+                color: #ffffff;
+            }
+            .menu-item.active {
+                .system-main__name {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}
+.menu-item > .menu-items {
+    padding: 0 1.25rem;
+}

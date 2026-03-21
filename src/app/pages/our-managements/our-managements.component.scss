@@ -1,0 +1,135 @@
+:host ::ng-deep {
+    // Input styling
+    .p-inputtext {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      
+      &:focus {
+        box-shadow: none;
+        border-color: #80bdff;
+      }
+      
+      &::placeholder {
+        color: #9ca3af;
+      }
+    }
+    
+    // Dropdown styling
+    .p-dropdown {
+      .p-dropdown-label {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+      }
+      
+      &:not(.p-disabled).p-focus {
+        box-shadow: none;
+        border-color: #80bdff;
+      }
+    }
+    
+    // Button styling
+    .p-button {
+      &.p-button-danger {
+        background: #dc3545;
+        border-color: #dc3545;
+        
+        &:hover {
+          background: #c82333;
+          border-color: #bd2130;
+        }
+      }
+      
+      &.p-button-primary {
+        background: var(--p-primary-500);;
+        border-color: var(--p-primary-500);;
+        
+        &:hover {
+          background: #303f9f;
+          border-color: #283593;
+        }
+      }
+      
+      &.p-button-secondary {
+        background: #6c757d;
+        border-color: #6c757d;
+        
+        &:hover {
+          background: #5a6268;
+          border-color: #545b62;
+        }
+      }
+    }
+    
+    // SelectButton styling
+    .p-selectbutton {
+      .p-button {
+        background: #f8f9fa;
+        border-color: #dee2e6;
+        color: #495057;
+        
+        &.p-highlight {
+          background: var(--p-primary-500);
+          border-color: var(--p-primary-500);
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  .team-members-grid {
+    .team-member-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      
+      .team-member-image {
+        height: 220px;
+        object-fit: cover;
+      }
+      
+      .status-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+        color: white;
+        
+        &.active-status {
+          background-color: #28a745;
+        }
+        
+        &.inactive-status {
+          background-color: #dc3545;
+        }
+      }
+      
+      .linkedin-link {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #0077B5;
+        text-decoration: none;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+
+  .linkedin-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-left: 5px;
+    font-weight: bold;
+  }

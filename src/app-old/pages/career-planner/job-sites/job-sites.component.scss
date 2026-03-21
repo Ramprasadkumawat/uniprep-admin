@@ -1,0 +1,16 @@
+.jobsitelogs img{
+    height: 50px;
+    object-fit: contain;
+}
+
+.editformimage{
+    object-fit: contain;
+    img{
+        position: relative;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+        display: flex;
+        margin-left: 25%;
+    }
+}

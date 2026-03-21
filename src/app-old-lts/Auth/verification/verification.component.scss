@@ -1,0 +1,80 @@
+// @import "../../../uniprep-assets/buttons";
+.bg-image {
+  background-image: url("../../../assets/images/Uniprep_Icons_Image_1.png");
+  background-size: cover;
+  background-position: center;
+}
+
+form {
+    input{
+        display:inline-block;
+        width:40px;
+        height:40px;
+        text-align:center;
+        margin-right: 10px;
+        color: var(--p-primary-500);
+      }
+  label {
+    font-size: 0.8rem;
+    color: black;
+  }
+
+  .backbtn
+  {
+    width:30px;
+    height:30px;
+    background: var(--p-primary-500);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: white;
+    a
+    {
+      color: white;
+      display: flex;
+    }
+  }
+
+  :focus {
+    border-color: var(--p-primary-500) !important;
+    // background-color: #fff !important;
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 0%) !important;
+  }
+  .signup {
+    font-size: small;
+    color: black;
+  }
+}
+.input-group-text {
+  background: white !important;
+  border-right: 1px solid var(--p-primary-500) !important;
+  i {
+    font-size: 0.7rem;
+    color: rgba(0, 0, 0, 0.378);
+  }
+}
+.footer-part {
+  text-align-last: center;
+  margin-top: 3rem;
+  span{
+    background-color: var(--p-primary-500);
+    padding: 5px 10px;
+    border-radius: 50%;
+    color: white;
+  }
+  i{
+    font-size: 0.5rem;
+    font-weight: 900;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+}
+.resend_label{
+    margin-left: 50px;
+    margin-top: 10px;
+}
+a {
+    text-decoration: none;
+    cursor: pointer;
+  }

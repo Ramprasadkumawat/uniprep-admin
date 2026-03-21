@@ -1,0 +1,498 @@
+<div class="card readingcard">
+	<!-- Filter Section -->
+	<div class="card-header border-0 bg-white filter-section" *ngIf="filterExpanded">
+		<div class="d-flex justify-content-between align-items-center mb-3">
+			<h6 class="mb-0 fw-bold">Filter By</h6>
+		</div>
+		<div>
+			<form [formGroup]="filterForm">
+				<div class="row g-3">
+					<div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label small">Order ID</label>
+						<input pInputText class="w-100" placeholder="Enter Order ID" formControlName="order_id" />
+					</div>
+					<div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label small">Company Name</label>
+						<input pInputText class="w-100" placeholder="Enter Company Name" formControlName="company_name"
+							type="text" />
+					</div>
+					<div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label small">Company ID</label>
+						<input pInputText class="w-100" placeholder="Enter Company ID" formControlName="company_id"
+							type="text" />
+					</div>
+					<div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label small">Talent ID</label>
+						<input pInputText class="w-100" placeholder="Enter Talent ID" formControlName="talent_id"
+							type="number" />
+					</div>
+					<div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label small">Candidate Name</label>
+						<input pInputText class="w-100" placeholder="Enter Candidate Name"
+							formControlName="candidate_name" />
+					</div>
+					<div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label small">Email ID</label>
+						<input pInputText class="w-100" placeholder="Enter Email ID" formControlName="email"
+							type="email" />
+					</div>
+					<div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label small">Phone Number (with Country Code)</label>
+						<div class="d-flex gap-2">
+							<ngx-intl-tel-input class="w-100"
+								[cssClass]="'form-control p-2 fs-6 w-100 border border-gray rounded-start-0'"
+								[preferredCountries]="['in']" [enableAutoCountrySelect]="true"
+								[enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10"
+								[searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+								[selectedCountryISO]=" preferredCountry" formControlName="phone"
+								customPlaceholder=" Enter Phone Number" appendTo="body"></ngx-intl-tel-input>
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label small">Position</label>
+						<input pInputText class="w-100" placeholder="Enter Position" formControlName="position"
+							type="text" />
+					</div>
+					<div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label small">Years of Experience</label>
+						<p-multiSelect class="w-100" placeholder="Select Years of Experience"
+							[options]="experienceYears" optionLabel="label" optionValue="value" appendTo="body"
+							formControlName="years_of_experience" [showClear]="true" [showToggleAll]="false"
+							[filter]="true" filterBy="label"></p-multiSelect>
+					</div>
+					<!-- <div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label small">Salary Expectation</label>
+						<div class="d-flex gap-2">
+							<p-select class="salary-currency-select" placeholder="Currency" [options]="currency || []"
+								optionLabel="currency_code" optionValue="currency_code" appendTo="body"
+								formControlName="expected_salary_currency" [filter]="true" filterBy="currency_code"
+								[showClear]="true"></p-select>
+							<input pInputText class="flex-grow-1" placeholder="Enter Salary"
+								formControlName="expected_salary" type="number" />
+						</div>
+					</div> -->
+					<div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label small">Status</label>
+						<p-select class="w-100" placeholder="Select Status" [options]="statusOptions"
+							optionLabel="label" optionValue="value" appendTo="body" formControlName="status"
+							[showClear]="true"></p-select>
+					</div>
+					<div class="col-12 col-md-6 col-lg-3">
+						<label class="form-label">Validation Status</label>
+						<p-select class="w-100" [options]="validationStatusOptions" optionLabel="label"
+							optionValue="value" appendTo="body" formControlName="validation_status"
+							placeholder="Select Validation Status"></p-select>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 d-flex justify-content-end gap-2">
+						<button pButton type="button" label="Reset Filter" class="p-button-warning"
+							(click)="resetFilter()"></button>
+						<button pButton type="button" label="Apply Filter" class="p-button-primary"
+							(click)="applyFilter()"></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!-- Leads List Section -->
+	<div class="card-body bg-light">
+		<h5 class="mb-0 fw-bold">Delivered Talents List</h5>
+		<div class="d-flex justify-content-between align-items-center mb-3">
+
+			<!-- Center: Summary Tabs -->
+			<div class="summary-tabs-container d-flex gap-2">
+				<button type="button" [class]="activeTab === 'all' ? 'summary-tab active' : 'summary-tab'"
+					(click)="onTabChange('all')">
+					Total Talent Count: {{ totalTalents }}
+				</button>
+				<button type="button" [class]="activeTab === 'shortlisted' ? 'summary-tab active' : 'summary-tab'"
+					(click)="onTabChange('shortlisted')">
+					Total Shortlisted: {{ shortlistedTalents }}
+				</button>
+				<button type="button" [class]="activeTab === 'rejected' ? 'summary-tab active' : 'summary-tab'"
+					(click)="onTabChange('rejected')">
+					Total Rejected: {{ rejectedTalents }}
+				</button>
+				<button type="button" [class]="activeTab === 'delivered' ? 'summary-tab active' : 'summary-tab'"
+					(click)="onTabChange('delivered')">
+					Delivered Talent Count: {{ deliveredTalents }}
+				</button>
+				<button type="button" [class]="activeTab === 'validationCount' ? 'summary-tab active' : 'summary-tab'"
+					(click)="onTabChange('validationStatus')">
+					Validation Status Count: {{ validationCount }}
+				</button>
+			</div>
+
+			<!-- Right: Action Buttons -->
+			<div class="d-flex gap-2">
+				<button pButton type="button" label="Filter" icon="pi pi-filter" class="p-button-info"
+					(click)="filterExpanded = !filterExpanded"></button>
+				<button pButton type="button" label="Add Deliver Talent" icon="pi pi-plus" class="p-button-success"
+					(click)="addTalent()"></button>
+				<button pButton type="button" label="Export" icon="pi pi-file-export" class="p-button-primary" (click)="exportData()"></button>
+			</div>
+		</div>
+
+
+		<!-- Table -->
+		<div class="table-responsive">
+			<p-table #dtTalents [value]="talents"  [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[25, 50, 100]"
+			[totalRecords]="totalRecords" (onLazyLoad)="onPageChange($event)" [lazy]="true">
+				<ng-template pTemplate="header">
+					<tr>
+						<th pSortableColumn="order_id">Order ID <p-sortIcon field="order_id"></p-sortIcon></th>
+						<th pSortableColumn="company_name">Company Name <p-sortIcon field="company_name"></p-sortIcon></th>
+						<th pSortableColumn="candidate_name">Candidate Name <p-sortIcon field="candidate_name"></p-sortIcon></th>
+						<th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+						<th pSortableColumn="phone">Phone No <p-sortIcon field="phone"></p-sortIcon></th>
+						<th pSortableColumn="position">Position <p-sortIcon field="position"></p-sortIcon></th>
+						<th pSortableColumn="years_of_experience">Year of experience <p-sortIcon field="years_of_experience"></p-sortIcon></th>
+						<th pSortableColumn="expected_salary">Salary Expectation <p-sortIcon field="expected_salary"></p-sortIcon></th>
+						<th pSortableColumn="status">Status <p-sortIcon field="status"></p-sortIcon></th>
+						<th pSortableColumn="validation_status">Validation Status <p-sortIcon field="validation_status"></p-sortIcon></th>
+						<th>Action</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-talent>
+					<tr>
+						<td>{{ talent.order_id }}</td>
+						<td>{{ talent.company_name }}</td>
+						<td>
+							<a *ngIf="talent.profile_url" [href]="talent.profile_url" target="_blank"
+								rel="noopener noreferrer" class="profile-link">
+								{{ talent.candidate_name }}
+							</a>
+							<span *ngIf="!talent.profile_url">{{ talent.candidate_name }}</span>
+						</td>
+						<td>{{ talent.email }}</td>
+						<td>{{talent.phone_code}}{{ talent.phone }}</td>
+						<td>{{ talent.position }}</td>
+						<td>{{ talent.years_of_experience }} {{ getExperienceLabel(talent.years_of_experience) }}
+						</td>
+						<td>{{ talent.expected_salary_currency }} {{ formatSalary(talent.expected_salary) }}</td>
+						<td>
+							<p-tag [value]="getStatusLabel(talent.status)"
+								[severity]="getStatusSeverity(talent.status)">
+							</p-tag>
+						</td>
+						<td>
+							<p-tag [value]="getValidationStatusLabel(talent.validation_status)"
+								[severity]="getValidationStatusSeverity(talent.validation_status)">
+							</p-tag>
+						</td>
+						<td>
+							<a href="javascript:void(0)" class="view-order-link" (click)="viewOrder(talent)">
+								View Order
+							</a>
+						</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="10" class="text-center py-4">No talents found</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</div>
+	</div>
+</div>
+
+<!-- View Talent Dialog -->
+<p-dialog [(visible)]="viewDialogVisible" [modal]="true" [style]="{ width: '90vw', maxWidth: '1200px' }"
+	[closable]="true" (onHide)="closeViewDialog()" [draggable]="false" [resizable]="false">
+	<ng-template pTemplate="header">
+		<h5 class="m-0">Talent Details</h5>
+	</ng-template>
+	<div *ngIf="selectedTalent" class="talent-details-dialog">
+		<form [formGroup]="editTalentForm" *ngIf="isEditMode && editTalentForm; else viewMode">
+			<div class="row g-3">
+				<!-- Left Column - Edit Mode -->
+				<div class="col-12 col-md-6">
+					<div class="form-group">
+						<label class="form-label">Company Name</label>
+						<input pInputText class="w-100" formControlName="company_name" />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Email ID</label>
+						<input pInputText class="w-100" formControlName="email" />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Profile URL</label>
+						<input pInputText class="w-100" formControlName="profile_url" />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Position</label>
+						<input pInputText class="w-100" formControlName="position" />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Current Salary</label>
+						<div class="d-flex gap-2">
+							<p-select class="w-25" [options]="currency" optionLabel="currency_code"
+								optionValue="currency_code" appendTo="body" formControlName="current_salary_currency"
+								[filter]="true" filterBy="currency_code" [showClear]="true"></p-select>
+							<input pInputText type="number" class="flex-grow-1" formControlName="current_salary" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="form-label">Work Location</label>
+						<p-multiSelect class="w-100" [options]="workLocations" optionLabel="work_location"
+							optionValue="id" appendTo="body" formControlName="work_locations"
+							[showToggleAll]="false"></p-multiSelect>
+					</div>
+					<div class="form-group">
+						<label class="form-label">Work Type</label>
+						<p-select class="w-100" [options]="workType" optionLabel="label" optionValue="value"
+							appendTo="body" formControlName="work_type"></p-select>
+					</div>
+					<div class="form-group">
+						<label class="form-label">Language & Proficiency</label>
+						<input pInputText class="w-100" [value]="getLanguageNames(selectedTalent.language_known)"
+							readonly />
+					</div>
+				</div>
+
+				<!-- Right Column - Edit Mode -->
+				<div class="col-12 col-md-6">
+					<div class="form-group">
+						<label class="form-label">Candidate Name</label>
+						<input pInputText class="w-100" formControlName="candidate_name" />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Phone No</label>
+						<ngx-intl-tel-input class="w-100"
+							[cssClass]="'form-control p-2 fs-6 w-100 border border-gray rounded-start-0'"
+							[preferredCountries]="['in']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+							[searchCountryFlag]="true" [maxLength]="15"
+							[searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+							[selectedCountryISO]="preferredCountry" formControlName="phone"
+							customPlaceholder="Enter Phone Number" appendTo="body">
+						</ngx-intl-tel-input>
+					</div>
+					<div class="form-group">
+						<label class="form-label">Intro Video</label>
+						<input pInputText class="w-100" value="No" readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Year of experience</label>
+						<input pInputText class="w-100"
+							[value]="selectedTalent.years_of_experience + ' ' + getExperienceLabel(selectedTalent.years_of_experience)"
+							readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Salary Expectation</label>
+						<div class="d-flex gap-2">
+							<p-select class="w-25" [options]="currency" optionLabel="currency_code"
+								optionValue="currency_code" appendTo="body" formControlName="expected_salary_currency"
+								[filter]="true" filterBy="currency_code" [showClear]="true"></p-select>
+							<input pInputText type="number" class="flex-grow-1" formControlName="expected_salary" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="form-label">Work Mode</label>
+						<p-select class="w-100" [options]="workMode" optionLabel="label" optionValue="value"
+							appendTo="body" formControlName="work_mode"></p-select>
+					</div>
+					<div class="form-group">
+						<label class="form-label">Notice Period</label>
+						<p-select class="w-100" [options]="noticePeriodOptions" optionLabel="label" optionValue="value"
+							appendTo="body" formControlName="notice_period"></p-select>
+					</div>
+					<div class="form-group">
+						<label class="form-label">Status</label>
+						<p-select class="w-100" [options]="statusOptions" optionLabel="label" optionValue="value"
+							appendTo="body" formControlName="status"></p-select>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-6">
+					<div class="form-group">
+						<label class="form-label">Validation Status</label>
+						<p-select class="w-100" [options]="validationStatusOptions" optionLabel="label"
+							optionValue="value" appendTo="body" formControlName="validation_status"
+							placeholder="Select Validation Status"></p-select>
+					</div>
+				</div>
+			</div>
+			<div class="row g-3">
+				<div class="col-12 col-md-6">
+					<div class="form-group">
+						<label class="form-label">UNIPREP Team Remarks</label>
+						<p-editor formControlName="remarks" placeholder="Enter the Remarks"
+							[style]="{'height':'200px'}"></p-editor>
+						<div class="d-flex justify-content-end mt-1">
+							<small class="text-muted char-counter"
+								[class.text-danger]="getTextLength(editTalentForm.get('remarks')?.value) > 2000">
+								{{ getTextLength(editTalentForm.get('remarks')?.value) }}/2000
+							</small>
+						</div>
+						<small class="text-danger" *ngIf="
+                    editTalentForm.get('remarks')?.invalid &&
+                    editTalentForm.get('remarks')?.touched
+                ">
+							<span *ngIf="editTalentForm.get('remarks')?.errors?.['maxlength']">Remarks cannot exceed
+								2000 characters.</span>
+						</small>
+					</div>
+				</div>
+				<div class="col-12 col-md-6">
+					<div class="form-group">
+						<label class="form-label">Validation Remarks</label>
+						<p-editor formControlName="validation_remarks" placeholder="Enter the Validation Remarks"
+							[style]="{'height':'200px'}"></p-editor>
+						<div class="d-flex justify-content-end mt-1">
+							<small class="text-muted char-counter"
+								[class.text-danger]="getTextLength(editTalentForm.get('validation_remarks')?.value) > 2000">
+								{{ getTextLength(editTalentForm.get('validation_remarks')?.value) }}/2000
+							</small>
+						</div>
+						<small class="text-danger" *ngIf="
+                    editTalentForm.get('validation_remarks')?.invalid &&
+                    editTalentForm.get('validation_remarks')?.touched
+                ">
+							<span *ngIf="editTalentForm.get('validation_remarks')?.errors?.['maxlength']">Remarks cannot
+								exceed 2000
+								characters.</span>
+						</small>
+					</div>
+				</div>
+			</div>
+
+			<!-- Action Buttons - Edit Mode -->
+			<div class="d-flex justify-content-end gap-2 mt-4">
+				<button pButton type="button" label="Cancel" class="p-button-secondary" (click)="cancelEdit()"></button>
+				<button pButton type="button" label="Save" icon="pi pi-check" iconPos="right" class="p-button-primary"
+					(click)="saveTalent()" [disabled]="editTalentForm.invalid"></button>
+			</div>
+		</form>
+
+		<!-- View Mode -->
+		<ng-template #viewMode>
+			<div class="row g-3">
+				<!-- Left Column -->
+				<div class="col-12 col-md-6">
+					<div class="form-group">
+						<label class="form-label">Company Name</label>
+						<input pInputText class="w-100" [value]="selectedTalent.company_name" readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Email ID</label>
+						<input pInputText class="w-100" [value]="selectedTalent.email" readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Profile URL</label>
+						<input pInputText class="w-100" [value]="selectedTalent.profile_url" readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Position</label>
+						<input pInputText class="w-100" [value]="selectedTalent.position" readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Current Salary</label>
+						<div class="d-flex gap-2">
+							<input pInputText class="w-25" [value]="selectedTalent.current_salary_currency" readonly />
+							<input pInputText class="flex-grow-1" [value]="formatSalary(selectedTalent.current_salary)"
+								readonly />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="form-label">Work Location</label>
+						<input pInputText class="w-100" [value]="selectedTalent.work_locations?.join(', ') || ''"
+							readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Work Type</label>
+						<input pInputText class="w-100" [value]="formatWorkType(selectedTalent.work_type)" readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Language Know</label>
+						<div class="d-flex gap-2">
+							<input pInputText class="flex-grow-1"
+								[value]="getLanguageNames(selectedTalent.language_known)" readonly />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="form-label">Validation Status</label>
+						<input pInputText class="w-100"
+							[value]="getValidationStatusLabel(selectedTalent.validation_status)" readonly />
+					</div>
+				</div>
+
+				<!-- Right Column -->
+				<div class="col-12 col-md-6">
+					<div class="form-group">
+						<label class="form-label">Candidate Name</label>
+						<input pInputText class="w-100" [value]="selectedTalent.candidate_name" readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Phone No</label>
+						<input pInputText class="w-100"
+							[value]="formatPhoneForDisplay(selectedTalent.phone,selectedTalent.phone_code)" readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Intro Video</label>
+						<input pInputText class="w-100" value="No" readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Year of experience</label>
+						<input pInputText class="w-100"
+							[value]="selectedTalent.years_of_experience + ' ' + getExperienceLabel(selectedTalent.years_of_experience)"
+							readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Salary Expectation</label>
+						<div class="d-flex gap-2">
+							<input pInputText class="w-25" [value]="selectedTalent.expected_salary_currency" readonly />
+							<input pInputText class="flex-grow-1" [value]="formatSalary(selectedTalent.expected_salary)"
+								readonly />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="form-label">Work Mode</label>
+						<input pInputText class="w-100" [value]="formatWorkMode(selectedTalent.work_mode)" readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Notice Period</label>
+						<input pInputText class="w-100" [value]="formatNoticePeriod(selectedTalent.notice_period)"
+							readonly />
+					</div>
+					<div class="form-group">
+						<label class="form-label">Status</label>
+						<input pInputText class="w-100" [value]="getStatusLabel(selectedTalent.status)" readonly />
+					</div>
+				</div>
+				<div class="row g-3 mt-2">
+					<div class="col-12 col-md-6">
+						<div class="form-group">
+							<label class="form-label">UNIPREP Team Remarks</label>
+							<div class="remarks-display"
+								[innerHTML]="getSanitizedHtml(selectedTalent.uniprep_remarks || '')"></div>
+							<small class="text-muted">{{ (selectedTalent.uniprep_remarks || '').length }}/2000</small>
+						</div>
+					</div>
+					<div class="col-12 col-md-6">
+						<div class="form-group">
+							<label class="form-label">Validation Remarks</label>
+							<div class="remarks-display"
+								[innerHTML]="getSanitizedHtml(selectedTalent.validation_remarks || '')"></div>
+							<small class="text-muted">{{ (selectedTalent.validation_remarks || '').length
+								}}/2000</small>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Action Buttons - View Mode -->
+			<div class="d-flex justify-content-end gap-2 mt-4">
+				<button pButton type="button" *ngIf="isEditMode" label="Update" class="p-button-warning"
+					(click)="updateTalent()"></button>
+				<button pButton type="button" label="Edit" icon="pi pi-pencil" iconPos="right" class="p-button-primary"
+					(click)="editTalent()"></button>
+			</div>
+		</ng-template>
+	</div>
+</p-dialog>
+
+<p-toast></p-toast>

@@ -1,0 +1,50 @@
+.input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+  }
+  
+  input[type="url"] {
+    padding-right: 30px; /* Adjust the value to make space for the icon */
+  }
+  
+  .plus-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 25px; /* Adjust the width as needed */
+    height: 25px; /* Adjust the height as needed */
+    background-color:var(--p-primary-500);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+  }
+  
+  .plus-icon i {
+    color: white;
+  }
+
+
+  
+input[type="text"] {
+    padding-right: 120px; /* Adjust the value to make space for the button */
+  }
+  
+  .upload-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 35%; /* Adjust the width as needed */
+    height: 100%; /* Adjust the height as needed */
+    background-color: var(--p-primary-500);
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .sm-font {
+    font-size: 12px;
+  }

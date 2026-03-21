@@ -1,0 +1,76 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter College</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filter()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Institute Name</label>
+							<p-select styleClass="w-full" placeholder="Select Institute" [options]="collegenames" optionValue="id" formControlName="collegename" optionLabel="collegename"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Region</label>
+							<p-select formControlName="region" (onChange)="selectMonth()" [(ngModel)]="collegeregion" placeholder="Select a Region" optionValue="id" optionLabel="state" styleClass="w-full" [options]="RegionOptions"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>District</label>
+							<p-select formControlName="district" placeholder="Select a District" [(ngModel)]="districtid" optionValue="id" optionLabel="district" styleClass="w-full" [options]="DistrictOptions"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>PinCode</label>
+							<input formControlName="pincode" type="number" class="form-control" pInputText />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Institute Type</label>
+							<p-select styleClass="w-full" [(ngModel)]="institutetypeid" formControlName="collegetype" placeholder="Select Institute" optionLabel="mitypename" optionValue="id" [options]="institutelist"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button pButton type="button" (click)="filterForm.reset(); filterFormElm.reset()" label="Reset Filter"></button>&nbsp;
+						<button pButton label="Filter Data"></button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<!-- table -->
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="collegelists" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [totalRecords]="datacount" [rows]="pageSize" [rowsPerPageOptions]="[10, 25, 50]">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<div><span>Coupon Code</span> <br /></div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell">College Name</th>
+			<th class="border-cell">Region</th>
+			<th class="border-cell">District</th>
+			<th class="border-cell">PinCode</th>
+			<th class="border-cell">College Type</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-collegelists let-expanded="expanded">
+		<tr>
+			<td class="border-cell">{{ collegelists.collegename }}</td>
+			<td class="border-cell">{{ collegelists.regionName }}</td>
+			<td class="border-cell">{{ collegelists.districtName }}</td>
+			<td class="border-cell">{{ collegelists.pincode }}</td>
+			<td class="border-cell">{{ collegelists.collegetype }}%</td>
+		</tr>
+	</ng-template>
+</p-table>

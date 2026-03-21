@@ -1,0 +1,47 @@
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between">
+            <div class="mt-2">
+                <h5 class="mb-0">Adithya M</h5>
+                <small>Adithya2810@gmail.com</small>
+            </div>
+            <img class="mt-2" style="max-height: 50px;" src="http://20.235.29.36/uniprepapi/storage/app/public/revieworganization/British_Council_logo.svg (1).png ">
+        </div>
+     
+    </div>
+    <div class="card-body" *ngFor="let item of questioninfo">
+        <div class="user-name d-flex align-items-center">
+            <img class="me-2" style="max-height: 40px;" src="{{item.country_flag}}">
+            <div class="" >
+                <h5 class="mb-0">{{item.requestedusername}}</h5>
+                <small>{{item.module_name}} | {{item.submodule_id}}</small> 
+            </div>
+        </div>
+        <div class="d-flex mt-3 ms-4">
+            <div> 
+                <div class="p-3 rounded" style="background-color: #F1F1F1;">
+                    <small>Question</small>
+                    <h6 class="mb-0">{{item.question}}</h6>
+                </div>
+                <div class="mt-1 p-3 rounded" style="background-color: #F1F1F1;">
+                    <small>Answer</small>
+                    <p [innerHTML]="item?.answer">{{item.answer}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="user-name d-flex align-items-center mt-4">
+            <img class="me-2" style="max-height: 40px;" src="http://20.235.29.36/uniprepapi/storage/app/public/revieworganization/germany.svg">
+            <div class="" >
+                <h5 class="mb-0">{{item.responseusername}}</h5>
+                <small>{{item.module_name}} | {{item.response_created_at}}</small> <br>
+                <!-- <small>Replying for Suggestion - 1</small>  -->
+            </div>
+        </div>
+        <div class="d-flex mt-1 ms-4">
+            <div class=" mt-1 p-3 rounded" style="background-color: #F1F1F1;">
+                <p class="mb-0" [innerHTML]="item?.response_msg">{{item.response_msg}}</p>
+            </div>
+        </div>
+
+    </div>
+</div>

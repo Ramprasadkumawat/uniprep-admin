@@ -1,0 +1,25 @@
+<div class="card my-2 h-100">
+	<div class="card-header d-flex w-full align-items-center justify-content-between">
+		<div>
+			<h4 class="bold-text mb-0">University Quiz</h4>
+			<span style="color: #a1a1a1; font-size: 10px">Total Categories:{{ universitylenght }}</span>
+		</div>
+		<div class="col-md-2">
+			<p-select optionValue="id" optionLabel="country" [options]="countryList" (onChange)="countryOnChange($event)" [(ngModel)]="selectedCountry" styleClass="w-full"></p-select>
+		</div>
+	</div>
+	<div class="card-body">
+		<!-- card list -->
+		<div class="row">
+			<div class="col-md-2 mb-2" *ngFor="let list of getUniversty">
+				<div class="card h-100 justify-content-between">
+						<h6 class="text-center mt-2">{{ list.submodule_name }}</h6>
+						<img class="m-auto" width="100" style="object-fit: contain" src="{{ list.image_link }}" alt="" />
+					<div class="p-3">
+						<button (click)="preAdmission(list.id)" class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px; width: -webkit-fill-available">Add Questions &nbsp;</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,147 @@
+<p-accordion value="0"styleClass="white-accordian" activeIndex="0">
+	<p-accordion-panel value="1">
+		<p-accordion-header>My Profile</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+				<div class="row" *ngIf="!showEdit">
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText [readonly]="true" />
+							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+								<div *ngIf="f.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText [readonly]="true" />
+							<div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
+								<div *ngIf="f.email.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mobile</label>
+							<input formControlName="phone" type="text" class="form-control" pInputText [readonly]="true" />
+							<div *ngIf="submitted && f.phone.errors" class="text-danger text-xs">
+								<div *ngIf="f.phone.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" *ngIf="showEdit">
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>User ID</label>
+							<input formControlName="userId" type="text" class="form-control" pInputText [readonly]="true" />
+							<div *ngIf="submitted && f.userId.errors" class="text-danger text-xs">
+								<div *ngIf="f.userId.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+								<div *ngIf="f.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText [readonly]="true" />
+							<div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
+								<div *ngIf="f.email.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mobile No.</label>
+							<input formControlName="phone" type="text" class="form-control" pInputText [readonly]="true" />
+							<div *ngIf="submitted && f.phone.errors" class="text-danger text-xs">
+								<div *ngIf="f.phone.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>User Type</label>
+							<p-select formControlName="userType" optionValue="id" optionLabel="type" styleClass="w-full" [options]="userTypes" [readonly]="true"></p-select>
+							<div *ngIf="submitted && f.userType.errors" class="text-danger text-xs">
+								<div *ngIf="f.userType.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3 mt-1">
+					<div class="col-12 text-right">
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton type="submit" [style.background-color]="showEdit ? 'var(--p-primary-500)' : '#0f100d'" style="border-radius: 8px; border: aliceblue; color: #fff" [label]="btnLabel"></button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<br />
+<p-accordion value="0"styleClass="white-accordian" activeIndex="0">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Set New Password</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="passwordForm" (ngSubmit)="submitPasswordForm()" #passwordFormElm>
+				<div class="row">
+					<div class="col-md-4 mt-1">
+						<label>Current Password</label>
+						<div class="form-group">
+							<input formControlName="password" [type]="passo" class="form-control" pInputText />
+							<span class="passwordvisibility" (click)="ShowPasswordOld()">
+								<img src="../../../assets/icons/viewpassword.svg" *ngIf="pshowo" />
+								<img src="../../../assets/icons/hidepassword.svg" *ngIf="!pshowo" />
+							</span>
+							<div *ngIf="passwordFormSubmitted && pf.password.errors" class="text-danger text-xs">
+								<div *ngIf="pf.password.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<label>Set New Password</label>
+						<div class="form-group">
+							<input formControlName="newpassword" [type]="pass" class="form-control" pInputText />
+							<span class="passwordvisibility" (click)="ShowPassword()">
+								<img src="../../../assets/icons/viewpassword.svg" *ngIf="pshow" />
+								<img src="../../../assets/icons/hidepassword.svg" *ngIf="!pshow" />
+							</span>
+							<div *ngIf="passwordFormSubmitted && pf.newpassword.errors" class="text-danger text-xs">
+								<div *ngIf="pf.newpassword.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<label>Enter New Password Again</label>
+						<div class="form-group">
+							<input formControlName="passwordConfirmation" [type]="passc" class="form-control" pInputText />
+							<span class="passwordvisibility" (click)="ShowPasswordConfirm()">
+								<img src="../../../assets/icons/viewpassword.svg" *ngIf="pshowc" />
+								<img src="../../../assets/icons/hidepassword.svg" *ngIf="!pshowc" />
+							</span>
+							<div *ngIf="passwordFormSubmitted && pf.passwordConfirmation.errors" class="text-danger text-xs">
+								<div *ngIf="pf.passwordConfirmation.errors.required">Required</div>
+								<div *ngIf="pf.passwordConfirmation.errors?.mustMatch">Passwords do not match.</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3 mt-1">
+					<div class="col-12 text-right">
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton type="submit" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" label="Set Password"></button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>

@@ -1,0 +1,181 @@
+<p-accordion styleClass="white-accordian" value="{{ activeIndex }}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>{{ eventId ? "Edit Event" : "Add Event" }}</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+				<div class="row">
+					<div class="col-md-3 mb-2">
+						<div class="form-group">
+							<label>Event Name</label>
+							<input type="text" formControlName="name" class="form-control" pInputText />
+							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+								<div *ngIf="f.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mb-2">
+						<div class="form-group">
+							<label>Event Type</label>
+							<p-select formControlName="type" optionValue="id" optionLabel="value" styleClass="w-full" [options]="eventType" placeholder="Event Type"> </p-select>
+							<div *ngIf="submitted && f.type.errors" class="text-danger text-xs">
+								<div *ngIf="f.type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mb-2">
+						<div class="form-group">
+							<label>Cover Image</label>
+							<!-- <input type="text" formControlName="image" class="form-control" pInputText /> -->
+							<div class="form-group">
+								<div class="input-wrapper">
+									<input type="file" (change)="onFileChange($event)" class="form-control w-100" pInputText style="display: none" #fileInput />
+									<input type="text" formControlName="image" class="form-control w-100" pInputText readonly (click)="fileInput.click()" />
+									<button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem" class="upload-button">Upload</button>
+								</div>
+							</div>
+							<img *ngIf="editImage" src="{{ editImage }}" alt="image" width="200px" height="200px" />
+							<div *ngIf="submitted && f.image.errors" class="text-danger text-xs">
+								<div *ngIf="f.image.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mb-2">
+						<div class="form-group">
+							<label>Card Status</label>
+							<p-select formControlName="status" optionValue="id" optionLabel="value" styleClass="w-full" [options]="cardStatus" placeholder="Card Status"> </p-select>
+							<div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+								<div *ngIf="f.status.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-5 mb-2">
+						<div class="form-group">
+							<label>Link College(optional)</label>
+							<p-select formControlName="college" optionValue="id" optionLabel="name" styleClass="w-full" [options]="contributionsCollegeList" placeholder="Select College" [filter]="true" [showClear]="true">
+								<ng-template let-data pTemplate="item">
+									<div>{{ data.name }} - {{ data.mitypename }}</div>
+								</ng-template>
+								<ng-template pTemplate="selectedItem" let-selectedOption> {{ selectedOption.name }} - {{ selectedOption.mitypename }} </ng-template>
+							</p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" pButton (click)="resetForm()">reset</button>
+						<button class="btn btn-primary" pButton type="submit">
+							{{ eventId ? "Update Event" : "Add Event" }}
+						</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<p-accordion value="0"styleClass="white-accordian" activeIndex="filterActiveIndex">
+	<p-accordion-panel value="1">
+						<p-accordion-header>Filter By</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="FilterForm" (ngSubmit)="filterFormSubmit()" #filterFormElement>
+				<div class="row">
+					<div class="col-md-3 mb-2">
+						<div class="form-group">
+							<label>Event Name</label>
+							<input type="text" formControlName="name" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3 mb-2">
+						<div class="form-group">
+							<label>Event Type</label>
+							<p-select formControlName="type" optionValue="id" optionLabel="value" styleClass="w-full" [options]="eventType" placeholder="Event Type"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mb-2">
+						<div class="form-group">
+							<label>Card Status</label>
+							<p-select formControlName="status" optionValue="id" optionLabel="value" styleClass="w-full" [options]="cardStatus" placeholder="Card Status"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-5 mb-2">
+						<div class="form-group">
+							<label>Link College(optional)</label>
+							<p-select formControlName="college" optionValue="id" optionLabel="name" styleClass="w-full" [options]="contributionsCollegeList" placeholder="Select College" [filter]="true" [showClear]="true">
+								<ng-template let-data pTemplate="item">
+									<div>{{ data.name }} - {{ data.mitypename }}</div>
+								</ng-template>
+								<ng-template pTemplate="selectedItem" let-selectedOption> {{ selectedOption.name }} - {{ selectedOption.mitypename }} </ng-template>
+							</p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" pButton (click)="resetFilterForm()">reset filter</button>
+						<button class="btn btn-primary" pButton type="submit">Filter</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="card">
+	<div class="row">
+		<div class="d-flex col-sm-5 col-md-6 justify-content-between">
+			<div class="d-flex align-items-center">
+				<div class="d-flex flex-column px-2">
+					<span style="font-size: 20px">Events</span>
+					<span class="text-xs" style="color: rgb(205, 203, 203)">Total Count:{{ eventCount }}</span>
+				</div>
+			</div>
+		</div>
+		<div class="d-flex col-sm-5 col-md-6 justify-content-end">
+			<div class="p-2 d-flex gap-2">
+				<!-- <button class="btn btn-primary" (click)="importContributior()">
+                    Import &nbsp; <i class="pi pi-file-export"></i>
+                </button> -->
+				<button class="btn btn-primary" (click)="exportEvent()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+			</div>
+		</div>
+	</div>
+	<div class="mb-2">
+		<div class="row p-2">
+			<div *ngFor="let item of eventListData" class="col-12 col-md-3 col-lg-3 mb-2">
+				<div class="card shadow-sm">
+					<div class="position-relative p-2">
+						<div class="d-flex justify-content-end align-items-center badge-aligner">
+							<span class="p-badge text-xs active-sts-badge" [ngClass]="item.status == 'Active' ? ' sts-success-color' : 'p-badge-danger'">
+								{{ item.status == "Active" ? "Card Active" : "Card Inactive" }}
+							</span>
+						</div>
+
+						<img *ngIf="item.image_name; else noImage" [src]="item.image_name" alt="Profile background" class="card-img-top" style="height: 175px; object-fit: cover; border-radius: 10px" />
+						<ng-template #noImage>
+							<div class="no-image">
+								<i class="fa fa-solid fa-image-slash"></i>
+							</div>
+						</ng-template>
+					</div>
+					<div class="card-body pt-2 mt-1">
+						<h5 class="card-title mb-1">{{ item.name }}</h5>
+						<h6 class="card-title mb-1" *ngIf="item.college_name">{{ item.college_name }} - {{ item.mitypename }}</h6>
+						<div class="d-flex justify-content-between">
+							<div class="d-flex align-items-center mt-2 mb-2" *ngIf="item.state && item.district">
+								<i class="fa-solid fa-location-dot me-2" style="color: red"></i>
+								<p class="card-title mt-2">{{ item.state }}<span *ngIf="item.state && item.district">, </span>{{ item.district }}</p>
+							</div>
+							<div class="d-flex align-items-center mt-2 mb-2"><i class="fa-solid fa-calendar me-2" style="font-size: 19px; color: #65d3a9"></i>{{ item.type }}</div>
+						</div>
+
+						<div class="d-flex justify-content-between">
+							<button pButton type="button" label="Edit" class="btn btn-primary m-0" (click)="editEvent(item)"></button>
+							<button pButton type="button" label="Event Page" class="btn btn-teritary m-0" [routerLink]="['/contributors/events', item.id]"></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="w-100 d-flex justify-content-center align-items-center" style="text-align: right">
+			<p-paginator (onPageChange)="pageChange($event)" [rows]="pageSize" [totalRecords]="eventCount" [rowsPerPageOptions]="[20, 50, 100]"></p-paginator>
+		</div>
+	</div>
+</div>

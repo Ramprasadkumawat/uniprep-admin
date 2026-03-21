@@ -1,0 +1,214 @@
+<p-accordion value="0" styleClass="white-accordian">
+    <p-accordion-panel value="1">
+        <p-accordion-header>Filter Hiring Support</p-accordion-header>
+        <p-accordion-content>
+            <form [formGroup]="filterForm" (ngSubmit)="filter()">
+                <!-- First Row -->
+                <div class="row mt-3">
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Requirement Type</label>
+                        <p-select class="w-100" [options]="requirementTypeOptions" optionLabel="label"
+                            optionValue="value" formControlName="requirementtype" placeholder="Select Requirement Type">
+                        </p-select>
+                    </div>
+
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Profile Count</label>
+                        <p-inputNumber class="w-100" formControlName="profilecount" placeholder="Enter profile count">
+                        </p-inputNumber>
+                    </div>
+
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Job Title</label>
+                        <p-select class="w-100" [options]="positionOptions" optionLabel="position_title"
+                            optionValue="position_title" formControlName="designation" placeholder="Select Job Title">
+                        </p-select>
+                    </div>
+
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Employment Type</label>
+                        <p-select class="w-100" [options]="employmentTypeOptions" formControlName="employmenttype"
+                            placeholder="Select Employment Type">
+                        </p-select>
+                    </div>
+                </div>
+
+
+                <!-- Second Row -->
+                <div class="row">
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Work Mode</label>
+                        <p-select class="w-100" [options]="workMode" formControlName="workmode"
+                            placeholder="Select work mode">
+                        </p-select>
+                    </div>
+
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Location</label>
+                        <p-multiselect class="w-100" [options]="locations" optionLabel="location" optionValue="id"
+                            formControlName="location" placeholder="Select location" [filter]="true">
+                        </p-multiselect>
+                    </div>
+
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Experience</label>
+                        <p-select class="w-100" [options]="experienceOptions" formControlName="experience"
+                            placeholder="Select experience">
+                        </p-select>
+                    </div>
+                    <div class="col-12 col-md-3 mb-3">
+                        <label class="fw-bold mb-2 d-block">Start Date</label>
+                        <p-datepicker formControlName="startdate" [showIcon]="true" [readonlyInput]="true"
+                            [minDate]="minDate" placeholder="Select Date (e.g., 17/12/2025)" dateFormat="dd/mm/yy"
+                            [minDate]="minDate" styleClass="w-100" [style]="{'width':'100%'}" appendTo="body">
+                        </p-datepicker>
+                    </div>
+                </div>
+
+
+                <!-- Third Row -->
+                <div class="row">
+                    <div class="col-12 col-lg-6 mb-3">
+                        <label class="fw-bold mb-2 d-block">Salary Range</label>
+                        <div class="row g-2 align-items-center">
+                            <!-- Currency -->
+                            <div class="col-12 col-sm-4">
+                                <p-select formControlName="currency" [options]="currencyOptions"
+                                    optionLabel="currency_code" optionValue="currency_code" [filter]="true"
+                                    filterBy="currency_code" placeholder="Currency" styleClass="w-100">
+                                </p-select>
+                            </div>
+                            <!-- Min Salary -->
+                            <div class="col-12 col-sm-4">
+                                <p-input-number formControlName="min_salary" placeholder="Min" class="w-100">
+                                </p-input-number>
+                            </div>
+                            <!-- Max Salary -->
+                            <div class="col-12 col-sm-4">
+                                <p-input-number formControlName="max_salary" placeholder="Max" class="w-100">
+                                </p-input-number>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Action Buttons -->
+                <div class="d-flex justify-content-end mt-1 gap-2">
+                    <button pButton type="button" label="Reset Filter" class="p-button-outlined btn-danger"
+                        (click)="resetFilter()"></button>
+                    <button pButton type="submit" label="Filter" class="p-button-primary"></button>
+                </div>
+            </form>
+        </p-accordion-content>
+    </p-accordion-panel>
+</p-accordion>
+
+<div class="employer-verification-container">
+    <div class="header-section p-3 bg-white border-bottom">
+        <div class="d-flex justify-content-between align-items-center pb-3">
+            <div class="d-flex gap-2">
+                <div>
+                    <h4 class="mb-0">Hiring Support</h4>
+                    <small class="text-muted">Total Transactions:
+                        {{ totalEmployeeCount.toString().padStart(2, "0") }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="width: 100%; height: 80vh; overflow: auto; overflow-x: hidden" class="mt-2 table-employer bg-white">
+    <p-table size="small" scrollHeight="600px" [value]="employeesList" [tableStyle]="{ 'min-width': '110rem' }"
+        dataKey="id" [rowHover]="true" [scrollable]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="employername">
+                    Employee Name <p-sortIcon field="employername"></p-sortIcon>
+                </th>
+                <th pSortableColumn="companyname">
+                    Company Name <p-sortIcon field="companyname"></p-sortIcon>
+                </th>
+                <th pSortableColumn="is_payment_completed ">
+                    Payment Status <p-sortIcon field="is_payment_completed "></p-sortIcon>
+                </th>
+                <th pSortableColumn="amount">
+                    Amount <p-sortIcon field="amount"></p-sortIcon>
+                </th>
+                <th pSortableColumn="actions">
+                    Actions <p-sortIcon field="actions"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-employee>
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img [src]="employee?.company_logo_url" class="rounded-circle mr-2" width="40" height="40" />
+                        <div>
+                            {{ employee?.employername }}
+                            <i *ngIf="employee?.verified" class="pi pi-check-circle text-success"></i><br />
+                            <small class="text-muted">Profile Updated On {{ employee?.updated_at }}</small>
+                        </div>
+                    </div>
+                </td>
+                <td>{{ employee?.companyname }}</td>
+                <td>
+                    {{ employee?.is_payment_completed == 1 ? 'Paid' : 'Unpaid' }}
+                </td>
+                <td>{{ employee?.amount }}</td>
+                <td>
+                    <div class="d-flex flex-column gap-2" style="font-size: 15px">
+                        <span style="cursor: pointer" (click)="openInfoDialog(employee)"><i
+                                class="pi pi-briefcase"></i>&nbsp;View
+                            Info</span>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-scrollTop target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>
+
+    <div class="footer-section p-3 d-flex justify-content-center">
+        <p-paginator (onPageChange)="pageChange($event)" [rows]="perPage" [totalRecords]="totalEmployeeCount"
+            [rowsPerPageOptions]="[10, 50, 100]"></p-paginator>
+    </div>
+</div>
+
+<p-dialog header="Requirement Details" [(visible)]="showInfoDialog" [modal]="true" [style]="{ width: '900px' }">
+    @if (selectedRequirement?.length > 0) {
+    <p-table [value]="selectedRequirement" styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '100%' }"
+        [rowHover]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Job Title</th>
+                <th>Requirement Type</th>
+                <th>Profiles Required</th>
+                <th>Salary Range</th>
+                <th>Start Date</th>
+                <th>Experience</th>
+                <th>Work Mode</th>
+                <th>Location</th>
+                <th>Amount</th>
+                <th>Price Per Profile</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-req>
+            <tr>
+                <td>{{ req.jobTitle }}</td>
+                <td>{{ req.requirementType }}</td>
+                <td>{{ req.profilesRequired }}</td>
+                <td>{{ req.min_salary }} - {{ req.max_salary }}</td>
+                <td>{{ req.startDate }}</td>
+                <td>{{ formatExperience(req.experience_name) }}</td>
+                <td>{{ req.work_mode || 'Any' }}</td>
+                <td>{{ req.location }}</td>
+                <td>{{ req.amount }}</td>
+                <td>{{ req.pricePerProfile }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    } @else {
+    <p class="text-center text-muted m-3">No requirements found for this employer.</p>
+    }
+</p-dialog>

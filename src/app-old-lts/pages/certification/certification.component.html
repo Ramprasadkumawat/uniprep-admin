@@ -1,0 +1,30 @@
+<div class="card readingcard h-100">
+    <div class="card-body">
+        <h4>Certificates</h4>
+        <p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="certificatesamplelist" styleClass="gray-header" [lazy]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="border-cell">Certificate Type</th>
+                    <th class="border-cell">Count</th>
+                    <th class="border-cell">Sample Name</th>
+                    <th class="border-cell">Sample Date</th>
+                    <th class="border-cell">Valid Till</th>
+                    <th class="border-cell">Sample Certfication ID</th>
+                    <th class="border-cell">Generate Sample</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-certificatesamplelist let-expanded="expanded">
+                <tr>
+                    <td class="border-cell" style="cursor: pointer;" (click)="certificateUserList(certificatesamplelist.module_id)">{{ certificatesamplelist.module_name }}</td>
+                    <td class="border-cell">{{ certificatesamplelist.count }}</td>
+                    <td class="border-cell">{{ certificatesamplelist.name }}</td>
+                    <td class="border-cell">{{ certificatesamplelist.validFrom }}</td>
+                    <td class="border-cell">{{ certificatesamplelist.validTill }}</td>
+                    <td class="border-cell">{{ certificatesamplelist.certificateId }}</td>
+                    <td class="border-cell"><button class="btn btn-primary" (click)="downloadSampleCertificate(certificatesamplelist)" pButton type="button" label="Generate & Download"></button></td>
+                </tr>
+            </ng-template>
+        </p-table>
+        
+    </div>
+</div>

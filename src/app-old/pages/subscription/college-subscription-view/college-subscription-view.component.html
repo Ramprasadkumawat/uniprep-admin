@@ -1,0 +1,119 @@
+<div class="card">
+    <div class="d-flex gap-3 p-3 align-items-baseline w-full">
+        <span class="h6 fw-bold">College Subscription View</span>
+        <button class="btn btn-primary" (click)="navigateSubscription()">Subscription Manager
+        </button>
+    </div>
+    <div class="row">
+        <div *ngFor="let subscription of subscriptionList" class="col-lg-4">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="row gap-5 mt-4 d-flex">
+                        <div class="card card-bg subscriptioncard col px-0"
+                            [ngClass]="{'active': subscription.popular == 1}">
+                            <div class="mostpopular" *ngIf="subscription.popular == 1">Most Popular Plan</div>
+                            <div class="card-header p-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h3 class="fw-bold mb-0">{{subscription.subscription_plan}} <br>Plan</h3>
+                                    <div class="text-end">
+                                        <h4 class="mb-0"><s>INR {{subscription.actualprice | number : '.2-2' }}</s>
+                                        </h4>
+                                        <div class="btn discountbutton">Save {{subscription.discountpercentage}} %
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-4">
+                                <h5 style="font-size: 18px; text-align: center;">Select Your Base Country</h5>
+                                <span class="p-float-label">
+                                    <p-select [options]="subscription.filteredCountryList" styleClass="w-100"
+                                        [(ngModel)]="subscription.selectedCoutry" optionLabel="country">
+                                        <ng-template pTemplate="selectedItem">
+                                            <img [src]="subscription.selectedCoutry?.flag"
+                                                [alt]="subscription.selectedCoutry?.altname" class="base-country-flag">
+                                            {{ subscription.selectedCoutry?.country }}
+                                        </ng-template>
+                                    </p-select>
+                                </span>
+                                <h5 style="font-size: 18px; text-align: center;" class="pt-4">Personalized Question:
+                                    {{subscription.chatlimit}} / day</h5>
+                            </div>
+                            <div class="card-footer  p-4" style="text-align: center;">
+                                <h2 class="font-primarycolor fw-bold">INR {{ subscription.givenprice | number :
+                                    '.2-2' }}</h2>
+                                <p class="fw-semibold">{{subscription.validity}} Month Validity</p>
+                                <div class="getstartedbtn">
+                                    <button *ngIf="!subscription.selected" class="btn btn-primary"
+                                        (click)="selectedSubscriptionPlan(subscription)">Select This Plan</button>
+                                    <button *ngIf="subscription.selected" class="btn dark-btn"
+                                        (click)="selectedSubscriptionPlan(subscription)">You have selected
+                                        {{subscription.subscription_plan}} Plan</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div class="row">
+    <div *ngFor="let subscription of subscriptionList" class="col-lg-4">
+        <div class="card-body">
+            <div class="container-fluid">
+                <div class="row gap-5 mt-4 d-flex">
+                    <div class="card card-bg subscriptioncard col px-0"
+                        [ngClass]="{'active': subscription.popular == 1}">
+                        <div class="mostpopular" *ngIf="subscription.popular == 1">Most Popular Plan</div>
+                        <div class="card-header p-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h3 class="fw-bold mb-0">{{subscription.subscription_plan}} <br>Plan</h3>
+                                <div class="text-end">
+                                    <h4 class="mb-0"><s>INR {{subscription.actualprice | number : '.2-2' }}</s>
+                                    </h4>
+                                    <div class="btn discountbutton">Save {{subscription.discountpercentage}} %
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <ng-container *ngIf="!subscription.selected">
+                                <h5 style="font-size: 18px; text-align: center;">Base Country</h5>
+                                <span class="p-float-label">
+                                    <div class="all-country-tag">All Countries</div>
+                                </span>
+                            </ng-container>
+                            <ng-container *ngIf="subscription.selected">
+                                <h5 style="font-size: 18px; text-align: center;">Select Your Base Country</h5>
+                                <span class="p-float-label">
+                                    <p-select [options]="subscription.filteredCountryList" styleClass="w-100"
+                                        [(ngModel)]="subscription.selectedCoutry" optionLabel="country">
+                                        <ng-template pTemplate="selectedItem">
+                                            <img [src]="subscription.selectedCoutry?.flag"
+                                                [alt]="subscription.selectedCoutry?.altname" class="base-country-flag">
+                                            {{ subscription.selectedCoutry?.country }}
+                                        </ng-template>
+                                    </p-select>
+                                </span>
+                            </ng-container>
+                            <h5 style="font-size: 18px; text-align: center;" class="pt-4">Personalized Question:
+                                {{subscription.chatlimit}} / day</h5>
+                        </div>
+                        <div class="card-footer  p-4" style="text-align: center;">
+                            <h2 class="font-primarycolor fw-bold">INR {{ subscription.givenprice | number :
+                                '.2-2' }}</h2>
+                            <p class="fw-semibold">{{subscription.validity}} Month Validity</p>
+                            <div class="getstartedbtn">
+                                <button *ngIf="!subscription.selected" class="btn btn-primary"
+                                    (click)="selectedSubscriptionPlan(subscription)">Select This Plan</button>
+                                <button *ngIf="subscription.selected" class="btn dark-btn"
+                                    (click)="selectedSubscriptionPlan(subscription)">You have selected
+                                    {{subscription.subscription_plan}} Plan</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->

@@ -1,0 +1,100 @@
+.border-cell {
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-width:1px !important;
+  }
+
+
+/* Define a container for the cards */
+.card-container {
+  gap: 10px; /* Add some spacing between cards */
+}
+
+/* Style for each card */
+.card {
+  background-color: #f0f0f0;
+  padding: 20px;
+  box-sizing: border-box;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+
+/* Adjust styles for smaller screens if needed */
+@media (max-width: 768px) {
+  .card {
+    flex: 0 0 calc(50% - 10px); /* Two cards per row on screens smaller than 768px */
+  }
+}
+
+/* Adjust styles for even smaller screens if needed */
+@media (max-width: 480px) {
+  .card {
+    flex: 0 0 calc(100% - 10px); /* One card per row on screens smaller than 480px */
+  }
+}
+input[type="text"] {
+  padding-right: 120px; /* Adjust the value to make space for the button */
+}
+
+.upload-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 35%; /* Adjust the width as needed */
+  height: 100%; /* Adjust the height as needed */
+  background-color: var(--p-primary-500);
+  border: none;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+.file-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+.input-wrapper {
+  position: relative;
+  // display: inline-block;
+}
+
+// css card list
+// css
+/* Add more styles for larger screens if needed */
+@media only screen and (max-width: 768px) {
+  /* Adjust styles for smaller screens */
+  .card-style {
+    /* Add responsive styles here */
+  }
+  
+  .card-style img {
+    width: 100%; /* Make the image take 100% width of its container */
+    margin-right: 0; /* Remove margin for small screens */
+  }
+  
+  .card-style h6 {
+    font-size: small; /* Adjust font size for smaller screens */
+  }
+  
+  .card-style p {
+    font-size: x-small; /* Adjust font size for smaller screens */
+  }
+}
+.card-style {
+  border: 1px solid #CECECE;
+  border-radius: 0px 0px 10px 10px;
+  background-color: #F5F5F5;
+  a
+  {
+    text-decoration: none;
+  }
+}
+.resourceimg
+{
+  width:60px;
+  height:60px;
+  img
+  {
+    width:inherit;
+  }
+}

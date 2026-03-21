@@ -1,0 +1,112 @@
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter By</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filter()" #filterFormElm>
+				<div class="row">
+					<!-- <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Student ID</label>
+                        <p-select styleClass="w-full" formControlName="student_id" optionValue="id"
+                            optionLabel="country" [filter]="true" filterBy="country"></p-select>
+                    </div>
+                </div> -->
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Student Name</label>
+							<p-select styleClass="w-full" formControlName="name" [options]="students" optionValue="id" optionLabel="name" [filter]="true" filterBy="name"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select styleClass="w-full" formControlName="status" [options]="status" optionValue="id" optionLabel="value" [filter]="true" filterBy="value"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>College</label>
+							<p-select styleClass="w-full" formControlName="college" [options]="college" optionValue="id" optionLabel="institutename" [filter]="true" filterBy="institutename"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Winner</label>
+							<p-select styleClass="w-full" formControlName="winner" [options]="winner" optionValue="id" optionLabel="value" [filter]="true" filterBy="value"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Branch</label>
+							<p-select styleClass="w-full" formControlName="branch" [options]="branch" optionValue="id" optionLabel="subject_name" [filter]="true" filterBy="subject_name"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Passing Year</label>
+							<p-select styleClass="w-full" formControlName="passingyear" [options]="passingyear" optionValue="id" optionLabel="value" [filter]="true" filterBy="value"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>iLearn Groups</label>
+							<p-select styleClass="w-full" formControlName="group" [options]="clusters" optionValue="id" optionLabel="group" [filter]="true" filterBy="group"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="button" (click)="resetFilter()">Reset Filter</button>&nbsp;
+						<button class="btn btn-primary" type="submit">Filter Data</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<br />
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="users" [paginator]="true" (onPage)="pageChange($event)" [first]="first" [lazy]="true" [rows]="pageSize" [totalRecords]="usersCount" [tableStyle]="{ 'min-width': '110rem' }">
+	<ng-template pTemplate="caption">
+		<div class="row">
+			<div class="d-flex col-sm-5 col-md-6 justify-content-between">
+				<div class="d-flex align-items-center">
+					<div class="d-flex flex-column">
+						<span style="font-size: 20px">Assessment Modules List</span>
+						<span class="text-xs" style="color: rgb(205, 203, 203)">Total Users:{{ usersCount }}</span>
+					</div>
+				</div>
+			</div>
+			<div class="d-flex col-sm-5 col-md-6 justify-content-end">
+				<div class="p-2">
+					<button class="btn btn-primary" (click)="exportFile()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+				</div>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th>Student Name</th>
+			<th>College</th>
+			<th>Branch</th>
+			<th>Passing year</th>
+			<th>Status</th>
+			<th>Overall Score</th>
+			<th>iLearn Competition</th>
+			<th>Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-user>
+		<tr>
+			<td>{{ user?.name }}</td>
+			<td>{{ user?.institutename }}</td>
+			<td>{{ user?.specialisation_name }}</td>
+			<td>{{ user?.last_degree_passing_year }}</td>
+			<td>{{ user?.is_completed }}</td>
+			<td>{{ user?.total_score }}</td>
+			<td>{{ user?.is_winner }}</td>
+			<td>
+				<span style="font-weight: 600; cursor: pointer; color: var(--p-primary-500)" (click)="getstudentDetail(user)">+ &nbsp; View More</span>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>

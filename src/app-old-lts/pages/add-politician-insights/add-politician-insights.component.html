@@ -1,0 +1,220 @@
+<p-accordion value="0" styleClass="white-accordian" value="{{activeIndex}}">
+	<p-accordion-panel value="1" *ngIf="addFormShow">
+		<p-accordion-header>Add Politician</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Politician Name</label>
+							<input type="text" formControlName="name" class="form-control paddingfive mt-2" pInputText />
+							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+								<div *ngIf="f.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Country</label>
+							<p-select formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full mt-2" [options]="countryList" [filter]="true" filterBy="country" (ngModelChange)="onChangeCountry($event)"></p-select>
+							<div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+								<div *ngIf="f.country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Occupation</label>
+							<p-select formControlName="occupation" [virtualScroll]="true" [virtualScrollItemSize]="50" optionValue="id" optionLabel="occupation" styleClass="w-full mt-2" [options]="filteredOccupationBasedOnCountry" [filter]="true" appendTo="body" filterBy="occupation"></p-select>
+							<div *ngIf="submitted && f.occupation.errors" class="text-danger text-xs">
+								<div *ngIf="f.occupation.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<label>Image</label>
+						<div class="form-group">
+							<div class="input-wrapper mt-2">
+								<input type="file" (change)="onFileChange($event)" class="form-control w-100" pInputText style="display: none" #fileInput />
+								<input type="text" formControlName="image" class="form-control w-100" pInputText readonly (click)="fileInput.click()" />
+								<button type="button" style="height: fit-content" class="upload-button rounded-end-3">Upload</button>
+								<div *ngIf="submitted && f.image.errors" class="text-danger text-xs">
+									<div *ngIf="f.image.errors.required">Required</div>
+								</div>
+							</div>
+							<img *ngIf="showImage" src="{{ showImage }}" alt="image" width="200px" height="200px" />
+						</div>
+					</div>
+					<div class="col-md-12 mt-1">
+						<div class="form-group">
+							<label>Description</label>
+							<textarea style="height: 100px" name="" id="" cols="10" rows="10" formControlName="description" type="text" class="form-control mt-2"></textarea>
+							<div *ngIf="submitted && f.description.errors" class="text-danger text-xs">
+								<div *ngIf="f.description.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="form.reset()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button">Reset Field</button>&nbsp;
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">Add</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+
+	<!-- <p-accordion-panel header="Edit Politician" *ngIf="!Addformshow">
+        <form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Politician Name</label>
+                        <input type="text"  formControlName="name" class="form-control paddingfive mt-2"
+                               pInputText>
+                        <div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+                            <div *ngIf="f.name.errors.required">Required</div>
+                            </div>
+                    </div>
+                </div> 
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Country</label>
+                        <p-select formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full"
+                            [options]="countryList" [filter]="true" filterBy="country"></p-select>
+                        <div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+                            <div *ngIf="f.country.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Occupation</label>
+                        <p-select formControlName="occupation" optionValue="id" optionLabel="occupation" styleClass="w-full"
+                            [options]="occupationList" [filter]="true" filterBy="name"></p-select>
+                        <div *ngIf="submitted && f.occupation.errors" class="text-danger text-xs">
+                            <div *ngIf="f.occupation.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 text-right">
+                    <button class="btn btn-primary" type="submit">Update</button>
+                </div>
+            </div>
+        </form>
+    </p-accordion-content></p-accordion-panel> -->
+</p-accordion>
+
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Politician</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Politician Name</label>
+							<p-multiselect formControlName="name" optionValue="name" optionLabel="name" styleClass="w-full" [options]="filterPoliticiansNameList" [filter]="true" filterBy="name" multiple="true" [showClear]="true"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Country</label>
+							<p-multiselect formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="countryList" [filter]="true" filterBy="name" multiple="true" [showClear]="true"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Occupation</label>
+							<p-multiselect formControlName="occupation" optionValue="id" optionLabel="occupation" styleClass="w-full" [options]="filteredOccupationBasedOnCountry" [filter]="true" filterBy="occupation"></p-multiselect>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="button" (click)="resetButton()">Reset Filter</button>
+						<button class="btn btn-primary" type="submit">Filter Data</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<br />
+<div class="card">
+	<div class="row">
+		<div class="d-flex col-sm-5 col-md-6 justify-content-between">
+			<div class="d-flex align-items-center">
+				<div class="d-flex flex-column px-2">
+					<span style="font-size: 20px">Politician Insights</span>
+					<span class="text-xs" style="color: rgb(205, 203, 203)">Total Count:{{ politicianCount }}</span>
+				</div>
+			</div>
+		</div>
+		<div class="d-flex col-sm-5 col-md-6 justify-content-end">
+			<div class="d-flex gap-2 align-items-center">
+				<button class="btn btn-primary" (click)="isShowImportModal = 'block'">Import &nbsp; <i class="pi pi-file-export"></i></button>
+				<button class="btn btn-primary" (click)="exportPolitician()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid mb-2">
+		<div class="row g-3">
+			<div *ngFor="let politician of politianInsightsList" class="col-12 col-md-3 col-lg-3">
+				<div class="card h-100 border-1 rounded-2" [ngStyle]="{ 'border-color': 'var(--p-primary-500)' }">
+					<div class="card-body p-3">
+						<!-- Profile Section -->
+						<div class="d-flex align-items-start gap-3">
+							<img [src]="politician.imageUrl" [alt]="politician.name" class="rounded-circle flex-shrink-0" width="80" height="80" />
+
+							<div class="flex-grow-1">
+								<h5 class="card-title fs-6 mb-2">{{ politician.name }}</h5>
+								<div class="d-flex align-items-center mb-2">
+									<img [src]="politician.flag" [alt]="politician.country + ' flag'" class="rounded-circle me-2" width="20" height="20" />
+									<span class="small">{{ politician.country }}</span>
+								</div>
+								<div>
+									<p class="mb-1 small">
+										<span class="fw-bold">Occupation:</span>
+										{{ politician.occupation }}
+									</p>
+									<p class="description small mb-0 text-muted">
+										{{ politician.description }}
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="w-100 d-flex justify-content-end" style="text-align: right">
+			<p-paginator (onPageChange)="pageChange($event)" [rows]="rows" [totalRecords]="politicianCount" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+		</div>
+	</div>
+</div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{ display: isShowImportModal }" id="top-layer" style="backdrop-filter: brightness(0.5)">
+	<div class="modal-dialog">
+		<div class="modal-content p-2" style="width: 150%">
+			<span (click)="isShowImportModal = 'none'" style="color: var(--p-primary-500); text-align: right; cursor: pointer"><i class="fa-solid fa-xmark"></i></span>
+			<div>
+				<label for="file" class="reading-drop-container">
+					<i class="pi pi-upload reading-drop-title"></i>
+					<input type="file" id="file" class="d-none" (change)="onFileChange($event)" (click)="$event['target']['value'] = ''" accept=".csv" /><br />
+					<div class="reading-sm-font" *ngIf="selectedFile?.name">{{ selectedFile.name }}</div>
+					<div *ngIf="!selectedFile?.name" class="d-flex flex-column gap-1 text-center">
+						<span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+						<span class="reading-sm-font">Please maintain the format of uploading to stop failures</span>
+					</div> </label
+				><br />
+				<div class="text-center">
+					<button class="btn btn-primary" (click)="uploadPoliticianFile()"><i class="fa-solid fa-upload"></i> Upload</button>
+					<a class="btn btn-primary" role="link" href="/assets/files/politician.csv" [download]="'politician'"> <i class="fa-solid fa-download"></i> Download Sample Doc </a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

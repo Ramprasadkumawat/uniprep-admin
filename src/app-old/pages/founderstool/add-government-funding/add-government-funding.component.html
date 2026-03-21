@@ -1,0 +1,212 @@
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}">
+	<p-accordion-panel value="1" *ngIf="Addformshow">
+		<p-accordion-header>Add Government Funding</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Fund Name</label>
+							<input type="text" formControlName="name" class="form-control paddingfive mt-2" pInputText />
+							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+								<div *ngIf="f.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Country</label>
+							<p-select formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full mt-2" [options]="countryList" [filter]="true" filterBy="country"></p-select>
+							<div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+								<div *ngIf="f.country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>State</label>
+							<p-select formControlName="state" optionValue="id" optionLabel="state" styleClass="w-full mt-2" [options]="stateList" [filter]="true" filterBy="state"></p-select>
+							<div *ngIf="submitted && f.state.errors" class="text-danger text-xs">
+								<div *ngIf="f.state.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Fund Type</label>
+							<p-select formControlName="fund_type" optionValue="id" optionLabel="funding_type_name" styleClass="w-full mt-2" [options]="fundTypeList" [filter]="true" filterBy="funding_type_name"></p-select>
+							<div *ngIf="submitted && f.fund_type.errors" class="text-danger text-xs">
+								<div *ngIf="f.fund_type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Website</label>
+							<input type="text" formControlName="website" class="form-control paddingfive mt-2" pInputText />
+							<div *ngIf="submitted && f.website.errors" class="text-danger text-xs">
+								<div *ngIf="f.website.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="resetForm()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button">Reset Field</button>&nbsp;
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">Add</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+
+	<!-- <p-accordion-panel header="Edit Politician" *ngIf="!Addformshow">
+        <form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Politician Name</label>
+                        <input type="text"  formControlName="name" class="form-control paddingfive mt-2"
+                               pInputText>
+                        <div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+                            <div *ngIf="f.name.errors.required">Required</div>
+                            </div>
+                    </div>
+                </div> 
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Country</label>
+                        <p-select formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full"
+                            [options]="countryList" [filter]="true" filterBy="country"></p-select>
+                        <div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+                            <div *ngIf="f.country.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>State</label>
+                        <p-select formControlName="occupation" optionValue="id" optionLabel="occupation" styleClass="w-full"
+                            [options]="stateList" [filter]="true" filterBy="name"></p-select>
+                        <div *ngIf="submitted && f.occupation.errors" class="text-danger text-xs">
+                            <div *ngIf="f.occupation.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 text-right">
+                    <button class="btn btn-primary" type="submit">Update</button>
+                </div>
+            </div>
+        </form>
+    </p-accordion-content></p-accordion-panel> -->
+</p-accordion>
+
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Government Funding</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Fund Name</label>
+							<p-multiselect formControlName="name" optionValue="name" optionLabel="name" styleClass="w-full" [options]="filterFundNameList" [filter]="true" filterBy="name" multiple="true" [showClear]="true"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Country</label>
+							<p-multiselect formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="countryList" [filter]="true" filterBy="name" multiple="true" [showClear]="true"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>State</label>
+							<p-multiselect formControlName="state" optionValue="id" optionLabel="state" styleClass="w-full" [options]="stateList" [filter]="true" filterBy="state"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Fund Type</label>
+							<p-multiselect formControlName="fund_type" optionValue="id" optionLabel="funding_type_name" styleClass="w-full" [options]="fundTypeList" [filter]="true" filterBy="funding_type_name"></p-multiselect>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="button" (click)="resetButton()">Reset Filter</button>
+						<button class="btn btn-primary" type="submit">Filter Data</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="card">
+	<div class="row">
+		<div class="d-flex col-sm-5 col-md-6 justify-content-between">
+			<div class="d-flex align-items-center">
+				<div class="d-flex flex-column px-2">
+					<span style="font-size: 20px">Governement Funds</span>
+					<span class="text-xs" style="color: rgb(205, 203, 203)">Total Count:{{ fundingCount }}</span>
+				</div>
+			</div>
+		</div>
+		<div class="d-flex col-sm-5 col-md-6 justify-content-end">
+			<div class="p-2">
+				<button class="btn btn-primary" (click)="exportData()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+			</div>
+		</div>
+	</div>
+	<div class="mb-2 p-2">
+		<div class="row g-4">
+			<div *ngFor="let fundData of governmentFundingList; let index = index" class="col-xxl-3 col-xl-3 col-lg-4 col-md-4 col-sm-6 col-xs-12 col-12 mb-3">
+				<div class="card subjectcard m-0 h-100">
+					<div class="card-body d-flex flex-column justify-content-between">
+						<div class="d-flex justify-content-between align-items-start gap-3">
+							<div class="d-flex gap-2 align-items-center flex-fill" title="Scholarship Name">
+								<!-- <input  type="checkbox" name="" id="" [(ngModel)]="selectedIndex === index"
+                                        (change)="questionSelectedCheckBox($event,index,scholarshipData)">&nbsp; -->
+								<input type="checkbox" (change)="onCheckboxChange($event)" [(ngModel)]="fundData.isChecked" />
+								<a class="uniprep-primary text-decoration-none h5 gap-1 mb-0 text-start d-flex text-wrap" target="_blank" href="{{ fundData.website }}">
+									<div class="fw-bold">{{ fundData.name }}</div>
+								</a>
+							</div>
+							<i class="text-danger" role="button" [class]="fundData.favourite == 1 ? 'fa-solid fa-heart' : 'fa-regular fa-heart'" (click)="bookmarkQuestion(fundData.id, fundData.favourite)"></i>
+						</div>
+
+						<div>
+							<div class="d-flex mt-2 gap-5 align-items-center">
+								<div class="d-flex gap-5">
+									<div class="d-flex gap-2 align-items-center font-bold" title="Scholarship Country">
+										<i class="fa-solid fa-earth-americas countryicon" aria-hidden="true"></i>
+										<p class="text-small mb-0">{{ fundData.country }}</p>
+									</div>
+									<div class="d-flex gap-2 align-items-center" title="Scholarship Type">
+										<i class="fa-solid fa-location-dot scholarshiptypeicon" aria-hidden="true"></i>
+										<p class="text-small mb-0">{{ fundData.region }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="d-flex mt-2 gap-3 align-items-center font-bold">
+								<div class="d-flex gap-2 align-items-center" title="Scholarship Country">
+									<i class="fa-solid fa-link countryicon" aria-hidden="true"></i>
+									<p class="text-small mb-0">{{ fundData.website }}</p>
+								</div>
+								<div class="d-flex gap-2 align-items-center" title="Scholarship Home Country">
+									<i class="fa-solid fa-coins homecountryicon" aria-hidden="true"></i>
+									<p class="text-small mb-0">{{ fundData.funding_type_name }}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="w-100 d-flex justify-content-end" style="text-align: right">
+			<p-paginator (onPageChange)="pageChange($event)" [rows]="rows" [totalRecords]="fundingCount" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+		</div>
+	</div>
+</div>

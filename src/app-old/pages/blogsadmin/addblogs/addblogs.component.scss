@@ -1,0 +1,56 @@
+/* CSS */
+.back-button {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: none;
+    background-color: #2f4272; /* Deep blue */
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .back-button:hover {
+    background-color: #1e2f5c;
+  }
+  input[type="text"] {
+    padding-right: 120px; /* Adjust the value to make space for the button */
+    }
+    
+    .upload-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 35%; /* Adjust the width as needed */
+    height: 100%; /* Adjust the height as needed */
+    background-color: var(--p-primary-500);
+    border: none;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    }
+    .file-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    }
+    .input-wrapper {
+    position: relative;
+    // display: inline-block;
+    }
+     
+  :host ::ng-deep .p-editor-toolbar {
+    display: none;
+  }
+  ::ng-deep .p-editor-toolbar {
+    position: relative;
+    text-align: end;
+    padding: 0.3rem;
+    background: var(--p-primary-500) !important;
+    i {
+      color: black;
+    }
+  }

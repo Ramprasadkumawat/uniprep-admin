@@ -1,0 +1,31 @@
+.subscription_header{border-bottom:1px solid grey;}
+.subscription{background-color:white;border-radius:10px;padding:20px;}
+.ptb_10{padding:20px 0;}
+.pt10{padding-top:10px;}
+.filter-card{border:1px solid #e9ecef;border-radius:10px;}
+.filter-card .card-header{background:#fff;}
+.filter-card .card-body{padding-top:0.75rem;}
+.price-field-group{display:flex;gap:8px;align-items:center;}
+.price-field-group .amount-input{flex:1;}
+:host ::ng-deep .currency-inline-select{min-width:86px;}
+:host ::ng-deep .currency-inline-select .p-select{width:86px;}
+.submit_btn{text-align:end;margin-top:50px;}
+label{padding-bottom:5px;}
+.monthly-subscription ::ng-deep .p-tabview-nav-container{
+  ::ng-deep .p-tabview-nav-content{
+    ::ng-deep ul{
+      border:none;
+      ::ng-deep li{
+        border:none;
+        a{padding:0.5rem 2rem;}
+      }
+    }
+  }
+}
+.font-medium{font-weight:500;}
+@media (max-width:450px){
+  .mobile-subscription{
+    flex-direction:column;
+    .monthly-subscription{width:inherit !important;}
+	}
+}

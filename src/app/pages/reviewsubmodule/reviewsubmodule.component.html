@@ -1,0 +1,35 @@
+<div class="card">
+    <div class="card-header">
+        <h5>{{this.modulename}}</h5>
+        <small>Total Sub-Categories : {{this.submoduleCount}}</small>
+    </div>
+    <div class="card-body">
+        <div class="row" *ngIf="subnotempty">
+            <div class="col-md-3" *ngFor="let item of subModules; let i = index">
+                <div class="m-2 border-green rounded-5 p-2" >
+                    <h5 class="text-center fw-bold">{{item.submodule_name}}</h5>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img src="{{item.icon}}">
+                    </div>                    
+                    <div class="row p-2">
+                        <div class="col-md-6">
+                            <p class="fs-6 fw-bold ">{{item.totalQues}}</p>
+                            <p class="font-09">Total Questions</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="fs-6 fw-bold">{{item.reviewedQues}}</p>
+                            <p class="font-09">Non Reviewd</p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <a class="btn btn-primary w-full" (click)="questionspage(item.id)">View</a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div *ngIf="subempty" class="d-flex justify-content-center">
+            <h6 class="py-5 ">No submodules for review</h6>
+        </div>
+    </div>
+</div>

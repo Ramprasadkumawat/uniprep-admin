@@ -1,0 +1,139 @@
+<p-accordion value="0"styleClass="white-accordian" activeIndex="0">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Data Validator</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #addFormElm>
+				<div class="row">
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Student Type *</label>
+							<p-select formControlName="student_type" optionValue="id" optionLabel="subtypeName" styleClass="w-full" [options]="StudentType" [filter]="true" filterBy="subtypeName"></p-select>
+							<div *ngIf="submitted && f.student_type.errors" class="text-danger text-xs">
+								<div *ngIf="f.student_type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1" *ngIf="notadmin">
+						<div class="form-group">
+							<label>Source Type *</label>
+							<p-select formControlName="source_type" optionValue="id" optionLabel="name" styleClass="w-full" [options]="sourceTypes" (onChange)="changeSourceType($event)" [filter]="true" filterBy="name"></p-select>
+							<div *ngIf="submitted && f.source_type.errors" class="text-danger text-xs">
+								<div *ngIf="f.source_type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1" *ngIf="notadmin">
+						<div class="form-group">
+							<label>Institution Name</label>
+							<p-select formControlName="source_name" optionValue="id" optionLabel="source_name" styleClass="w-full" *ngIf="form.get('source_type').value != '2'" [options]="sourceName" (onChange)="changeSourceName()" [filter]="true" filterBy="source_name" appendTo="body"></p-select>
+							<p-select formControlName="source_name" optionValue="id" optionLabel="institutename" styleClass="w-full" *ngIf="form.get('source_type').value == '2'" [options]="sourceName" (onChange)="changeSourceName()" [filter]="true" filterBy="institutename" appendTo="body"></p-select>
+							<div *ngIf="submitted && f.source_name.errors" class="text-danger text-xs">
+								<div *ngIf="f.source_name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-9 mt-1">
+						<div class="form-group">
+							<label>File Upload</label>
+							<input formControlName="file" type="file" class="form-control" pInputText (change)="onFileSelect($event)" accept=".csv" />
+
+							<!-- Error handling for file validation -->
+							<div *ngIf="submitted && f.file.errors" class="text-danger text-xs">
+								<div *ngIf="f.file.errors.required">File is required.</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-3 text-right mt-3">
+						<button class="btn btn-primary" type="submit">Upload</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<p-accordion value="0"styleClass="white-accordian" activeIndex="0">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filterSubmitForm()">
+				<div class="row">
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Student Type *</label>
+							<p-select formControlName="student_type" optionValue="id" optionLabel="subtypeName" styleClass="w-full" [options]="StudentType" [filter]="true" filterBy="subtypeName"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1" *ngIf="notadmin">
+						<div class="form-group">
+							<label>Source Type *</label>
+							<p-select formControlName="source_type" optionValue="id" optionLabel="name" styleClass="w-full" [options]="sourceTypes" (onChange)="changeSourceType($event)" [filter]="true" filterBy="name"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1" *ngIf="notadmin">
+						<div class="form-group">
+							<label>Institution Name</label>
+							<p-select formControlName="source_name" optionValue="id" optionLabel="source_name" styleClass="w-full" *ngIf="form.get('source_type').value != '2'" [options]="sourceName" (onChange)="changeSourceName()" [filter]="true" filterBy="source_name" appendTo="body"></p-select>
+							<p-select formControlName="source_name" optionValue="id" optionLabel="institutename" styleClass="w-full" *ngIf="form.get('source_type').value == '2'" [options]="sourceName" (onChange)="changeSourceName()" [filter]="true" filterBy="institutename" appendTo="body"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="submit">Filter</button>
+						<button (click)="resetFilter()" class="btn btn-primary" type="button">Reset Filter</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div style="background-color: #fff">
+	<h5 class="p-2 ps-3">Upload</h5>
+	<hr />
+	<div class="card-container p-3">
+		<div class="row">
+			<div class="col-md-4 p-1" *ngFor="let list of datavalidatorlist">
+				<div class="card" style="cursor: pointer" (click)="validationDataListPage(list.id)">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-2">
+								<div class="content-left">
+									<p><i class="fa-solid fa-file fa-3x"></i></p>
+								</div>
+							</div>
+							<div class="col-md-10">
+								<div class="content-right">
+									<h5>{{ list.file_name }}</h5>
+									<div>
+										<b>Last Uploaded:</b><span>{{ list.last_uploaded }}</span>
+									</div>
+									<div>
+										<b>Student Type: </b><span>{{ list.student_type }}</span>
+									</div>
+									<div>
+										<b>Source Type: </b><span>{{ list.source_type }}</span>
+									</div>
+									<div>
+										<b>Institution: </b><span>{{ list.institution }}</span>
+									</div>
+									<div>
+										<b>Location: </b><span>{{ list.location }}</span>
+									</div>
+									<div>
+										<b>Pre-Sales: </b><span>{{ list.pre_sale }}</span>
+									</div>
+									<div>
+										<b>Bdt: </b><span>{{ list.bdt }}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<p-paginator [rows]="10" [totalRecords]="totalcount" (onPageChange)="paginate($event)" [rowsPerPageOptions]="[12, 36, 72, 100]"></p-paginator>
+	</div>
+</div>

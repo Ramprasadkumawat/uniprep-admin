@@ -1,0 +1,354 @@
+::host ::ng-deep .docs-wrap .doc-wrap {
+  justify-content: space-between;
+}
+
+::host ::ng-deep .docs-wrap .doc-wrap .actions {
+  margin-left: auto;
+}
+
+/* Docs Wallet compact + responsive (overrides) */
+::host ::ng-deep .docs-wrap {
+  gap: 12px;
+}
+
+::host ::ng-deep .docs-wrap .doc-wrap {
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  justify-content: space-between;
+}
+
+::host ::ng-deep .docs-wrap .doc-wrap .image {
+  max-width: 44px;
+  max-height: 44px;
+  flex: 0 0 44px;
+}
+
+::host ::ng-deep .docs-wrap .doc-wrap .content {
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+::host ::ng-deep .docs-wrap .doc-wrap .content .name {
+  font-size: 14px;
+  line-height: 1.2;
+  color: #0a0f1f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+::host ::ng-deep .docs-wrap .doc-wrap .content .date-size {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+::host ::ng-deep .docs-wrap .doc-wrap .actions {
+  margin-left: auto;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+::host ::ng-deep .docs-wrap .doc-wrap .actions .p-button {
+  width: 34px;
+  height: 34px;
+}
+
+::host ::ng-deep .docs-wrap .doc-wrap .actions .p-button .pi {
+  font-size: 14px;
+}
+
+/* 3-dot button style as requested */
+.docs-wrap .doc-wrap .actions .doc-actions-btn.p-button-icon-only.p-button-rounded{
+  border-radius: 50%;
+  height: var(--p-button-icon-only-width);
+  margin-left: 61rem !important;
+}
+
+@media (max-width:575.98px) {
+  ::host ::ng-deep .docs-wrap .doc-wrap {
+    align-items: flex-start;
+    padding: 12px;
+    gap: 10px;
+  }
+}
+
+#container {
+  display: flex;
+  width: 100%;
+
+  #main {
+    padding: 10px;
+    border-right: 1px solid #dee2e6;
+  }
+
+  #body {
+    padding: 10px;
+    flex: 1;
+  }
+}
+
+.header-border {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.top-header {
+  border: solid #cbe176;
+  border-width: 1px 1px 0 1px;
+}
+
+.backButton {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width:575.98px) {
+  #container {
+    display: block;
+  }
+
+  .btn-mt-2 {
+    margin-top: 5px;
+  }
+}
+
+::ng-deep .p-calendar {
+  height: 42px;
+}
+
+.border-cell {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-width: 1px !important;
+}
+
+::ng-deep .p-column-filter-menu-button span {
+  color: white !important;
+}
+
+::ng-deep .p-column-filter-menu-button-active,
+::ng-deep .p-column-filter-menu-button-open {
+  background: black !important;
+}
+
+::ng-deep .p-column-filter-menu-button {
+
+  &:hover,
+  &:focus {
+    background: transparent;
+  }
+}
+
+.cardremarks {
+  transition: height 0.3s;
+  overflow: hidden;
+}
+
+.cardremarks.expanded {
+  width: auto;
+  height: auto;
+}
+
+.cardremarks.collapsed {
+  height: 2.5rem;
+}
+
+.editor-wrapper {
+  height: 400px;
+}
+
+p-editor {
+  height: 100%;
+}
+
+.border-cell {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-width: 1px !important;
+}
+
+.badge-style {
+  font-size: 14px;
+  padding: 7px 20px;
+}
+
+.custom-danger {
+  color: red !important;
+}
+
+.status-failed {
+  color: red;
+}
+
+.status-expired {
+  color: black;
+}
+
+.status-started {
+  color: purple;
+}
+
+.status-completed {
+  color: green;
+}
+
+.copy-container {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 6px;
+}
+
+.copy-input {
+  flex: 1;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 14px;
+  padding-left: 12px;
+}
+
+.copy-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.copy-btn {
+  border-radius: 8px;
+  font-size: 13px;
+  padding: 6px 14px;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .p-dialog-mask {
+  z-index: 10000 !important;
+}
+
+:host ::ng-deep .customtab .p-tablist {
+  background: #4b5584 !important;
+  border-radius: 6px 6px 0 0;
+  border: none !important;
+  padding: 0 !important;
+}
+
+:host ::ng-deep .customtab .p-tablist-tab {
+  color: white !important;
+  background: transparent !important;
+  padding: 12px 22px !important;
+  font-weight: 600;
+  border: none !important;
+}
+
+:host ::ng-deep .customtab .p-tablist-tab:hover {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+
+:host ::ng-deep .customtab .p-tablist-tab.p-tab-active {
+  background: #0a0f1f !important;
+  color: white !important;
+}
+
+:host ::ng-deep .customtab .p-tablist-active-bar {
+  display: none !important;
+}
+
+.font-medium {
+  font-weight: 600;
+}
+
+:host ::ng-deep .rt-tabs .p-tablist {
+  background: transparent !important;
+}
+
+:host ::ng-deep .rt-tabs .p-tablist .p-tablist-tab-list {
+  padding: 10px 20px;
+  background: #CACFE5 !important;
+  display: inline-flex;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  gap: 15px;
+}
+
+:host ::ng-deep .rt-tabs .p-tablist .p-tablist-tab-list .p-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 20px;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: #4C5B9E;
+  font-size: 14px;
+  border-radius: 6px;
+  user-select: none;
+}
+
+:host ::ng-deep .rt-tabs .p-tablist .p-tablist-tab-list .p-tab:hover {
+  background: #4C5B9E !important;
+  color: white !important;
+}
+
+:host ::ng-deep .rt-tabs .p-tablist .p-tablist-tab-list .p-tab.p-tab-active {
+  background: #4C5B9E !important;
+  color: white !important;
+}
+
+:host ::ng-deep .p-dialog-content {
+  overflow-y: auto !important;
+}
+
+:host ::ng-deep .docs-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+:host ::ng-deep .docs-wrap .doc-wrap {
+  display: flex;
+  gap: 20px;
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  align-items: center;
+}
+
+:host ::ng-deep .docs-wrap .doc-wrap .image {
+  max-width: 60px;
+  max-height: 60px;
+}
+
+:host ::ng-deep .docs-wrap .doc-wrap .image img {
+  width: 60%;
+  height: 70%;
+  object-fit: contain;
+}
+
+:host ::ng-deep .docs-wrap .doc-wrap .content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+:host ::ng-deep .docs-wrap .doc-wrap .content .name {
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 600;
+  color: #000;
+}
+
+:host ::ng-deep .docs-wrap .doc-wrap .content .date-size {
+  font-size: 12px;
+  font-weight: 400;
+  color: #444;
+}

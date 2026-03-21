@@ -1,0 +1,228 @@
+<div class="card mt-2">
+    <div class="card-header d-flex w-full align-items-center justify-content-between" style="background-color: #fff;">
+        <span>Quiz List <br><span style="color: #A1A1A1; font-size: 10px;">Total
+                Sub-Categories:{{totalQuizCount}}</span></span>
+        <div class=" text-right p-1">
+            <button (click)="addnewquestionpopup()" class="ps-3 pe-3 pt-2 pb-2" pButton
+                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">New
+                Question
+                &nbsp; <i class="fa-solid fa-plus"></i></button>&nbsp;
+            <button class="ps-3 pe-3 pt-2 pb-2" (click)="addnewquestionpopupImport()" pButton
+                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">Import
+                &nbsp;
+                <i class="pi pi-file-export"></i></button>&nbsp;
+            <!-- <button class="ps-3 pe-3 pt-2 pb-2" pButton
+                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                (click)="exportFile()">Export &nbsp;
+                <i class="pi pi-file-export"></i></button> -->
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- card list -->
+        <div class="row gap-4 mt-5 d-flex">
+            <div class="card" style="width: 23%;" *ngFor="let quiz of quizList let i = index" [attr.data-index]="i">
+                <div class="container-fluid p-4">
+                    <h5 style="font-size: 13px;">Question {{i + 1}}</h5>
+                    <p class="mt-3 fw-bold" style="color: #001631; font-size: 14px;">{{quiz.question}}</p>
+                    <!-- <span style="font-size: 14px; color: #001631;">
+                        Source <br><span class="fw-bold"> {{currentModuleName}}
+                            | <a style="text-decoration: none; color: black;" href="{{quiz.source_faqquestion}}"
+                                target="_blank"> Question {{i + 1}}</a></span>
+                    </span> -->
+                    <div class="p-1 mt-1" style="text-align: center; display: flex; justify-content: flex-start;">
+                        <button (click)="editQuestion(quiz)" class="px-3 py-2" pbutton
+                            style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                            Edit
+                        </button>&nbsp;&nbsp;&nbsp;
+                        <button (click)="viewQuestion(quiz)" class="px-3 py-2" pButton
+                            style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                            View
+                        </button>&nbsp;&nbsp;
+                        <button (click)="deletequiz(quiz)" pButton
+                            style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                            <i class="fa-solid fa-trash"></i>
+                            &nbsp;
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-paginator (onPageChange)="onPageChange($event)" [rows]="rows" [totalRecords]="totalQuizCount"
+        [rowsPerPageOptions]="[50, 100, 200,500]"></p-paginator>
+</div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':newquestionadd}" id="top-layer"
+    style="backdrop-filter: brightness(0.5);">
+    <div class="modal-dialog">
+        <div class="modal-content p-2" style="width: 150%;">
+            <span (click)="closeAddQuizPopUp()"
+                style="color: var(--p-primary-500); text-align: right; cursor: pointer;"><i
+                    class="fa-solid fa-xmark"></i></span>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <div class="modal-body">
+                    <span style="color: #001631; font-size: 20px;">{{currentModuleName}} Quiz Entry</span>
+                    <div class="row mt-3">
+                        <div class="col-md-12 mt-1">
+                            <div class="form-group">
+                                <label>Question</label>
+                                <input formControlName="question" type="text" class="form-control" pInputText>
+                                <div *ngIf="submitted && f.question.errors" class="text-danger text-xs">
+                                    <div *ngIf="f.question.errors.required">Required</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6 mt-1">
+                            <div class="form-group">
+                                <label>Option 1</label>
+                                <input formControlName="option1" type="text" class="form-control" pInputText>
+                                <div *ngIf="submitted && f.option1.errors" class="text-danger text-xs">
+                                    <div *ngIf="f.option1.errors.required">Required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-1">
+                            <div class="form-group">
+                                <label>Option 2</label>
+                                <input formControlName="option2" type="text" class="form-control" pInputText>
+                                <div *ngIf="submitted && f.option2.errors" class="text-danger text-xs">
+                                    <div *ngIf="f.option2.errors.required">Required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-1">
+                            <div class="form-group">
+                                <label>Option 3</label>
+                                <input formControlName="option3" type="text" class="form-control" pInputText>
+                                <div *ngIf="submitted && f.option3.errors" class="text-danger text-xs">
+                                    <div *ngIf="f.option3.errors.required">Required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-1">
+                            <div class="form-group">
+                                <label>Option 4</label>
+                                <input formControlName="option4" type="text" class="form-control" pInputText>
+                                <div *ngIf="submitted && f.option4.errors" class="text-danger text-xs">
+                                    <div *ngIf="f.option4.errors.required">Required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-1">
+                            <div class="form-group">
+                                <label>Answer</label>
+                                <p-select formControlName="answer" optionValue="id" optionLabel="name"
+                                    styleClass="w-full" [options]="answerOptionSelection"></p-select>
+                                <div *ngIf="submitted && f.answer.errors" class="text-danger text-xs">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-1">
+                            <div class="form-group">
+                                <label>Source Summary</label>
+                                <textarea rows="5" cols="30" pInputTextarea formControlName="source_summary">
+                                </textarea>
+                                <div *ngIf="submitted && f.source_summary.errors" styleClass="w-full"
+                                    class="text-danger text-xs">
+                                    <div *ngIf="f.source_summary.errors.required">Required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-1">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <p-select formControlName="status" optionValue="id" optionLabel="name"
+                                    [options]="statusData" styleClass="w-full"></p-select>
+                                <div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+                                    <div *ngIf="f.status.errors.required">Required</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-3 mb-4 mt--4 text-right">
+                    <button type="submit" class="ps-3 pe-3 pt-2 pb-2" pButton
+                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">{{addOrUpdate}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':submitafter}"
+    style="backdrop-filter: brightness(0.5);">
+    <div class="modal-dialog">
+        <div class="modal-content p-2">
+            <span (click)="addsubmitclosepopup()"
+                style="color: var(--p-primary-500); text-align: right; cursor: pointer;"><i
+                    class="fa-solid fa-xmark"></i></span>
+            <form>
+                <div class="modal-body">
+                    <div class="container-fluid p-2">
+                        <h5 style="font-size: 15px;">Question {{viewQuizData?.id}}</h5>
+                        <p class="mt-3" style="color: #001631; font-size: 14px;">{{viewQuizData?.question}}</p>
+                        <h6 style="font-size: 15px;">Options</h6>
+                        <tbody>
+                            <tr class="card p-2 mt-3 " multiple="multiple"
+                                [ngClass]="{'card-selected mat-elevation-z4': viewQuizData?.answer === 1}">
+                                {{viewQuizData?.option1}}
+                            </tr>
+                            <tr class="card p-2 mt-3" multiple="multiple"
+                                [ngClass]="{'card-selected mat-elevation-z4': viewQuizData?.answer === 2}">
+                                {{viewQuizData?.option2}}
+                            </tr>
+                            <tr class="card p-2 mt-3" multiple="multiple selection"
+                                [ngClass]="{'card-selected mat-elevation-z4': viewQuizData?.answer === 3}">
+                                {{viewQuizData?.option3}}
+                            </tr>
+                            <tr class="card p-2 mt-3" multiple="multiple"
+                                [ngClass]="{'card-selected mat-elevation-z4': viewQuizData?.answer === 4}">
+                                {{viewQuizData?.option4}}
+                            </tr>
+                        </tbody>
+                        <span class="mt-2" style="font-size: 14px; color: #001631;">
+                            Source <br> {{currentModuleName}} | Question {{viewQuizData?.source_faqquestion}}
+                        </span>
+                    </div>
+                </div>
+                <div class="p-3 mb-4 mt--4" style="text-align: center;">
+                    <button class="ps-4 pe-4 pt-1 pb-1" pButton (click)="closeViewPopUp(viewQuizData)"
+                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">Edit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':newquestionaddimport}" id="top-layer"
+    style="backdrop-filter: brightness(0.5);">
+    <div class="modal-dialog">
+        <div class="modal-content p-2" style="width: 150%;">
+            <span (click)="closeAddQuizPopUpImport()"
+                style="color: var(--p-primary-500); text-align: right; cursor: pointer;"><i
+                    class="fa-solid fa-xmark"></i></span>
+            <div>
+                <label for="file" class="reading-drop-container">
+                    <i class="pi pi-upload reading-drop-title"></i>
+                    <input type="file" id="file" class="d-none" (change)="onFileChange($event)"
+                        (click)="$event['target']['value']=''" accept=".csv"><br />
+                    <div class="reading-sm-font" *ngIf="selectedFile?.name">{{selectedFile.name}}</div>
+                    <div *ngIf="!selectedFile?.name" class="d-flex flex-column gap-1 text-center">
+                        <span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+                        <span class="reading-sm-font">Please maintain the format of uploading to stop failures</span>
+                    </div>
+                </label><br />
+                <div class="text-center">
+                    <button class="btn btn-primary" (click)="uploadFile()">
+                        <i class="fa-solid fa-upload"></i> Upload
+                    </button>
+                    <button class="btn btn-primary" (click)="downloadSampleCSV()">
+                        <i class="fa-solid fa-download"></i> Download Sample Doc
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

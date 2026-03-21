@@ -1,0 +1,142 @@
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex justify-content-start">
+            <button class="back-button mt-1" (click)="goBack()">
+                <span class="arrow"><i class="fa-solid fa-angle-left"></i></span>
+            </button> &nbsp;
+            <h3>{{blogtitle}}</h3>
+        </div>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="submitForm()">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Blog Title</label>
+                        <input formControlName="title" type="text" class="form-control" pInputText>
+                        <div *ngIf="submitted && f.title.errors" class="text-danger text-xs">
+                            <div *ngIf="f.title.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Blog URL Slug</label>
+                        <input formControlName="slug" type="text" class="form-control" pInputText>
+                        <div *ngIf="submitted && f.slug.errors" class="text-danger text-xs">
+                            <div *ngIf="f.slug.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Categories</label>
+                        <p-multiselect placeholder="Select" optionValue="id" formControlName="categories"
+                            optionLabel="category" styleClass="w-full" [options]="categorieslist"></p-multiselect>
+                        <div *ngIf="submitted && f.categories.errors" class="text-danger text-xs">
+                            <div *ngIf="f.categories.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Tags</label>
+                        <p-multiselect placeholder="Select" optionValue="id" formControlName="tags"
+                            optionLabel="tag_name" styleClass="w-full" [options]="tagslist"></p-multiselect>
+                        <div *ngIf="submitted && f.tags.errors" class="text-danger text-xs">
+                            <div *ngIf="f.tags.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    <label style="color: #FF7000;">SEO Options</label>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>SEO Title</label>
+                        <input formControlName="seotitle" type="text" class="form-control" pInputText>
+                        <div *ngIf="submitted && f.seotitle.errors" class="text-danger text-xs">
+                            <div *ngIf="f.seotitle.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>META Description</label>
+                        <input formControlName="metades" type="text" class="form-control" pInputText>
+                        <div *ngIf="submitted && f.metades.errors" class="text-danger text-xs">
+                            <div *ngIf="f.metades.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>META Tags</label>
+                        <input formControlName="metatags" type="text" class="form-control" pInputText>
+                        <div *ngIf="submitted && f.metatags.errors" class="text-danger text-xs">
+                            <div *ngIf="f.metatags.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>META Author</label>
+                        <input formControlName="metaauthor" type="text" class="form-control" pInputText>
+                        <div *ngIf="submitted && f.metaauthor.errors" class="text-danger text-xs">
+                            <div *ngIf="f.metaauthor.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Blog Cover Image / META Cover Image</label>
+                    <div class="form-group" (dragover)="onDragOver($event)">
+                        <div class="input-wrapper">
+                            <input type="file" (change)="onFileChange($event)" formControlName="image"
+                                accept=".png, .svg, .webp" style="display: none; color: black;" #fileInput>
+                            <input style="height: 40px !important;" type="text" (change)="onFileChange($event)"
+                                formControlName="image" class="form-control" pInputText readonly
+                                [value]="form.controls.image.value ? form.controls.image.value.name : ''"
+                                (click)="fileInput.click()">
+                            <button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem;"
+                                class="upload-button" (click)="fileInput.click()">Upload Image</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <p-select [disabled]="onlyEditTimeEnable" placeholder="Select" optionValue="id" formControlName="status"
+                            optionLabel="name" styleClass="w-full" [options]="statuses"></p-select>
+                            <div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+                                <div *ngIf="f.status.errors.required">Required</div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="field mt-2">
+                        <p-editor [style]="{ height: '30vh' }" (onTextChange)="onEditorChange($event)"
+                            [(ngModel)]="textMessage" formControlName="textmessage" con [modules]="modules" placeholder="Text">
+                        </p-editor>
+                        <button pButton class="btn btn-sm btn-primary" type="submit" style="float: right"
+                            [disabled]="!isMessageValid">
+                            {{blogButtonTitle}}
+                        </button>
+                        <button pButton class="btn btn-sm btn-primary" (click)="saveDraft()" type="button"
+                            style="float: right; background-color: #B5BDD0 !important; border:#B5BDD0 !important ;color: black;"
+                            [disabled]="!isMessageValid">
+                            Save Draft
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

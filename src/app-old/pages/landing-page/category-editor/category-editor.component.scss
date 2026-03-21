@@ -1,0 +1,122 @@
+:host ::ng-deep {
+    // Input styling
+    .p-inputtext {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      
+      &:focus {
+        box-shadow: none;
+        border-color: #80bdff;
+      }
+      
+      &::placeholder {
+        color: #9ca3af;
+      }
+    }
+    
+    // Dropdown styling
+    .p-dropdown {
+      .p-dropdown-label {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+      }
+      
+      &:not(.p-disabled).p-focus {
+        box-shadow: none;
+        border-color: #80bdff;
+      }
+    }
+    
+    // Button styling
+    .p-button {
+      &.p-button-danger {
+        background: #dc3545;
+        border-color: #dc3545;
+        
+        &:hover {
+          background: #c82333;
+          border-color: #bd2130;
+        }
+      }
+      
+      &.p-button-primary {
+        background: var(--p-primary-500);;
+        border-color: var(--p-primary-500);;
+        
+        &:hover {
+          background: #303f9f;
+          border-color: #283593;
+        }
+      }
+      
+      &.p-button-secondary {
+        background: #6c757d;
+        border-color: #6c757d;
+        
+        &:hover {
+          background: #5a6268;
+          border-color: #545b62;
+        }
+      }
+    }
+    
+    // SelectButton styling
+    .p-selectbutton {
+      .p-button {
+        background: #f8f9fa;
+        border-color: #dee2e6;
+        color: #495057;
+        
+        &.p-highlight {
+          background: var(--p-primary-500);
+          border-color: var(--p-primary-500);
+          color: #ffffff;
+        }
+      }
+    }
+  }
+  
+  // Card styling
+  .card {
+    border-radius: 0.5rem;
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    
+    .card-header {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+    }
+  }
+  
+  // Section styling
+  .section-header {
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e9ecef;
+    
+    h5 {
+      color: #ff6b00;
+      font-weight: 600;
+    }
+  }
+  
+  // Form label styling
+  .form-label {
+    font-weight: 500;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  // Text colors
+  .text-primary {
+    color: #ff6b00 !important;
+  }
+  
+  .text-danger {
+    color: #dc3545 !important;
+  }
+
+  .p-inputgroup {
+    border-radius: 6px;
+  }
+  

@@ -1,0 +1,283 @@
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}" (onClose)="closeAccodion()"
+	class="mb-4 rt-cust-accordion">
+	<p-accordion-panel value="1" *ngIf="addsubscription">
+		<p-accordion-header>Add Subscription</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">User Type</label>
+							<p-select styleClass="w-full" formControlName="subscriptionType"
+								[options]="addUserTypeOptions" optionValue="value" optionLabel="label"
+								placeholder="Select User Type"></p-select>
+							<div *ngIf="submitted && f.subscriptionType.errors" class="text-danger text-xs">
+								<div *ngIf="f.subscriptionType.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Country</label>
+							<p-select styleClass="w-full" formControlName="country" [options]="countryOptions"
+								optionValue="id" optionLabel="name" placeholder="Select Country"></p-select>
+							<div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+								<div *ngIf="f.country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Subscription Type</label>
+							<p-select styleClass="w-full" formControlName="subscriptionPlan"
+								[options]="addSubscriptionTypeOptions" optionValue="value" optionLabel="label"
+								placeholder="Select Subscription Type"></p-select>
+							<div *ngIf="submitted && f.subscriptionPlan.errors" class="text-danger text-xs">
+								<div *ngIf="f.subscriptionPlan.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Actual Price</label>
+							<div class="price-field-group">
+								<p-select styleClass="currency-inline-select" formControlName="currency"
+									[options]="addCurrencyOptions" optionValue="id" optionLabel="currency_code"
+									placeholder="Select"></p-select>
+								<input type="text" formControlName="actualPrice" class="form-control amount-input"
+									pInputText placeholder="Enter Actual Price" />
+							</div>
+							<div *ngIf="submitted && (f.actualPrice.errors || f.currency.errors)"
+								class="text-danger text-xs">
+								<div *ngIf="f.actualPrice.errors.required">Required</div>
+								<div *ngIf="f.currency.errors.required">Currency is required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Save</label>
+							<input type="text" formControlName="discountPercentage" class="form-control" pInputText
+								placeholder="Enter the save %" />
+							<div *ngIf="submitted && f.discountPercentage.errors" class="text-danger text-xs">
+								<div *ngIf="f.discountPercentage.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Given Price</label>
+							<div class="price-field-group">
+								<p-select styleClass="currency-inline-select" formControlName="currency"
+									[options]="addCurrencyOptions" optionValue="id" optionLabel="currency_code"
+									placeholder="Select"></p-select>
+								<input type="text" formControlName="givenPrice" class="form-control amount-input"
+									pInputText placeholder="Enter Given Price" />
+							</div>
+							<div *ngIf="submitted && (f.givenPrice.errors || f.currency.errors)"
+								class="text-danger text-xs">
+								<div *ngIf="f.givenPrice.errors.required">Required</div>
+								<div *ngIf="f.currency.errors.required">Currency is required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Validity</label>
+							<p-select styleClass="w-full" formControlName="validity" [options]="addValidityOptions"
+								optionValue="value" optionLabel="label" placeholder="Select Validity"></p-select>
+							<div *ngIf="submitted && f.validity.errors" class="text-danger text-xs">
+								<div *ngIf="f.validity.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="mt-2 text-right">
+						<button type="submit" class="btn btn-primary">Add Subscription</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+	<p-accordion-panel value="2" *ngIf="editsubscription">
+		<p-accordion-header>Edit Subscription</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="editform" (ngSubmit)="editFormSubmit()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">User Type</label>
+							<p-select styleClass="w-full" formControlName="subscriptionType"
+								[options]="addUserTypeOptions" optionValue="value" optionLabel="label"
+								placeholder="Select User Type"></p-select>
+							<div *ngIf="editFormSubmitted && ef.subscriptionType.errors" class="text-danger text-xs">
+								<div *ngIf="ef.subscriptionType.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Country</label>
+							<p-select styleClass="w-full" formControlName="country" [options]="countryOptions"
+								optionValue="id" optionLabel="name" placeholder="Select Country"></p-select>
+							<div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+								<div *ngIf="f.country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Subscription Type</label>
+							<p-select styleClass="w-full" formControlName="subscriptionPlan"
+								[options]="addSubscriptionTypeOptions" optionValue="value" optionLabel="label"
+								placeholder="Select Subscription Type"></p-select>
+							<div *ngIf="editFormSubmitted && ef.subscriptionPlan.errors" class="text-danger text-xs">
+								<div *ngIf="ef.subscriptionPlan.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Actual Price</label>
+							<div class="price-field-group">
+								<p-select styleClass="currency-inline-select" formControlName="currency"
+									[options]="addCurrencyOptions" optionValue="id" optionLabel="currency_code"
+									placeholder="Select"></p-select>
+								<input type="text" formControlName="actualPrice" class="form-control amount-input"
+									pInputText placeholder="Enter Actual Price" />
+							</div>
+							<div *ngIf="editFormSubmitted && (ef.actualPrice.errors || ef.currency.errors)"
+								class="text-danger text-xs">
+								<div *ngIf="ef.actualPrice.errors.required">Required</div>
+								<div *ngIf="ef.currency.errors.required">Currency is required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Save</label>
+							<input type="text" formControlName="discountPercentage" class="form-control" pInputText
+								placeholder="Enter the save %" />
+							<div *ngIf="editFormSubmitted && ef.discountPercentage.errors" class="text-danger text-xs">
+								<div *ngIf="ef.discountPercentage.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Given Price</label>
+							<div class="price-field-group">
+								<p-select styleClass="currency-inline-select" formControlName="currency"
+									[options]="addCurrencyOptions" optionValue="id" optionLabel="currency_code"
+									placeholder="Select"></p-select>
+								<input type="text" formControlName="givenPrice" class="form-control amount-input"
+									pInputText placeholder="Enter Given Price" />
+							</div>
+							<div *ngIf="editFormSubmitted && (ef.givenPrice.errors || ef.currency.errors)"
+								class="text-danger text-xs">
+								<div *ngIf="ef.givenPrice.errors.required">Required</div>
+								<div *ngIf="ef.currency.errors.required">Currency is required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group mb-4">
+							<label class="mb-1 font-medium">Validity</label>
+							<p-select styleClass="w-full" formControlName="validity" [options]="validityoption"
+								optionValue="id" optionLabel="name"></p-select>
+							<div *ngIf="editFormSubmitted && ef.validity.errors" class="text-danger text-xs">
+								<div *ngIf="ef.validity.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="mt-2 text-right">
+						<button type="submit" class="btn btn-primary">Update Subscription</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<p-accordion styleClass="white-accordian" value="{{activeFilter}}" (onClose)="closeFilterAccodion()"
+	class="mb-4 rt-cust-accordion">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter By</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" class="row g-3">
+				<div class="col-md-4 mb-4">
+					<label class="mb-1 font-medium">User Type</label>
+					<p-select styleClass="w-full" formControlName="subscriptionType" [options]="subscriptionTypeList"
+						optionValue="id" optionLabel="name" placeholder="Select User Type"></p-select>
+				</div>
+				<div class="col-md-4 mb-4">
+					<label class="mb-1 font-medium">Subscription Type</label>
+					<p-select styleClass="w-full" formControlName="subscriptionPlan" [options]="subscriptionPlanList"
+						optionValue="name" optionLabel="name" placeholder="Select Subscription Type"></p-select>
+				</div>
+				<div class="col-md-4 mb-4">
+					<label class="mb-1 font-medium">Country</label>
+					<p-select styleClass="w-full" formControlName="country" [options]="countryOptions" optionValue="id"
+						optionLabel="name" placeholder="Select Country"></p-select>
+				</div>
+				<div class="col-md-12 d-flex justify-content-end gap-2">
+					<button type="button" class="btn btn-warning btn-sm text-white" (click)="resetFilter()">Reset
+						Filter</button>
+					<button type="button" class="btn btn-primary btn-sm" (click)="applyFilter()">Apply Filter</button>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="card readingcard p-2 mb-4">
+	<div class="card-header border-0 bg-white header-section">
+		<div class="row justify-content-center">
+			<div class="col-md-12 d-flex gap-2">
+				<div class="select-title bg-white d-flex justify-content-between align-items-center"
+					style="width: 100%">
+					<div>
+						<h5 class="mb-0 form-title text-dark"><span>Subscription Manager</span></h5>
+					</div>
+					<div class="d-flex gap-2 align-items-center">
+						<button class="btn btn-primary" (click)="navigateStudentSubscription()">Student User View &nbsp;
+							<i class="pi pi-th-large"></i></button>
+						<button class="btn btn-primary" (click)="navigateSubscriptionHistory()">Update History &nbsp; <i
+								class="pi pi-history"></i></button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="subscriptionList" styleClass="gray-header subscription-table"
+	[paginator]="true" (onPage)="pageChange($event)" [first]="first" [totalRecords]="subscriptionCount" [lazy]="true" [rows]="pageSize"
+	[showFirstLastIcon]="true" [showPageLinks]="true" [showCurrentPageReport]="false" [pageLinks]="5"
+	[paginatorStyleClass]="'subscription-paginator'" [tableStyle]="{ 'min-width': '70rem' }" class="rt-table">
+	<ng-template pTemplate="header">
+		<tr>
+			<th>User Type</th>
+			<th>Country</th>
+			<th>Subscription Type</th>
+			<th>Actual Price</th>
+			<th>Save</th>
+			<th>Given Price</th>
+			<th>Validity</th>  
+			<th>Action</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-sub>
+		<tr>
+			<td>{{ sub.userType }}</td>
+			<td>{{ sub.country }}</td>
+			<td>{{ sub.subscriptionType }} ({{ sub.plan_name }})</td>
+			<td>{{ sub.currency}} {{ (sub.actual_price ?? 0) | number : "1.0-0" }}</td>
+			<td>{{ (sub.save ?? 0) }} %</td>
+			<td>{{ sub.currency}} {{ (sub.price ?? 0) | number : "1.0-0" }}</td>
+			<td>{{ (sub.validity ?? 0) | number : "2.0-0" }} Months</td>
+			<td>
+				<span (click)="editoption(sub)" style="cursor: pointer"><span style="color: var(--p-primary-500)"><i
+							class="fa-solid fa-pen-to-square"></i></span>&nbsp; Edit</span>
+				<p-confirmpopup></p-confirmpopup>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+

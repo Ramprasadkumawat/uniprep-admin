@@ -1,0 +1,95 @@
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}" *ngIf="eventUserNameAndLocationHide">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Event</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="fileterform" (ngSubmit)="filterform()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-6">
+								<label class="form-label">From</label>
+								<div class="input-group mb-3">
+									<input type="date" formControlName="formdate" class="form-control border-black paddingfive" />
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">To</label>
+								<div class="input-group mb-3">
+									<input type="date" formControlName="todate" class="form-control border-black paddingfive" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Event Name</label>
+							<p-select placeholder="Select" formControlName="eventname" optionValue="id" optionLabel="eventname" styleClass="w-full" [options]="eventnamelist" [filter]="true" filterBy="eventname"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select placeholder="Select" formControlName="location" optionValue="id" optionLabel="district" styleClass="w-full" [options]="locations" [filter]="true" filterBy="district"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Event Status</label>
+							<p-select placeholder="Select" optionValue="id" formControlName="eventstatus" optionLabel="name" styleClass="w-full" [options]="statuses"></p-select>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button pButton type="button" label="" class="btn btn-primary" (click)="resetButton()">Reset Field</button>&nbsp;
+							<button pButton type="submit" label="" class="btn btn-primary">Filter</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<div class="card">
+	<div class="card-header container-fluid">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<div>
+				<span style="font-size: 20px">Events List</span><br />
+				<span style="font-size: small">Total Events: {{ datacount }}</span>
+			</div>
+		</div>
+	</div>
+	<div class="card-body container-fluid">
+		<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="eventuserlists" styleClass="gray-header" [totalRecords]="datacount">
+			<ng-template pTemplate="header">
+				<tr>
+					<th class="border-cell">User Name</th>
+					<th class="border-cell">Email ID</th>
+					<th class="border-cell">Number</th>
+					<th class="border-cell">Event Name</th>
+					<th class="border-cell">Status</th>
+					<th class="border-cell">Event Location</th>
+					<th class="border-cell">User Registered Date</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-event let-expanded="expanded">
+				<tr>
+					<td class="border-cell">{{ event.name }}</td>
+					<td class="border-cell">{{ event.email }}</td>
+					<td class="border-cell">{{ event.phone }}</td>
+					<td class="border-cell">{{ event.eventname }}</td>
+					<td class="border-cell">{{ event.status }}</td>
+					<td class="border-cell" style="white-space: nowrap">
+						{{ event.regionName }} , <br />
+						{{ event.locationName }}
+					</td>
+					<td class="border-cell">{{ event.date }}</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+
+	<div class="card-footer container-fluid">
+		<p-paginator [rows]="10" [totalRecords]="datacount" (onPageChange)="pageChange($event)" [rowsPerPageOptions]="[10, 50, 100, 500]"></p-paginator>
+	</div>
+</div>

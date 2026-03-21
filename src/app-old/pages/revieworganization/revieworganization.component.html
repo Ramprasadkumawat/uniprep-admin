@@ -1,0 +1,99 @@
+<p-accordion value="0">
+	<p-accordion-panel value="1" selected="true">
+		<p-accordion-header>{{ headName }}</p-accordion-header
+		><p-accordion-content>
+			<form [formGroup]="reviewOrg">
+				<div class="row">
+					<div class="col-12 col-md-3">
+						<div class="form-group">
+							<label>Organization Name</label>
+							<input type="text" class="form-control p-3" formControlName="oname" [ngClass]="{ 'is-invalid': submitted && reviewOrg.controls.oname.errors }" />
+						</div>
+						<div *ngIf="submitted && reviewOrg.controls.oname.errors" class="text-danger">
+							<div *ngIf="submitted && reviewOrg.controls.oname.errors.required">Please enter the organization name</div>
+						</div>
+					</div>
+					<div class="col-12 col-md-3">
+						<label>Organization Logo</label>
+						<input type="file" class="form-control p-3" #takeInput (change)="onFileSelect($event)" [ngClass]="{ 'is-invalid': submitted && reviewOrg.controls.logo.errors }" />
+
+						<div *ngIf="submitted && reviewOrg.controls.logo.errors" class="text-danger">
+							<div *ngIf="submitted && reviewOrg.controls.logo.errors.required">Please upload logo</div>
+						</div>
+					</div>
+					<div class="col-12 col-md-3">
+						<label class="test">Country</label><br />
+						<p-select styleClass="w-full" [options]="countries" optionValue="id" optionLabel="country" [filter]="true" filterBy="country" (onChange)="countrySelect()" placeholder="Select a country" formControlName="country" [(ngModel)]="selectedCountries"></p-select>
+
+						<div *ngIf="submitted && reviewOrg.controls.country.errors" class="text-danger">
+							<div *ngIf="submitted && reviewOrg.controls.country.errors.required">Please select the country</div>
+						</div>
+					</div>
+					<div class="col-12 col-md-3">
+						<div class="form-group">
+							<label>Website</label>
+							<input type="text" class="form-control p-3" formControlName="website" [ngClass]="{ 'is-invalid': submitted && reviewOrg.controls.website.errors }" />
+						</div>
+						<div *ngIf="submitted && reviewOrg.controls.website.errors" class="text-danger">
+							<div *ngIf="submitted && reviewOrg.controls.website.errors.required">Please enter the website url</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 col-md-3">
+						<label>Module</label><br />
+						<p-multiselect [options]="modules" [(ngModel)]="selectedM" (onChange)="selectData($event)" [group]="true" styleClass="w-100" defaultLabel="Select a Module" scrollHeight="250px" display="chip" formControlName="module" optionValue="value" [ngClass]="{ 'is-invalid': submitted && reviewOrg.controls.module.errors }">
+							<ng-template let-group pTemplate="group">
+								<div class="flex align-items-center">
+									<span>{{ group.label }}</span>
+								</div>
+							</ng-template>
+						</p-multiselect>
+
+						<div *ngIf="submitted && reviewOrg.controls.module.errors" class="text-danger">Please select a module</div>
+					</div>
+				</div>
+				<div class="d-flex justify-content-end">
+					<input type="submit" value="Add Organization" *ngIf="addBtn" (click)="addOrg()" class="btn btn-primary" />
+					<input type="submit" value="Update User" *ngIf="editBtn" (click)="updateOrg()" class="btn btn-primary" />
+				</div>
+			</form> </p-accordion-content
+	></p-accordion-panel>
+</p-accordion>
+<p-accordion value="0">
+	<p-accordion-panel value="1" selected="true">
+		<p-accordion-header>Review Organization</p-accordion-header>
+		<p-accordion-content>
+			<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="rusers">
+				<ng-template pTemplate="header">
+					<tr>
+						<th>Organization Name</th>
+						<th>Organization Logo</th>
+						<th>Country</th>
+						<th>Created</th>
+						<th>Action</th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-ruser>
+					<tr>
+						<td>
+							{{ ruser.organizationname }}<br />
+							<small>{{ ruser.website }}</small>
+						</td>
+						<td><img width="100px" src="{{ ruser.logo }}" /></td>
+						<td>{{ ruser.countryName }}</td>
+						<td>{{ ruser.createdDateTime }}</td>
+						<td>
+							<span style="cursor: pointer" (click)="editOrg(ruser.id, ruser.organizationname, ruser.website, ruser.country, ruser.moduleSelected)"
+								><span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span>&nbsp; Edit</span
+							><br />
+							<span style="cursor: pointer" (click)="deleteOrg(ruser.id)"
+								>&nbsp;&nbsp;<span style="color: var(--p-primary-500)"><i class="fa-solid fa-trash"></i></span> &nbsp;Delete</span
+							>
+						</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>

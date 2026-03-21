@@ -1,0 +1,574 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Users</p-accordion-header>
+		<p-accordion-content>
+			<form #filterFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Mobile</label>
+							<input formControlName="phone" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>User Type</label>
+							<p-select formControlName="usertype" optionValue="id" optionLabel="name" styleClass="w-full"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="ps-3 pe-2 pt-2 pb-2" pButton type="button" label="Reset Filter" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Reset Filter</button>&nbsp;
+						<button class="ps-3 pe-2 pt-2 pb-2" pButton label="Filter Data" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Filter Data</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="row">
+	<div class="col-xl-3 col-lg-3 mt-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Registrations</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 500 </span>
+					</div>
+					<div class="col-auto">
+						<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-xl-3 col-lg-3 mt-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Active Subscribers</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 300 </span>
+					</div>
+					<div class="col-auto">
+						<i style="color: var(--p-primary-500)" class="fa-solid fa-user fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-3 col-lg-3 mt-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title t text-muted mb-0" style="font-size: 15px">New Users</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 200 </span>
+					</div>
+					<div class="col-auto">
+						<i style="color: var(--p-primary-500)" class="fa-solid fa-user-slash fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-xl-3 col-lg-3 mt-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title t text-muted mb-0" style="font-size: 15px">Exhausted Users</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 200 </span>
+					</div>
+					<div class="col-auto">
+						<i style="color: var(--p-primary-500)" class="fa-solid fa-user-slash fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-6 mt-3">
+		<div class="card mb-4 mb-xl-0 p-3" style="height: 385px">
+			<div class="row">
+				<div class="col-6">
+					<span class="card-title text-muted mb-0" style="font-size: 15px; color: #001631"> Performance Overview </span>
+					<h5 style="color: #848484; font-size: 11px">Revenue Generated</h5>
+					<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> INR 5,00,000 </span>
+				</div>
+				<div class="col-6 text-right">
+					<select name="work_days" id="id_work_days" multiple="multiple" style="font-size: 11px">
+						<option style="width: 80px" value="1">Week</option>
+						<option style="width: 80px" value="2">Month</option>
+						<option style="width: 80px" value="3">Year</option>
+					</select>
+				</div>
+			</div>
+			<div>
+				<!-- chart -->
+			</div>
+		</div>
+	</div>
+	<div class="col-6">
+		<div class="row">
+			<div class="col-xl-6 col-lg-6 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Support Tickets</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 50 </span>
+							</div>
+							<div class="col-auto">
+								<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-6 col-lg-6 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Closed Support Tickets</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 10 </span>
+							</div>
+							<div class="col-auto">
+								<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xl-12 col-lg-12 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Active Support Tickets</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 40 </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-6 col-lg-6 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Q&A Reports</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 50 </span>
+							</div>
+							<div class="col-auto">
+								<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-6 col-lg-6 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Closed Q&A Reports</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 10 </span>
+							</div>
+							<div class="col-auto">
+								<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-12 col-lg-12 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Active Q&A Reports</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 40 </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- uniprep -->
+<h2 class="mt-3" style="color: #001631; font-size: 22px">UNIPREP</h2>
+
+<div class="row">
+	<div class="col-xl-3 col-lg-3 mt-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Subscribers</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 500 </span>
+					</div>
+					<div class="col-auto">
+						<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-xl-3 col-lg-3 mt-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Credits Completed by Users</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 300 </span>
+					</div>
+					<div class="col-auto">
+						<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-3 col-lg-3 mt-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title t text-muted mb-0" style="font-size: 15px">Certificates Granted</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 200 </span>
+					</div>
+					<div class="col-auto">
+						<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-3 col-lg-3 mt-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Most Preferred Plan</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> Advanced </span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-6">
+		<div class="row">
+			<div class="col-xl-6 col-lg-6 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Reading Questions</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 50 </span>
+							</div>
+							<div class="col-auto">
+								<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-6 col-lg-6 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Quiz Questions</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 10 </span>
+							</div>
+							<div class="col-auto">
+								<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-12 col-lg-12 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Revenue Generated</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> INR 2,00,000 </span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-6 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3" style="height: 200px">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Subscribers This Month</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 40 </span>
+							</div>
+							<div style="width: 100%; height: 600px" id="chart-regionwisechar"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-6 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3" style="height: 200px">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Quizes Attended This Month</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 40 </span>
+							</div>
+						</div>
+						<div style="width: 100%; height: 600px" id="chart-regionwisechar"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-6 mt-3">
+		<div class="card mb-4 mb-xl-0 p-3" style="height: 400px">
+			<h2 class="card-title text-muted mb-0" style="font-size: 18px; color: #001631">Countries</h2>
+			<div style="width: 100%; height: 600px" id="chart-regionwisechar"></div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-6 mt-3">
+		<div class="card mb-4 mb-xl-0 p-3" style="height: 400px">
+			<span class="card-title text-muted mb-0" style="font-size: 18px; color: #001631"> Subscription Preference </span>
+			<div>
+				<div style="width: 100%; height: 340px; border: 1px solid var(--p-primary-400); border-radius: 12px" id="chart-regionwisechar"></div>
+			</div>
+		</div>
+	</div>
+	<div class="col-6 mt-3">
+		<div class="card mb-4 mb-xl-0 p-3" style="height: 400px">
+			<span class="card-title text-muted mb-0" style="font-size: 18px; color: #001631"> Universities </span>
+			<div style="width: 100%; height: 600px" id="chart-regionwisechar"></div>
+		</div>
+	</div>
+	<div class="col-6 mt-3">
+		<div class="card mb-4 mb-xl-0 p-3" style="height: 400px">
+			<span class="card-title text-muted mb-0" style="font-size: 18px; color: #001631"> Program Level </span>
+			<div style="width: 100%; height: 340px; border: 1px solid var(--p-primary-400); border-radius: 12px" id="chart-regionwisechar"></div>
+		</div>
+	</div>
+	<div class="col-6 mt-3">
+		<div class="card mb-4 mb-xl-0 p-3" style="height: 400px">
+			<span class="card-title text-muted mb-0" style="font-size: 18px; color: #001631"> Region </span>
+			<div style="width: 100%; height: 600px" id="chart-regionwisechar">
+				<!-- chart -->
+			</div>
+		</div>
+	</div>
+	<div class="col-12 mt-3">
+		<div class="card mb-4 mb-xl-0 p-3" style="height: 250px">
+			<span class="card-title text-muted mb-0" style="font-size: 18px; color: #001631"> Top Report Resolvers </span>
+			<div style="width: 100%; height: 600px" id="chart-regionwisechart">
+				<!-- chart -->
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Chat System -->
+<h2 class="mt-3" style="color: #001631; font-size: 22px">Chat System</h2>
+
+<div class="row">
+	<div class="col-xl-6 col-lg-6 mt-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Chats</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 500 </span>
+					</div>
+					<div class="col-auto">
+						<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-xl-3 col-lg-3 mt-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Credit Subscribers</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 300 </span>
+					</div>
+					<div class="col-auto">
+						<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-3 col-lg-3 mt-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Most Preferred Plan</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> Advanced </span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-6">
+		<div class="row">
+			<div class="col-xl-6 col-lg-6 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Active Chats</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 50 </span>
+							</div>
+							<div class="col-auto">
+								<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-6 col-lg-6 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Closed Chats</h5>
+								<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631"> 10 </span>
+							</div>
+							<div class="col-auto">
+								<i style="color: var(--p-primary-500)" class="fa-solid fa-users fa-2x"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-12 col-lg-12 mt-3">
+				<div class="card card-stats mb-4 mb-xl-0 p-3">
+					<div class="card-body2" style="cursor: pointer">
+						<div class="row">
+							<div class="col">
+								<span class="h2 font-weight-bold mb-0" style="font-size: 18px; color: #001631"> Recent Chats </span>
+								<hr />
+								<div class="card-body2" style="cursor: pointer">
+									<div class="row">
+										<div class="col">
+											<span class="h2 font-weight-bold mb-0" style="font-size: 15px; color: #001631"> Amarnath Embranthiri </span>
+											<h5 class="card-title text-muted mb-0" style="font-size: 15px">amarnathembranthiri&#64;gmail.com</h5>
+										</div>
+										<div class="col-auto">
+											<div class="card p-1" style="background-color: var(--p-primary-500); color: #fff; font-size: 10px">
+												<span>03/03</span>
+											</div>
+											<span style="font-size: 10px">10:20 AM</span>
+										</div>
+									</div>
+								</div>
+								<hr />
+								<div class="card-body2" style="cursor: pointer">
+									<div class="row">
+										<div class="col">
+											<span class="h2 font-weight-bold mb-0" style="font-size: 15px; color: #001631"> Amarnath Embranthiri </span>
+											<h5 class="card-title text-muted mb-0" style="font-size: 15px">amarnathembranthiri&#64;gmail.com</h5>
+										</div>
+										<div class="col-auto">
+											<div class="card p-1" style="background-color: var(--p-primary-500); color: #fff; font-size: 10px">
+												<span>03/03</span>
+											</div>
+											<span style="font-size: 10px">10:20 AM</span>
+										</div>
+									</div>
+								</div>
+								<hr />
+								<div class="card-body2" style="cursor: pointer">
+									<div class="row">
+										<div class="col">
+											<span class="h2 font-weight-bold mb-0" style="font-size: 15px; color: #001631"> Amarnath Embranthiri </span>
+											<h5 class="card-title text-muted mb-0" style="font-size: 15px">amarnathembranthiri&#64;gmail.com</h5>
+										</div>
+										<div class="col-auto">
+											<div class="card p-1" style="background-color: var(--p-primary-500); color: #fff; font-size: 10px">
+												<span>03/03</span>
+											</div>
+											<span style="font-size: 10px">10:20 AM</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-6 mt-3">
+		<div class="card mb-4 mb-xl-0 p-3" style="height: 400px">
+			<h2 class="card-title text-bold mb-0" style="font-size: 18px; color: #001631">Countries</h2>
+			<div style="width: 100%; height: 600px" id="chart-regionwisechar">
+				<!-- chart -->
+			</div>
+		</div>
+	</div>
+
+	<div class="col-6 mt-3">
+		<div class="card mb-4 mb-xl-0 p-3" style="height: 400px">
+			<span class="card-title text-bold mb-0" style="font-size: 18px; color: #001631"> Subscription Preference </span>
+			<div style="width: 100%; height: 340px; border: 1px solid var(--p-primary-400); border-radius: 12px" id="chart-regionwisechar"></div>
+		</div>
+	</div>
+	<div class="col-6 mt-3">
+		<div class="card mb-4 mb-xl-0 p-3" style="height: 400px">
+			<span class="card-title text-bold mb-0" style="font-size: 18px; color: #001631"> Universities </span>
+			<div style="width: 100%; height: 600px" id="chart-regionwisechar">
+				<!-- chart -->
+			</div>
+		</div>
+	</div>
+	<div class="col-12 mt-3">
+		<div class="card mb-4 mb-xl-0 p-3" style="height: 400px">
+			<span class="card-title text-bold-0" style="font-size: 18px; color: #001631"> Region </span>
+			<div style="width: 100%; height: 600px" id="chart-regionwisechar">
+				<!-- chart -->
+			</div>
+		</div>
+	</div>
+</div>

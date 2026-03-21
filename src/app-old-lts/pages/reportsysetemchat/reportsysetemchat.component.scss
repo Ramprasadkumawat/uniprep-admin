@@ -1,0 +1,19 @@
+.circle {
+    display: inline-block;
+    width: 20px; 
+    height: 20px; 
+    line-height: 20px; 
+    border-radius: 50%; 
+    background-color: #D60909; 
+    text-align: center; 
+    color: white; 
+    font-size: 11px; 
+  }
+  // chat
+  .active {
+    background-color: #EBEDF2;
+  }
+  .activeticets {
+    background-color: var(--p-primary-500) !important;
+    color: #fff;
+  }

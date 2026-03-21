@@ -1,0 +1,52 @@
+.answercard {
+  background-color: var(--p-primary-200);
+  border: 2px solid var(--p-primary-500);
+  max-height: 60vh;
+  overflow-y: auto;
+  height: 60%;
+  padding: 1%;
+  border-radius: 10px;
+}
+
+.btn-primary {
+  border-radius: 15px !important;
+}
+
+.btn-secondary {
+  border-radius: 15px !important;
+}
+input[type="text"] {
+  padding-right: 120px; /* Adjust the value to make space for the button */
+  width: 100%;
+}
+*:not(.pi, .fa-solid){
+  white-space: inherit !important;
+}
+.newClass{
+  white-space: pre-wrap !important;
+}
+
+.CardSpace{
+  margin-right: 0.1rem;
+}
+::ng-deep {
+  .fullscreen {
+    background-color: white;
+
+    .form-group {
+      height: 100%;
+      width: 100%;
+    }
+
+    .ql-container {
+      height: 90vh !important;
+      width: 100% !important;
+    }
+  }
+}
+
+::ng-deep .ql-fullscreen:after {
+  content: "\26F6";
+  padding: 0 !important;
+  font-weight: bold;
+}

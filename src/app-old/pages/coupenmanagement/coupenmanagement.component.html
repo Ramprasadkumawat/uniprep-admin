@@ -1,0 +1,185 @@
+<p-accordion styleClass="white-accordian" (onClose)="activeIndex = -1" activeIndexChange="activeIndex = $event.index" value="{{activeIndex}}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>{{ couponCreaterName }}</p-accordion-header
+		><p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Coupon Code Name</label>
+							<input type="text" formControlName="coupencodename" class="form-control paddingfive mt-2" pInputText />
+							<div *ngIf="submitted && f.coupencodename.errors" class="text-danger text-xs">
+								<div *ngIf="f.coupencodename.errors.required">Required</div>
+								<div *ngIf="f.coupencodename.errors.hasSpace">Coupon Code Name should be entered without spaces</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Discount Percentage</label>
+							<p-select placeholder="Select" class="paddingfive mt-1" formControlName="discountpercentage" optionValue="id" optionLabel="percentage" styleClass="w-full" [options]="percentage" styleClass="w-full"></p-select>
+							<div *ngIf="submitted && f.discountpercentage.errors" class="text-danger text-xs">
+								<div *ngIf="f.discountpercentage.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-6">
+								<label class="form-label">Validity-From</label>
+								<div class="input-group mb-3">
+									<input type="date" formControlName="validityform" class="form-control border-black paddingfive" />
+									<div *ngIf="submitted && f.validityform.errors" class="text-danger text-xs">
+										<div *ngIf="f.validityform.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">To</label>
+								<div class="input-group mb-3">
+									<input type="date" formControlName="to" class="form-control border-black paddingfive" />
+									<div *ngIf="submitted && f.to.errors" class="text-danger text-xs">
+										<div *ngIf="f.to.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>User Type</label>
+							<p-select class="mt-1" optionValue="id" optionLabel="usertype" placeholder="Select" formControlName="usertype" [options]="UsertypeOptions" optionValue="id" (onChange)="username($event)" optionLabel="usertype" styleClass="w-full"></p-select>
+							<div *ngIf="submitted && f.usertype.errors" class="text-danger text-xs">
+								<div *ngIf="f.usertype.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>User Name</label>
+							<p-select class="mt-1" optionValue="id" placeholder="Select" optionLabel="usertype" formControlName="username" [options]="usernameoption" optionValue="id" optionLabel="name" [filter]="true" styleClass="w-full"></p-select>
+							<!-- <input type="text" formControlName="username" class="form-control border-black paddingfive"> -->
+							<div *ngIf="submitted && f.to.errors" class="text-danger text-xs">
+								<div *ngIf="f.to.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Region</label>
+                        <p-select class="mt-1" placeholder="Select" formControlName="region" optionValue="id" optionLabel="state"
+                                    styleClass="w-full" [options]="region" (onChange)="changeRegion($event)" [filter]="true"
+                                    filterBy="state"></p-select>
+                        <div *ngIf="submitted && f.region.errors" class="text-danger text-xs">
+                            <div *ngIf="f.region.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <div class="form-group">
+                        <label>Location</label>
+                        <p-select placeholder="Select" formControlName="location" optionValue="id"  [(ngModel)]="Locationng"
+                                    optionLabel="district" styleClass="w-full" [options]="locations" [filter]="true"
+                                    filterBy="district"></p-select>
+                        <div *ngIf="submitted && f.location.errors" class="text-danger text-xs">
+                            <div *ngIf="f.location.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div> -->
+					<div class="col-md-4 mt-2" *ngIf="IsNotVisibleInEdit">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select placeholder="Select" optionValue="id" formControlName="status" optionLabel="name" styleClass="w-full" [options]="statuses"></p-select>
+							<div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+								<div *ngIf="f.status.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button pButton type="submit" label="" class="btn btn-primary">{{ btntxt }}</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+	<p-accordion-panel value="2">
+		<p-accordion-header>Filter</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="fileterform" (ngSubmit)="filterCouponForm()">
+				<div class="row">
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select placeholder="Select" optionValue="id" formControlName="status" optionLabel="name" styleClass="w-full" [options]="statuses"></p-select>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button pButton type="button" (click)="resetButton()" label="" class="btn btn-primary">Rest Filter</button>
+							<button pButton type="submit" label="" class="btn btn-primary">Filter</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="coupenlists" styleClass="gray-header" [totalRecords]="datacount">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<div>
+				<span style="font-size: 20px">Coupon Details</span> <br />
+				<span style="font-size: 13px">Total Coupons: {{ datacount }} | Total Active Coupons: {{ activecount }} | Total Deactive Coupons: {{ deactivecount }}</span>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell">Coupon Code Name</th>
+			<th class="border-cell">Discount %</th>
+			<th class="border-cell">Validity</th>
+			<th class="border-cell">Username</th>
+			<th class="border-cell">User Type</th>
+			<!-- <th class="border-cell">Location</th> -->
+			<th class="border-cell">Leads</th>
+			<th class="border-cell">Status</th>
+			<th class="border-cell">Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-coupenlists let-expanded="expanded">
+		<tr>
+			<td class="border-cell" style="cursor: pointer" (click)="copyToClipboard(coupenlists.couponcodename)">{{ coupenlists.couponcodename }}</td>
+			<td class="border-cell">{{ coupenlists.discountpercentage }}%</td>
+			<td class="border-cell">{{ coupenlists.validityFrom }} to <br />{{ coupenlists.validityTo }}</td>
+			<td class="border-cell">{{ coupenlists.name }}</td>
+			<td class="border-cell">
+				{{ coupenlists.usertype == 14 ? "Employee" : coupenlists.usertype == 13 ? "Freelacer" : coupenlists.usertype == 9 ? "Marketing Representative" : "Marketing Intern" }}
+			</td>
+			<!-- <td class="border-cell" style="white-space: nowrap;">{{coupenlists.regionName}} , <br>
+                {{coupenlists.locationName}}</td> -->
+			<td class="border-cell">
+				<span style="white-space: nowrap; cursor: pointer" (click)="coupenUseSubsribeLeadUsers(coupenlists.id)"
+					><b>{{ coupenlists.leads }} Users</b></span
+				>
+			</td>
+			<td class="border-cell">{{ coupenlists.status == 1 ? "Active" : "Deactive" }}</td>
+			<td class="border-cell" style="white-space: nowrap">
+				<div style="cursor: pointer; color: var(--p-primary-500)" class="view-btn m-1">
+					<span (click)="editlist(coupenlists)"><i class="fa-solid fa-pen"></i> &nbsp; Edit</span>
+					<span style="cursor: pointer" class="d-flex gap-2" (click)="deletestudent(coupenlists.id)">
+						<span style="color: var(--p-primary-500)">
+							<i class="fa-solid fa-trash"></i>
+						</span>
+						Delete
+					</span>
+				</div>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+<div class="card-footer">
+	<p-paginator [rows]="rows" [totalRecords]="datacount" (onPageChange)="pageChange($event)" [rowsPerPageOptions]="[10, 50, 100, 500]"></p-paginator>
+</div>
+<p-confirmDialog></p-confirmDialog>

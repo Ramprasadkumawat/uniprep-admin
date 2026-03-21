@@ -1,0 +1,89 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+						<p-accordion-header>Filter By</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filtersubmit()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mobile</label>
+							<input formControlName="phone" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<!--                <div class="col-md-4  mt-1">-->
+					<!--                    <div class="form-group">-->
+					<!--                        <label>Category</label>-->
+					<!--                        <p-select formControlName="category" optionValue="id" optionLabel="name" styleClass="w-full"></p-select>-->
+					<!--                    </div>-->
+					<!--                </div>-->
+					<!--                <div class="col-md-4  mt-1">-->
+					<!--                    <div class="form-group">-->
+					<!--                        <label>Priority</label>-->
+					<!--                        <p-select formControlName="Priority" optionValue="id" optionLabel="name" styleClass="w-full"></p-select>-->
+					<!--                    </div>-->
+					<!--                </div>-->
+				</div>
+				<div class="row mt-3 mt-1">
+					<div class="col-12 text-right">
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" label="Reset Filter" (click)="reset()">Reset Filter</button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton type="submit" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" label="Filter">Filter</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<!-- table list -->
+
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="chats" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [totalRecords]="datacount" [rows]="pageSize" [rowsPerPageOptions]="[10, 25, 50]">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<div>
+				<span>Chats List</span> <br />
+				<span class="text-muted text-small">Total Chats : {{ datacount }}</span>
+			</div>
+			<button class="ps-3 pe-3 pt-2 pb-2" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" pButton>Export &nbsp; <i class="pi pi-file-export"></i></button>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th>User Details</th>
+			<th>Credit Plan</th>
+			<th>Credits</th>
+			<th>Credits Left</th>
+			<th>Chat</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-chat let-expanded="expanded">
+		<tr>
+			<td>
+				<span class="bold">{{ chat.name }}</span
+				><br /><span>{{ chat.email }}</span
+				><br /><span>{{ chat.phone }}</span>
+			</td>
+			<td>{{ chat.subscription }}</td>
+			<td>{{ chat.totalcredits }}</td>
+			<td>{{ chat.questions_left }}</td>
+			<td>
+				<div class="view-btn m-1">
+					<a
+						><span style="cursor: pointer"><i class="fa-solid fa-message" style="color: var(--p-primary-500)"></i></span>
+						<div *ngIf="chat.messageRead == 1" class="notification-dot"></div
+					></a>
+				</div>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>

@@ -1,0 +1,19 @@
+.active-sts-badge{
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    // background: #8bc246;
+}
+
+.no-image {
+    height: 100px;
+    border-radius: 15px;
+    background: lightgrey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    i {
+        font-size: 40px;
+        color: white;
+    }
+}

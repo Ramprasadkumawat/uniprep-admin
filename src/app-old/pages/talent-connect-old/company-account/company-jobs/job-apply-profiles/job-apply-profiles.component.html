@@ -1,0 +1,35 @@
+<p-accordion value="0"styleClass="white-accordian">
+		<p-accordion-panel value="1">
+		<p-accordion-header>Filter Employees</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Name</label>
+							<input class="form-control w-100" pInputText formControlName="username" />
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="location" styleClass="w-full" [options]="locations" placeholder="Select Type" [filter]="true" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Interview Stage</label>
+							<p-select formControlName="interested_in" optionValue="id" optionLabel="work_mode" styleClass="w-full" [options]="interviewStages" placeholder="Select Size" [filter]="true" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="btn btn-danger" type="button">Reset Filter</button>
+							<button class="btn btn-primary" type="submit">Filter Employers</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>

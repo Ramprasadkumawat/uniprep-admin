@@ -1,0 +1,41 @@
+
+.table th {
+    background-color: #343a40 !important;
+    color: #fff !important;
+    text-align: center;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.buttonStyle {
+    background-color: var(--p-primary-500);
+    border-radius: 8px;
+    border: aliceblue;
+    color: #fff;
+}
+
+.copy-icons{
+	font-size: 15px;
+    color: #1a237e;
+    margin: 5px;
+	cursor: pointer;
+}
+
+.fullscreen-mode {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: white;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+/* Optional: Smooth transition */
+.fullscreen-mode {
+    transition: all 0.3s ease-in-out;
+}

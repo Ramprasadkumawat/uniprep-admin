@@ -1,0 +1,145 @@
+<div style="width: 100%; height: 80vh; overflow: auto; overflow-x: hidden">
+	<p-accordion styleClass="white-accordian" (onClose)="activeIndex = -1" (onOpen)="activeIndex = 1" value="{{activeIndex}}">
+		<p-accordion-panel value="1">
+			<p-accordion-header>{{ title }}</p-accordion-header
+			><p-accordion-content>
+				<form [formGroup]="form" (ngSubmit)="submitForm()">
+					<input formControlName="id" type="hidden" class="form-control" pInputText />
+					<div class="row">
+						<div class="col-12">
+							<div class="row">
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Jobsite Name</label>
+										<input formControlName="jobs_site_name" type="text" class="form-control" pInputText />
+										<div *ngIf="submitted && f.jobs_site_name.errors" class="text-danger text-xs">
+											<div *ngIf="f.jobs_site_name.errors.required">Jobs Site Name Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<label>Jobsite Logo</label>
+									<div class="d-flex flex-row align-items-center">
+										<p-fileUpload mode="basic" [chooseLabel]="PatchImageName || 'Upload Jobsite Logo'" name="jobs_site_logo" accept="image/*" chooseIcon="pi pi-upload" (onSelect)="onFileSelected($event)" #fileImageUpload></p-fileUpload>
+										<button type="button" (click)="clearImage()" class="btn btn-danger">X</button>
+									</div>
+									<div class="editformimage">
+										<img *ngIf="editClick" alt="{{ form.value.jobs_site_logo }}" class="img-responsive" src="{{ storagePath }}JobSite/{{ form.value.jobs_site_logo }}" />
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Jobsite Link</label>
+										<input formControlName="job_site_link" type="text" class="form-control" pInputText />
+										<div *ngIf="submitted && f.job_site_link.errors" class="text-danger text-xs">
+											<div *ngIf="f.job_site_link.errors.required">Jobsite Link Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Country</label>
+										<p-select placeholder="Select Country" optionValue="id" formControlName="country" [filter]="true" [filterBy]="'country'" optionLabel="country" styleClass="w-full" [options]="countryData"></p-select>
+										<div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+											<div *ngIf="f.country.errors.required">Country Required</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="reset()">Reset Field</button>&nbsp;
+							<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">{{ btntxt }}</button>
+						</div>
+					</div>
+				</form>
+			</p-accordion-content>
+		</p-accordion-panel>
+		<p-accordion-panel value="2">
+			<p-accordion-header>Filter Jobsite</p-accordion-header>
+			<p-accordion-content>
+				<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()">
+					<div class="row">
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">Job Options</label>
+								<input style="height: 40px !important" formControlName="job_option_name" type="text" class="form-control" pInputText />
+							</div>
+						</div>
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">Country</label>
+								<p-select placeholder="Select Country" optionValue="id" formControlName="country" [filter]="true" [filterBy]="'country'" optionLabel="country" styleClass="w-full" [options]="countryData"></p-select>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="filterReset()">Reset Field</button>&nbsp;
+							<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">Filter</button>
+						</div>
+					</div>
+				</form>
+			</p-accordion-content>
+		</p-accordion-panel>
+	</p-accordion>
+	<p-table size="small" scrollHeight="600px" [scrollable]="true" styleClass="p-datatable-gridlines" [value]="jobsiteData" [totalRecords]="totalJobsites" [tableStyle]="{ 'min-width': '40rem' }">
+		<ng-template pTemplate="caption">
+			<div class="d-flex w-full align-items-center justify-content-between">
+				<div>
+					<span>Jobs sites List</span> <br />
+					<span class="text-muted text-small">Total Jobsites : {{ totalJobsites }}</span>
+				</div>
+				<div>
+					<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" pButton (click)="careerPlannerRedirect()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Career Planner &nbsp; <i class="fa-solid fa-school"></i></button>
+
+					<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" pButton (click)="fileUploadModal = true" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Import &nbsp; <i class="pi pi-file-export"></i></button>
+
+					<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" (click)="exportTable()" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Export &nbsp;<i class="pi pi-file"></i></button>
+				</div>
+			</div>
+		</ng-template>
+		<ng-template pTemplate="header">
+			<tr>
+				<th class="border-cell">Jobsite Name</th>
+				<th class="border-cell">Jobsite Logo</th>
+				<th class="border-cell">Country</th>
+				<th class="border-cell">Jobsite Link</th>
+				<th class="border-cell">Actions</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-jobs>
+			<tr>
+				<td>{{ jobs.job_site_name }}</td>
+				<td>
+					<div class="d-flex align-items-center justify-content-center jobsitelogs">
+						<img src="{{ storagePath }}JobSite/{{ jobs.job_site_logo }}" alt="{{ jobs.job_site_logo }}" class="img-responsive" />
+					</div>
+				</td>
+				<td>{{ jobs.country }}</td>
+				<td>
+					<a target="_blank" title="{{ !jobs.job_site_url.startsWith('http://') && !jobs.job_site_url.startsWith('https://') ? 'http://' + jobs.job_site_url : jobs.job_site_url }}" href="{{ !jobs.job_site_url.startsWith('http://') && !jobs.job_site_url.startsWith('https://') ? 'http://' + jobs.job_site_url : jobs.job_site_url }}">{{ jobs.job_site_url }}</a>
+				</td>
+				<td>
+					<div class="view-btn m-1" style="cursor: pointer">
+						<a (click)="editJobs(jobs)"><i class="fa-solid fa-pen"></i> Edit</a>
+					</div>
+				</td>
+			</tr>
+		</ng-template>
+	</p-table>
+	<p-dialog header="File Upload" [(visible)]="fileUploadModal" [modal]="true" [style]="{ width: '50vw' }">
+		<label for="file" class="reading-drop-container">
+			<i class="pi pi-upload reading-drop-title"></i>
+			<input type="file" id="file" class="d-none" (change)="onFileChange($event)" accept=".csv" /><br />
+			<span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+			<span class="reading-sm-font">Please maintain the format of uploading to stop failures</span> </label
+		><br />
+		<div class="text-center">
+			<button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="uploadFile()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Upload</button>
+		</div>
+	</p-dialog>
+	<p-scrollTop #scrollTopButton target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>
+</div>

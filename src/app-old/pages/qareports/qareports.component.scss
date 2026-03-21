@@ -1,0 +1,45 @@
+td{
+    border-top:1px solid #dee2e6;
+    text-align: left;
+    padding: 15px;
+    font-size: .9rem;
+    font-weight: 500;
+}
+
+.titlerow{
+    padding: 10px;
+    font-weight: 600;
+    background-color: #f9faf5;
+    font-weight: 700;
+    color: #343a40;
+}
+
+table{
+    margin-top: 20px;
+    width: 100%;
+}
+
+.tabletitle{
+    color: #343a40;
+    font-size: 1.5rem;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: -5px;
+    font-weight: 600;
+}
+.reportcomment{
+    font-size: .8rem;
+    opacity: .8;
+}
+.reportcommenttitle{
+    font-size: .9rem;
+    font-weight: 700;
+    opacity: .8;
+}
+.messageblock{
+    display:none;
+}
+.commentblock{
+    border: 1px solid #f6f6f6;
+    padding: 10px;
+}

@@ -1,0 +1,140 @@
+<div class="companies-stats-wrapper">
+
+  <!-- TOTAL COUNT -->
+  <div class="stats-section">
+    <h6 class="companies-stats-title total-title">Total Count</h6>
+
+    <div class="companies-stats-counts">
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">Company: {{ totalCompanies || 0 }}</span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">Users: {{ totalUsers || 0 }}</span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Revenue: {{ totalRevenue || 0 }} ({{ totalRevenuePercentage || 0 }})
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Active</span>
+        <span class="stat-value">
+          Subscribed Employers: {{ activeSubscribedEmployers || 0 }}
+          ({{ totalActiveSubscriptionsPercentage || 0 }})
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Active Jobs: {{ totalActiveJobs || 0 }} ({{ totalActiveJobsPercentage || 0 }})
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Jobs: {{ totalJobs || 0 }} ({{ totalJobsPercentage || 0 }})
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Applicants: {{ totalApplicants || 0 }} ({{ totalApplicantsPercentage || 0 }})
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Cards Seen: {{ totalCardsSeen || 0 }}
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="stats-divider"></div>
+
+
+  <!-- TODAY COUNT -->
+  <div class="stats-section">
+    <h6 class="companies-stats-title today-title">Today's Count</h6>
+
+    <div class="companies-stats-counts">
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Company: {{ todayData?.companies || 0 }}
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Users: {{ todayData?.users || 0 }}
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Revenue: {{ todayData?.revenue?.count || 0 }}
+          ({{ todayData?.revenue?.percentage || 0 }})
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Active</span>
+        <span class="stat-value">
+          Subscribed Employers:
+          {{ todayData?.active_subscriptions?.count || 0 }}
+          ({{ todayData?.active_subscriptions?.percentage || 0 }})
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Jobs: {{ todayData?.jobs?.count || 0 }}
+          ({{ todayData?.jobs?.percentage || 0 }})
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Active Jobs: {{ todayData?.active_jobs?.count || 0 }}
+          ({{ todayData?.active_jobs?.percentage || 0 }})
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Applicants: {{ todayData?.applicants?.count || 0 }}
+          ({{ todayData?.applicants?.percentage || 0 }})
+        </span>
+      </div>
+
+      <div class="companies-stat">
+        <span class="stat-label">Total</span>
+        <span class="stat-value">
+          Cards Seen: {{ todayData?.card_seen || 0 }}
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+</div>

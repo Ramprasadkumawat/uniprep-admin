@@ -1,0 +1,130 @@
+<p-accordion styleClass="white-accordian" (onClose)="activeIndex = -1" activeIndexChange="activeIndex = $event.index" value="{{activeIndex}}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>{{ faqCatName }}</p-accordion-header
+		><p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<input formControlName="id" type="hidden" class="form-control" pInputText />
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+								<div *ngIf="f.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label class="form-label">User Type</label>
+							<p-multiselect class="custom-multiselect" placeholder="Select" formControlName="usertype" optionValue="id" optionLabel="usertype" styleClass="w-full" [options]="usertypefortutorial" [filter]="true" placeholder="Select"></p-multiselect>
+
+							<div *ngIf="submitted && f.usertype.errors" class="text-danger text-xs">
+								<div *ngIf="f.usertype.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select placeholder="Select" optionValue="id" formControlName="status" optionLabel="name" styleClass="w-full" [options]="statuses"></p-select>
+							<div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+								<div *ngIf="f.status.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<!-- <button
+            pButton
+            label="Reset Field"
+            type="button"
+            class="m-1"
+            (click)="reset()"
+          ></button>
+          <button pButton type="submit" class="m-1">{{ btntxt }}</button> -->
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="reset()">Reset Field</button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">{{ btntxt }}</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+	<p-accordion-panel value="2">
+		<p-accordion-header>Filter FAQ Category</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterform" (ngSubmit)="submitFilterForm()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label class="form-label">User Type</label>
+							<p-multiselect class="custom-multiselect" placeholder="Select" formControlName="usertype" optionValue="id" optionLabel="usertype" styleClass="w-full" [options]="usertypefortutorial" [filter]="true" placeholder="Select"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select placeholder="Select" optionValue="id" formControlName="status" optionLabel="name" styleClass="w-full" [options]="statuses"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<!-- <button
+            pButton
+            label="Reset Field"
+            (click)="reset()"
+            type="button"
+            class="m-1"
+          ></button>
+          <button pButton label="Filter" type="submit" class="m-1"></button> -->
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="resetFilter()">Reset Filter</button>&nbsp;
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">Filter</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<br />
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="faqcategorielists" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [totalRecords]="datacount" [rows]="pageSize" [rowsPerPageOptions]="[10, 25, 50]">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<div>
+				<span>FAQ Category List</span> <br />
+				<span class="text-muted text-small">Total Categories : {{ datacount }}</span>
+			</div>
+			<!-- <button pButton>Export &nbsp; <i class="pi pi-file"></i></button> -->
+			<button type="button" class="ps-3 pe-2 pt-2 pb-2" (click)="exportTable()" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Export &nbsp; <i class="pi pi-file"></i></button>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell">Category Name</th>
+			<th class="border-cell">Status</th>
+			<th class="border-cell">Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-category let-expanded="expanded">
+		<tr>
+			<td class="border-cell">{{ category.name }}</td>
+			<td class="border-cell">{{ category.status == 1 ? "Active" : "Deactive" }}</td>
+			<td class="border-cell">
+				<div class="view-btn m-1" style="cursor: pointer">
+					<a (click)="editcat(category)"><i class="fa-solid fa-pen"></i> Edit</a>
+				</div>
+				<!-- <div (click)="delete(category.id)" style="cursor: pointer;" class="view-btn m-1">
+          <i class="fa-solid fa-trash text-danger"></i> Delete
+        </div> -->
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+<p-confirmDialog></p-confirmDialog>

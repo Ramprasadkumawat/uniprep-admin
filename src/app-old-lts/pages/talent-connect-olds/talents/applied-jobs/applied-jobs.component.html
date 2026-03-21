@@ -1,0 +1,145 @@
+<!-- Filter Accordion -->
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Employer</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()" #filterFormElm>
+				<div class="row mb-3">
+					<!-- First row -->
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Position</label>
+							<p-select fluid appendTo="body" styleClass="w-full" formControlName="position" [options]="dropdownData?.positions || []" placeholder="Select the job" optionLabel="position_title" [filter]="true" filterBy="position_title" [showClear]="true" optionValue="id"> </p-select>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select fluid appendTo="body" styleClass="w-full" formControlName="location" [options]="workLocation" placeholder="City, Country" optionLabel="work_location" [virtualScroll]="true" [virtualScrollItemSize]="40" [filter]="true" filterBy="work_location" [showClear]="true" optionValue="id"></p-select>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Start Date</label>
+							<p-datepicker formControlName="start_date" styleClass="w-full" placeholder="Date" dateFormat="dd/mm/yy" [showClear]="true"> </p-datepicker>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Due Date</label>
+							<p-datepicker formControlName="due_date" styleClass="w-full" placeholder="Date" dateFormat="dd/mm/yy" [showClear]="true"> </p-datepicker>
+						</div>
+					</div>
+				</div>
+
+				<div class="row mb-3">
+					<!-- Second row -->
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Work Mode</label>
+							<p-select formControlName="workmode" fluid appendTo="body" styleClass="w-full" [options]="dropdownData?.workmode" placeholder="Select Work Mode" optionLabel="work_mode" [filter]="true" filterBy="work_mode" [showClear]="true" optionValue="id"> </p-select>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Employment Type</label>
+							<p-select fluid appendTo="body" styleClass="w-full" formControlName="employmenttype" [options]="dropdownData?.employmenttype" placeholder="Select Work Mode" optionLabel="employment_type" [filter]="true" filterBy="employment_type" [showClear]="true" optionValue="id"> </p-select>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Salary Offer</label>
+							<input class="form-control w-100" pInputText formControlName="salaryoffer" />
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Job Status</label>
+							<p-select
+								formControlName="status"
+								optionValue="id"
+								optionLabel="name"
+								styleClass="w-full"
+								[options]="[
+									{ id: 1, name: 'Actively Hiring' },
+									{ id: 2, name: 'Hiring Closed' },
+									{ id: 3, name: 'Future Hiring' }
+								]"
+								placeholder="Select status"></p-select>
+						</div>
+					</div>
+				</div>
+
+				<div class="d-flex justify-content-end mt-4">
+					<button class="btn btn-danger me-2" type="button" (click)="resetFilter()">Reset Filter</button>
+					<button class="btn btn-primary" type="submit">Filter Employees</button>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<!-- Job Listings with Updated Card Style -->
+<div class="job-listings p-3 bg-white">
+	<div class="header-section p-3 bg-white border-bottom">
+		<div class="d-flex justify-content-between align-items-center">
+			<div class="d-flex align-items-center">
+				<button pButton pRipple type="button" icon="pi pi-arrow-left" class="p-button-rounded p-button-primary me-3" [routerLink]="'/talent-connect/talents'"></button>
+				<div>
+					<h4 class="mb-0">Job Postings</h4>
+					<small class="text-muted">Total Jobs: {{ totalCandidates.toString().padStart(2, "0") }}</small>
+				</div>
+			</div>
+
+			<div class="d-flex align-items-center">
+				<span class="p-input-icon-left me-3" style="width: 350px">
+					<input type="text" pInputText [(ngModel)]="searchText" placeholder="Search" class="w-100" />
+				</span>
+				<button pButton pRipple type="button" label="Export" icon="pi pi-download" class="p-button-primary"></button>
+			</div>
+		</div>
+	</div>
+	<div class="row g-2 mt-2">
+		<div class="col-md-3" *ngFor="let candidate of candidates">
+			<!-- Updated card to match the new minimal design -->
+			<div class="card border rounded-3 shadow-sm h-100">
+				<div class="card-body p-3">
+					<div class="d-flex">
+						<div class="me-3">
+							<img [src]="candidate?.company_logo || '/api/placeholder/80/80'" class="rounded border" alt="company logo" width="50" style="height: 100%" />
+						</div>
+
+						<div class="d-flex flex-column justify-content-center">
+							<h6 class="card-title mb-1 fw-bold" style="font-size: 14px">
+								{{ candidate?.position_title }}
+							</h6>
+							<span class="text-muted card-text">{{ candidate?.company_name }}</span>
+
+							<div class="d-flex align-items-center mb-1" style="font-size: 12px">
+								<i class="pi pi-map-marker text-success me-1"></i>
+								<span class="card-text">{{ candidate.work_location }}</span>
+							</div>
+
+							<div>
+								<span class="badge rounded-3 px-3 py-1 bg-success text-white">
+									{{ candidate.hiringstage }}
+								</span>
+							</div>
+							<span style="font-size: 9px; color: var(--p-secondary-500)">{{ candidate?.matching_skills }}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<hr />
+	<div class="w-100 bg-white">
+		<p-paginator *ngIf="totalCandidates >= 0" (onPageChange)="pageChange($event)" [rows]="pageSize" [totalRecords]="totalCandidates" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+	</div>
+</div>

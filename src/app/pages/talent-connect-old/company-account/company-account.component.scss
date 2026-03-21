@@ -1,0 +1,225 @@
+/* employer-verification.component.scss */
+
+.employer-verification-container {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.header-section {
+  background-color: #ffffff;
+}
+
+.list-view,
+.card-view {
+  background-color: #ffffff;
+}
+
+.company-card {
+  transition: all 0.2s ease;
+  height: 100%;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.card-header-content {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.job-count,
+.talent-count {
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.footer-section {
+  background-color: #ffffff;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* Override PrimeNG styles */
+:host ::ng-deep {
+  .p-progressbar {
+    height: 8px;
+    background: #e9ecef;
+
+    .p-progressbar-value {
+      background: #ff9800;
+    }
+  }
+
+  .p-card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+
+    .p-card-body {
+      padding: 1rem;
+    }
+
+    .p-card-footer {
+      padding: 1rem;
+      background-color: #f8f9fa;
+    }
+  }
+
+  .p-button.p-button-warning {
+    background-color: #ff9800;
+    border-color: #ff9800;
+  }
+
+  .p-button.p-button-success {
+    background-color: #8bc34a;
+    border-color: #8bc34a;
+  }
+
+  .p-table .p-datatable-thead > tr > th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 400;
+  }
+}
+
+.company-logo {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.stats-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #f8f9fa;
+}
+
+.profile-progress .p-progressbar-value {
+  background-color: #ff8c00 !important;
+}
+
+.p-button.p-button-warning {
+  background-color: #ff8c00;
+  border-color: #ff8c00;
+}
+
+.p-button.p-button-primary {
+  background-color: #3f51b5;
+  border-color: #3f51b5;
+}
+
+.backButton {
+  background-color: rgb(63, 76, 131);
+  color: #fff !important;
+  border-radius: 10px !important;
+  border: none;
+  padding: 10px;
+}
+
+.chatButton {
+  background-color: #85ad18;
+  color: #fff !important;
+  border-radius: 10px !important;
+  border: none;
+  padding: 10px;
+}
+
+.dataCard {
+  border-radius: 12px !important;
+  text-transform: inherit !important;
+  background-color: #f8f8f8;
+  border: 1px solid #dfe4f8;
+}
+
+.alignleft {
+  text-align: start;
+}
+
+.smallText {
+  font-size: 0.7em;
+}
+
+.card.readingcard {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  overflow: hidden;
+}
+
+.static-profile {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  padding: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.scrolling-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 15px;
+  height: calc(100vh - 200px);
+}
+
+/* Bottom Section */
+.bottom-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Progress Bar Container */
+.progress-container {
+  flex-grow: 1;
+  margin-right: 20px;
+}
+
+/* Progress Bar */
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #fee4cd;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #f48221;
+  border-radius: 10px;
+}
+
+.tag {
+  display: inline-block;
+  background: #f0f0f0;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.orangeTag {
+  background-color: #fee4cd !important;
+}
+::ng-deep .p-selectbutton .p-button.p-highlight:hover {
+  background: #3f4c83 !important;
+  border-color: #3f4c83 !important;
+  color: #fff;
+}
+::ng-deep .p-selectbutton .p-button.p-highlight {
+  background: #3f4c83 !important;
+  border-color: #3f4c83 !important;
+  color: #fff;
+}

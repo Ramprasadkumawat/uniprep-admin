@@ -1,0 +1,205 @@
+<div class="card mt-2">
+    <div class="card-header row w-full m-0" style="background-color: #fff">
+        <div class="col-lg-5 d-lg-flex gap-3">
+            <div class="d-flex">
+                <p-button (click)="goBack()" icon="pi pi-arrow-left" styleClass="p-button-rounded p-button-text text-dark"></p-button>
+                <div>
+					<span>{{ moduleName }} - {{ cardHeader }}</span><br />
+                        <span style="color: #5a5959; font-size: 12px" *ngIf="categoryName">Category: {{ categoryName }}</span> <br />
+					<span style="color: #a1a1a1; font-size: 10px">Total Questions: {{ totalQuestionCount }}
+				</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-7 d-sm-flex gap-2 mt-sm-0 mt-2 justify-content-lg-end">
+<!--            <button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" pButton (click)="openQuestionForm()" style="background-color: #9bc329; border-radius: 8px; border: aliceblue; color: #fff">New Question &nbsp; <i class="fa-solid fa-plus"></i></button>-->
+<!--            <button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" pButton (click)="navigateSuggestedQuestion()" style="background-color: #c9040a; border-radius: 8px; border: aliceblue; color: #fff">Q&A Request &nbsp; <i class="fa-solid fa-plus"></i></button>-->
+<!--            <button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" pButton (click)="fileUploadModal = true" style="background-color: var(&#45;&#45;uniprep-primary); border-radius: 8px; border: aliceblue; color: #fff">Import &nbsp; <i class="pi pi-file-export"></i></button>-->
+            <button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" pButton (click)="exportFile()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">
+                Export &nbsp;
+
+                <i class="pi pi-file-export"></i>
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <!-- <div class="col-md-12 mb-2">
+                <div class="d-flex gap-3 justify-content-end" [ngClass]="{ 'd-none': deletePermission === 0 }">
+                    <button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" (click)="selectAllCheckboxes()" pButton>
+                        <i class="fa-solid {{ selectAllQuestion ? 'fa-xmark' : 'fa-check' }} me-2"></i>
+                        {{ selectAllQuestion ? 'Deselect All' : 'Select All' }}
+                    </button>
+                    <button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2"  (click)="DeleteSelectedCheckBoxes()" pButton>
+                        <i class="fa-solid fa-trash me-2"></i> Delete Selected
+                    </button>
+                </div>
+            </div> -->
+            <div class="col-xl-3 col-md-6 col-sm-6 mb-3" *ngFor="let item of questionList; let i = index">
+                <div class="card h-100">
+                    <div class="card-body h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex gap-2">
+                                    <input type="checkbox" [ngClass]="{ 'd-none': deletePermission === 0 }"  [(ngModel)]="item.isChecked" [value]="item.id" style="transform: scale(1.5);" >
+                                    <div class="fw-bold sm-font pt-1">Question {{ first + i + 1 }}</div>
+                                </div>
+                                <p-rating [(ngModel)]="item.favourite" (click)="rating(item)" [stars]="1" cancel="false"> </p-rating>
+                            </div>
+                            <div class="d-flex pb-1">
+                                <p-tag [severity]="item.pre_verified == 1 ? 'success' : 'warn'" [value]="item.pre_verified == 1 ? 'Pre-Verified' : 'Not P-Verified'" [rounded]="true" class="card-tag CardSpace"></p-tag>
+                                <p-tag [severity]="item.verified == 1 ? 'success' : 'warn'" [value]="item.verified == 1 ? 'Verified' : 'Not Verified'" [rounded]="true" class="card-tag CardSpace"></p-tag>
+                                <p-tag [severity]="item.formatted == 1 ? 'success' : 'warn'" [value]="item.formatted == 1 ? 'Formatted' : 'Not Formatted'" [rounded]="true" class="card-tag CardSpace"></p-tag>
+                                <p-tag [severity]="item.reviewed == 1 ? 'success' : 'info'" [value]="item.reviewed == 1 ? 'Reviewed' : 'Not Reviewed'" [rounded]="true" class="card-tag CardSpace"></p-tag>
+                            </div>
+                            <div class="pb-1 fw-bold">
+                                {{ item.question }}
+                            </div>
+                        </div>
+                        <div>
+                            <div class="row pb-2">
+                                <div class="col-12">
+                                    <button class="ps-4 pe-4 pt-1 pb-1" pButton (click)="openViewQuestion(item)" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px; width: 100%; display: flex; justify-content: center">View</button>
+                                </div>
+                            </div>
+                            <div style="color: #a1a1a1; font-size: 10px">Last Updated: {{ item.updated_at | date }}</div>
+                            <div style="color: #a1a1a1; font-size: 10px">Last Updated By: {{ item.updated_user_name }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p-paginator (onPageChange)="pageChange($event)" [first]="first" [rows]="rows" [totalRecords]="totalQuestionCount" [rowsPerPageOptions]="[50, 30, 20, 10]"></p-paginator>
+        </div>
+    </div>
+</div>
+
+<p-dialog [(visible)]="viewQuestionModal" [modal]="true" header="{{ moduleName }} - {{ cardHeader }}" [style]="{ width: '80vw' }">
+    <div *ngIf="questionListData">
+        <div style="color: var(--p-primary-500)">Question</div>
+        <br />
+        <div class="row">
+            <div class="col-lg-10 fw-bold" style="font-size: 16px">{{ questionListData.question }}</div>
+            <div class="col-lg-2">
+                <button class="ps-4 pe-4 pt-1 pb-1" pButton (click)="reviewBy(questionListData.id)" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Reviewed By</button>
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-2 pb-1">
+            <div style="color: #a1a1a1; font-size: 10px">Last Updated {{ questionListData.updated_at | date }}</div>
+            <p-tag [severity]="questionListData.pre_verified == 1 ? 'success' : 'info'" [value]="questionListData.pre_verified == 1 ? 'Pre-Verified' : 'Not Pre-Verified'" [rounded]="true" class="card-tag"></p-tag>
+            <p-tag [severity]="questionListData.verified == 1 ? 'success' : 'warn'" [value]="questionListData.verified == 1 ? 'Verified' : 'Not Verified'" [rounded]="true" class="card-tag"></p-tag>
+            <p-tag [severity]="questionListData.formatted == 1 ? 'success' : 'warn'" [value]="questionListData.formatted == 1 ? 'Formatted' : 'Not Formatted'" [rounded]="true" class="card-tag"></p-tag>
+            <p-tag [severity]="questionListData.reviewed == 1 ? 'success' : 'info'" [value]="questionListData.reviewed == 1 ? 'Reviewed' : 'Not Reviewed'" [rounded]="true" class="card-tag"></p-tag>
+        </div>
+
+        <div class="answercard">
+            <div style="color: var(--p-primary-500)">Answer</div>
+            <br />
+
+            <div style="white-space: inherit !important;" [innerHTML]="questionListData.answer"></div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-6 col-12">
+                <div class="fw-bold">Recommended Videos</div>
+                <br />
+                <!--                <p-carousel [value]="questionListData.videolink" [numVisible]="3" [numScroll]="1" [circular]="true"-->
+                <!--                    [responsiveOptions]="responsiveOptions">-->
+                <!--                    <ng-template let-item pTemplate="item">-->
+                <!--                        <div class="text-center">-->
+                <!--                            <iframe-->
+                <!--                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"-->
+                <!--                                    allowfullscreen-->
+                <!--                                    frameborder="0"-->
+                <!--                                    height="100px"-->
+                <!--                                    [src]="item.link | safe"-->
+                <!--                                    title="Uniprep Video Player"-->
+                <!--                                    width="80%"-->
+                <!--                            ></iframe>-->
+                <!--                        </div>-->
+                <!--                    </ng-template>-->
+                <!--                </p-carousel>-->
+                <div class="d-flex flex-wrap gap-3">
+                    <a class="px-4 m-0 py-2 btn btn-primary" target="_blank" href="{{ videoL.link }}" *ngFor="let videoL of questionListData.videolink; let ind = index">Video {{ ind + 1 }} &nbsp;<i class="fa-solid fa-video"></i></a>
+                </div>
+            </div>
+            <div class="col-md-6 col-12">
+                <div class="fw-bold">Recommended Links</div>
+                <br />
+                <!--                <p-carousel [value]="questionListData.imagelink" [numVisible]="3" [numScroll]="1" [circular]="true"-->
+                <!--                    [responsiveOptions]="responsiveOptions">-->
+                <!--                    <ng-template let-item pTemplate="item">-->
+                <!--                        <div class="text-center">-->
+                <!--                            <img [src]="item.link" [alt]="item.title" style="width: 80%; height: 100px">-->
+                <!--                        </div>-->
+                <!--                    </ng-template>-->
+                <!--                </p-carousel>-->
+                <div class="d-flex flex-wrap gap-3">
+                    <a class="px-4 m-0 py-2 btn btn-secondary btn-rounded" target="_blank" href="{{ refL.link }}" *ngFor="let refL of questionListData.reflink; let ind = index">Link {{ ind + 1 }} &nbsp;<i class="fa-solid fa-link"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+<p-dialog header="Reviewed By" [(visible)]="reviewedByModal" [modal]="true" [style]="{ width: '40vw' }">
+    <ng-template pTemplate="header">
+        <span class="text-xl font-bold ms-2">Reviewed</span>
+    </ng-template>
+    <div class="container-fluid">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-3" *ngFor="let review of reviewedByOrgList">
+                <img src="{{ review.logo }}" [alt]="review.organizationname" class="w-2 shadow-2 img-fluid" />
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Suggestion" [(visible)]="suggestionModal" [modal]="true" [style]="{ width: '60vw' }">
+    <div class="d-flex gap-2 pt-2 align-items-baseline" *ngFor="let item of suggestion">
+        <!-- <input type="checkbox"> -->
+        <div style="width: 100%">
+            <div class="d-flex gap-2 pb-2">
+                <div class="fw-bold" style="font-size: 16px">Review User: {{ item.name }}</div>
+                <p-tag severity="success" [rounded]="true" class="card-tag" *ngIf="item.action == 'Actioned'">{{ item.action }}</p-tag>
+                <p-tag severity="warn" [rounded]="true" class="card-tag" *ngIf="item.action == 'Not Actioned'">{{ item.action }}</p-tag>
+            </div>
+            <div class="pb-3">{{ item.sname }}</div>
+            <div style="color: #a1a1a1" class="container-bottom pb-3">
+                {{ item.suggestion }}
+            </div>
+            <div class="text-right" *ngIf="item.action == 'Not Actioned'">
+                <button class="ps-4 pe-4 pt-1 pb-1" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px" (click)="actionSuggestion(item.id)">Action</button>
+            </div>
+            <br />
+        </div>
+    </div>
+    <div class="text-right">
+        <!-- <button class="ps-4 pe-4 pt-1 pb-1" pButton
+            style="background-color: #9BC329;border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+            Action
+        </button> -->
+    </div>
+</p-dialog>
+<!-- <p-dialog header="File Upload" [(visible)]="fileUploadModal" [modal]="true" [style]="{ width: '50vw' }">
+    <div class="row">
+        <div class="col-md-6 col-12">
+            <div class="w-full">
+                <a href="assets/files/Export-UK-All-Modules.csv" download class="ps-4 pe-4 pt-2 pb-2 w-full d-flex justify-content-center align-items-initial no-underline" style="background-color: #000000; border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px"> <i class="pi pi-file-export"></i>&nbsp;&nbsp;Download Report</a>
+            </div>
+        </div>
+        <div class="col-md-6 col-12 mt-md-0 mt-2">
+            <div class="w-full">
+                <a href="assets/files/Export UK - All Modules.csv" download class="ps-4 pe-4 pt-2 pb-2 w-full d-flex justify-content-center align-items-initial no-underline" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px"> <i class="pi pi-file-export"></i>&nbsp;&nbsp;Download Read Me</a>
+            </div>
+        </div>
+    </div>
+    <br />
+    <label for="file" class="reading-drop-container">
+        <i class="pi pi-upload reading-drop-title"></i>
+        <input type="file" id="file" class="d-none" (change)="onFileChange($event)" accept=".csv" /><br />
+        <span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+        <span class="reading-sm-font">Please maintain the format of uploading to stop failures</span> </label
+    ><br />
+    <div class="text-center">
+        <button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="uploadFile()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Upload</button>
+    </div>
+</p-dialog> -->

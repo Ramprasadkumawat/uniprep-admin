@@ -1,0 +1,28 @@
+.border-cell {
+    border: 1px solid #ccc;
+    padding: 8px;
+    background-color: #efefef !important;
+    color: black !important;
+}
+
+.joblogos{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 5px;
+    padding: 2px;
+    img{
+        object-fit: contain;
+        max-height: 50px;
+        width: 100%;
+        margin: auto;
+        padding: 5px;
+    }
+}
+
+.parent-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}

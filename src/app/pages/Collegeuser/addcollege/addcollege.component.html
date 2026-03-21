@@ -1,0 +1,182 @@
+<p-accordion styleClass="white-accordian" activeIndexChange="indextchange($event)" value="{{activeIndex}}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Add College</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>College Name</label>
+							<input formControlName="collegename" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.collegename.errors" class="text-danger text-xs">
+								<div *ngIf="f.collegename.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>College Type</label>
+							<input formControlName="collegetype" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.collegetype.errors" class="text-danger text-xs">
+								<div *ngIf="f.collegetype.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Alternate Name (Keywords)</label> -->
+					<!-- <textarea formControlName="text-are" type="text" class="form-control" > -->
+					<!-- <textarea style="height: 100px;" name="" id="" cols="10" rows="10" formControlName="alterbativename" type="text" class="form-control"></textarea>
+                        <div *ngIf="submitted && f.alterbativename.errors" class="text-danger text-xs">
+                            <div *ngIf="f.alterbativename.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div> -->
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Contract Status</label>
+							<p-select styleClass="w-full" formControlName="status" [options]="statusOptions"></p-select>
+							<div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+								<div *ngIf="f.status.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-md-4 mt-2">
+                    <div class="form-group">
+                        <label>College Region</label>
+                        <input formControlName="region" type="text" class="form-control" pInputText>
+                        <div *ngIf="submitted && f.region.errors" class="text-danger text-xs">
+                            <div *ngIf="f.region.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div> -->
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>College Region</label>
+							<p-select formControlName="region" (onChange)="selectMonth()" [(ngModel)]="collegeregion" placeholder="Select a Region" optionValue="id" optionLabel="state" styleClass="w-full" [options]="RegionOptions"> </p-select>
+
+							<div *ngIf="submitted && f.region.errors" class="text-danger text-xs">
+								<div *ngIf="f.region.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-md-4 mt-2">
+                    <div class="form-group">
+                        <label>District</label>
+                        <input formControlName="district" type="text" class="form-control" pInputText>
+                        <div *ngIf="submitted && f.district.errors" class="text-danger text-xs">
+                            <div *ngIf="f.district.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div> -->
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>District</label>
+							<p-select formControlName="district" placeholder="Select a District" [(ngModel)]="districtid" optionValue="id" optionLabel="district" styleClass="w-full" [options]="DistrictOptions"></p-select>
+							<div *ngIf="submitted && f.district.errors" class="text-danger text-xs">
+								<div *ngIf="f.district.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>PinCode</label>
+							<input formControlName="pincode" type="number" class="form-control" pInputText />
+							<div *ngIf="submitted && f.pincode.errors" class="text-danger text-xs">
+								<div *ngIf="f.pincode.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Contact Person Name</label>
+							<input formControlName="contactpersonname" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.contactpersonname.errors" class="text-danger text-xs">
+								<div *ngIf="f.contactpersonname.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Contact Person Number</label>
+							<input formControlName="number" type="number" class="form-control" pInputText />
+							<div *ngIf="submitted && f.number.errors" class="text-danger text-xs">
+								<div *ngIf="f.number.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Contact Person Email</label>
+							<input formControlName="email" type="email" class="form-control" pInputText />
+							<div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
+								<div *ngIf="f.email.errors.required">Required</div>
+								<div *ngIf="f.email.errors.email">Email format</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" (click)="form.reset()" type="button">Reset Field</button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">{{ btntxt }}</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<!-- list -->
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="collegelist" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [rows]="pageSize" [totalRecords]="datacount" [rowsPerPageOptions]="[10, 25, 50]">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<span
+				>College Details <br />
+				<span> Total : {{ datacount }}</span></span
+			>
+			<div class="text-right p-1">
+				<button class="ps-3 pe-2 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Add plan &nbsp;<i class="fa-solid fa-circle-plus"></i></button>&nbsp;
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell">College Name</th>
+			<th class="border-cell">Contact Person</th>
+			<th class="border-cell">Region</th>
+			<th class="border-cell">District</th>
+			<th class="border-cell">College Type</th>
+			<th class="border-cell">PinCode</th>
+			<th class="border-cell">Contract</th>
+			<th class="border-cell">Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-user>
+		<tr>
+			<td class="border-cell">{{ user.collegename }}</td>
+			<td class="border-cell">
+				{{ user.contactpersonname }} <br /><span style="font-size: 13px">{{ user.contactpersonemail }}</span
+				><br /><span style="font-size: 13px">{{ user.contactpersonnumber }}</span>
+			</td>
+			<td class="border-cell">{{ user.regionName }}</td>
+			<td class="border-cell">{{ user.locationName }}</td>
+			<td class="border-cell">{{ user.collegetype }}</td>
+			<td class="border-cell">{{ user.pincode }}</td>
+			<td class="border-cell">{{ user.status === 1 ? "Active" : "In-Active" }}</td>
+			<td class="border-cell">
+				<span style="cursor: pointer" (click)="redirectmanage()"
+					><span style="color: var(--p-primary-500)"><i class="fa-solid fa-grip-lines"></i></span> Manage</span
+				>&nbsp;&nbsp;
+				<span style="cursor: pointer" (click)="editcollegedetails(user)"
+					><span style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span> Edit</span
+				>&nbsp;&nbsp;
+				<span style="cursor: pointer" (click)="deletecollegelist(user.id)"
+					><span style="color: var(--p-primary-500)"><i class="fa-solid fa-trash-can"></i></span> Delete</span
+				>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+<p-confirmDialog></p-confirmDialog>

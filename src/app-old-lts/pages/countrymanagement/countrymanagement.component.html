@@ -1,0 +1,135 @@
+<p-accordion styleClass="white-accordian" activeIndexChange="indextchange($event)" value="{{activeIndex}}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>{{ ed }}</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Name</label>
+							<input style="height: 40px !important" formControlName="name" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+								<div *ngIf="f.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select placeholder="Select" styleClass="w-full" formControlName="status" [options]="statusOptions"></p-select>
+							<div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+								<div *ngIf="f.status.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-md-3">
+                    <label>Image Upload (.svg)</label>
+                    <div class="form-group">
+                      <div class="input-wrapper">
+                        <input type="file" (change)="onFileChange($event)" accept=".svg" style="display: none;" #fileInput>
+                        <input type="text" formControlName="image" class="form-control" pInputText readonly (click)="fileInput.click()">
+                        <button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem;" class="upload-button"
+                          (click)="fileInput.click()">Upload</button>
+                        <div *ngIf="submitted && f.image.errors" class="text-danger text-xs">
+                          <div *ngIf="f.image.errors.required">Required</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+					<div class="col-md-3">
+						<label>Image Upload (.svg)</label>
+						<div class="form-group" (dragover)="onDragOver($event)">
+							<div class="input-wrapper">
+								<input type="file" (change)="onFileChange($event)" formControlName="image" accept=".svg" style="display: none; color: black" #fileInput />
+								<input style="height: 40px !important" type="text" (change)="onFileChange($event)" formControlName="image" class="form-control" pInputText readonly [value]="form.controls.image.value ? form.controls.image.value.name : ''" (click)="fileInput.click()" />
+								<button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem" class="upload-button" (click)="fileInput.click()">Upload</button>
+								<div *ngIf="submitted && f.image.errors" class="text-danger text-xs">
+									<div *ngIf="f.image.errors.required">Required</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-4 text-right">
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit" label="Add Quiz Question">{{ btntxt }}</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+
+	<p-accordion-panel value="2">
+		<p-accordion-header>Filter Country</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filterData()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Country Name</label>
+							<p-multiselect class="custom-multiselect" formControlName="coutryname" optionValue="id" optionLabel="name" styleClass="w-full" [options]="intcountries"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select placeholder="Select" styleClass="w-full" formControlName="status" [options]="statusOptions"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-4 text-right">
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" label="Reset Filter" (click)="filterFormReset()">Reset Filter</button>&nbsp;
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit" label="Filter">Filter</button>
+					</div>
+				</div>
+
+				<!-- <div class="row mt-2">
+                <div class="col-12 text-right">
+                    <button class="ps-3 pe-3 pt-2 pb-2" pButton
+                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                        type="button" label="Reset Filter" (click)="filterForm.reset()">Reset Filter</button>&nbsp;
+                    <button class="ps-4 pe-4 pt-2 pb-2" pButton
+                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                        type="submit" label="Filter"> Filter</button>
+                </div>
+            </div> -->
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<!-- list -->
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="coutrylist" styleClass="gray-header" [lazy]="true" [totalRecords]="datacount">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<span
+				>Country List<br /><span style="color: #a1a1a1; font-size: 10px">Total Countries: {{ datacount }}</span></span
+			>
+			<div class="text-right p-1">
+				<span style="color: #a1a1a1; font-size: 10px">Total Questions: {{ totalcount }}</span>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell">Country Name</th>
+			<th class="border-cell">Total Questions</th>
+			<th class="border-cell">Icon</th>
+			<th class="border-cell">Status</th>
+			<th class="border-cell">Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-user>
+		<tr>
+			<td class="border-cell">{{ user.country }}</td>
+			<td class="border-cell">{{ user.totalque }}</td>
+			<td class="border-cell"><img [src]="user.flag" alt="file" class="file-image" /></td>
+			<td class="border-cell">{{ user.status === 1 ? "Active" : "In-Active" }}</td>
+			<td class="border-cell">
+				<span (click)="editcountrydetails(user)" style="cursor: pointer"
+					><span style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span>&nbsp; Edit</span
+				>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+<div class="card-footer">
+	<p-paginator [rows]="8" [totalRecords]="datacount" (onPageChange)="pageChange($event)" [rowsPerPageOptions]="[10, 25, 50, 100]"></p-paginator>
+</div>

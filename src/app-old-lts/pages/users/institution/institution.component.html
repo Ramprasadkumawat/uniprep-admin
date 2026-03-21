@@ -1,0 +1,184 @@
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}">
+	<p-accordion-panel value="1" *ngIf="Adduserform">
+		<p-accordion-header>Assign Institutions</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+				<div class="row">
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Home Country</label>
+							<p-select formControlName="home_country" (onChange)="changeCountry($event)" [filter]="true" filterBy="country" placeholder="Select a country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="homecountries"> </p-select>
+
+							<div *ngIf="submitted && f.home_country.errors" class="text-danger text-xs">
+								<div *ngIf="f.home_country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Region</label>
+							<p-select formControlName="region" optionValue="id" optionLabel="state" styleClass="w-full" [options]="region" (onChange)="changeRegion($event)" [filter]="true" filterBy="state"></p-select>
+							<div *ngIf="submitted && f.region.errors" class="text-danger text-xs">
+								<div *ngIf="f.region.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="district" styleClass="w-full" [options]="locations" [filter]="true" (onChange)="changeLocation()" filterBy="district"></p-select>
+							<div *ngIf="submitted && f.location.errors" class="text-danger text-xs">
+								<div *ngIf="f.location.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Institute Type</label>
+							<p-select styleClass="w-full" formControlName="Institutetype" placeholder="Select Institute" optionLabel="mitypename" optionValue="id" [options]="institutelist" (onChange)="changeDistrict()"></p-select>
+							<div *ngIf="submitted && f.Institutetype.errors" class="text-danger text-xs">
+								<div *ngIf="f.Institutetype.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Education Institution</label>
+							<p-select formControlName="educationinstitute" optionValue="id" optionLabel="institutename" styleClass="w-full" [options]="educationinstitute" [filter]="true" filterBy="institutename"></p-select>
+							<div *ngIf="submitted && f.educationinstitute.errors" class="text-danger text-xs">
+								<div *ngIf="f.educationinstitute.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Source Type</label>
+							<p-select formControlName="source_type" optionValue="id" optionLabel="type" styleClass="w-full" [options]="userTypes" (onChange)="checkUserType($event)"></p-select>
+							<div *ngIf="submitted && f.source_type.errors" class="text-danger text-xs">
+								<div *ngIf="f.source_type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Assign Name</label>
+							<p-select formControlName="source_name" optionValue="user_id" optionLabel="name" styleClass="w-full" [options]="sourceName" [filter]="true" filterBy="name"></p-select>
+							<div *ngIf="submitted && f.source_name.errors" class="text-danger text-xs">
+								<div *ngIf="f.source_name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="submit" *ngIf="!AddAndEditButton">Assign Institution</button>
+						<button class="btn btn-primary" type="submit" *ngIf="AddAndEditButton">update Institution</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content></p-accordion-panel
+	>
+	<p-accordion-panel value="2">
+		<p-accordion-header>Filter Institutions</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filter()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Home Country</label>
+							<p-select formControlName="home_country" (onChange)="changeCountry($event)" [filter]="true" filterBy="country" placeholder="Select a country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="homecountries"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Region</label>
+							<p-select formControlName="region" optionValue="id" optionLabel="state" styleClass="w-full" [options]="region" (onChange)="changeRegion($event)" [filter]="true" filterBy="state"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="district" styleClass="w-full" [options]="locations" (onChange)="changeDistrict('filter')" [filter]="true" filterBy="district"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Education Institution</label>
+							<p-select formControlName="educationinstitute" optionValue="id" optionLabel="institutename" styleClass="w-full" [options]="educationinstitute" [filter]="true" filterBy="institutename"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Source Type</label>
+							<p-select formControlName="source_type" optionValue="id" optionLabel="type" styleClass="w-full" [options]="userTypes" (onChange)="changeSourceType($event)"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3 mt-2">
+						<div class="form-group">
+							<label>Assign Name</label>
+							<p-select formControlName="source_name" optionValue="user_id" optionLabel="name" styleClass="w-full" [options]="sourceName" [filter]="true" filterBy="name"> </p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="button" (click)="resetFilter()">Reset Filter</button>&nbsp;
+						<button class="btn btn-primary" type="submit">Filter Data</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="card">
+	<div class="card-header">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<div class="d-flex flex-column">
+				<span class="h6 fw-bold">Institutions Table</span>
+				<span class="text-xs" style="color: rgb(205, 203, 203)">Total Users:{{ institutionCount }}</span>
+			</div>
+			<button (click)="exportFile()" class="btn btn-primary">Export &nbsp; <i class="pi pi-file-export"></i></button>
+		</div>
+	</div>
+	<div class="card-body">
+		<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="institutionList" [paginator]="true" (onPage)="pageChange($event)" [first]="first" [lazy]="true" [rows]="pageSize" [totalRecords]="institutionCount">
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Region</th>
+					<th>Location</th>
+					<th>Educational Institution</th>
+					<th>Source Type</th>
+					<th>Assign Name</th>
+					<th>Pre-Sales</th>
+					<th>BDT</th>
+					<th>Creation Date</th>
+					<th>Actions</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-Data>
+				<tr>
+					<td>{{ Data?.state }}</td>
+					<td>{{ Data?.district }}</td>
+					<td>{{ Data?.institutename }}</td>
+					<td>{{ Data?.type }}</td>
+					<td>{{ Data?.name }}</td>
+					<td>{{ Data?.presale }}</td>
+					<td>{{ Data?.bdt }}</td>
+					<td>{{ Data?.created_time }}</td>
+					<td>
+						<div class="action-sec">
+							<span style="color: var(--p-primary-500)" (click)="EditAssignIns(Data.id, Data.region_id, Data.location_id, Data.institution_id, Data.source_type_id, Data.source_name_id, Data.homecountry, Data.institutetype)">
+								<i class="fa-solid fa-pen-to-square"></i>
+								<span class="ms-2">Edit</span>
+							</span>
+							<span style="color: var(--p-primary-500)" (click)="DeleteAssignIns(Data.id)">
+								<i class="fa-solid fa-trash"></i>
+								<span class="ms-2">Delete</span>
+							</span>
+						</div>
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+</div>

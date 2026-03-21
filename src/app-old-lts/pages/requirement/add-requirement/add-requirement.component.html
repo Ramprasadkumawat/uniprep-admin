@@ -1,0 +1,546 @@
+<p-toast />
+<div class="card readingcard">
+	<div class="card-header border-0 bg-white header-section">
+		<div class="row justify-content-center">
+			<div class="col-12 d-flex flex-column flex-md-row gap-2">
+				<div
+					class="select-title bg-white d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center"
+					style="width: 100%">
+					<div>
+						<h5 class="mb-0 form-title text-dark">
+							<span>Add Requirement</span>
+						</h5>
+					</div>
+					<div class="d-flex gap-2 align-items-center">
+						<button pButton type="button" class="guidelines-btn p-2 px-4 py-2" (click)="openGuideLines()">
+							<i class="fa-solid fa-route me-2"></i>Guidelines
+						</button>
+						<button pButton type="button" class="how-it-works-btn p-2 px-4 py-2" (click)="openHiringOutput()">
+							<i class="pi pi-question me-2"></i>How to use
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-body overflow-y-auto">
+		<div class="container-fluid">
+			<form [formGroup]="hiringSupportForm" (ngSubmit)="submitHiringSupport()" *ngIf="hiringSupportForm">
+				<div formArrayName="requirements" class="bg-white">
+					<div *ngFor="let requirement of requirementsFormArray.controls; let i = index" [formGroupName]="i"
+						class="requirement-section bg-white">
+						<div class="d-flex justify-content-between align-items-center mb-3"
+							*ngIf="requirementsFormArray.length > 1">
+							<h6 class="mb-0">Requirement {{ i + 1 }}</h6>
+							<button pButton type="button" icon="pi pi-times" class="p-button-danger p-button-text p-button-sm"
+								(click)="removeRequirement(i)" [disabled]="requirementsFormArray.length === 1">
+								Remove
+							</button>
+						</div>
+						<div class="row g-3">
+							<!-- Row 1 -->
+							<div class="col-12 col-md-6 col-lg-4">
+								<div class="form-group">
+									<label class="form-label">Company ID</label>
+									<input pInputText class="w-100" placeholder="Enter Company ID (7 characters)"
+										formControlName="companyIdInput" maxlength="7" />
+									<small class="text-muted">Enter 7-character Company ID to auto-fill Company Name</small>
+								</div>
+							</div>
+							<div class="col-12 col-md-6 col-lg-4">
+								<div class="form-group">
+									<label class="form-label">Company Name</label>
+									<p-select class="w-100" placeholder="Select Company name" [options]="companiesList || []"
+										optionLabel="company_name" optionValue="company_id" appendTo="body" formControlName="companyId"
+										[showClear]="true" [filter]="true" filterBy="company_name" [virtualScroll]="true"
+										[virtualScrollItemSize]="38" (ngModelChange)="onCompanyChange($event, i)"></p-select>
+									<small class="text-danger" *ngIf="
+								                    getRequirementForm(i).get('companyId')?.invalid &&
+								                    getRequirementForm(i).get('companyId')?.touched
+								                  ">Company Name is required.</small>
+								</div>
+							</div>
+							<div class="col-12 col-md-6 col-lg-4">
+								<div class="form-group">
+									<label class="form-label">Job Title</label>
+									<p-select class="w-100" placeholder="Enter Job Title" [options]="visiblePositions || []"
+										optionLabel="position_title" optionValue="position_title" appendTo="body" formControlName="jobTitle"
+										[filter]="true" filterBy="position_title" (onFilter)="onPositionFilter($event)" [showClear]="true" [virtualScroll]="true"
+										[virtualScrollItemSize]="30" [lazy]="true" (onLazyLoad)="loadPositionsLazy($event)">
+										<ng-template #header>
+											<div class="p-2" (click)="$event.stopPropagation()">
+												<p-inputgroup>
+													<input pInputText class="rounded-end-2 me-1 w-full" placeholder="Custom Job Title"
+														styleClass="w-100" #jobTitleExp fluid
+														(click)="$event.stopPropagation(); focusInput(jobTitleExp)" />
+													<button type="button" class="btn btn-primary" (click)="confirmationPanel($event, i)">
+														<i class="fa fa-plus"></i>&nbsp;Add New
+													</button>
+												</p-inputgroup>
+												<p-confirmpopup></p-confirmpopup>
+											</div>
+										</ng-template>
+									</p-select>
+									<small class="text-danger" *ngIf="
+								                    getRequirementForm(i).get('jobTitle')?.invalid &&
+								                     getRequirementForm(i).get('jobTitle')?.touched
+								                  ">Job Title is required.</small>
+								</div>
+							</div>
+
+							<div class="col-12 col-md-6 col-lg-4">
+								<div class="form-group">
+									<label class="form-label">No of Vacancies</label>
+									<input pInputText class="w-100" placeholder="Enter No of Vacancies" formControlName="vacancies"
+										type="number" />
+									<small class="text-danger" *ngIf="
+								                    getRequirementForm(i).get('vacancies')?.invalid &&
+								                     getRequirementForm(i).get('vacancies')?.touched
+								                  ">Vacancies is required.</small>
+								</div>
+							</div>
+							<div class="col-12 col-md-6 col-lg-4">
+								<div class="form-group">
+									<label class="form-label">No of Shortlist Talents</label>
+									<input pInputText class="w-100" placeholder="Enter No of Shortlisted Talents"
+										formControlName="talentRequirement" type="number" min="0" />
+									<small class="text-danger" *ngIf="
+																                    getRequirementForm(i).get('talentRequirement')?.invalid &&
+																                     getRequirementForm(i).get('talentRequirement')?.touched
+																                  ">
+										<span *ngIf="getRequirementForm(i).get('talentRequirement')?.errors?.['required']">
+											Talent Requirement is required.
+										</span>
+										<span *ngIf="getRequirementForm(i).get('talentRequirement')?.errors?.['minTalentRequirement']">
+											Minimum talent requirement is {{ getRequirementForm(i).get('vacancies')?.value * 3 }} ({{
+											getRequirementForm(i).get('vacancies')?.value }} vacancies × 3).
+										</span>
+									</small>
+								</div>
+							</div>
+							<!-- Row 2 -->
+							<div class="col-12 col-md-6 col-lg-4">
+								<div class="form-group">
+									<label class="form-label">Employment Type</label>
+									<p-select class="w-100" placeholder="Select Employment Type" [options]="employmentTypeOptions"
+										optionLabel="label" optionValue="label" appendTo="body" formControlName="workType" [filter]="true"
+										filterBy="label" [showClear]="true"></p-select>
+									<small class="text-danger" *ngIf="
+															                    getRequirementForm(i).get('workType')?.invalid &&
+															                     getRequirementForm(i).get('workType')?.touched
+															                  ">Employment Type is required.</small>
+								</div>
+							</div>
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="form-group">
+									<label class="form-label">Job Location</label>
+									<p-multiSelect class="w-100" placeholder="Select Location" [options]="visibleLocations"
+										[virtualScroll]="true" [virtualScrollItemSize]="38" [lazy]="true"
+										(onLazyLoad)="loadLocationsLazy($event)" optionLabel="work_location" optionValue="id"
+										appendTo="body" formControlName="jobLocation" [filter]="true" filterBy="work_location"
+										[showToggleAll]="false"></p-multiSelect>
+									<small class="text-danger" *ngIf="
+                    (getRequirementForm(i).get('jobLocation')?.invalid ||
+                     !getRequirementForm(i).get('jobLocation')?.value ||
+                     (isArray(getRequirementForm(i).get('jobLocation')?.value) && getRequirementForm(i).get('jobLocation')?.value.length === 0)) &&
+                     getRequirementForm(i).get('jobLocation')?.touched
+                  ">Job Location is required. Please select at least one location.</small>
+								</div>
+							</div>
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="form-group">
+									<label class="form-label">Work Mode</label>
+									<p-select class="w-100" placeholder="Select Work Mode" [options]="workMode" optionLabel="label"
+										optionValue="label" appendTo="body" formControlName="workMode" [filter]="true" filterBy="label"
+										[showClear]="true"></p-select>
+									<small class="text-danger" *ngIf="
+                    getRequirementForm(i).get('workMode')?.invalid &&
+                    getRequirementForm(i).get('workMode')?.touched
+                  ">Work Mode is required.</small>
+								</div>
+							</div>
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="form-group">
+									<label class="form-label">Experience Level</label>
+									<p-select class="w-100" placeholder="Choose the Experience Level" [options]="experienceLevelData"
+										optionLabel="label" optionValue="id" appendTo="body" formControlName="experienceLevel"
+										[filter]="true" filterBy="label" [showClear]="true"></p-select>
+									<small class="text-danger" *ngIf="
+                     getRequirementForm(i).get('experienceLevel')?.invalid &&
+                      getRequirementForm(i).get('experienceLevel')?.touched
+                   ">Experience Level is required.</small>
+								</div>
+							</div>
+
+							<!-- Row 3 - Salary Range -->
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="form-group">
+									<label class="form-label">Salary Range</label>
+									<div class="d-flex gap-2">
+										<p-select class="salary-currency-select" placeholder="Select Currency" [options]="currency"
+											optionLabel="currency_code" optionValue="currency_code" appendTo="body" filter="true"
+											filterBy="currency_code" formControlName="salaryCurrency"></p-select>
+										<input pInputText class="salary-min-input" placeholder="Min." type="number"
+											formControlName="salaryMin" />
+										<input pInputText class="salary-max-input" placeholder="Max." type="number"
+											formControlName="salaryMax" />
+									</div>
+									<small class="text-danger" *ngIf="
+                    (getRequirementForm(i).get('salaryCurrency')?.invalid ||
+                     getRequirementForm(i).get('salaryMin')?.invalid ||
+                     getRequirementForm(i).get('salaryMax')?.invalid) &&
+                    (getRequirementForm(i).get('salaryCurrency')?.touched ||
+                     getRequirementForm(i).get('salaryMin')?.touched ||
+                     getRequirementForm(i).get('salaryMax')?.touched)
+                  ">
+										<span *ngIf="getRequirementForm(i).get('salaryCurrency')?.errors?.['required']">
+											Salary Currency is required.
+										</span>
+										<span *ngIf="getRequirementForm(i).get('salaryMin')?.errors?.['required']">
+											Minimum Salary is required.
+										</span>
+										<span *ngIf="getRequirementForm(i).get('salaryMax')?.errors?.['required']">
+											Maximum Salary is required.
+										</span>
+										<span *ngIf="getRequirementForm(i).get('salaryMin')?.errors?.['salaryRangeInvalid']">
+											{{ getRequirementForm(i).get('salaryMin')?.errors?.['salaryRangeInvalid']?.message }}
+										</span>
+									</small>
+								</div>
+							</div>
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="form-group">
+									<label class="form-label">Job Start Date</label>
+									<p-datepicker [showIcon]="true" [readonlyInput]="true" placeholder="Expected Onboarding"
+										dateFormat="dd/mm/yy" styleClass="w-100" [style]="{'width':'100%'}" appendTo="body"
+										[minDate]="minDate" formControlName="jobStartDate" variant="filled" fluid>
+									</p-datepicker>
+									<small class="text-danger" *ngIf="
+                    getRequirementForm(i).get('jobStartDate')?.invalid &&
+                     getRequirementForm(i).get('jobStartDate')?.touched
+                  ">
+										<span *ngIf="getRequirementForm(i).get('jobStartDate')?.errors?.['required']">Job Start Date is
+											required.</span>
+										<span *ngIf="getRequirementForm(i).get('jobStartDate')?.errors?.['minDate']">Job Start Date must be
+											at least 7 days from today.</span>
+									</small>
+								</div>
+							</div>
+							<div class="col-12 col-md-6 col-lg-6">
+								<div class="form-group">
+									<label class="form-label">Minimum Education</label>
+									<p-select class="w-100" placeholder="Select Minimum Education" [options]="minimumEducation"
+										optionLabel="minimum_education" optionValue="id" appendTo="body" formControlName="minEducation"
+										[filter]="true" filterBy="minimum_education"></p-select>
+									<small class="text-danger" *ngIf="
+		                     getRequirementForm(i).get('minEducation')?.invalid &&
+		                      getRequirementForm(i).get('minEducation')?.touched
+		                   ">Minimum Education is required.</small>
+								</div>
+							</div>
+						</div>
+						<!-- Language & Proficiency -->
+						<div class="col-12">
+							<div class="form-group">
+								<label class="form-label">Language Know</label>
+								<div formArrayName="languages">
+									<div *ngFor="let language of getLanguagesArray(i).controls; let j = index" [formGroupName]="j"
+										class="d-flex gap-2 align-items-end mb-2">
+										<div class="flex-grow-1">
+											<p-select class="w-100" placeholder="Select Language" [options]="getAvailableLanguages(i, j)"
+												optionLabel="language" optionValue="language" appendTo="body" formControlName="language"
+												[filter]="true" filterBy="language"></p-select>
+											<small class="text-danger" *ngIf="
+												getLanguagesArray(i).at(j).get('language')?.errors?.['duplicateLanguage'] &&
+												getLanguagesArray(i).at(j).get('language')?.touched
+											">This language is already selected.</small>
+										</div>
+										<p-select class="flex-grow-1" placeholder="Language Proficiency" [options]="languageProficiency"
+											optionLabel="label" optionValue="value" appendTo="body" formControlName="proficiency"
+											[filter]="true" filterBy="label" [showClear]="true"></p-select>
+										<button pButton type="button" icon="pi pi-times"
+											class="p-button-danger p-button-text p-button-sm language-remove-btn"
+											(click)="removeLanguage(i, j)" *ngIf="getLanguagesArray(i).length > 1">
+										</button>
+										<div *ngIf="getLanguagesArray(i).length === 1" class="language-remove-btn"></div>
+										<!-- Add More Language Button - Show on last row dynamically -->
+										<button *ngIf="j === getLanguagesArray(i).length - 1" pButton type="button"
+											label="Add More Language" icon="pi pi-plus" class="add-language-btn"
+											(click)="addLanguage(i)"></button>
+									</div>
+								</div>
+								<small class="text-danger" *ngIf="
+							                    getRequirementForm(i).get('languages')?.invalid &&
+							                     getRequirementForm(i).get('languages')?.touched
+							                  ">At least one language is required.</small>
+							</div>
+						</div>
+						<!-- Full Width Sections -->
+						<div class="row g-3">
+							<div class="col-12">
+								<!-- Roles & Responsibilities -->
+								<div class="col-12">
+									<div class="form-group editor-field-card">
+										<div class="d-flex justify-content-between align-items-center mb-2">
+											<label class="form-label mb-0">Roles & Responsibilities</label>
+											<button type="button" class="ai-generate-btn"
+												*ngIf="!isNotEmptyHtml(getRequirementForm(i).get('rolesResponsibilities')?.value)"
+												(click)="aiGenerate('roles', 'generate', i)" [disabled]="isLoadingAiGenerate">
+												<i class="fa-solid fa-sparkles"></i> AI Generate
+											</button>
+											<button type="button" class="rephrase-btn"
+												*ngIf="isNotEmptyHtml(getRequirementForm(i).get('rolesResponsibilities')?.value)"
+												(click)="aiGenerate('roles', 'rephrase', i)" [disabled]="isLoadingAiGenerate">
+												Rephrase
+											</button>
+										</div>
+										<p-editor formControlName="rolesResponsibilities" placeholder="Enter roles and responsibilities"
+											[style]="{'height':'200px'}"></p-editor>
+										<div class="d-flex justify-content-end mt-1">
+											<small class="text-muted char-counter">
+												{{ getTextLength(getRequirementForm(i).get('rolesResponsibilities')?.value) }}/2000
+											</small>
+										</div>
+										<small class="text-danger" *ngIf="
+                      getRequirementForm(i).get('rolesResponsibilities')?.invalid &&
+                       getRequirementForm(i).get('rolesResponsibilities')?.touched
+                    ">
+											<span *ngIf="getRequirementForm(i).get('rolesResponsibilities')?.errors?.['required']">
+												Roles & Responsibilities is required.
+											</span>
+											<span *ngIf="getRequirementForm(i).get('rolesResponsibilities')?.errors?.['maxlength']">
+												Roles & Responsibilities must not exceed 2000 characters.
+											</span>
+										</small>
+									</div>
+								</div>
+
+								<!-- Notes (Specific Skills, if any) -->
+								<div class="col-12">
+									<div class="form-group editor-field-card">
+										<div class="d-flex justify-content-between align-items-center mb-2">
+											<label class="form-label mb-0">Notes (Specific Skills, if any)</label>
+											<!-- <button type="button" class="ai-generate-btn"
+												*ngIf="!isNotEmptyHtml(getRequirementForm(i).get('notes')?.value)"
+												(click)="aiGenerate('notes', 'generate', i)" [disabled]="isLoadingAiGenerate">
+												<i class="fa-solid fa-sparkles"></i> AI Generate
+											</button>
+											<button type="button" class="rephrase-btn"
+												*ngIf="isNotEmptyHtml(getRequirementForm(i).get('notes')?.value)"
+												(click)="aiGenerate('notes', 'rephrase', i)" [disabled]="isLoadingAiGenerate">
+												Rephrase
+											</button> -->
+										</div>
+										<p-editor formControlName="notes" placeholder="Enter specific skills or notes"
+											[style]="{'height':'200px'}"></p-editor>
+										<div class="d-flex justify-content-end mt-1">
+											<small class="text-muted char-counter">
+												{{ getTextLength(getRequirementForm(i).get('notes')?.value) }}/2000
+											</small>
+										</div>
+										<small class="text-danger" *ngIf="
+                      getRequirementForm(i).get('notes')?.invalid &&
+                       getRequirementForm(i).get('notes')?.touched &&
+                       getRequirementForm(i).get('notes')?.errors?.['maxlength']
+                    ">Notes must not exceed 2000 characters.</small>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr class="my-4" *ngIf="i < requirementsFormArray.length - 1">
+					</div>
+				</div>
+
+				<!-- Add another Requirement Button -->
+				<div class="row mt-4">
+					<div class="col-md-12 d-flex justify-content-end">
+						<button pButton type="button" label="Add another Requirement" icon="pi pi-plus" class="add-requirement-btn"
+							(click)="addAnotherRequirement()"></button>
+					</div>
+				</div>
+
+				<!-- Bottom Section - Order Summary -->
+				<div class="row mt-3">
+					<div class="col-md-12">
+						<div class="order-summary-card d-flex justify-content-end">
+							<!-- <div class="total-amount-section d-none">
+								<div class="total-label">Total amount</div>
+								<div class="total-value" [class.text-danger]="isTotalAmountExceeded()">
+									INR {{ getTotalAmountFormatted() }}
+								</div>
+							</div>
+							<div class="alert alert-danger mt-2 mb-2 d-none" *ngIf="isTotalAmountExceeded()" role="alert">
+								<i class="pi pi-exclamation-triangle me-2"></i>
+								<strong>Error:</strong> Total amount cannot exceed ₹1,00,000 (1 lakh). Current total: ₹{{
+								getTotalAmountFormatted() }}
+							</div> -->
+							<div class="action-buttons">
+								<button pButton type="submit" label="Submit Order" icon="pi pi-arrow-right" iconPos="right"
+									class="submit-order-btn" [disabled]="!isFormValid() || isTotalAmountExceeded()"></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<!-- Employer Hiring Support Agreement Dialog -->
+<p-dialog [(visible)]="agreementDialogVisible" [modal]="true" [style]="{ width: '50vw', maxWidth: '90vw' }"
+	[draggable]="false" [resizable]="false" [closable]="true" [dismissableMask]="true">
+	<ng-template pTemplate="header">
+		<div class="d-flex justify-content-between align-items-center w-100 p-2">
+			<h5 class="mb-0">Employer Hiring Support Agreement</h5>
+			<!-- <button pButton type="button" icon="pi pi-times" class="p-button-text p-button-rounded"
+        (click)="agreementDialogVisible = false"></button> -->
+		</div>
+	</ng-template>
+
+	<form [formGroup]="agreementForm" (ngSubmit)="submitAgreement()" class="p-4" *ngIf="agreementForm">
+		<!-- Logos -->
+		<div class="d-flex justify-content-center gap-3 mb-4">
+			<div class="logo-circle">
+				<img src="/assets/images/uniprep-light.svg" alt="Uniprep Logo" class="logo-image" />
+			</div>
+			<div class="logo-circle">
+				<img *ngIf="companyLogo" [src]="companyLogo" alt="Company Logo" class="logo-image"
+					(error)="$event.target.src = '/assets/images/uniprep-light.svg'" />
+				<img *ngIf="!companyLogo" src="/assets/images/uniprep-light.svg" alt="Company Logo" class="logo-image" />
+			</div>
+		</div>
+
+		<!-- Form Fields -->
+		<div class="row g-3 mb-3">
+			<div class="col-md-6">
+				<label class="form-label">Company Name:</label>
+				<input pInputText class="w-100" formControlName="companyName" />
+				<small class="text-danger" *ngIf="
+          agreementForm.get('companyName')?.invalid &&
+          agreementForm.get('companyName')?.touched
+        ">Company Name is required.</small>
+			</div>
+			<div class="col-md-6">
+				<label class="form-label">Authorized Person:</label>
+				<input pInputText class="w-100" formControlName="authorizedPerson" />
+				<small class="text-danger" *ngIf="
+          agreementForm.get('authorizedPerson')?.invalid &&
+          agreementForm.get('authorizedPerson')?.touched
+        ">Authorized Person is required.</small>
+			</div>
+			<div class="col-md-6">
+				<label class="form-label">Email:</label>
+				<input pInputText type="email" class="w-100" formControlName="email" />
+				<small class="text-danger" *ngIf="
+          agreementForm.get('email')?.invalid &&
+          agreementForm.get('email')?.touched
+        ">Valid email is required.</small>
+			</div>
+			<div class="col-md-6">
+				<label class="form-label">Date:</label>
+				<input pInputText class="w-100" formControlName="date" />
+				<small class="text-danger" *ngIf="
+          agreementForm.get('date')?.invalid &&
+          agreementForm.get('date')?.touched
+        ">Date is required.</small>
+			</div>
+			<div class="col-md-12">
+				<label class="form-label">Sign Here!</label>
+
+				<!-- Signature Mode Toggle -->
+				<div class="d-flex gap-2 mb-3">
+					<button pButton type="button" [class.p-button-outlined]="signatureMode !== 'upload'"
+						[class.p-button-primary]="signatureMode === 'upload'" label="Upload Signature" icon="pi pi-upload"
+						(click)="signatureMode = 'upload'; onSignatureModeChange()"></button>
+					<button pButton type="button" [class.p-button-outlined]="signatureMode !== 'digital'"
+						[class.p-button-primary]="signatureMode === 'digital'" label="Draw Signature" icon="pi pi-pencil"
+						(click)="signatureMode = 'digital'; onSignatureModeChange()"></button>
+				</div>
+
+				<!-- Digital Signature Pad -->
+				<div *ngIf="signatureMode === 'digital'" class="signature-pad-container">
+					<app-signature-pad #signaturePad (signatureChange)="onSignaturePadChange($event)"></app-signature-pad>
+					<div class="d-flex gap-2 mt-2">
+						<button pButton type="button" label="Clear" icon="pi pi-trash" class="p-button-outlined p-button-sm"
+							(click)="clearSignaturePad()"></button>
+					</div>
+					<div *ngIf="digitalSignatureData" class="mt-2">
+						<small class="text-success">
+							<i class="pi pi-check-circle"></i> Signature saved
+						</small>
+					</div>
+				</div>
+
+				<!-- Upload Signature -->
+				<div *ngIf="signatureMode === 'upload'">
+					<div class="d-flex gap-2 align-items-center">
+						<input pInputText class="flex-grow-1" placeholder="Enter signature" formControlName="signature"
+							*ngIf="!uploadedSignature" />
+						<div class="d-flex align-items-center gap-2 flex-grow-1" *ngIf="uploadedSignature">
+							<span class="text-truncate" style="max-width: 200px;">{{ uploadedSignature.name }}</span>
+							<button pButton type="button" icon="pi pi-times" class="p-button-text p-button-sm"
+								(click)="removeSignature()"></button>
+						</div>
+						<input type="file" #signatureUpload accept="image/*,.pdf" style="display: none"
+							(change)="onSignatureUpload($event)" />
+						<button pButton type="button" label="Upload" icon="pi pi-upload" class="p-button-outlined"
+							(click)="signatureUpload.click()"></button>
+					</div>
+				</div>
+
+				<!-- Error Message -->
+				<small class="text-danger" *ngIf="
+          agreementForm.get('signature')?.invalid &&
+          agreementForm.get('signature')?.touched
+        ">Signature is required.</small>
+			</div>
+		</div>
+
+		<!-- Terms Section -->
+		<div class="mb-4">
+			<p class="text-muted small">
+				We utilize cookies to enhance your experience on our site. You can select which types of cookies to accept and
+				adjust your preferences whenever you like. Please note that disabling cookies may affect your experience. For
+				more information, please refer to our policy.
+			</p>
+			<div class="d-flex align-items-center gap-2">
+				<p-checkbox formControlName="agreeToTerms" [binary]="true" inputId="agreeTerms"></p-checkbox>
+				<label for="agreeTerms" class="mb-0">I agree to the terms</label>
+			</div>
+			<small class="text-danger" *ngIf="
+        agreementForm.get('agreeToTerms')?.invalid &&
+        agreementForm.get('agreeToTerms')?.touched
+      ">You must agree to the terms.</small>
+		</div>
+
+		<!-- Pay Later and Pay Now Buttons -->
+		<div class="d-flex justify-content-end gap-2">
+			<!-- <button pButton type="button" label="Pay Later" class="pay-later-btn" [disabled]="agreementForm.invalid"
+				(click)="submitAgreementPayLater()"></button> -->
+			<button pButton type="submit" label="Pay Now" class="submit-agreement-btn"
+				[disabled]="agreementForm.invalid"></button>
+		</div>
+	</form>
+</p-dialog>
+
+<!-- Payment Link Dialog -->
+<p-dialog [(visible)]="paymentLinkDialogVisible" [modal]="true" [style]="{ width: '500px' }" [closable]="true"
+	[draggable]="false" [resizable]="false" styleClass="payment-link-dialog">
+	<ng-template pTemplate="header">
+		<span class="dialog-title p-2">Payment Link</span>
+	</ng-template>
+	<div class="payment-link-content p-4">
+		<div class="form-field mb-3">
+			<label class="form-label">Payment Link</label>
+			<div class="d-flex gap-2">
+				<input pInputText class="form-control" [value]="paymentLink" readonly />
+				<p-button icon="pi pi-copy" (click)="copyPaymentLink()" [pTooltip]="'Copy Link'"
+					tooltipPosition="top"></p-button>
+			</div>
+		</div>
+		<div class="text-muted small">
+			The payment link has been copied to your clipboard. You can share this link with the client to complete the
+			payment.
+		</div>
+	</div>
+</p-dialog>

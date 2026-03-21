@@ -1,0 +1,127 @@
+<p-accordion value="0">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Sub Category</p-accordion-header>
+		<p-accordion-content>
+			<div class="row">
+				<div class="col-md-4">
+					<label class="form-label">Status</label>
+					<div class="input-group mb-3">
+						<select type="date" formControlName="createdTo" class="form-control border-black paddingfive">
+							<option value="1">Reviewed</option>
+							<option value="0">Not Reviewed</option>
+						</select>
+					</div>
+				</div>
+				<div class="col-md-4"></div>
+				<div class="col-md-4 d-flex justify-content-end">
+					<a class="btn btn-primary">Filter</a>
+				</div>
+			</div>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="card d-flex justify-content-end mt-5">
+	<div class="card-header d-flex justify-content-between">
+		<div class="d-flex">
+			<div class="d-flex flex-column mt-2">
+				<h5>Reading List</h5>
+				<small>Total Sub-Categories : 02</small>
+			</div>
+			<div class="d-flex align-items-center">
+				<select class="form-control ms-5 mt-2">
+					<option value="1"><i class="fa-solid fa-flag-usa"></i>United States</option>
+					<option value="2"><i class="fa-solid fa-flag-usa"></i>United Kingdom</option>
+				</select>
+			</div>
+		</div>
+		<div>
+			<a class="btn btn-primary">Add Question Suggestion</a>
+		</div>
+	</div>
+	<div class="card-body">
+		<div class="row">
+			<div class="col-md-3">
+				<div class="mt-2" class="card-border">
+					<p class="card-question">Question 01</p>
+					<p class="text-justified">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec sapien ac augue tincidunt venenatis et lobortis justo. Vivamus ut consequat ipsum, vel lacinia augue.</p>
+					<div class="d-flex justify-content-center align-items-center">
+						<a class="btn btn-primary w-full">Reviewed</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="mt-2" class="card-border">
+					<p class="card-question">Question 01</p>
+					<p class="text-justified">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec sapien ac augue tincidunt venenatis et lobortis justo. Vivamus ut consequat ipsum, vel lacinia augue.</p>
+					<div class="d-flex justify-content-center align-items-center">
+						<a class="btn btn-primary w-full">Reviewed</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="mt-2" class="card-border">
+					<p class="card-question">Question 01</p>
+					<p class="text-justified">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec sapien ac augue tincidunt venenatis et lobortis justo. Vivamus ut consequat ipsum, vel lacinia augue.</p>
+					<div class="d-flex justify-content-center align-items-center">
+						<a class="btn btn-danger w-full">Review</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="mt-2" class="card-border">
+					<p class="card-question">Question 01</p>
+					<p class="text-justified">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec sapien ac augue tincidunt venenatis et lobortis justo. Vivamus ut consequat ipsum, vel lacinia augue.</p>
+					<div class="d-flex justify-content-center align-items-center">
+						<a class="btn btn-primary w-full" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="getQuestion(2)">Reviewed</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<div class="d-flex justify-content-end align-items-center">
+			<p class="mb-0 me-2">Entries Per Page</p>
+			<select class="rounded-2">
+				<option value="10">10</option>
+				<option value="20">20</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+			</select>
+		</div>
+	</div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Pre-Application - Career Prospects View</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<small>Question</small>
+				<h5>What are the mandatory documents to carry during Tier 4 Visa Submission ?</h5>
+				<small>Answer</small>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed purus est, aliquam eget massa ut, gravida posuere arcu. Quisque maximus eu purus in faucibus. In ut neque malesuada, aliquet magna ut, auctor augue. Donec accumsan risus non leo convallis ultricies. Curabitur massa purus, ultricies non cursus vel, placerat tincidunt diam. Sed a cursus felis. Integer sed commodo magna. Nulla a maximus ante. Donec iaculis odio dolor, et finibus velit fringilla fermentum. Cras sed orci leo. Ut tempus eu tortor et dictum. Ut non augue lectus. Nam mattis leo dictum nunc consectetur pulvinar. Donec varius ante ac mattis dignissim. Mauris quis nunc luctus, vestibulum libero quis, mattis ipsum.</p>
+				<div class="row">
+					<div class="col-md-6">
+						<p-carousel [value]="videos" styleClass="custom-carousel" [numVisible]="3" [numScroll]="1" [circular]="true" [autoplayInterval]="3000" [responsiveOptions]="responsiveOptions">
+							<ng-template pTemplate="header">
+								<p class="fs-6 fw-semibold">Video Link</p>
+							</ng-template>
+							<ng-template let-videos pTemplate="item" style="margin: 10px">
+								<iframe width="180" height="100" src="{{ videos.link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+								<img src="" />
+							</ng-template>
+						</p-carousel>
+					</div>
+					<div class="col-md-6"></div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,408 @@
+<div class="card readingcard">
+	<div class="card-header border-0 bg-white header-section">
+		<div class="row justify-content-center">
+			<div class="col-12 d-flex flex-column flex-md-row gap-2">
+				<div class="select-title bg-white d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center"
+					style="width: 100%">
+					<div>
+						<h5 class="mb-0 form-title text-dark">
+							<span>Add Talent</span>
+						</h5>
+					</div>
+					<div class="d-flex gap-2 align-items-center">
+						<button pButton type="button" class="how-it-works-btn p-2 px-4 py-2">
+							<i class="pi pi-question me-2"></i>How it works ?
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-body overflow-y-auto">
+		<div class="container-fluid">
+			<form [formGroup]="talentForm" (ngSubmit)="onSubmit()" *ngIf="talentForm">
+				<!-- Order ID and Talent ID Section -->
+				<div class="row mb-3">
+					<div class="col-12 col-md-6">
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Order ID
+							</label>
+							<div class="position-relative">
+								<input pInputText class="w-100 order-id-uppercase" placeholder="Enter Order ID"
+									formControlName="orderId" (input)="onOrderIdInput($event)" />
+								<i *ngIf="isLoadingOrder" class="pi pi-spin pi-spinner position-absolute"
+									style="right: 10px; top: 50%; transform: translateY(-50%);"></i>
+							</div>
+							<small class="text-danger" *ngIf="
+								talentForm.get('orderId')?.invalid &&
+								talentForm.get('orderId')?.touched
+							">Order ID is required.</small>
+						</div>
+					</div>
+					<div class="col-12 col-md-6">
+						<!-- Company Name -->
+
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Company Name
+							</label>
+							<!-- <p-select class="w-100" placeholder="Select Company Name" [options]="companiesList || []"
+								optionLabel="company_name" optionValue="company_id" appendTo="body" formControlName="companyId"
+								[filter]="true" filterBy="company_name"></p-select> -->
+							<input pInputText class="w-100" placeholder="Enter Company Name" readonly
+								formControlName="companyId" />
+							<!-- <small class="text-danger" *ngIf="
+														talentForm.get('companyId')?.invalid &&
+														talentForm.get('companyId')?.touched
+													">Company Name is required.</small> -->
+						</div>
+
+					</div>
+				</div>
+
+				<!-- Main Form Fields -->
+				<div class="row">
+					<!-- Left Column -->
+					<div class="col-12 col-md-6">
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Talent ID
+							</label>
+							<div class="position-relative">
+								<input pInputText class="w-100" placeholder="Enter Talent ID" formControlName="talentId"
+									type="number" />
+								<i *ngIf="isLoadingTalent" class="pi pi-spin pi-spinner position-absolute"
+									style="right: 10px; top: 50%; transform: translateY(-50%);"></i>
+							</div>
+							<small class="text-danger" *ngIf="
+														talentForm.get('talentId')?.invalid &&
+														talentForm.get('talentId')?.touched
+													">Talent ID is required.</small>
+						</div>
+						<!-- Email ID -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Email ID
+							</label>
+							<input pInputText class="w-100" placeholder="Enter email ID" formControlName="email"
+								type="email" />
+							<small class="text-danger" *ngIf="
+								talentForm.get('email')?.invalid &&
+								talentForm.get('email')?.touched
+							">Email ID is required.</small>
+						</div>
+
+						<!-- Profile URL -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Profile URL
+							</label>
+							<input pInputText class="w-100" placeholder="Enter Profile URL"
+								formControlName="profileUrl" />
+							<a *ngIf="talentForm.get('profileUrl')?.value" [href]="talentForm.get('profileUrl')?.value"
+								target="_blank" rel="noopener noreferrer"
+								class="d-inline-block mt-2 text-primary text-decoration-none">
+								<i class="pi pi-external-link me-2"></i>{{ talentForm.get('profileUrl')?.value }}
+							</a>
+							<small class="text-danger" *ngIf="
+								talentForm.get('profileUrl')?.invalid &&
+								talentForm.get('profileUrl')?.touched
+							">Profile URL is required.</small>
+						</div>
+
+						<!-- Year of Experience -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Year of Experience
+							</label>
+							<p-select class="w-100" placeholder="Select the years Experience"
+								[options]="experienceYears" optionLabel="label" optionValue="value" appendTo="body"
+								formControlName="yearOfExperience" [filter]="true" filterBy="label"
+								[showClear]="true"></p-select>
+							<small class="text-danger" *ngIf="
+								talentForm.get('yearOfExperience')?.invalid &&
+								talentForm.get('yearOfExperience')?.touched
+							">Year of Experience is required.</small>
+						</div>
+
+						<!-- Current Salary -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Current Salary
+							</label>
+							<div class="d-flex gap-2">
+								<p-select class="salary-currency-select" placeholder="Select Currency"
+									[options]="currency" optionLabel="currency_code" optionValue="currency_code"
+									appendTo="body" formControlName="currentSalaryCurrency" [filter]="true"
+									filterBy="currency_code" [showClear]="true"></p-select>
+								<input pInputText class="flex-grow-1" placeholder="Enter the Current Salary per month"
+									type="number" formControlName="currentSalary" />
+							</div>
+							<small class="text-danger" *ngIf="
+								(talentForm.get('currentSalaryCurrency')?.invalid ||
+								talentForm.get('currentSalary')?.invalid) &&
+								(talentForm.get('currentSalaryCurrency')?.touched ||
+								talentForm.get('currentSalary')?.touched)
+							">Current Salary is required.</small>
+						</div>
+
+						<!-- Work Mode -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Work Mode
+							</label>
+							<p-select class="w-100" placeholder="Select Work Arrangement Mode" [options]="workMode"
+								optionLabel="label" optionValue="label" appendTo="body"
+								formControlName="workMode"></p-select>
+							<small class="text-danger" *ngIf="
+								talentForm.get('workMode')?.invalid &&
+								talentForm.get('workMode')?.touched
+							">Work Mode is required.</small>
+						</div>
+
+						<!-- Notice Period -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Notice Period
+							</label>
+							<p-select class="w-100" placeholder="Enter Your Notice period"
+								[options]="noticePeriodOptions" optionLabel="label" optionValue="value" appendTo="body"
+								formControlName="noticePeriod"></p-select>
+							<small class="text-danger" *ngIf="
+								talentForm.get('noticePeriod')?.invalid &&
+								talentForm.get('noticePeriod')?.touched
+							">Notice Period is required.</small>
+						</div>
+
+					</div>
+
+					<!-- Right Column -->
+					<div class="col-12 col-md-6">
+						<!-- Candidate Name -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Candidate Name
+							</label>
+							<input pInputText class="w-100" placeholder="Enter Your Name"
+								formControlName="candidateName" />
+							<small class="text-danger" *ngIf="
+								talentForm.get('candidateName')?.invalid &&
+								talentForm.get('candidateName')?.touched
+							">Candidate Name is required.</small>
+						</div>
+
+						<!-- Phone No -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Phone No
+							</label>
+							<ngx-intl-tel-input class="w-100"
+								[cssClass]="'form-control p-2 fs-6 w-100 border border-gray rounded-start-0'"
+								[preferredCountries]="['in']" [enableAutoCountrySelect]="true"
+								[enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10"
+								[searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+								[selectedCountryISO]=" preferredCountry" formControlName="phoneNo"
+								customPlaceholder=" Enter Phone Number" appendTo="body"></ngx-intl-tel-input>
+							<small class="text-danger" *ngIf="
+								talentForm.get('phoneNo')?.invalid &&
+								talentForm.get('phoneNo')?.touched
+							">Phone No is required.</small>
+						</div>
+
+						<!-- Position -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Position
+							</label>
+							<p-select class="w-100" placeholder="Enter Your Position" [options]="visiblePositions || []"
+								optionLabel="position_title" optionValue="position_title" appendTo="body"
+								formControlName="position" [filter]="true" filterBy="position_title" [showClear]="true"
+								[virtualScroll]="true" [virtualScrollItemSize]="30" [lazy]="true"
+								(onLazyLoad)="loadPositionsLazy($event)">
+								<ng-template #header>
+									<div class="p-2" (click)="$event.stopPropagation()">
+										<p-inputgroup>
+											<input pInputText class="rounded-end-2 me-1 w-full"
+												placeholder="Custom Job Title" styleClass="w-100" #positionInput fluid
+												(click)="$event.stopPropagation(); focusInput(positionInput)" />
+											<button type="button" class="btn btn-primary"
+												(click)="confirmationPanel($event)">
+												<i class="fa fa-plus"></i>&nbsp;Add New
+											</button>
+										</p-inputgroup>
+										<p-confirmpopup></p-confirmpopup>
+									</div>
+								</ng-template>
+							</p-select>
+							<small class="text-danger" *ngIf="
+								talentForm.get('position')?.invalid &&
+								talentForm.get('position')?.touched
+							">Position is required.</small>
+						</div>
+
+						<!-- Work Location -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Work Location
+							</label>
+							<p-multiSelect class="w-100" placeholder="City, Country" [options]="visibleLocations"
+								optionLabel="work_location" optionValue="id" appendTo="body"
+								formControlName="workLocation" [virtualScroll]="true" [virtualScrollItemSize]="38"
+								[lazy]="true" (onLazyLoad)="loadLocationsLazy($event)" [filter]="true"
+								filterBy="work_location" [showToggleAll]="false" [showClear]="true"></p-multiSelect>
+							<small class="text-danger" *ngIf="
+								talentForm.get('workLocation')?.invalid &&
+								talentForm.get('workLocation')?.touched
+							">Work Location is required.</small>
+						</div>
+
+						<!-- Salary Expectation -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Salary Expectation
+							</label>
+							<div class="d-flex gap-2">
+								<p-select class="salary-currency-select" placeholder="Select Currency"
+									[options]="currency" optionLabel="currency_code" optionValue="currency_code"
+									appendTo="body" formControlName="salaryExpectationCurrency" [filter]="true"
+									filterBy="currency_code" [showClear]="true"></p-select>
+								<input pInputText class="flex-grow-1"
+									placeholder="Enter the Expectation Salary per month" type="number"
+									formControlName="salaryExpectation" />
+							</div>
+							<small class="text-danger" *ngIf="
+								(talentForm.get('salaryExpectationCurrency')?.invalid ||
+								talentForm.get('salaryExpectation')?.invalid) &&
+								(talentForm.get('salaryExpectationCurrency')?.touched ||
+								talentForm.get('salaryExpectation')?.touched)
+							">Salary Expectation is required.</small>
+						</div>
+
+						<!-- Work Type -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Work Type
+							</label>
+							<p-select class="w-100" placeholder="Select Employment Type" [options]="workType"
+								optionLabel="label" optionValue="label" appendTo="body"
+								formControlName="workType"></p-select>
+							<small class="text-danger" *ngIf="
+								talentForm.get('workType')?.invalid &&
+								talentForm.get('workType')?.touched
+							">Work Type is required.</small>
+						</div>
+
+						<!-- Language & Proficiency -->
+						<div class="form-group mb-3">
+							<label class="form-label">
+								<i class="pi pi-check-circle text-warning me-2"></i>Language & Proficiency
+							</label>
+							<div formArrayName="languages">
+								<div *ngFor="let language of languagesFormArray.controls; let j = index"
+									[formGroupName]="j" class="d-flex gap-2 align-items-end mb-2">
+									<p-select class="flex-grow-1" placeholder="Select Language" [options]="getAvailableLanguages(j)"
+										optionLabel="language" optionValue="language" appendTo="body"
+										formControlName="language" [filter]="true" filterBy="language"
+										[showClear]="true"></p-select>
+									<p-select class="flex-grow-1" placeholder="Language Proficiency"
+										[options]="languageProficiency" optionLabel="label" optionValue="value"
+										appendTo="body" formControlName="proficiency" [filter]="true" filterBy="label"
+										[showClear]="true"></p-select>
+									<button pButton type="button" icon="pi pi-times"
+										class="p-button-danger p-button-text p-button-sm language-remove-btn"
+										(click)="removeLanguage(j)" *ngIf="languagesFormArray.length > 1">
+									</button>
+									<div *ngIf="languagesFormArray.length === 1" class="language-remove-btn"></div>
+									<!-- Add More Language Button - Show on last row dynamically -->
+									<button *ngIf="j === languagesFormArray.length - 1" pButton type="button"
+										label="Add" icon="pi pi-plus" class="add-language-btn"
+										(click)="addLanguage()"></button>
+								</div>
+							</div>
+							<small class="text-danger" *ngIf="
+								talentForm.get('languages')?.invalid &&
+								talentForm.get('languages')?.touched
+							">At least one language is required.</small>
+						</div>
+					</div>
+				</div>
+
+				<!-- Talent Validation Status, Talent Status & UNIPREP Team Remarks Section -->
+				<div class="row mt-3">
+					<!-- <div class="col-12 col-md-6">
+						<div class="form-group mb-3">
+							<label class="form-label mb-0">
+								<i class="pi pi-check-circle text-warning me-2"></i>Talent Validation Status
+							</label>
+							<p-select class="w-100" placeholder="Select Status" [options]="statusOptions" optionLabel="label"
+								optionValue="value" appendTo="body" formControlName="validationStatus" [showClear]="true">
+							</p-select>
+							<small class="text-danger" *ngIf="
+								talentForm.get('validationStatus')?.invalid &&
+								talentForm.get('validationStatus')?.touched
+							">
+								Talent Validation Status is required.
+							</small>
+						</div>
+					</div> -->
+
+					<div class="col-12 col-md-6">
+						<div class="form-group mb-3">
+							<label class="form-label mb-0">
+								<i class="pi pi-check-circle text-warning me-2"></i>Talent Status</label>
+							<p-select class="w-100" placeholder="Select Talent Status" [options]="talentStatusOptions"
+								optionLabel="label" optionValue="value" appendTo="body" formControlName="talentStatus"
+								[showClear]="true">
+							</p-select>
+							<small class="text-danger" *ngIf="
+								talentForm.get('talentStatus')?.invalid &&
+								talentForm.get('talentStatus')?.touched
+							">
+								Talent Status is required.
+							</small>
+						</div>
+					</div>
+					<div class="col-12 col-md-12">
+						<div class="form-group mb-3 editor-field-card">
+							<div class="d-flex justify-content-between align-items-center mb-2">
+								<label class="form-label mb-0">
+									<i class="pi pi-check-circle text-warning me-2"></i>UNIPREP Team Remarks
+								</label>
+							</div>
+							<p-editor formControlName="remarks" placeholder="Enter the Remarks"
+								[style]="{'height':'200px'}"></p-editor>
+							<div class="d-flex justify-content-end mt-1">
+								<small class="text-muted char-counter"
+									[class.text-danger]="getTextLength(talentForm.get('remarks')?.value) > 2000">
+									{{ getTextLength(talentForm.get('remarks')?.value) }}/2000
+								</small>
+							</div>
+							<small class="text-danger" *ngIf="
+								talentForm.get('remarks')?.invalid &&
+								talentForm.get('remarks')?.touched
+							">
+								<span *ngIf="talentForm.get('remarks')?.errors?.['required']">UNIPREP Team Remarks is
+									required.</span>
+								<span *ngIf="talentForm.get('remarks')?.errors?.['maxlength']">Remarks cannot exceed
+									2000
+									characters.</span>
+							</small>
+						</div>
+					</div>
+				</div>
+
+				<!-- Submit Button -->
+				<div class="row mt-3">
+					<div class="col-12 d-flex justify-content-end">
+						<button pButton type="submit" label="Create Talent" icon="pi pi-arrow-right" iconPos="right"
+							class="submit-talent-btn" [disabled]="talentForm.invalid || isSubmitting"
+							[loading]="isSubmitting"></button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<p-toast></p-toast>

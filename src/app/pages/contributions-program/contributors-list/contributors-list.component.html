@@ -1,0 +1,257 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Contributors</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Students</label>
+							<p-select formControlName="totalstudent" optionValue="value" optionLabel="label" styleClass="w-full" [options]="studentList" [filter]="true" [showClear]="true" filterBy="label" placeholder="Students"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Country</label>
+							<p-select formControlName="country" optionValue="id" optionLabel="country_name" styleClass="w-full" (onChange)="onChangeCountry($event)" [options]="countryList" placeholder="Select Country" [filter]="true" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>State</label>
+							<p-select formControlName="state" optionValue="id" optionLabel="state_name" styleClass="w-full" (onChange)="onChangeState($event)" [options]="regionList" placeholder="Select State" [filter]="true" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-0 mt-md-3">
+						<div class="form-group">
+							<label>City</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="city_name" styleClass="w-full" [options]="locationLists" placeholder="Select City" [filter]="true" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-0 mt-md-3">
+						<div class="form-group">
+							<label>Payment Method</label>
+							<p-select formControlName="paymentmethod" optionValue="id" optionLabel="name" styleClass="w-full" [options]="paymentMethodList" placeholder="Payment Method"></p-select>
+						</div>
+					</div>
+					<div class="col-md-2 mt-0 mt-md-3">
+						<div class="form-group">
+							<label>Valid From</label>
+							<input type="date" formControlName="validfrom" class="form-control paddingfive" />
+						</div>
+					</div>
+					<div class="col-md-2 mt-0 mt-md-3">
+						<div class="form-group">
+							<label>Valid To</label>
+							<input type="date" formControlName="validto" class="form-control paddingfive" />
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="btn btn-primary" type="button" (click)="resetFilter()">Reset Filter</button>
+							<button class="btn btn-primary" type="submit">Filter Data</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div style="width: 100%; height: 80vh; overflow: auto; overflow-x: hidden" class="mt-2">
+	<p-table size="small" scrollHeight="600px" [scrollable]="true" styleClass="p-datatable-gridlines" [value]="contributionsList" [totalRecords]="contributionsCount" [paginator]="true" (onPage)="pageChange($event)" [rows]="pageSize" [first]="first" [rowsPerPageOptions]="[10, 50, 100]" [tableStyle]="{ 'min-width': '120rem', width: '100%' }" [globalFilterFields]="['contributorID', 'totalstudent', 'amount', 'name', 'payment_method', 'payment_id', 'payment_date']">
+		<ng-template pTemplate="caption">
+			<div class="d-flex w-full align-items-center justify-content-between">
+				<span
+					>Contributions <br /><span style="color: #a1a1a1; font-size: 10px">Total Contributions: {{ contributionsCount }}</span></span
+				>
+				<div class="d-flex gap-2">
+					<button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton (click)="onShowAddContribution()">Add Contribution &nbsp; <i class="pi pi-plus"></i></button>
+					<button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton (click)="exportContributionList()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+				</div>
+			</div>
+		</ng-template>
+		<ng-template pTemplate="header">
+			<tr>
+				<th pSortableColumn="contributorID">Contributor ID<p-sortIcon field="contributorID"></p-sortIcon></th>
+				<th pSortableColumn="totalstudent">Students<p-sortIcon field="totalstudent"></p-sortIcon></th>
+				<th pSortableColumn="amount">Amount<p-sortIcon field="amount"></p-sortIcon></th>
+				<th pSortableColumn="name">Contributor Details<p-sortIcon field="name"></p-sortIcon></th>
+				<th pSortableColumn="location">Location<p-sortIcon field="location"></p-sortIcon></th>
+				<th pSortableColumn="payment_method">Payment Method<p-sortIcon field="payment_method"></p-sortIcon></th>
+				<th pSortableColumn="payment_id">Payment Id<p-sortIcon field="payment_id"></p-sortIcon></th>
+				<th pSortableColumn="payment_date">Payment Date<p-sortIcon field="payment_date"></p-sortIcon></th>
+				<th pSortableColumn="status">Status<p-sortIcon field="status"></p-sortIcon></th>
+				<th>Actions</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-item>
+			<tr>
+				<td>{{ item.contributorID || "-" }}</td>
+				<td>{{ item.totalstudent || "-" }}</td>
+				<td>{{ item.amount || "-" }}</td>
+				<td>
+					<div class="d-flex">
+						<div class="flex-column">
+							{{ item.name }} <br />
+							{{ item.email }} <br />
+							{{ item.phonenumber }}
+						</div>
+					</div>
+				</td>
+				<td>{{ item?.location || "-" }}</td>
+				<td>
+					<ng-container [ngSwitch]="item?.payment_method">
+						<div *ngSwitchCase="'1'">RazorPay</div>
+						<div *ngSwitchCase="'2'">Cash</div>
+						<div *ngSwitchCase="'3'">Bank transfer</div>
+					</ng-container>
+				</td>
+				<td>{{ item?.payment_id || "-" }}</td>
+				<td>{{ item?.payment_time | date : "short" }}</td>
+				<td>{{ item?.userstatus ? "Created" : "Not Created" }}</td>
+				<td>
+					<div *ngIf="!item?.userstatus" class="view-btn m-1" style="cursor: pointer" [routerLink]="['/contributors', item.id]">
+						<a><i class="fa-solid fa-user"></i> Create Profile</a>
+					</div>
+					<div *ngIf="item.invoice_link; else showGenerate" class="view-btn m-1" style="cursor: pointer" (click)="downloadInvoice(item)">
+						<a><i class="fa-solid fa-download"></i> Downnload Invoice</a>
+					</div>
+					<ng-template #showGenerate>
+						<div class="view-btn m-1" style="cursor: pointer" (click)="generateInvoice(item)">
+							<a><i class="fa-solid fa-file-lines"></i> Generate Invoice</a>
+						</div>
+					</ng-template>
+					<div class="view-btn m-1" style="cursor: pointer" (click)="onShowEditContribution(item)">
+						<a><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+					</div>
+				</td>
+			</tr>
+		</ng-template>
+	</p-table>
+	<p-scrollTop target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>
+</div>
+
+<p-dialog [header]="contributorsId ? 'Edit Contribution' : 'Add Contribution'" [(visible)]="isAddEditContribution" [modal]="true" [style]="{ width: '50vw' }" (onHide)="closeModal()">
+	<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+		<div class="row">
+			<div *ngIf="contributorsId" class="col-12 mb-2">
+				<div class="form-group">
+					<label>Contributor Id</label>
+					<input formControlName="contributorID" type="text" class="form-control" pInputText [readOnly]="true" />
+					<div *ngIf="submitted && f.contributorID.errors" class="text-danger text-xs">
+						<div *ngIf="f.contributorID.errors.required">Contributor Id is Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>Number of Students</label>
+					<input type="number" [min]="1" formControlName="totalstudent" class="form-control" pInputText />
+					<div *ngIf="submitted && f.totalstudent.errors" class="text-danger text-xs">
+						<div *ngIf="f.totalstudent.errors.required">Number of Students is Required</div>
+						<div *ngIf="f.totalstudent.errors.min">Must be at least 1</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>Amount</label>
+					<input formControlName="amount" type="text" class="form-control" pInputText [readOnly]="true" />
+					<div *ngIf="submitted && f.amount.errors" class="text-danger text-xs">
+						<div *ngIf="f.amount.errors.required">Amount is Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>Contributor Name</label>
+					<input formControlName="name" type="text" class="form-control" pInputText />
+					<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+						<div *ngIf="f.name.errors.required">Contributor Name is Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>Contributor Email Id</label>
+					<input formControlName="email" type="email" class="form-control" pInputText />
+					<div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
+						<div *ngIf="f.email.errors.required">Contributor Email Id is Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>Contributor Phone Number</label>
+					<ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [phoneValidation]="false" [selectedCountryISO]="preferredCountry" name="phone" formControlName="phone" customPlaceholder="Enter Contributor Phone Number"> </ngx-intl-tel-input>
+					<div *ngIf="submitted && f.phone.errors" class="text-danger text-xs">
+						<div *ngIf="f.phone.errors.required">Contributor Phone Number is Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>Country</label>
+					<p-select formControlName="country" optionValue="id" optionLabel="country_name" styleClass="w-full" (onChange)="onChangeCountry($event)" [options]="countryList" placeholder="Select Country" [filter]="true" [showClear]="true"> </p-select>
+					<div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+						<div *ngIf="f.country.errors.required">Country is Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>State</label>
+					<p-select formControlName="region" optionValue="id" optionLabel="state_name" styleClass="w-full" (onChange)="onChangeState($event)" [options]="regionList" placeholder="Select State" [filter]="true" [showClear]="true"> </p-select>
+					<div *ngIf="submitted && f.region.errors" class="text-danger text-xs">
+						<div *ngIf="f.region.errors.required">State is Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>City</label>
+					<p-select formControlName="location" optionValue="id" optionLabel="city_name" styleClass="w-full" [options]="locationLists" placeholder="Select City" [filter]="true" [showClear]="true"> </p-select>
+					<div *ngIf="submitted && f.location.errors" class="text-danger text-xs">
+						<div *ngIf="f.location.errors.required">City is Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>Payment Method</label>
+					<p-select formControlName="paymentmethod" optionValue="id" optionLabel="name" styleClass="w-full" [options]="paymentMethodList" placeholder="Payment Method"></p-select>
+					<div *ngIf="submitted && f.paymentmethod.errors" class="text-danger text-xs">
+						<div *ngIf="f.paymentmethod.errors.required">Payment Method is Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>Payment Id</label>
+					<input formControlName="paymentid" type="text" class="form-control" pInputText />
+					<div *ngIf="submitted && f.paymentid.errors" class="text-danger text-xs">
+						<div *ngIf="f.paymentid.errors.required">Payment Id is Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>Payment Date</label>
+					<input formControlName="paymentdate" type="date" class="form-control" pInputText />
+					<div *ngIf="submitted && f.paymentdate.errors" class="text-danger text-xs">
+						<div *ngIf="f.paymentdate.errors.required">Payment Date is Required</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row mt-3">
+			<div class="col-12 text-right">
+				<p-confirmpopup></p-confirmpopup>
+				<button class="btn btn-teritary" type="button" (click)="contributorsId ? deleteContribution($event) : closeModal()">
+					{{ contributorsId ? "Delete" : "Cancel" }}
+				</button>
+				<button class="btn btn-primary" type="submit">{{ contributorsId ? "Update" : "Add" }}</button>
+			</div>
+		</div>
+	</form>
+</p-dialog>

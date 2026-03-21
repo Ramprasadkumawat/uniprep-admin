@@ -1,0 +1,396 @@
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}">
+	<p-accordion-panel value="1" *ngIf="AddScholarshipform">
+		<p-accordion-header>Add Scholarship</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Scholarship Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+								<div *ngIf="f.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Scholarship Country</label>
+							<p-select formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="countries" [filter]="true" filterBy="country" (onChange)="countryChange($event)"></p-select>
+							<div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+								<div *ngIf="f.country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Home Country</label>
+							<p-select formControlName="home_country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="homecountries" [filter]="true" filterBy="country"></p-select>
+							<div *ngIf="submitted && f.home_country.errors" class="text-danger text-xs">
+								<div *ngIf="f.home_country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Scholarship Type</label>
+							<p-select formControlName="type" optionValue="id" optionLabel="type" styleClass="w-full" [options]="scholarshipTypeList"></p-select>
+							<div *ngIf="submitted && f.type.errors" class="text-danger text-xs">
+								<div *ngIf="f.type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Study Level</label>
+							<p-multiselect [options]="studyLevelList" formControlName="study_level" optionValue="id" optionLabel="level" styleClass="w-full" placeholder="Select"> </p-multiselect>
+							<div *ngIf="submitted && f.study_level.errors" class="text-danger text-xs">
+								<div *ngIf="f.study_level.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Organisation/Institute</label>
+							<p-select formControlName="university" optionValue="id" optionLabel="name" styleClass="w-full" [options]="universityList" [filter]="true" filterBy="name" appendTo="body"></p-select>
+							<div *ngIf="submitted && f.university.errors" class="text-danger text-xs">
+								<div *ngIf="f.university.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Region</label>
+							<p-select formControlName="region" optionValue="id" optionLabel="state" styleClass="w-full" [options]="regionList" [filter]="true" filterBy="state"></p-select>
+							<div *ngIf="submitted && f.region.errors" class="text-danger text-xs">
+								<div *ngIf="f.region.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Value</label>
+							<input formControlName="value" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.value.errors" class="text-danger text-xs">
+								<div *ngIf="f.value.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Website</label>
+							<input formControlName="website" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.website.errors" class="text-danger text-xs">
+								<div *ngIf="f.website.errors.required">Required</div>
+								<div *ngIf="f.website.errors.pattern">Enter Valid URL</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Coverage Value</label>
+							<p-select formControlName="cover_id" optionValue="id" optionLabel="cover_name" styleClass="w-full" [options]="coverList" [filter]="true" filterBy="cover_name"></p-select>
+							<div *ngIf="submitted && f.cover_id.errors" class="text-danger text-xs">
+								<div *ngIf="f.cover_id.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="button" (click)="resetForm()">Reset</button>&nbsp;
+						<button class="btn btn-primary" type="submit">Add Category</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+	<p-accordion-panel value="2" *ngIf="EditFormshow">
+		<p-accordion-header>Edit Scholarship</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="Editform" (ngSubmit)="submitEditForm()" #editFormElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Scholarship Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+							<div *ngIf="editsubmitted && e.name.errors" class="text-danger text-xs">
+								<div *ngIf="e.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Scholarship Country</label>
+							<p-select formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="countries" [filter]="true" filterBy="country" (onChange)="countryChange($event)"></p-select>
+							<div *ngIf="editsubmitted && e.country.errors" class="text-danger text-xs">
+								<div *ngIf="e.country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Home Country</label>
+							<p-select formControlName="home_country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="homecountries" [filter]="true" filterBy="country"></p-select>
+							<div *ngIf="editsubmitted && e.home_country.errors" class="text-danger text-xs">
+								<div *ngIf="e.home_country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Scholarship Type</label>
+							<p-select formControlName="type" optionValue="id" optionLabel="type" styleClass="w-full" [options]="scholarshipTypeList"></p-select>
+							<div *ngIf="editsubmitted && e.type.errors" class="text-danger text-xs">
+								<div *ngIf="e.type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Study Level</label>
+							<p-multiselect [options]="studyLevelList" formControlName="study_level" optionValue="id" optionLabel="level" styleClass="w-full" placeholder="Select"> </p-multiselect>
+							<div *ngIf="editsubmitted && e.study_level.errors" class="text-danger text-xs">
+								<div *ngIf="e.study_level.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Organisation/Institute</label>
+							<p-select formControlName="university" optionValue="id" optionLabel="name" styleClass="w-full" [options]="universityList" [filter]="true" filterBy="name" appendTo="body"></p-select>
+							<div *ngIf="editsubmitted && e.university.errors" class="text-danger text-xs">
+								<div *ngIf="e.university.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Region</label>
+							<p-select formControlName="region" optionValue="id" optionLabel="state" styleClass="w-full" [options]="regionList" [filter]="true" filterBy="state"></p-select>
+							<div *ngIf="editsubmitted && e.region.errors" class="text-danger text-xs">
+								<div *ngIf="e.region.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Value</label>
+							<input formControlName="value" type="text" class="form-control" pInputText />
+							<div *ngIf="editsubmitted && e.value.errors" class="text-danger text-xs">
+								<div *ngIf="e.value.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>website</label>
+							<input formControlName="website" type="text" class="form-control" pInputText />
+							<div *ngIf="editsubmitted && e.website.errors" class="text-danger text-xs">
+								<div *ngIf="e.website.errors.required">Required</div>
+								<div *ngIf="e.website.errors.pattern">Enter Valid URL</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Coverage Value</label>
+							<p-select formControlName="cover_id" optionValue="id" optionLabel="cover_name" styleClass="w-full" [options]="coverList" [filter]="true" filterBy="cover_name"></p-select>
+							<div *ngIf="submitted && e.cover_id.errors" class="text-danger text-xs">
+								<div *ngIf="e.cover_id.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="submit">Update Category</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+	<p-accordion-panel value="3">
+		<p-accordion-header>Add Institute</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="instituteForm" (ngSubmit)="submitInstituteForm()" #instituteFormElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Scholarship Country</label>
+							<p-select formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="countries" [filter]="true" filterBy="country"></p-select>
+							<div *ngIf="instituteSubmitted && i.country.errors" class="text-danger text-xs">
+								<div *ngIf="i.country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Institute Name</label>
+							<input formControlName="institute_name" type="text" class="form-control" pInputText />
+							<div *ngIf="instituteSubmitted && i.institute_name.errors" class="text-danger text-xs">
+								<div *ngIf="i.institute_name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="submit">Add Institute</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+	<p-accordion-panel value="4">
+		<p-accordion-header>Filter Scholarship</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filter()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Scholarship Country</label>
+							<p-select formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="countries" [filter]="true" filterBy="country"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Home Country</label>
+							<p-select formControlName="home_country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="homecountries" [filter]="true" filterBy="country" (onChange)="filterCountryChange($event)"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Region</label>
+							<p-multiselect [options]="filterRegionList" formControlName="region" optionValue="id" optionLabel="state" styleClass="w-full" placeholder="Select"> </p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Scholarship Type</label>
+							<p-select formControlName="type" optionValue="id" optionLabel="type" styleClass="w-full" [options]="scholarshipTypeList"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Study Level</label>
+							<p-multiselect [options]="studyLevelList" formControlName="study_level" optionValue="id" optionLabel="level" styleClass="w-full" placeholder="Select"> </p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Organisation/Institute</label>
+							<p-multiselect [options]="filterUniversityList" formControlName="university" optionValue="id" optionLabel="name" styleClass="w-full" placeholder="Select" appendTo="body"> </p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Coverage Value</label>
+							<p-select formControlName="cover_id" optionValue="id" optionLabel="cover_name" styleClass="w-full" [options]="coverList" [filter]="true" filterBy="cover_name"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Restriction</label>
+							<p-select formControlName="restrict_flag" optionValue="id" optionLabel="label" styleClass="w-full" [options]="restrictionList"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="button" (click)="resetFilter()">Reset Filter</button>&nbsp;
+						<button class="btn btn-primary" type="submit">Filter Data</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<br />
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="scholarshipList" [paginator]="true" (onPage)="pageChange($event)" [first]="first" [lazy]="true" [rows]="pageSize" [totalRecords]="totalScholarShipCount" [tableStyle]="{ 'min-width': '100rem' }" [rowsPerPageOptions]="[100, 250, 500]">
+	<ng-template pTemplate="caption">
+		<div class="row">
+			<div class="d-flex col-sm-5 col-md-6 justify-content-between">
+				<div class="d-flex align-items-center w-full gap-5">
+					<div class="d-flex flex-column">
+						<span style="font-size: 20px">Scholarship List</span>
+						<span class="text-xs" style="color: rgb(205, 203, 203)">Total Scholarship:{{ totalScholarShipCount }}</span>
+					</div>
+					<input type="text" placeholder="Search Scholarship Name" pInputText [(ngModel)]="searchScholarshpName" (input)="performSearch()" />
+				</div>
+			</div>
+			<div class="d-flex col-sm-5 col-md-6 justify-content-end">
+				<div class="p-2">
+					<button class="btn btn-primary" (click)="deleteSelected()">Delete Selected &nbsp; <i class="fa-solid fa-trash me-2"></i></button>
+
+					<button class="btn btn-primary" (click)="fileUploadModal = true">Import &nbsp; <i class="pi pi-file-import"></i></button>
+					<button class="btn btn-primary" (click)="exportFile()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+				</div>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th><input type="checkbox" (click)="selectAllCheckbox()" [(ngModel)]="selectAllCheckboxes" style="transform: scale(1.5)" /></th>
+			<th>Home Country</th>
+			<th>Scholarship Name</th>
+			<th>Scholarship Country</th>
+			<th>Scholarship Type</th>
+			<th>Study Level</th>
+			<th>Organisation/Institute</th>
+			<th>Region</th>
+			<th>Value</th>
+			<th>Coverage Value</th>
+			<th>Link</th>
+			<th>Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-scholarship>
+		<tr>
+			<td>
+				<input type="checkbox" style="transform: scale(1.5); vertical-align: middle" [value]="scholarship.id" [(ngModel)]="scholarship.isChecked" />
+			</td>
+			<td>{{ scholarship.home_country }}</td>
+			<td>
+				<!-- <i class="fa-solid fa-lock" *ngIf="scholarship.restrict_flag==1" style="margin-right: 10px;"></i> -->
+				{{ scholarship.name }}
+			</td>
+			<td>{{ scholarship.country }}</td>
+			<td>{{ scholarship.type }}</td>
+			<td>{{ scholarship.study_level }}</td>
+			<td>{{ scholarship.university }}</td>
+			<td>{{ scholarship.region == null ? "null" : scholarship.region }}</td>
+			<td>{{ scholarship.value }}</td>
+			<td>{{ scholarship.cover_name }}</td>
+			<td class="border-cell">
+				<a target="_blank" href="{{ scholarship.website }}">Website <i class="fa-solid fa-link"></i></a><br />
+			</td>
+			<td>
+				<span style="cursor: pointer; white-space: nowrap" (click)="edit(scholarship.id)"
+					><span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span>&nbsp; Edit</span
+				><br />
+				<p-confirmpopup></p-confirmpopup>
+				<span style="cursor: pointer; white-space: nowrap" (click)="delete($event, scholarship.id)"
+					><span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-trash"></i></span> &nbsp;Delete</span
+				>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+<p-dialog header="File Upload" [(visible)]="fileUploadModal" [modal]="true" [style]="{ width: '50vw' }">
+	<label for="file" class="reading-drop-container">
+		<i class="pi pi-upload reading-drop-title"></i>
+		<input type="file" id="file" class="d-none" (click)="fileInput.value = null" (change)="onFileChange($event)" accept=".csv" #fileInput /><br />
+		<div class="uniprep-primaryhighlight">{{ selectedFile?.name }}</div>
+		<span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+		<span class="reading-sm-font">Please maintain the format of uploading to stop failures</span> </label
+	><br />
+	<div class="text-center align-items-center">
+		<button class="btn btn-primary" (click)="uploadFile()"><i class="fa-solid fa-upload"></i> Upload</button>
+		<a [href]="sampleDownloadPath">
+			<button class="btn btn-primary"><i class="fa-solid fa-download"></i> Download Sample Doc</button>
+		</a>
+	</div>
+</p-dialog>

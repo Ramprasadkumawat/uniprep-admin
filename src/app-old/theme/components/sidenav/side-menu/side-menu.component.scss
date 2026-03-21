@@ -1,0 +1,52 @@
+@import "../../../../../assets/breakpoints";
+.menu-items {
+  user-select: none;
+  margin: 5px;
+  padding: 0;
+  list-style-type: none;
+  overflow: hidden;
+  .menu-item {
+    color: #222b45;
+    cursor: pointer;
+    .system-main__apps {
+      font-size: 0.65rem;
+      &.header {
+        font-weight: 700;
+        color: #344767;
+        opacity: 0.6 !important;
+        text-transform: uppercase;
+      }
+      font-weight: 700;
+      color: #67748e;
+      padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+      display: flex;
+      text-decoration: none;
+      align-items: center;
+      .system-main__icon .pi {
+        font-size: 0.8rem;
+        padding: 10px;
+        border-radius: 0.5rem;
+        background-color: #fff !important;
+        box-shadow: 0 0.3125rem 0.625rem 0 rgba(0, 0, 0, 0.12) !important;
+        margin-right: 0.5rem !important;
+      }
+    }
+    &.active {
+      background-color: #fff;
+      border-radius: 0.5rem;
+      box-shadow: rgb(0 0 0 / 11%) 0px 5px 15px;
+      .system-main__icon .pi {
+        background-image: linear-gradient(310deg, var(--p-primary-500), var(--p-primary-500));
+        color: white;
+      }
+      .menu-item.active {
+        .system-main__name {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+.menu-item > .menu-items {
+  padding: 0 1.25rem;
+}

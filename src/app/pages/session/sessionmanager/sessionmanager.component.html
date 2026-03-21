@@ -1,0 +1,264 @@
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}">
+	<p-accordion-panel value="1" *ngIf="Addformshow">
+		<p-accordion-header>{{ header_text }}</p-accordion-header
+		><p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Session Name</label>
+							<input formControlName="sessionname" type="text" class="form-control" />
+							<div *ngIf="submitted && f.sessionname.errors" class="text-danger text-xs">
+								<div *ngIf="f.sessionname.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Country</label>
+							<p-select styleClass="w-full" formControlName="country" [options]="countries" optionValue="id" optionLabel="country" [filter]="true" filterBy="country" (onChange)="changeCountry($event)"></p-select>
+							<div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+								<div *ngIf="f.country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>State</label>
+							<p-select formControlName="state" optionValue="id" optionLabel="state" styleClass="w-full" [options]="state" (onChange)="changeRegion($event)" [filter]="true" filterBy="state" [readonly]="form.get('country')?.value == 122 ? false : true"></p-select>
+							<div *ngIf="submitted && f.state.errors" class="text-danger text-xs">
+								<div *ngIf="f.state.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="district" styleClass="w-full" [options]="locations" [filter]="true" filterBy="district" (onChange)="changeLocation($event)" [editable]="true"></p-select>
+							<div *ngIf="submitted && f.location.errors" class="text-danger text-xs">
+								<div *ngIf="f.location.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-3">
+						<div class="form-group">
+							<label> Date</label>
+							<input formControlName="date" type="date" class="form-control" pInputText />
+							<div *ngIf="submitted && f.date.errors" class="text-danger text-xs">
+								<div *ngIf="f.date.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-3">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="input-group">
+									<label class="form-label">From</label>
+									<input type="time" formControlName="from" class="form-control border-black" />
+									<div *ngIf="submitted && f.from.errors" class="text-danger text-xs">
+										<div *ngIf="f.from.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="input-group">
+									<label class="form-label">To</label>
+									<input type="time" formControlName="to" class="form-control border-black" />
+									<div *ngIf="submitted && f.to.errors" class="text-danger text-xs">
+										<div *ngIf="f.to.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-3">
+						<div class="form-group">
+							<label>Venue/College</label>
+							<p-select styleClass="w-full" formControlName="venue" [options]="venues" optionValue="id" optionLabel="institutename" [filter]="true" filterBy="institutename" [editable]="true"></p-select>
+							<div *ngIf="submitted && f.venue.errors" class="text-danger text-xs">
+								<div *ngIf="f.venue.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-3">
+						<div class="form-group">
+							<label>Expected Participants</label>
+							<input formControlName="participants" type="text" class="form-control" />
+							<div *ngIf="submitted && f.participants.errors" class="text-danger text-xs">
+								<div *ngIf="f.participants.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-3">
+						<div class="form-group">
+							<label>Speaker Name</label>
+							<p-select styleClass="w-full" formControlName="speaker" [options]="speakers" optionValue="id" optionLabel="name" [filter]="true" filterBy="name"></p-select>
+							<div *ngIf="submitted && f.speaker.errors" class="text-danger text-xs">
+								<div *ngIf="f.speaker.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 mt-3">
+						<div class="form-group">
+							<label>Associated Employee</label>
+							<p-multiselect styleClass="w-full" formControlName="employee" [options]="employees" optionValue="id" optionLabel="name" [filter]="true" filterBy="name"></p-multiselect>
+							<div *ngIf="submitted && f.employee.errors" class="text-danger text-xs">
+								<div *ngIf="f.employee.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 mt-3">
+						<div class="form-group">
+							<label>Session Description</label>
+							<textarea type="text" rows="2" class="form-control" formControlName="description"></textarea>
+							<div *ngIf="submitted && f.description.errors" class="text-danger text-xs">
+								<div *ngIf="f.description.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="submit" *ngIf="ifAdd">Add Session</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Sessions</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filtersubmit()" #formElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="input-group">
+									<label class="form-label">From</label>
+									<input type="date" formControlName="from" class="form-control border-black" />
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="input-group">
+									<label class="form-label">To</label>
+									<input type="date" formControlName="to" class="form-control border-black" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Session Name</label>
+							<input formControlName="sessionname" type="text" class="form-control" />
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Country</label>
+							<p-select styleClass="w-full" formControlName="country" [options]="countries" optionValue="id" optionLabel="country" [filter]="true" filterBy="country" (onChange)="changeCountry($event)"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-3">
+						<div class="form-group">
+							<label>State</label>
+							<p-select formControlName="state" optionValue="id" optionLabel="state" styleClass="w-full" [options]="state" (onChange)="changeRegion($event)" [filter]="true" filterBy="state" [readonly]="form.get('country')?.value == 122 ? false : true"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-3">
+						<div class="form-group">
+							<label>Venue/College</label>
+							<p-select styleClass="w-full" formControlName="venue" [options]="venues" optionValue="id" optionLabel="institutename" [filter]="true" filterBy="institutename" [editable]="true"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-3">
+						<div class="form-group">
+							<label>Speaker Name</label>
+							<p-select styleClass="w-full" formControlName="speaker" [options]="speakers" optionValue="id" optionLabel="name" [filter]="true" filterBy="name"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" (click)="reset()">Reset Field</button>
+						<button class="btn btn-primary" type="submit">Filter Session</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<div style="background-color: #fff">
+	<h4 class="p-2 ps-3">
+		Session List <br /><span style="font-size: 10px">Total Sessions: {{ totalsession }}</span>
+	</h4>
+	<hr />
+	<div class="card-container p-2">
+		<div class="row mt-3 p-2">
+			<div class="col-md-6" *ngFor="let session of sessions">
+				<div class="card eventcard">
+					<div class="row">
+						<div class="col-12">
+							<h5 class="ms-5 mt-2">{{ session.name }}</h5>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12 d-flex align-items-center">
+							<span class="btn btn-primary sessioncountdown ms-5">{{ session.daystogo }}</span>
+							<i class="pi pi-clock ms-5"></i>
+							<h6 class="mb-0 ms-1">{{ session.time }}</h6>
+							<i class="pi pi-calendar ms-5"></i>
+							<h6 class="mb-0 ms-1">{{ session.date }}</h6>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12">
+							<p class="ms-5 me-5" style="font-size: 14px; color: #555">
+								{{ session.description }}
+							</p>
+						</div>
+					</div>
+					<div class="row mt-2 d-flex align-items-center">
+						<div class="d-flex align-items-center ms-5">
+							<img class="me-3 mb-3" style="width: 20px" [src]="session.flag" alt="" />
+							<strong style="margin-top: -10px">{{ session.location }}</strong>
+						</div>
+					</div>
+					<div class="row mt-2 d-flex align-items-center">
+						<div class="d-flex align-items-center ms-5">
+							<i class="pi pi-building me-3 mb-3" style="font-size: 20px"></i>
+							<strong style="margin-top: -10px">{{ session.venue }}</strong>
+						</div>
+					</div>
+					<div class="row mt-2 d-flex align-items-center">
+						<div class="d-flex align-items-center ms-5">
+							<i class="pi pi-microphone me-3 mb-3" style="font-size: 20px"></i>
+							<strong style="margin-top: -10px">{{ session.speaker }}</strong>
+						</div>
+					</div>
+					<div class="row mt-2 d-flex align-items-center">
+						<div class="d-flex align-items-center ms-5">
+							<i class="fa-solid fa-gauge me-3 mb-3" style="font-size: 20px"></i>
+							<strong style="margin-top: -10px">{{ session.paricipants }}</strong>
+						</div>
+					</div>
+					<div class="row mt-2 d-flex align-items-center">
+						<div class="d-flex align-items-center ms-5 flex-wrap">
+							<span class="btn btn-primary sessioncountdown me-3">View Feedback Form</span>
+							<span class="btn btn-warning editsession me-3">Edit Session</span>
+							<span class="btn btn-danger delete-button">
+								<i class="pi pi-trash" style="font-size: 10px"></i>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<p-paginator [rows]="10" [totalRecords]="totalcount" (onPageChange)="paginate($event)" [rowsPerPageOptions]="[6, 12, 36, 72, 144, 600]"></p-paginator>
+	</div>
+</div>

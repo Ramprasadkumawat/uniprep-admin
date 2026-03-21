@@ -1,0 +1,153 @@
+<div class="row text-center px-2 py-2">
+  <div class="col-md-6">
+    <div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+      <div class="card-body2" style="cursor: pointer">
+        <div class="row">
+          <div class="col">
+            <h5 class="card-title text-muted mb-0" style="font-size: 15px">Total User Active Today</h5>
+            <span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+              {{ totalActiveUser }}
+            </span>
+          </div>
+          <div class="col-auto d-flex align-items-center">
+            <i class="fa-solid fa-people-group" style="color: var(--p-primary-500); font-size: 2rem"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+      <div class="card-body2" style="cursor: pointer">
+        <div class="row">
+          <div class="col">
+            <h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Average Hours</h5>
+            <span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+              {{ totalAverageHours }}
+            </span>
+          </div>
+          <div class="col-auto d-flex align-items-center">
+            <i class="fa-solid fa-clock" style="color: var(--p-primary-500); font-size: 2rem"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-accordion value="0">
+  <p-accordion-panel value="1" class="p-element">
+    <p-accordion-header>Advance Filter</p-accordion-header>
+    <p-accordion-content>
+      <form [formGroup]="advanceFilter" (ngSubmit)="submitFilter()">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="row">
+              <div class="col-md-6">
+                <label class="form-label">From</label>
+                <input type="date" formControlName="fromdate" style="padding: 0.5rem !important" class="form-control border-black paddingfive" pInputText />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">To</label>
+                <input type="date" formControlName="todate" style="padding: 0.5rem !important" class="form-control border-black paddingfive" pInputText />
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label">User Name</label>
+              <input type="text" formControlName="username" style="padding: 0.5rem !important" class="form-control border-black paddingfive" pInputText />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label">Source Type</label>
+              <p-select optionValue="id" optionLabel="name" styleClass="w-full" formControlName="source_type" placeholder="Select one" [options]="sourceTypeList"></p-select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label">Source Name</label>
+              <p-select optionValue="user_id" optionLabel="name" styleClass="w-full" formControlName="source_user_id" placeholder="Select one" [options]="sourceTypeName"></p-select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label">Location</label>
+              <p-select optionValue="location" optionLabel="location" styleClass="w-full" formControlName="location" placeholder="Select One" [options]="locationList"></p-select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label">Country</label>
+              <p-multiselect class="border-black paddingfive mt-2" styleClass="w-full" [options]="countryList" optionValue="country" formControlName="country" placeholder="Select Country" optionLabel="country" selectedItemsLabel="{0} items selected" [maxSelectedLabels]="0"></p-multiselect>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label">Device</label>
+              <p-select optionValue="device" optionLabel="device" styleClass="w-full" placeholder="Select one" formControlName="device" [options]="deviceList"></p-select>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-12 text-right">
+            <button class="ps-3 pe-3 pt-2 pb-2" pButton (click)="resetFilter()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" label="Reset Filter"></button>&nbsp;
+            <button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit" label="Filter"></button>
+          </div>
+        </div>
+      </form>
+    </p-accordion-content>
+  </p-accordion-panel>
+</p-accordion>
+<div>
+  <p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="loadUserTrackingData" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [rows]="pageSize" [totalRecords]="totalUserTrackingCount" [first]="first" [tableStyle]="{ 'min-width': '110rem' }" [rowsPerPageOptions]="[100, 200, 500, 1000]">
+    <ng-template pTemplate="caption">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6">
+					<h4>User Tracking</h4>
+					<p class="text-small mb-0" style="color: #7d7574">Total User : {{ totalUserTrackingCount }}</p>
+				</div>
+				<div class="col-md-6 text-end">
+					<div class="d-flex justify-content-md-end">
+						<div class="p-2">
+						  <button class="btn btn-primary" (click)="updateUserTrackingData()">Update Counts &nbsp; <i class="fa-solid fa-arrows-rotate"></i></button>
+						</div>
+						<div class="p-2">
+						  <button class="btn btn-primary" (click)="exportUserTracking()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+						</div>
+					  </div>
+				</div>
+			</div>
+		</div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Session ID</th>
+        <th>Username</th>
+        <th pSortableColumn="session_start">Session Start<p-sortIcon field="session_start"></p-sortIcon></th>
+        <th pSortableColumn="session_end">Session End<p-sortIcon field="session_end"></p-sortIcon></th>
+        <th pSortableColumn="sessionCount">Total Session<p-sortIcon field="sessionCount"></p-sortIcon></th>
+        <th pSortableColumn="location">Location<p-sortIcon field="location"></p-sortIcon></th>
+        <th pSortableColumn="country">Country<p-sortIcon field="country"></p-sortIcon></th>
+        <th pSortableColumn="device">Device<p-sortIcon field="device"></p-sortIcon></th>
+        <th pSortableColumn="browser">Browser<p-sortIcon field="browser"></p-sortIcon></th>
+        <th pSortableColumn="os">OS<p-sortIcon field="os"></p-sortIcon></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td>{{ item.session_id }}</td>
+        <td>{{ item.name }}</td>
+        <td>{{ item.session_start_at }}</td>
+        <td>{{ item.session_end_at }}</td>
+        <td>{{ updateSessionTime(item) }}</td>
+        <td class="columnClick">{{ item.location }}</td>
+        <td class="columnClick">{{ item.country }}</td>
+        <td class="columnClick">{{ item.device }}</td>
+        <td class="columnClick">{{ item.browser }}</td>
+        <td class="columnClick">{{ item.os }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

@@ -1,0 +1,413 @@
+<uni-questions [subCategory]="storageSubCategory"></uni-questions>
+
+<!--<p-accordion value="0"styleClass="white-accordian">-->
+
+<!--    <p-accordion-panel header="Filter Category">-->
+<!--        <form [formGroup]="filterForm" (ngSubmit)="filtersubmit()" #filterFormElm>-->
+<!--            <div class="row">-->
+<!--                <div class="col-md-2">-->
+<!--                    <div class="form-group">-->
+<!--                        <label>From</label>-->
+<!--                        <p-datepicker formControlName="fromdate" dateFormat="dd-mm-yy"></p-datepicker>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-md-2">-->
+<!--                    <div class="form-group">-->
+<!--                        <label>To   </label>-->
+<!--                        <p-datepicker formControlName="todate" dateFormat="dd-mm-yy"></p-datepicker>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-md-4">-->
+<!--                    <div class="form-group">-->
+<!--                        <label>Formatted</label>-->
+<!--                        <p-select optionValue="id" optionLabel="name" [options]="categoryDropdownList"-->
+<!--                                    styleClass="w-full" formControlName="formatted"></p-select>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-md-4">-->
+<!--                    <div class="form-group">-->
+<!--                        <label>Favourite</label>-->
+<!--                        <p-select optionValue="id" optionLabel="name" [options]="categoryDropdownList"-->
+<!--                                    styleClass="w-full" formControlName="favourite"></p-select>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-md-4">-->
+<!--                    <div class="form-group">-->
+<!--                        <label>Verified</label>-->
+<!--                        <p-select optionValue="id" optionLabel="name" [options]="categoryDropdownList"-->
+<!--                                    styleClass="w-full" formControlName="verified"></p-select>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-md-4">-->
+<!--                    <div class="form-group">-->
+<!--                        <label>Suggestion</label>-->
+<!--                        <p-select optionValue="id" optionLabel="name" [options]="suggestionList" styleClass="w-full"-->
+<!--                                    formControlName="suggestion"></p-select>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-md-4">-->
+<!--                    <div class="form-group">-->
+<!--                        <label>Reviewed</label>-->
+<!--                        <p-select optionValue="id" optionLabel="name" [options]="categoryDropdownList"-->
+<!--                                    styleClass="w-full" formControlName="reviewed"></p-select>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="row mt-2">-->
+<!--                <div class="col-12 text-right">-->
+<!--                    <button class="ps-3 pe-3 pt-2 pb-2" pButton (click)="resetFilter()"-->
+<!--                            style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"-->
+<!--                            type="button" label="Reset Filter"></button>&nbsp;-->
+<!--                    <button class="ps-4 pe-4 pt-2 pb-2" pButton-->
+<!--                            style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"-->
+<!--                            type="submit" label="Filter"></button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </p-accordion-content></p-accordion-panel>-->
+<!--</p-accordion>-->
+
+<!--<div class="card mt-2">-->
+<!--    <div class="card-header row w-full m-0" style="background-color: #fff;">-->
+<!--        <div class="col-lg-5 d-lg-flex gap-3">-->
+<!--            <span>{{cardHeader}} <br><span style="color: #A1A1A1; font-size: 10px;">Total Questions: {{totalQuestionCount}}</span></span>-->
+<!--            <div class="form-group">-->
+<!--                <p-select optionValue="id" optionLabel="country" [options]="countryList"-->
+<!--                            (onChange)="countryOnChange($event)" [(ngModel)]="selectedCountry"-->
+<!--                            styleClass="w-full"></p-select>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-lg-7 d-sm-flex gap-2 mt-sm-0 mt-2 justify-content-lg-end">-->
+<!--            <button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" pButton (click)="openQuestionForm()"-->
+<!--                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">New Question-->
+<!--                &nbsp; <i class="fa-solid fa-plus"></i></button>-->
+<!--            <button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" pButton (click)="fileUploadModal=true;"-->
+<!--                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">Import &nbsp;-->
+<!--                <i class="pi pi-file-export"></i></button>-->
+<!--            <button class="ps-3 pe-3 pt-2 pb-2 mt-lg-0 mt-2" pButton (click)="exportFile()"-->
+<!--                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;">Export &nbsp;-->
+<!--                <i class="pi pi-file-export"></i></button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="card-body">-->
+<!--        <div class="row mt-5">-->
+<!--            <div class="col-xl-3 col-md-6 col-sm-6 mb-3" *ngFor="let item of questionList; let i = index">-->
+<!--                <div class="card p-3">-->
+<!--                    <div class="d-flex justify-content-between">-->
+<!--                        <div class="fw-bold sm-font pt-1">Question {{i + 1}}</div>-->
+<!--                        <p-rating [(ngModel)]="item.favourite" [stars]="1" [cancel]="false"></p-rating>-->
+<!--                    </div>-->
+<!--                    <div class="d-flex gap-2 pb-1">-->
+<!--                        <p-tag [severity]="item.verified == 1 ? 'success' : 'warning'"-->
+<!--                               [value]="item.verified == 1 ? 'Verified' : 'Not Verified'" [rounded]="true"-->
+<!--                               class="card-tag"></p-tag>-->
+<!--                        <p-tag [severity]="item.formatted == 1 ? 'success' : 'warning'"-->
+<!--                               [value]="item.formatted == 1 ? 'Formatted' : 'Not Formatted'" [rounded]="true"-->
+<!--                               class="card-tag"></p-tag>-->
+<!--                        <p-tag [severity]="item.reviewed == 1 ? 'success' : 'info'"-->
+<!--                               [value]="item.reviewed == 1 ? 'Reviewed' : 'Not Reviewed'" [rounded]="true"-->
+<!--                               class="card-tag"></p-tag>-->
+<!--                    </div>-->
+<!--                    <div class="pb-1 fw-bold">-->
+<!--                        {{item.question}}-->
+<!--                    </div>-->
+<!--                    <div class="row pb-2">-->
+<!--                        <div class="col-6">-->
+<!--                            <button class="ps-4 pe-4 pt-1 pb-1" pButton (click)="openEditQuestion(item)" style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;width:100%;display: flex;-->
+<!--                                    justify-content: center;">-->
+<!--                                Edit-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                        <div class="col-6">-->
+<!--                            <button class="ps-4 pe-4 pt-1 pb-1" pButton (click)="openViewQuestion(item)" style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;width:100%;display: flex;-->
+<!--                                    justify-content: center;">-->
+<!--                                View-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div style="color: #A1A1A1; font-size: 10px;">Last Updated: {{item.updated_at | date}}</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <p-paginator (onPageChange)="pageChange($event)" [first]="first" [rows]="rows"  [totalRecords]="totalQuestionCount" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>-->
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<p-dialog header="Pre-Application - Career Prospects Entry" [(visible)]="questionModal" [modal]="true"-->
+<!--          [style]="{ width: '70vw' }">-->
+<!--    <form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>-->
+<!--        <div class="form-group pb-2">-->
+<!--            <label>Question</label>-->
+<!--            <input type="text" formControlName="question" styleClass="w-full" class="form-control" pInputText/>-->
+<!--            <div *ngIf="submitted && f.question.errors" class="text-danger text-xs">-->
+<!--                <div *ngIf="f.question.errors.required">Required</div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="form-group pb-2">-->
+<!--            <label>Answer</label>-->
+<!--            <p-editor formControlName="answer" [style]="{ height: '200px' }"></p-editor>-->
+<!--            <div *ngIf="submitted && f.answer.errors" class="text-danger text-xs">-->
+<!--                <div *ngIf="f.answer.errors.required">Required</div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row pb-2">-->
+<!--            <div class="col-md-6 col-12">-->
+<!--                <div class="form-group">-->
+<!--                    <label>Video Link</label>-->
+<!--                    <input type="text" formControlName="videolink" styleClass="w-full" class="form-control"-->
+<!--                           pInputText/>-->
+<!--                    <div *ngIf="submitted && f.videolink.errors" class="text-danger text-xs">-->
+<!--                        <div *ngIf="f.videolink.errors.required">Required</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-6 col-12">-->
+<!--                <div class="form-group">-->
+<!--                    <label>Source Link with image</label>-->
+<!--                    <input type="text" formControlName="imagelink" styleClass="w-full" class="form-control"-->
+<!--                           pInputText/>-->
+<!--                    <div *ngIf="submitted && f.imagelink.errors" class="text-danger text-xs">-->
+<!--                        <div *ngIf="f.imagelink.errors.required">Required</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row pb-2">-->
+<!--            <div class="col-md-6 col-12">-->
+<!--                <div class="form-group">-->
+<!--                    <label>Favourite Status</label>-->
+<!--                    <p-select optionValue="id" optionLabel="name" [options]="categoryDropdownList" styleClass="w-full"-->
+<!--                                formControlName="favourite"></p-select>-->
+<!--                    <div *ngIf="submitted && f.favourite.errors" class="text-danger text-xs">-->
+<!--                        <div *ngIf="f.favourite.errors.required">Required</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-6 col-12">-->
+<!--                <div class="form-group">-->
+<!--                    <label>Verified Status</label>-->
+<!--                    <p-select optionValue="id" optionLabel="name" [options]="categoryDropdownList" styleClass="w-full"-->
+<!--                                formControlName="verified"></p-select>-->
+<!--                    <div *ngIf="submitted && f.verified.errors" class="text-danger text-xs">-->
+<!--                        <div *ngIf="f.verified.errors.required">Required</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row pb-2">-->
+<!--            <div class="col-md-6 col-12">-->
+<!--                <div class="form-group">-->
+<!--                    <label>Formatted Status</label>-->
+<!--                    <p-select optionValue="id" optionLabel="name" [options]="categoryDropdownList" styleClass="w-full"-->
+<!--                                formControlName="formatted"></p-select>-->
+<!--                    <div *ngIf="submitted && f.formatted.errors" class="text-danger text-xs">-->
+<!--                        <div *ngIf="f.formatted.errors.required">Required</div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-6">-->
+<!--                <button class="ps-4 pe-4 pt-1 pb-1" pButton type="button" (click)="getEditHistory()"-->
+<!--                        style="background-color: #0f100d;border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">-->
+<!--                    Edit History-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="col-md-6">-->
+<!--                <div class="text-right">-->
+<!--                    <button class="ps-4 pe-4 pt-1 pb-1" pButton type="button" (click)="suggestionModal=true;"-->
+<!--                            style="background-color: #f3210e;border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">-->
+<!--                        Suggestions-->
+<!--                    </button>&nbsp;&nbsp;-->
+<!--                    <p-confirmpopup></p-confirmpopup>-->
+<!--                    <button class="ps-4 pe-4 pt-1 pb-1" pButton type="button" (click)="deleteQuestion($event)"-->
+<!--                            style="background-color: #f3900e;border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">-->
+<!--                        Delete-->
+<!--                    </button>&nbsp;&nbsp;-->
+<!--                    <button class="ps-4 pe-4 pt-1 pb-1" pButton type="submit"-->
+<!--                            style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">-->
+<!--                        Submit-->
+<!--                    </button>-->
+<!--                </div>-->
+
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
+<!--    <br>-->
+<!--    <p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="historyList" styleClass="gray-header" class="mt-2" *ngIf="historyModal">-->
+<!--        <ng-template pTemplate="header">-->
+<!--            <tr>-->
+<!--                <th>User</th>-->
+<!--                <th>Serial No.</th>-->
+<!--                <th>Date</th>-->
+<!--                <th>Activity Log</th>-->
+<!--            </tr>-->
+<!--        </ng-template>-->
+<!--        <ng-template pTemplate="body" let-user>-->
+<!--            <tr>-->
+<!--                <td>{{user.username}}</td>-->
+<!--                <td>{{user.serial_no}}</td>-->
+<!--                <td>{{user.date | date}}</td>-->
+<!--                <td>-->
+<!--                    <div class="fw-bold">New Value</div>-->
+<!--                    <div>{{user.new_value}}</div>-->
+<!--                    <br/>-->
+<!--                    <div class="fw-bold">Old Value</div>-->
+<!--                    <div>{{user.old_value}}</div>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--        </ng-template>-->
+<!--    </p-table>-->
+<!--</p-dialog>-->
+<!--<p-dialog header="Pre-Application - Career Prospects Entry" [(visible)]="viewQuestionModal" [modal]="true"-->
+<!--          [style]="{ width: '80vw' }">-->
+<!--    <div *ngIf="questionListData">-->
+<!--        <div style="color: var(--p-primary-500);">Question</div>-->
+<!--        <br>-->
+<!--        <div class="row">-->
+<!--            <div class="col-lg-10 fw-bold" style="font-size: 16px;">{{questionListData.question}} </div>-->
+<!--            <div class="col-lg-2">-->
+<!--                <button class="ps-4 pe-4 pt-1 pb-1" pButton (click)="reviewdByModal=true;"-->
+<!--                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">-->
+<!--                    Reviewed By-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="d-flex align-items-center gap-2 pb-1">-->
+<!--            <div style="color: #A1A1A1; font-size: 10px;">Last Updated {{questionListData.updated_at | date}}</div>-->
+<!--            <p-tag [severity]="questionListData.verified == 1 ? 'success' : 'warning'"-->
+<!--                   [value]="questionListData.verified == 1 ? 'Verified' : 'Not Verified'" [rounded]="true"-->
+<!--                   class="card-tag"></p-tag>-->
+<!--            <p-tag [severity]="questionListData.formatted == 1 ? 'success' : 'warning'"-->
+<!--                   [value]="questionListData.formatted == 1 ? 'Formatted' : 'Not Formatted'" [rounded]="true"-->
+<!--                   class="card-tag"></p-tag>-->
+<!--            <p-tag [severity]="questionListData.reviewed == 1 ? 'success' : 'info'"-->
+<!--                   [value]="questionListData.reviewed == 1 ? 'Reviewed' : 'Not Reviewed'" [rounded]="true"-->
+<!--                   class="card-tag"></p-tag>-->
+<!--        </div>-->
+<!--        <div style="color: var(--p-primary-500);">Answer</div>-->
+<!--        <br/>-->
+<!--        <div>{{questionListData.answer}}</div>-->
+<!--        <br/>-->
+<!--        <div class="row">-->
+<!--            <div class="col-md-6 col-12">-->
+<!--                <div class="fw-bold">Video Reference</div>-->
+<!--                <br/>-->
+<!--                <p-carousel [value]="questionListData.videolink" [numVisible]="3" [numScroll]="1" [circular]="true"-->
+<!--                            [responsiveOptions]="responsiveOptions">-->
+<!--                    <ng-template let-item pTemplate="item">-->
+<!--                        <div class="text-center">-->
+<!--                            <img [src]="item.imageurl" [alt]="item.title" style="width: 70%; height: 70%">-->
+<!--                        </div>-->
+<!--                    </ng-template>-->
+<!--                </p-carousel>-->
+<!--            </div>-->
+<!--            <div class="col-md-6 col-12">-->
+<!--                <div class="fw-bold">Website Reference</div>-->
+<!--                <br/>-->
+<!--                <p-carousel [value]="questionListData.reflink" [numVisible]="3" [numScroll]="1" [circular]="true"-->
+<!--                            [responsiveOptions]="responsiveOptions">-->
+<!--                    <ng-template let-item pTemplate="item">-->
+<!--                        <div class="text-center">-->
+<!--                            <img [src]="item.imageurl" [alt]="item.title" style="width: 70%; height: 70%">-->
+<!--                        </div>-->
+<!--                    </ng-template>-->
+<!--                </p-carousel>-->
+<!--            </div>-->
+
+<!--        </div>-->
+<!--    </div>-->
+
+<!--</p-dialog>-->
+<!--<p-dialog header="Reviewed By" [(visible)]="reviewdByModal" [modal]="true" [style]="{ width: '20vw' }">-->
+<!--    <div class="text-center pt-2 pb-2">-->
+<!--        <img src="assets/images/subcard.jpg" alt="" style="height: 100px;width: 100px;">-->
+<!--    </div>-->
+<!--</p-dialog>-->
+
+<!--<p-dialog header="Suggestion" [(visible)]="suggestionModal" [modal]="true" [style]="{ width: '60vw' }">-->
+<!--    <div class="d-flex gap-2 align-items-baseline">-->
+<!--        <input type="checkbox">-->
+<!--        <div>-->
+<!--            <div class="d-flex gap-2 pb-2">-->
+<!--                <div class="fw-bold" style="font-size: 16px;">Review User: Jhon Doe</div>-->
+<!--                <p-tag severity="success" [rounded]="true" class="card-tag">Verified</p-tag>-->
+<!--            </div>-->
+<!--            <div class="pb-3">Organizaton: Department of the Internation Trade.</div>-->
+<!--            <div style="color: #A1A1A1;" class="container-bottom pb-3">-->
+<!--                Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio reiciendis temporibus odio neque-->
+<!--                explicabo, quos autem.-->
+<!--            </div>-->
+<!--            <br>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="d-flex gap-2 pt-2 align-items-baseline">-->
+<!--        <input type="checkbox">-->
+<!--        <div>-->
+<!--            <div class="d-flex gap-2 pb-2">-->
+<!--                <div class="fw-bold" style="font-size: 16px;">Review User: Jhon Doe</div>-->
+<!--                <p-tag severity="warning" [rounded]="true" class="card-tag">Checked</p-tag>-->
+<!--            </div>-->
+<!--            <div class="pb-3">Organizaton: Department of the Internation Trade.</div>-->
+<!--            <div style="color: #A1A1A1;" class="container-bottom pb-3">-->
+<!--                Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio reiciendis temporibus odio neque-->
+<!--                explicabo, quos autem.-->
+<!--            </div>-->
+<!--            <br>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="d-flex gap-2 pt-2 align-items-baseline">-->
+<!--        <input type="checkbox">-->
+<!--        <div>-->
+<!--            <div class="d-flex gap-2 pb-2">-->
+<!--                <div class="fw-bold" style="font-size: 16px;">Review User: Jhon Doe</div>-->
+<!--                <p-tag severity="info" [rounded]="true" class="card-tag">Not Interested</p-tag>-->
+<!--            </div>-->
+<!--            <div class="pb-3">Organizaton: Department of the Internation Trade.</div>-->
+<!--            <div style="color: #A1A1A1;">-->
+<!--                Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio reiciendis temporibus odio neque-->
+<!--                explicabo, quos autem.-->
+<!--            </div>-->
+<!--            <br>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div class="text-right">-->
+<!--        <button class="ps-4 pe-4 pt-1 pb-1" pButton-->
+<!--                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">-->
+<!--            Action-->
+<!--        </button>-->
+<!--    </div>-->
+<!--</p-dialog>-->
+<!--<p-dialog header="File Upload" [(visible)]="fileUploadModal" [modal]="true" [style]="{ width: '50vw' }">-->
+<!--    <div class="row">-->
+<!--        <div class="col-md-6 col-12">-->
+<!--            <div class="w-full">-->
+<!--                <a href="assets/files/Export-UK-All-Modules.csv" download-->
+<!--                   class="ps-4 pe-4 pt-2 pb-2 w-full d-flex justify-content-center align-items-initial no-underline"-->
+<!--                   style="background-color: #000000;border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">-->
+<!--                    <i class="pi pi-file-export"></i>&nbsp;&nbsp;Download Report</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-md-6 col-12 mt-md-0 mt-2">-->
+<!--            <div class="w-full">-->
+<!--                <a href="assets/files/Export UK - All Modules.csv" download-->
+<!--                   class="ps-4 pe-4 pt-2 pb-2 w-full d-flex justify-content-center align-items-initial no-underline"-->
+<!--                   style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">-->
+<!--                    <i class="pi pi-file-export"></i>&nbsp;&nbsp;Download Read Me</a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <br/>-->
+<!--    <label for="file" class="reading-drop-container">-->
+<!--        <i class="pi pi-upload reading-drop-title"></i>-->
+<!--        <input type="file" id="file" class="d-none" (change)="onFileChange($event)" accept=".csv"><br/>-->
+<!--        <span class="reading-sm-font">Only .csv file formats are supported for uploads</span>-->
+<!--        <span class="reading-sm-font">Please maintain the format of uploading to stop failures</span>-->
+<!--    </label><br/>-->
+<!--    <div class="text-center">-->
+<!--        <button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="uploadFile()"-->
+<!--                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">-->
+<!--            Upload-->
+<!--        </button>-->
+<!--    </div>-->
+<!--</p-dialog>-->

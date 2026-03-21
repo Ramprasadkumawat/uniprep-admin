@@ -1,0 +1,133 @@
+<div class="card mt-2">
+    <div class="card-header d-flex w-full align-items-center justify-content-between"
+        style="background-color: transparent">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 col-12">
+                    <div class="d-flex gap-3 align-items-center">
+                        <h5 class="mb-0">Entrepreneur Sector Proficiency Test</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body d-flex w-full align-items-center justify-content-between"
+        style="background-color: transparent">
+        <div class="container-fluid">
+            <div class="row">
+                <form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+                    <div class="row">
+                        <div class="col-md-4">
+                             
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input formControlName="submodulename" type="text" class="form-control" pInputText>
+                                <div *ngIf="submitted && f.submodulename.errors" class="text-danger text-xs">
+                                    <div *ngIf="f.submodulename.errors.required">Required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>URL Slug</label>
+                                <input formControlName="urlslug" type="text" class="form-control" pInputText>
+                                <div *ngIf="submitted && f.urlslug.errors" class="text-danger text-xs">
+                                    <div *ngIf="f.urlslug.errors.required">Required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Image</label>
+                            <div class="form-group" (dragover)="onDragOver($event)">
+                                <div class="input-wrapper">
+                                    <input type="file" (change)="onFileChangeIcon($event)" formControlName="icon" accept=".svg"
+                                        style="display: none; color: black;" #fileInputicon>
+                                    <input style="height: 40px !important;" type="text" (change)="onFileChangeIcon($event)"
+                                        formControlName="icon" class="form-control" pInputText readonly
+                                        [value]="form.controls.icon.value ? form.controls.icon.value.name : ''"
+                                        (click)="fileInputicon.click()">
+                                    <button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem;"
+                                        class="upload-button" (click)="fileInputicon.click()">Upload</button>
+                                    <div *ngIf="submitted && f.icon.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.icon.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12 text-right">
+                            <button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="resetForm()"
+                                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                                type="button">Reset Field
+                            </button>&nbsp;
+
+                            <button class="ps-3 pe-3 pt-2 pb-2" pButton
+                                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                                type="submit">{{btntxt}}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-2">
+    <div class="card-header d-flex w-full align-items-center justify-content-between"
+        style="background-color: transparent">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 col-12">
+                    <div>
+                        <h5 class="mb-0">Entrepreneur Sector Proficiency Test Modules</h5>
+                        <span style="color: #A1A1A1; font-size: 12px;">Total Categories:
+                            {{categoryCount}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row mt-5">
+            <div class="col-lg-3 col-md-6 col-sm-6 mb-3"  *ngFor="let list of etreprenuertestlists">
+                <div class="card p-3">
+                    <div class="text-center fw-bold">{{list.submodule_name}}</div>
+                    <div style="text-align: center;">
+                        <img width="43" height="43" src="{{list.icon}}" alt="">
+                    </div>
+                    <div class="row text-center mt-2">
+                        <div class="d-flex gap-2">
+                            <div class="flex-grow-1"  >
+                                <button (click)="navigate(list)"
+                                    class="w-100 justify-content-center" pButton
+                                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                                    Add Tests
+                                </button>
+                            </div>
+                             
+                            <div class="flex-grow-1">
+                                <button (click)="editCategory(list)" class="w-100 justify-content-center" pButton
+                                    style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                                    Edit
+                                </button>
+                            </div>
+                            <p-confirmpopup></p-confirmpopup>
+                            <div class="flex-grow-1">
+                                <button (click)="deleteCategory(list)" class="w-100 justify-content-center"
+                                    pButton
+                                    style="background-color: red;border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px;">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-paginator (onPageChange)="pageChange($event)" [rows]="rows" [totalRecords]="categoryCount"
+        [rowsPerPageOptions]="[10,50,100]"></p-paginator>
+</div>

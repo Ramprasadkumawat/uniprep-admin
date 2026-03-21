@@ -1,0 +1,116 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+						<p-accordion-header>Filter By</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filtersubmit()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Mobile</label>
+							<input formControlName="phone" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Category</label>
+							<p-select formControlName="category" optionValue="id" optionLabel="reportoption_name" styleClass="w-full" [options]="category"></p-select>
+						</div>
+					</div>
+					<!-- <div class="col-md-4  mt-1">
+                   <div class="form-group">
+                       <label>Priority</label>
+                       <p-select formControlName="Priority" optionValue="id" optionLabel="name" styleClass="w-full"></p-select>
+                   </div>
+               </div> -->
+				</div>
+				<div class="row mt-3 mt-1">
+					<div class="col-12 text-right">
+						<button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton type="button" (click)="reset()" label="Reset Filter"></button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton type="submit" label="Filter"></button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<!-- table list -->
+
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="ticketsLists" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [totalRecords]="datacount" [rows]="pageSize" [rowsPerPageOptions]="[10, 25, 50]">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<span
+				>Ticket List <br /><span style="color: #a1a1a1; font-size: 10px">Total Tickets: {{ datacount }}</span></span
+			>
+			<button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton (click)="exportsubmit()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th>Ticket No.</th>
+			<th>User Details</th>
+			<th>Plan Name</th>
+			<th>Report Date</th>
+			<th>Issue</th>
+			<th>Info</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-tickets>
+		<tr>
+			<td>{{ tickets.id }}</td>
+			<td>
+				<a (click)="redirecttolead(tickets.user_id)" style="cursor: pointer; color: var(--p-primary-500)">{{ tickets.userName }}</a>
+				<br />
+				<span style="font-size: smaller">{{ tickets.userEmail }}</span>
+				<br />
+				<span style="font-size: smaller">{{ tickets.userPhone }}</span>
+			</td>
+			<td>{{ tickets.subscriptonPlan }}</td>
+			<td>{{ tickets.createdDateTime }}</td>
+			<td>{{ tickets.reportOptionName }}</td>
+			<td>
+				<span class="expand-icon" (click)="toggleRow(tickets)">
+					<span> <i [class]="'pi ' + (tickets.expanded ? 'pi pi-minus' : 'pi pi-plus')" [ngClass]="'custom-icon'"></i></span>
+				</span>
+			</td>
+		</tr>
+		<tr *ngIf="tickets.expanded">
+			<td [attr.colspan]="6">
+				<div class="row-details d-flex">
+					<div class="card p-2" style="width: 65%">
+						<h2 style="font-size: 12px">Ticket Message</h2>
+						<span style="font-size: 10px">{{ tickets.comment }}</span>
+					</div>
+					<div class="card p-2 ms-2" style="width: 35%">
+						<div class="d-flex">
+							<span style="font-size: small; align-self: center">Set Status</span>
+							<span class="ms-3" style="height: 30px; width: 70%">
+								<p-select placeholder="Select the update status" [options]="options" optionValue="id" optionLabel="name" styleClass="w-full"></p-select>
+							</span>
+						</div>
+						<div class="row mt-3 mt-1">
+							<div class="col-12" style="text-align: center">
+								<!-- <button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton
+                                type="button" label="Set Status">Set Status
+                            </button>&nbsp; -->
+								<button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton type="submit" label="Send Mail" [disabled]="tickets.report_status == 2 ? true : false" (click)="sendreportMail(tickets.id)"></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+<p-confirmDialog [style]="{ width: '30vw' }"></p-confirmDialog>

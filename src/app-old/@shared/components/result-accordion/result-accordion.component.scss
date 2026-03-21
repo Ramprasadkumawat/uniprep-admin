@@ -1,0 +1,111 @@
+
+
+.crd {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  h4 {
+    font-size: 1rem;
+    margin-bottom: 2px;
+  }
+}
+.description {
+  font-size: .6rem
+}
+
+.dsrp {
+  margin-top: 10px;
+  padding: 5px;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: 0.25rem;
+  .dsrp-header {
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    padding-bottom: 2px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    &.b-0 {
+      border-bottom-width: 0px;
+    }
+  }
+  .dsrp-content {
+    font-size: .8rem;
+    padding: 5px;
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+      text-decoration: none;
+      display: flex;
+      width: 100%;
+      padding: 3px;
+      border-radius: 3px;
+      background: #fcfafa;
+      margin-top: 5px;
+      justify-content: space-between;
+      color: #359dd5;
+      &:first-child {
+        margin-top: 0px;
+      }
+    }
+  }
+  .dsrp-title {
+    color: gray;
+    font-size: .7rem;
+  }
+  .dsrp-score, .dsrp-content {
+    &.success {
+      color: var(--p-primary-500);
+    }
+    &.warning {
+      color: orange;
+    }
+    &.danger {
+      color: red;
+    }
+  }
+  .cntnt {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+    &:active {
+      opacity: .8;
+    }
+  }
+}
+
+.circular-chart {
+  display: block;
+  width: 45px;
+}
+.circular-chart.warning .circle {
+  stroke: #ff9f00;
+}
+.circular-chart.danger .circle {
+  stroke: #ff0000;
+}
+.circular-chart.success .circle {
+  stroke: var(--p-primary-500);
+}
+.percentage {
+  fill: #666;
+  font-family: sans-serif;
+  font-size: 0.5em;
+  text-anchor: middle;
+}
+.circle-bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 3.8;
+}
+.circle {
+  fill: none;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  animation: progress 1s ease-out forwards;
+}

@@ -1,0 +1,206 @@
+  .mostpopular {
+      background: var(--p-primary-500);
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      border-radius: 12px 12px 0 0;
+      position: absolute;
+      top: -2em;
+      width: 100%;
+  }
+
+  .subscriptioncard {
+      border-width: 2px !important;
+      height: -webkit-fill-available;
+
+      .card-header {
+          background: transparent;
+      }
+
+      .card-footer {
+          background: transparent;
+      }
+
+      &:hover {
+          background-color: var(--p-primary-200);
+          border: 2px solid var(--p-primary-500);
+
+          // height: 445px;
+          .getstartedbtn {
+              display: block;
+
+              .btn {
+                  margin: 0 !important;
+                  width: 100%;
+                  border-radius: 10px !important;
+              }
+          }
+      }
+
+      &:focus {
+          background-color: var(--p-primary-200);
+          border: 2px solid var(--p-primary-500);
+
+          .getstartedbtn {
+              display: block;
+
+              .btn {
+                  margin: 0 !important;
+                  width: 100%;
+                  border-radius: 10px !important;
+              }
+          }
+      }
+
+      .getstartedbtn {
+          display: none;
+
+          .btn {
+              margin: 0 !important;
+              width: 100%;
+              border-radius: 10px !important;
+          }
+      }
+  }
+
+  .subscriptioncard.active {
+      background-color: var(--p-primary-200);
+      border: 2px solid var(--p-primary-500);
+
+      // height: 480px;
+      .getstartedbtn {
+          display: block;
+
+          .btn {
+              margin: 0 !important;
+              width: 100%;
+              border-radius: 10px !important;
+          }
+      }
+  }
+
+  .subscriptioncard1 {
+      border-width: 2px !important;
+      height: -webkit-fill-available;
+
+      .card-header {
+          background: transparent;
+      }
+
+      .card-footer {
+          background: transparent;
+      }
+
+      &:hover {
+          // height: 465px;
+          background-color: var(--p-primary-200);
+          border: 2px solid var(--p-primary-500);
+
+          .getstartedbtn {
+              display: block;
+
+              .btn {
+                  margin: 0 !important;
+                  width: 100%;
+                  border-radius: 10px !important;
+              }
+          }
+      }
+
+      &:focus {
+          background-color: var(--p-primary-200);
+          border: 2px solid var(--p-primary-500);
+
+          .getstartedbtn {
+              display: block;
+
+              .btn {
+                  margin: 0 !important;
+                  width: 100%;
+                  border-radius: 10px !important;
+              }
+          }
+      }
+
+      .getstartedbtn {
+          display: none;
+
+          .btn {
+              margin: 0 !important;
+              width: 100%;
+              border-radius: 10px !important;
+          }
+      }
+  }
+
+  .discountbutton {
+      border: 2px solid #FF8800;
+      margin: 0;
+      padding: 4px 10px !important;
+      background-color: #FFE1BE;
+      font-size: 0.8em;
+      border-radius: 5px !important;
+      color: #FF8800;
+      font-weight: 500;
+
+      &:focus {
+          border: 2px solid #FF8800;
+          margin: 0;
+          padding: 4px 10px !important;
+          background-color: #FF8800;
+          font-size: 0.8em;
+          border-radius: 5px !important;
+          color: #fff;
+          font-weight: 500;
+      }
+
+      &:hover {
+          border: 2px solid #FF8800;
+          margin: 0;
+          padding: 4px 10px !important;
+          background-color: #FF8800;
+          font-size: 0.8em;
+          border-radius: 5px !important;
+          color: #fff;
+          font-weight: 500;
+      }
+  }
+
+  .sameline {
+      padding: 1rem 0rem !important;
+  }
+
+  :host ::ng-deep .p-multiselect {
+      border-radius: 50px !important;
+  }
+
+//   :host ::ng-deep .p-dropdown {
+//       border-radius: 50px !important;
+//       padding: 5px;
+//   }
+
+  :host ::ng-deep .p-multiselect .p-multiselect-label.p-placeholder {
+      font-size: 12px;
+  }
+
+  .base-country-flag {
+      width: 27px;
+      height: 27px;
+  }
+
+
+  // 
+
+  .all-country-tag {
+      border: 1px solid var(--p-primary-500);
+      border-radius: 20px;
+      padding: 5px 10px;
+      width: 180px;
+      text-align: center;
+      margin: auto;
+      background-color: #fff;
+  }
+
+  .card-bg {
+      background-color: #FAFAFA;
+  }

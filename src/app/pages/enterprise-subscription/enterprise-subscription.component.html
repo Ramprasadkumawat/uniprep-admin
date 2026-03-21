@@ -1,0 +1,369 @@
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}" (onClose)="closeAccodion()">
+	<p-accordion-panel value="1">
+		<p-accordion-header>{{ buttonTitle == "Create" ? "Add Enterprise Subscription" : "Update Enterprise Subscription" }}</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="addOrUpdate()" #formElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>College Type</label>
+							<p-select styleClass="w-full" formControlName="formtype" [options]="college_type" optionValue="id" optionLabel="institute_type" (onChange)="changeCollegeType($event)" [readonly]="edit_payment_action === 7 || edit_payment_action === 6 || edit_payment_action === 8"></p-select>
+							<div *ngIf="submitted && f.formtype.errors" class="text-danger text-xs">
+								<div *ngIf="f.formtype.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Institution</label>
+							<p-select styleClass="w-full" formControlName="college" [options]="collegeList" [readonly]="edit_payment_action === 7 || edit_payment_action === 6 || edit_payment_action === 8" optionValue="id" optionLabel="institutename" appendTo="body" [filter]="true" filterBy="institutename"></p-select>
+							<div *ngIf="submitted && f.college.errors" class="text-danger text-xs">
+								<div *ngIf="f.college.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Set Users Number</label>
+							<input type="text" formControlName="number_of_users" class="form-control" pInputText (input)="calculateTotal()" />
+							<div *ngIf="submitted && f.number_of_users.errors" class="text-danger text-xs">
+								<div *ngIf="f.number_of_users.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-md-4 mt-2">
+                    <div class="form-group">
+                        <label>Set Price Per User</label>
+                        <input type="text" formControlName="price_per_user" class="form-control" pInputText
+                        [readonly]="edit_payment_action === 7 || edit_payment_action === 6 || edit_payment_action === 8" (input)="calculateTotal()">
+                        <div *ngIf="submitted && f.price_per_user.errors" class="text-danger text-xs">
+                            <div *ngIf="f.price_per_user.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <div class="form-group">
+                        <label>Total Price</label>
+                        <input type="text" formControlName="total_price" class="form-control" pInputText
+                            [readonly]="true">
+                        <div *ngIf="submitted && f.total_price.errors" class="text-danger text-xs">
+                            <div *ngIf="f.total_price.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div> -->
+					<!--  <div class="col-md-4 mt-2">
+                    <div class="form-group">
+                        <label>Validity</label>
+                        <p-select styleClass="w-full" formControlName="validity" [options]="validityList"
+                            optionValue="id" optionLabel="name" appendTo="body"></p-select>
+                        <div *ngIf="submitted && f.validity.errors" class="text-danger text-xs">
+                            <div *ngIf="f.validity.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div> -->
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Payment Type</label>
+							<p-select styleClass="w-full" placeholder="Select" formControlName="paymenttype" [options]="paymentList" [readonly]="edit_payment_action === 7 || edit_payment_action === 6 || edit_payment_action === 8" optionValue="id" optionLabel="name" appendTo="body"></p-select>
+							<div *ngIf="submitted && f.paymenttype.errors" class="text-danger text-xs">
+								<div *ngIf="f.paymenttype.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Subscription Plan</label>
+							<!-- <p-select styleClass="w-full" formControlName="subscription_plan"
+                        [readonly]="edit_payment_action === 7 || edit_payment_action === 6 || edit_payment_action === 8"  [options]="subscriptionPlanList" optionValue="id" optionLabel="name"></p-select> -->
+							<input type="text" formControlName="subscription_plan" class="form-control" pInputText [readonly]="true" />
+						</div>
+						<!--
+          <div class="form-group mt-2">
+                      <input
+              type="text"
+              formControlName="subscription_plan1"
+              class="form-control"
+              pInputText
+              [readonly]="true"
+            />
+          </div>
+          <div class="form-group mt-2">
+                      <input
+              type="text"
+              formControlName="subscription_plan2"
+              class="form-control"
+              pInputText
+              [readonly]="true"
+            />
+          </div> -->
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Set Price</label>
+							<div class="position-relative" style="width: 100%">
+								<p-select class="fixed-dropdown" [options]="subscriptionPlanCurrency" formControlName="subscription_currency" optionValue="id" optionLabel="currency_code" optionValue="currency_code" [readonly]="edit_payment_action === 7 || edit_payment_action === 6 || edit_payment_action === 8" [filter]="true" filterBy="currency_code" style="position: absolute; left: 0; top: 0; height: 100%; z-index: 2" appendTo="body" [showClear]="true" placeholder="Currency"></p-select>
+								<input type="text" formControlName="premium_price" class="form-control" pInputText [readonly]="buttonTitle === 'Update'" placeholder="Enter price" style="padding-left: 110px; height: 36px" />
+							</div>
+							<div *ngIf="submitted && f.premium_price.errors" class="text-danger text-xs">
+								<div *ngIf="f.premium_price.errors.required">Required</div>
+							</div>
+						</div>
+						<!--
+          <div class="form-group mt-2">
+                   <input
+              type="text"
+              formControlName="career_price"
+              class="form-control"
+              pInputText
+              [readonly]="buttonTitle === 'Update'"
+            />
+            <div
+              *ngIf="submitted && f.career_price.errors"
+              class="text-danger text-xs"
+            >
+              <div *ngIf="f.career_price.errors.required">Required</div>
+            </div>
+          </div>
+          <div class="form-group mt-2">
+                     <input
+              type="text"
+              formControlName="entre_price"
+              class="form-control"
+              pInputText
+              [readonly]="buttonTitle === 'Update'"
+            />
+            <div
+              *ngIf="submitted && f.entre_price.errors"
+              class="text-danger text-xs"
+            >
+              <div *ngIf="f.entre_price.errors.required">Required</div>
+            </div>
+          </div> -->
+					</div>
+					<div class="mt-2 text-right">
+						<button type="submit" class="btn btn-primary">
+							{{ buttonTitle }}
+						</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="card">
+	<div class="card-header">
+		<div class="d-flex w-full align-items-center justify-content-between mobile-subscription">
+			<span class="h6 fw-bold">Enterprise Subscription Manager</span>
+		</div>
+	</div>
+	<div class="card-body">
+		<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="subscriptionList" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [totalRecords]="totalCount" [lazy]="true" [first]="first" [rows]="pageSize" [rowsPerPageOptions]="[10, 25, 50]" [tableStyle]="{ 'min-width': '90rem' }">
+			<ng-template pTemplate="header">
+				<tr>
+					<th>College Name</th>
+					<th style="width: 5rem">Type</th>
+					<th style="width: 7rem">Subscription Plan</th>
+					<!--  <th>Validity</th> -->
+					<th style="width: 5rem">College Admin Users</th>
+					<th style="width: 5rem">Student User Limit</th>
+					<th style="width: 5rem">Student Users</th>
+					<th style="width: 5rem">Paid user</th>
+					<th style="width: 5rem">Price/ User</th>
+					<th style="width: 5rem">Total Price</th>
+					<th style="width: 10rem">Status</th>
+					<th style="width: 17rem">Actions</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-sub>
+				<tr>
+					<td>{{ sub?.institutename }}</td>
+					<td>{{ sub?.payment_type_id == 1 ? "College" : "Student" }}</td>
+					<td>
+						<span style="cursor: pointer" (click)="openPricingData(sub?.premium_price, sub?.career_price, sub?.entre_price)">View Pricing</span>
+					</td>
+					<td>{{ sub?.college_users_count }}</td>
+					<!--  <td>{{sub?.validity}} Months</td> -->
+					<td>{{ sub?.limits }}</td>
+					<td>
+						{{ sub?.used }}
+						<span style="cursor: pointer" *ngIf="sub?.used > 0" (click)="showHistory(sub?.id, sub?.payment_type_id, sub)"><i class="fa-solid fa-eye"></i></span>
+					</td>
+					<td>{{ sub?.paid_users }}</td>
+					<td style="text-align: right">{{ sub?.price }}</td>
+					<td style="text-align: right">{{ sub?.totalprice }}</td>
+					<td>{{ sub?.payment_status }}</td>
+					<td style="text-align: left">
+						<table style="width: -webkit-fill-available">
+							<tr>
+								<td>
+									<span (click)="edit(sub)" style="cursor: pointer" *ngIf="sub?.payment_action == 1 || sub?.payment_action == 2 || sub?.payment_action == 5 || sub?.payment_action == 6 || sub?.payment_action == 7 || sub?.payment_action == 8"
+										><span style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span>&nbsp; Edit</span
+									>
+									<p-confirmpopup></p-confirmpopup>
+								</td>
+								<!--  <td style="text-align: center;">
+                            <span  (click)="shareLink(sub)" style="cursor: pointer;" *ngIf="sub?.payment_action==1 ||sub?.payment_action==2||sub?.payment_action==6||sub?.payment_action==7"><span
+                                style="color: var(--p-primary-500);">
+                                <i class="fa-solid fa-share"></i></span>&nbsp; Send Link</span>
+                        </td>  -->
+							</tr>
+							<!--  <tr><td colspan="2" >
+                                <span (click)="adduserpopup(sub)" style="cursor: pointer;" *ngIf="sub?.payment_action == 5 ||sub?.payment_action == 6 || sub?.payment_action == 7"><span
+                                    style="color: var(--p-primary-500);"> 
+                                    <i class="fa-solid fa-user"></i></span>&nbsp; Add User</span>
+                            </td>
+                        </tr> -->
+							<tr>
+								<span (click)="delete($event, sub?.subscription_manager_id)" style="cursor: pointer" *ngIf="sub?.payment_action == 1 || sub?.payment_action == 5">
+									<span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-trash"></i></span>&nbsp;Delete</span
+								>
+								<!-- &nbsp;&nbsp;<span (click)="openAssignModel(sub)" style="cursor: pointer;"
+                            *ngIf="sub?.payment_action==3"><span class="ms-2" style="color: var(--p-primary-500);"><i
+                                    class="fa-solid fa-user"></i></span> &nbsp;
+                            Assign</span> -->
+								<td colspan="2">
+									<span (click)="adduserpopup(sub)" style="cursor: pointer; margin-left: -8px" *ngIf="sub?.payment_action == 3"
+										><span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-user"></i></span> &nbsp; Add User</span
+									>
+								</td>
+							</tr>
+						</table>
+						<span *ngIf="sub?.payment_action == 4"> - </span>
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+</div>
+<p-dialog header="Assign Students" [(visible)]="showAssignModel" [modal]="true" [style]="{ width: '35vw' }" class="assignDialog">
+	<div class="pt-3 border-solid border-1 border-blue-500">
+		<p class="mb-2">College</p>
+		<p>{{ instituteDetails?.institutename }}</p>
+	</div>
+
+	<ng-template pTemplate="footer">
+		<form [formGroup]="assignform" (ngSubmit)="assign()" #assignformElement>
+			<p class="mb-0">Students List</p>
+			<p-multiselect styleClass="w-full" formControlName="student_list" defaultLabel="Select" optionValue="id" optionLabel="name" [options]="student_details"></p-multiselect>
+			<div *ngIf="assignSubmitted && a.student_list.errors" class="text-danger text-xs">
+				<div *ngIf="a.student_list.errors.required">Required</div>
+			</div>
+			<br /><br />
+			<div class="d-flex justify-content-center">
+				<p-button type="submit">Assign</p-button>
+			</div>
+		</form>
+	</ng-template>
+</p-dialog>
+<p-dialog header="Added Students" [(visible)]="historyModel" [modal]="true" [style]="{ width: '90vw' }" class="studentHistory">
+	<hr />
+	<div class="pt-3 border-solid border-1 border-blue-500" style="display: flex; justify-content: space-between">
+		<div>
+			<p class="mb-2">{{ addcollegeorstudent }}</p>
+			<p>{{ addnamecollegename }}</p>
+		</div>
+		<div>
+			<p class="mb-2">User Limit</p>
+			<p>{{ adduserlimtpopup }}</p>
+		</div>
+	</div>
+	<hr />
+	<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="studentHistory" styleClass="gray-header" [lazy]="true">
+		<ng-template pTemplate="header">
+			<tr>
+				<th>User Name</th>
+				<th>Email Id</th>
+				<th>Home Country</th>
+				<th>Status</th>
+				<th>Action</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-detail>
+			<tr>
+				<td>{{ detail.student_name }}</td>
+				<td>{{ detail.email }}</td>
+				<td>{{ detail.country_name }}</td>
+				<td>{{ detail.status }}</td>
+				<td style="text-align: center">-</td>
+				<!-- <td><span *ngIf="detail.status !='Payment Completed' && addcollegeorstudent == 'Student'" style="cursor: pointer;" (click)="sentLinkSeperate(detail.enterprise_subscribers_id)" ><i class="fa-solid fa-share"></i> &nbsp;Send link</span></td> -->
+			</tr>
+		</ng-template> </p-table
+	><br /><br />
+	<div class="mt-2" style="display: flex; justify-content: space-between">
+		<span> Added Users:{{ addeduser }} </span>
+		<span> Remaining Users:{{ remaininguser }} </span>
+		<span *ngIf="addcollegeorstudent == 'Student'"> Paid Users:{{ paiduser }} </span>
+		<span *ngIf="addcollegeorstudent == 'Student'"> Payment Pending Users:{{ pendingpaymentuser }} </span>
+		<span>
+			<span *ngIf="addcollegeorstudent == 'Student'" style="cursor: pointer" (click)="sentLinkAllAdduser()"><i class="fa-solid fa-share"></i> &nbsp;Send Link to All</span>
+		</span>
+	</div>
+</p-dialog>
+<p-dialog header="Add Users" [(visible)]="showAddUserModel" [modal]="true" [style]="{ width: '35vw' }" class="adduserDialog">
+	<div class="pt-3 border-solid border-1 border-blue-500" style="display: flex; justify-content: space-between">
+		<div>
+			<p class="mb-2">{{ collegeorstudent }}</p>
+			<p>{{ namecollegename }}</p>
+		</div>
+		<div>
+			<p class="mb-2">User Limit</p>
+			<p>{{ userlimtpopup }}</p>
+		</div>
+	</div>
+	<hr />
+	<div>
+		<div class="pt-3 border-solid border-1 border-blue-500" style="display: flex; justify-content: space-between">
+			<div>
+				<p class="mb-2">Student List</p>
+			</div>
+			<div>
+				<p class="mb-2">Count:{{ addusercound }}</p>
+			</div>
+		</div>
+		<div class="card p-2" style="height: 200px">
+			<p>
+				<span>Name*</span>,&nbsp;&nbsp;<span>Email Id*</span>,&nbsp;&nbsp;<span>Phone number*</span>,&nbsp;&nbsp;<span>Home Country*</span>,&nbsp;&nbsp;<span>Location*</span>,<br /><span>Program Level Looking*</span>,&nbsp;&nbsp;<span>Last Degree Passing*</span>,<br /><span>Gender</span
+				><!--<span  *ngIf="collegeorstudent == 'College'">&nbsp;&nbsp;Subscription Order id</span> -->
+			</p>
+			<p style="position: absolute; bottom: 0">* fields are mandatory</p>
+		</div>
+	</div>
+	<div class="mt-3">
+		<label for="file" class="reading-drop-container">
+			<i class="pi pi-upload reading-drop-title"></i>
+			<input type="file" id="file" class="d-none" (change)="onFileChange($event)" (click)="$event['target']['value'] = ''" accept=".csv" /><br />
+			<div class="reading-sm-font" *ngIf="selectedFile?.name">
+				{{ selectedFile.name }}
+			</div>
+			<div *ngIf="!selectedFile?.name" class="d-flex flex-column gap-1 text-center">
+				<span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+				<span class="reading-sm-font">Please maintain the format of uploading to stop failures</span>
+			</div> </label
+		><br />
+		<div class="text-center">
+			<button (click)="uploadFile()" class="btn btn-primary"><i class="fa-solid fa-upload"></i> Upload</button>
+
+			<a href="https://api.uniprep.ai/uniprepapi/storage/app/public/SampleUploadDocuments/SampleDocumentAndReadme-Enterprise.zip">
+				<button class="btn btn-primary"><i class="fa-solid fa-download"></i> Download Sample Doc</button>
+			</a>
+		</div>
+	</div>
+</p-dialog>
+<p-dialog header="View Pricing" [(visible)]="showViewPriceModel" [modal]="true" [style]="{ width: '35vw' }">
+	<table class="table table-bordered" style="width: 100%; text-align: left; border-collapse: collapse">
+		<tbody>
+			<tr>
+				<td style="border: 1px solid black">Premium Price</td>
+				<td style="border: 1px solid black">{{ premium_price }}</td>
+			</tr>
+			<!--  <tr>
+        <td style="border: 1px solid black">Career Price</td>
+        <td style="border: 1px solid black">{{ careerprice }}</td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid black">Entrepreneur Price</td>
+        <td style="border: 1px solid black">{{ etreprice }}</td>
+      </tr> -->
+		</tbody>
+	</table>
+</p-dialog>

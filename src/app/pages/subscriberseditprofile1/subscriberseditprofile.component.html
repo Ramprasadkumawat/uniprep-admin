@@ -1,0 +1,511 @@
+<div class="d-flex">
+    <div class="backButton" style="cursor: pointer" (click)="goBack()"><i class="pi pi-arrow-left"></i><h6>Back</h6></div>
+    <h6>&nbsp;&nbsp;Subscribers / {{ users?.[0]?.username }} / {{ breadcrumbsname }}</h6>
+</div>
+<div class="mt-4">
+    <p-tabs activeIndex="1" value="1" styleClass="customtab" class="rt-tabs">
+            <p-tablist>
+            <p-tab value="1">Edit Profile</p-tab>
+            <p-tab value="2">User Transactions</p-tab>
+            <p-tab value="3">Remarks</p-tab>
+            <p-tab value="6" (click)="showPaymentDialog = true">Generate Payment Link</p-tab>
+            <p-tab value="7" (click)="onDocsWalletTabClick()">Docs Wallet</p-tab>
+            <p-tab value="4">Usage Tracking</p-tab>
+            <p-tab value="5">Invites</p-tab>
+            </p-tablist>
+        <p-tabpanels header="Edit Profile">
+            <p-tabpanel value="1" header="Edit Profile">
+                <div class="p-3 header-border">
+                    <h2 style="font-size: 18px"><b>Edit User</b></h2>
+                </div>
+                <div class="p-3">
+                    <form [formGroup]="editform">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Talent ID</label>
+                                    <input formControlName="talent_id" type="text" class="form-control" pInputText [disabled]="true" [readonly]="true" />
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Name *</label>
+                                    <input formControlName="name" type="text" class="form-control" pInputText [readonly]="isEdit" />
+                                    <div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.name.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Email ID *</label>
+                                    <input formControlName="email" type="email" class="form-control" pInputText [readonly]="true" />
+                                    <div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.email.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Mobile (Optional)</label>
+                                    <span *ngIf="checkWhatsUpOrPhone != 1" class="d-flex align-items-center" style="float: right">
+                                        <i class="fa-solid fa-phone" style="color: #0d6efd; font-size: 1rem"></i>
+                                        <span class="ms-1" style="color: #0d6efd; font-weight: 500">Phone</span>
+                                    </span>
+                                    <span *ngIf="checkWhatsUpOrPhone == 1" class="d-flex align-items-center" style="float: right">
+                                        <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp Icon" width="16" height="16" />
+                                        <span class="ms-1" style="color: #128c7e; font-weight: 500">Whatsapp</span>
+                                    </span>
+                                    <ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [phoneValidation]="false" [selectedCountryISO]="preferredCountry" name="phone" formControlName="phone" customPlaceholder="Enter Contact Number" (keyup)="onChangeContact($event)" [disabled]="isEdit">
+                                    </ngx-intl-tel-input>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Gender *</label>
+                                    <p-select styleClass="w-full" formControlName="gender" [filter]="true" filterBy="code" [options]="genderoption" [disabled]="isEdit" optionValue="code" optionLabel="name" [readonly]="isEdit"></p-select>
+                                    <div *ngIf="submitted && f.gender.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.gender.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Country</label>
+                                    <p-select formControlName="country_id" (onChange)="changeCountryFilter()" [filter]="true" filterBy="country" placeholder="Select  country" optionValue="id" optionLabel="country" [disabled]="isEdit" styleClass="w-full" [options]="homeCountries"> </p-select>
+                                    <div *ngIf="submitted && f.country_id.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.country_id.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Location</label>
+                                    <p-select [virtualScrollItemSize]="38" [virtualScroll]="true" formControlName="location_id" optionValue="id" optionLabel="work_location" styleClass="w-100" [options]="locationListFilter" placeholder="Select State" [filter]="true" [disabled]="isEdit" filterBy="work_location" [appendTo]="'body'"> </p-select>
+                                    <div *ngIf="submitted && f.location_id.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.location_id.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Last Degree Passing Year</label>
+                                    <p-datepicker appendTo="body" view="year" styleClass="w-full" [maxDate]="today" dateFormat="yy" inputId="yearpicker" formControlName="last_degree_passing_year" placeholder="Last Degree Passing" [disabled]="isEdit"></p-datepicker>
+                                    <div *ngIf="submitted && f.last_degree_passing_year.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.last_degree_passing_year.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Student Type *</label>
+                                    <p-select formControlName="student_type" optionValue="id" optionLabel="subtypeName" styleClass="w-full" (onChange)="changeStudentType($event)" [options]="StudentList" [filter]="true" filterBy="subtypeName" [readonly]="true"></p-select>
+                                    <div *ngIf="submitted && f.student_type.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.student_type.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3" *ngIf="this.users[0]?.usertype_id === 1">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Source Type *</label>
+                                    <p-select formControlName="source_type" optionValue="id" optionLabel="name" styleClass="w-full" [options]="sourceTypes" (onChange)="changeSourceType($event)" [disabled]="isEdit" [filter]="true" filterBy="name"></p-select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3" *ngIf="this.users[0]?.usertype_id === 1">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">{{ customSourceName }}</label>
+                                    <p-select formControlName="source_name" optionValue="id" optionLabel="source_name" styleClass="w-full" *ngIf="editform.get('source_type').value != '2'" [options]="sourceName" (onChange)="changeSourceName()" [disabled]="isEdit" [filter]="true" filterBy="source_name" appendTo="body"></p-select>
+                                    <p-select formControlName="source_name" optionValue="id" optionLabel="institutename" styleClass="w-full" *ngIf="editform.get('source_type').value == '2'" [disabled]="isEdit" [options]="sourceName" (onChange)="changeSourceName()" [filter]="true" filterBy="source_name" appendTo="body"></p-select>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Current Education *</label>
+                                    <p-select formControlName="programlevel_id" optionValue="id" optionLabel="programlevel" styleClass="w-full" [options]="programLevels" [filter]="true" filterBy="programlevel" [readonly]="isEdit"></p-select>
+                                    <div *ngIf="submitted && f.programlevel_id.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.programlevel_id.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3" *ngIf="isCollegeSelected">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Current Specialization </label>
+                                    <p-select formControlName="current_specialization_id" optionValue="id" optionLabel="specialization_name" styleClass="w-full" [options]="currentSpecializationList" [filter]="true" filterBy="specialization_name" [readonly]="isEdit"></p-select>
+                                    <div *ngIf="submitted && f.current_specialization_id.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.current_specialization_id.errors.required">Required</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">Source Job</label>
+                                    <input formControlName="source_job" type="text" class="form-control" pInputText [readonly]="true" />
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3" *ngIf="usertypid && this.users[0]?.is_demo_expired === 0">
+                                <div class="form-group">
+                                    <label class="mb-2 font-medium">
+                                        Subscription
+                                        <span [ngClass]="{ 'fw-bold text-success': users[0]?.subscriptionplanstatus === 'Active', 'fw-normal text-danger': users[0]?.subscriptionplanstatus !== 'Active' }" *ngIf="users[0] && users[0]?.subscription_plan_id === editform.get('subscription_id')?.value"> ({{ users[0]!.subscriptionplanstatus }}) </span>
+                                    </label>
+                                    <p-select formControlName="subscription_id" optionValue="id" optionLabel="subscription" styleClass="w-full" [options]="subscriptions" [filter]="true" filterBy="subscription" (onChange)="changePlan($event)" [readonly]="isEdit"></p-select>
+                                    <div *ngIf="submitted && f.subscription_id.errors" class="text-danger text-xs">
+                                        <div *ngIf="f.subscription_id.errors.required">Required</div>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-3" *ngIf="isShowCheckbox">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                        <input (click)="changePlanChecbox($event)" class="form-check-input me-1" type="checkbox" value="" aria-label="..." />
+                                        Activate same trail again
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+                        <p-confirmpopup></p-confirmpopup>
+                        <div class="col-12 text-right">
+                            <button class="btn btn-primary" (click)="submitForm()">{{ EditOrUpdate }}</button>
+                            <button *ngIf="currentUserId == 21" class="btn btn-danger" (click)="deletestudent()">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </p-tabpanel>
+            <p-tabpanel value="2" header="User Transactions">
+                <p-table size="small" scrollHeight="600px" [value]="subscriberTransaction" styleClass="gray-header" class="mt-2 header-background">
+                    <ng-template pTemplate="caption" styleClass="gray-header">
+                        <div class="d-flex w-full align-items-center justify-content-between">
+                            <span style="font-size: 18px">User Transactions<br /><span style="color: #a1a1a1; font-size: 10px">Total Transactions: {{ subscriberTransactionCount }}</span></span>
+                            <button class="btn btn-primary">Export &nbsp; <i class="pi pi-file-export"></i></button>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                        <th>Order ID.</th>
+                        <th>Date and Time</th>
+                        <th>Subscriptions</th>
+                        <th>Price</th>
+                        <th>Transaction ID</th>
+                        <th>Status</th>
+                        <th>Coupon</th>
+                        <th>Source</th>
+                        <th>Source Type</th>
+                        <th>Invoice</th>
+                        <th>Remarks</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-user>
+                        <tr>
+                            <td>{{ user.orderid }}</td>
+                            <td>{{ user.transactiontime }}</td>
+                            <td>{{ user.products }}</td>
+                            <td>{{ user.price }}</td>
+                            <td>{{ user.transactionid }}</td>
+                            <td [ngClass]="{'status-failed': user.transactionstatus === 'Failed','status-expired': user.transactionstatus === 'Expired','status-started': user.transactionstatus === 'Payment started','status-completed': user.transactionstatus === 'Completed'}">{{ user.transactionstatus }}</td>
+                            <td>{{ user.couponcodename != null ? user.couponcodename + " " + user.coupondiscount + "% Discount" : "n/a" }}</td>
+                            <td>{{ user.source_name }}</td>
+                            <td>{{ user.source_type }}</td>
+                            <td>
+                                <a *ngIf="user.link; else dash" [href]="user.link" class="btn btn-primary" target="_blank" download> Download </a>
+                                <ng-template #dash>-</ng-template>
+                            </td>
+                            <td [ngClass]="{ 'text-danger': user.transactionstatus !== 'Completed1' }">{{ user.payment_status }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabpanel>
+            <p-tabpanel value="3" header="Remarks">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div>
+                            <h3>Remarks</h3>
+                            <span style="font-size: small">Total Remarks : {{ remarkscount }}</span>
+                        </div>
+                        <div>
+                            <button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton (click)="isAddRemark = true">Add Remarks</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card p-3 mb-3" *ngFor="let item of remarkList">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <p style="color: gray">{{ item.remarks }}</p>
+                                    <div class="uniprep-primary fw-bold">By {{ item.created_by }}</div>
+                                    <div>{{ item.created_at | date : "d-MM-y h:mm a" }}</div>
+                                </div>
+                                <div class="col-md-2">
+                                    <span *ngIf="item.status_option" class="badge rounded-pill mb-2 px-3 py-2 text-white" [ngStyle]="{ 'background-color': getStatusColor(item.status_option), 'font-size': '0.85rem' }">{{ item.status_option }}</span>
+                                    <span *ngIf="!item.status_option">No Remarks</span>
+                                </div>
+                                <div class="col-md-2">
+                                    <div>
+                                        <div class="uniprep-primary fw-bold">Next Follow Up</div>
+                                        <div>{{ item.follow_date }}{{ "1970-01-01T" + item.follow_time | date : "hh:mm a" }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabpanel>
+            <p-tabpanel value="4" header="Usage Tracking">
+                <p-table size="small" scrollHeight="600px"  [value]="usagetrackinglist" styleClass="gray-header" class="mt-2 header-background">
+                    <ng-template pTemplate="caption" styleClass="gray-header">
+                        <div class="d-flex w-full align-items-center justify-content-between">
+                            <span style="font-size: 18px">Usage Tracking<br /><span style="color: #a1a1a1; font-size: 10px">Total Hours: {{ usageTrackingHoursCount }}</span></span>
+                            <button (click)="exportUsageTracking()" class="btn btn-primary">Export &nbsp; <i class="pi pi-file-export"></i></button>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="border-cell">Session ID.</th>
+                            <th class="border-cell">Session Start</th>
+                            <th class="border-cell">Session End</th>
+                            <th class="border-cell">Total Session</th>
+                            <th class="border-cell">Location</th>
+                            <th class="border-cell">Device</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-user>
+                        <tr>
+                            <td class="border-cell">{{ user.session_id }}</td>
+                            <td class="border-cell">{{ user.session_start_at }}</td>
+                            <td class="border-cell">{{ user.session_end_at }}</td>
+                            <td class="border-cell">{{ user.total_session }}</td>
+                            <td class="border-cell">{{ user.location }}</td>
+                            <td class="border-cell">{{ user.device }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabpanel>
+            <p-tabpanel value="5" header="Invites">
+                <p-table size="small" scrollHeight="600px" [value]="invitesList" styleClass="gray-header" class="mt-2 header-background">
+                    <ng-template pTemplate="caption" styleClass="gray-header">
+                        <div class="d-flex w-full align-items-center justify-content-between">
+                            <span style="font-size: 18px">Invites<br /><span style="color: #a1a1a1; font-size: 10px">Total: {{ usageTrackingHoursCount }}</span></span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="border-cell">Email ID.</th>
+                            <th class="border-cell">Registration Status</th>
+                            <th class="border-cell">Name</th>
+                            <th class="border-cell">Phone Number</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-user>
+                        <tr>
+                            <td class="border-cell">{{ user.receiver_email }}</td>
+                            <td class="border-cell">{{ user.register_status == 1 ? "Yes" : "No" }}</td>
+                            <td class="border-cell">{{ user.register_name }}</td>
+                            <td class="border-cell">{{ user.phone }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabpanel>
+            <p-tabpanel value="7" header="Docs Wallet">
+                <div class="p-3 header-border">
+                    <h2 style="font-size: 16px">Docs Wallet</h2>
+                </div>
+                <div class="docs-wrap">
+                    <!-- Aadhar Front -->
+                    <div class="doc-wrap" *ngIf="userDocument.aadhar.front">
+                        <div class="image">
+                            <img [src]="getFileIcon(userDocument.aadhar.front.name)" width="60">
+                        </div>
+                        <div class="content">
+                            <div class="name">{{ userDocument.aadhar.front.name }}</div>
+                            <div class="date-size">{{ userDocument.aadhar.front.uploaded_at }}&nbsp;{{ userDocument.aadhar.front.size }}</div>
+                        </div>
+                        <div class="actions">
+                            <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded" (click)="aadharFrontMenu.toggle($event)"></button>
+                            <p-menu #aadharFrontMenu [popup]="true" [model]="buildDocActions(userDocument.aadhar.front)"></p-menu>
+                        </div>
+                    </div>
+                    <!-- Aadhar Back -->
+                    <div class="doc-wrap" *ngIf="userDocument.aadhar.back">
+                        <div class="image">
+                            <img [src]="getFileIcon(userDocument.aadhar.back.name)" width="60">
+                        </div>
+                        <div class="content">
+                            <div class="name">{{ userDocument.aadhar.back.name }}</div>
+                            <div class="date-size">{{ userDocument.aadhar.back.uploaded_at }}&nbsp;{{ userDocument.aadhar.back.size }}</div>
+                        </div>
+                        <div class="actions">
+                            <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded" (click)="aadharBackMenu.toggle($event)"></button>
+                            <p-menu #aadharBackMenu [popup]="true" [model]="buildDocActions(userDocument.aadhar.back)"></p-menu>
+                        </div>
+                    </div>
+                    <!-- PAN Front -->
+                    <div class="doc-wrap" *ngIf="userDocument.pan.front">
+                        <div class="image">
+                            <img [src]="getFileIcon(userDocument.pan.front.name)" width="60">
+                        </div>
+                        <div class="content">
+                            <div class="name">{{ userDocument.pan.front.name }}</div>
+                            <div class="date-size">{{ userDocument.pan.front.uploaded_at }}&nbsp;{{ userDocument.pan.front.size }}</div>
+                        </div>
+                        <div class="actions">
+                            <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded" (click)="panFrontMenu.toggle($event)"></button>
+                            <p-menu #panFrontMenu [popup]="true" [model]="buildDocActions(userDocument.pan.front)"></p-menu>
+                        </div>
+                    </div>
+                    <!-- PAN Back -->
+                    <div class="doc-wrap" *ngIf="userDocument.pan.back">
+                        <div class="image">
+                            <img [src]="getFileIcon(userDocument.pan.back.name)" width="60">
+                        </div>
+                        <div class="content">
+                            <div class="name">{{ userDocument.pan.back.name }}</div>
+                            <div class="date-size">{{ userDocument.pan.back.uploaded_at }}&nbsp;{{ userDocument.pan.back.size }}</div>
+                        </div>
+                        <div class="actions">
+                            <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded" (click)="panBackMenu.toggle($event)"></button>
+                            <p-menu #panBackMenu [popup]="true" [model]="buildDocActions(userDocument.pan.back)"></p-menu>
+                        </div>
+                    </div>
+                    <!-- Education Docs -->
+                    <div class="doc-wrap" *ngFor="let eduDoc of userDocument.education">
+                        <div class="image">
+                            <img [src]="getFileIcon(eduDoc.name)" width="60">
+                        </div>
+                        <div class="content">
+                            <div class="name">{{ eduDoc.name }}</div>
+                            <div class="date-size">{{ eduDoc.uploaded_at }}&nbsp;{{ eduDoc.size }}</div>
+                        </div>
+                        <div class="actions">
+                            <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded" (click)="eduMenu.toggle($event)"></button>
+                            <p-menu #eduMenu [popup]="true" [model]="buildDocActions(eduDoc)"></p-menu>
+                        </div>
+                    </div>
+                    <!-- Payslip Docs -->
+                    <div class="doc-wrap" *ngFor="let payDoc of userDocument.payslip">
+                        <div class="image">
+                            <img [src]="getFileIcon(payDoc.name)" width="60">
+                        </div>
+                        <div class="content">
+                            <div class="name">{{ payDoc.name }}</div>
+                            <div class="date-size">{{ payDoc.uploaded_at }}&nbsp;{{ payDoc.size }}</div>
+                        </div>
+                        <div class="actions">
+                            <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded" (click)="payMenu.toggle($event)"></button>
+                            <p-menu #payMenu [popup]="true" [model]="buildDocActions(payDoc)"></p-menu>
+                        </div>
+                    </div>
+                    <!-- Experience Docs -->
+                    <div class="doc-wrap" *ngFor="let expDoc of userDocument.experience">
+                        <div class="image">
+                            <img [src]="getFileIcon(expDoc.name)" width="60">
+                        </div>
+                        <div class="content">
+                            <div class="name">{{ expDoc.name }}</div>
+                            <div class="date-size">{{ expDoc.uploaded_at }}&nbsp;{{ expDoc.size }}</div>
+                        </div>
+                        <div class="actions">
+                            <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded" (click)="expMenu.toggle($event)"></button>
+                            <p-menu #expMenu [popup]="true" [model]="buildDocActions(expDoc)"></p-menu>
+                        </div>
+                    </div>
+                    <!-- Other Docs -->
+                    <div class="doc-wrap" *ngFor="let otherDoc of userDocument.other">
+                        <div class="image">
+                            <img [src]="getFileIcon(otherDoc.name)" width="60">
+                        </div>
+                        <div class="content">
+                            <div class="name">{{ otherDoc.name }}</div>
+                            <div class="date-size">{{ otherDoc.uploaded_at }}&nbsp;{{ otherDoc.size }}</div>
+                        </div>
+                        <div class="actions">
+                            <button pButton type="button" icon="pi pi-ellipsis-v" class="p-button-text p-button-rounded" (click)="otherMenu.toggle($event)"></button>
+                            <p-menu #otherMenu [popup]="true" [model]="buildDocActions(otherDoc)"></p-menu>
+                        </div>
+                    </div>
+                </div>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
+</div>
+<p-dialog header="Add Remarks" [(visible)]="isAddRemark" [modal]="true" [style]="{ width: '500px' }" [closable]="true" [contentStyle]="{ overflow: 'visible' }">
+    <form [formGroup]="remarksForm" (ngSubmit)="submitFormRemarks()">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <label class="mb-1 font-medium">Status</label>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="rnr" formControlName="rnr" [checked]="remarksForm.get('rnr')?.value === 1" (change)="onRnrChange($event)" />
+                            <label class="form-check-label" for="status">RNR</label>
+                        </div>
+                    </div>
+                    <p-select optionValue="value" optionLabel="label" [options]="remarksStatusList" formControlName="status" placeholder="Select status" styleClass="w-full"> </p-select>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group mb-3">
+                    <label class="mb-1 font-medium">Follow Up Required?</label>
+                    <p-select (onChange)="onFollowUpChange($event)" styleClass="w-full" formControlName="followUp" placeholder="Select Yes/No" optionLabel="label" optionValue="value" [options]="coBranding"></p-select>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group mb-3">
+                    <label class="mb-1 font-medium">Follow Up Date</label>
+                    <input type="date" class="form-control" formControlName="followUpDate" placeholder="Date Selection" />
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group mb-3">
+                    <label class="mb-1 font-medium">Follow Up Time</label>
+                    <input type="time" class="form-control" formControlName="followUpTime" placeholder="Time Selection" />
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group mb-3">
+                    <label class="mb-1 font-medium">Remarks</label>
+                    <textarea class="form-control" formControlName="remarks" rows="3" placeholder="Type your remarks here..."> </textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <button type="submit" pButton label="Add Remark" class="p-button-primary"></button>
+        </div>
+    </form>
+</p-dialog>
+<p-dialog header="Generate Payment Link" [(visible)]="showPaymentDialog" [modal]="true" [style]="{width: '500px'}" [closable]="true" [appendTo]="'body'" [baseZIndex]="10000">
+    <form [formGroup]="paymentForm" (ngSubmit)="generatePaymentLink()">
+        <div class="row">
+            <div class="col-md-12">
+                <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Currency</label>
+                <p-select formControlName="currency" [options]="currencyList" optionValue="currency_code" optionLabel="currency_code" placeholder="Select Currency" class="w-100" [filter]="true" filterBy="currency_code" [virtualScroll]="true" [virtualScrollItemSize]="20"></p-select>
+                <small class="text-danger" *ngIf="paymentForm.get('currency')?.invalid && paymentForm.get('currency')?.touched">Currency is required.</small>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Total Amount</label>
+                <input pInputText class="w-100" formControlName="total_amount" type="number" placeholder="Enter Total Amount"/>
+                <small class="text-danger" *ngIf="paymentForm.get('total_amount')?.invalid && paymentForm.get('total_amount')?.touched">Total Amount is required.</small>
+            </div>
+        </div>
+        <div class="row mt-3 mb-3">
+            <div class="col-md-12">
+                <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Description</label>
+                <textarea pInputTextarea rows="4" formControlName="description" placeholder="Describe the payment link you are generating" class="w-100"></textarea>
+                <small class="text-danger" *ngIf="paymentForm.get('description')?.invalid && paymentForm.get('description')?.touched">Description is required.</small>
+            </div>
+        </div>
+        <div class="text-end">
+            <p-button type="submit" label="Generate Link"></p-button>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <label class="mb-2 font-medium"><i class="pi pi-check-circle text-warning me-2"></i>Payment Link</label>
+                <div class="copy-container">
+                    <input pInputText class="copy-input" [value]="generatedLink || 'Payment Link'" readonly/>
+                    <button pButton type="button" class="copy-btn" label="Copy url" (click)="copyLink()" [disabled]="!generatedLink"></button>
+                </div>
+            </div>
+        </div>
+    </form>
+</p-dialog>

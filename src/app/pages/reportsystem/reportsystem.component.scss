@@ -1,0 +1,41 @@
+.expand-icon {
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.custom-icon {
+    background-color: var(--p-primary-500);
+    color: #fff;
+    border-radius: 50%;
+    padding: 4px;
+}
+.border-cell {
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-width:1px !important;
+}
+
+// .custom-scrolltop {
+//     position: fixed;
+//     bottom: 20px;
+//     right: 20px;
+//     padding: 10px;
+//     cursor: pointer;
+//     background-color: #007bff;
+//     color: #fff;
+//     border: none;
+//     border-radius: 5px;
+//     display: none; /* Initially hide the button */
+// }
+
+// .custom-scrolltop:hover {
+//     background-color: #0056b3;
+// }
+
+.custom-span {
+    width: 90px; /* Adjust this value based on your desired width */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }

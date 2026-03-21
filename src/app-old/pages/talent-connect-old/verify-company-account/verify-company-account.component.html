@@ -1,0 +1,478 @@
+<p-accordion value="0" styleClass="white-accordian">
+  <p-accordion-panel value="1">
+    <p-accordion-header>New Employer Account</p-accordion-header>
+    <p-accordion-content>
+      <form [formGroup]="form" (ngSubmit)="submitForm()">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>User Name</label>
+              <input type="text" class="form-control" formControlName="name" placeholder="Enter the username" pInputText />
+              <div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+                <div *ngIf="f.name.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Mobile Number</label>
+              <ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [phoneValidation]="false" [selectedCountryISO]="CountryISO.India" name="phone" formControlName="phone" customPlaceholder="Enter Mobile Number"> </ngx-intl-tel-input>
+              <div *ngIf="submitted && f.phone.errors" class="text-danger text-xs">
+                <div *ngIf="f.phone.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-control" pInputText placeholder="Enter the email" formControlName="email" />
+              <div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
+                <div *ngIf="f.email.errors.required">please enter valid email</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Gender</label>
+              <p-select formControlName="gender" optionValue="value" optionLabel="label" styleClass="w-full" [options]="genderList" placeholder="Select Gender"> </p-select>
+              <div *ngIf="submitted && f.gender.errors" class="text-danger text-xs">
+                <div *ngIf="f.gender.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Country</label>
+              <p-select formControlName="country_id" optionValue="id" optionLabel="country_name" styleClass="w-full" [options]="countryList" [filter]="true" placeholder="Select Country" (onChange)="onChangeCountry($event)"> </p-select>
+              <div *ngIf="submitted && f.country_id.errors" class="text-danger text-xs">
+                <div *ngIf="f.country_id.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Location</label>
+              <p-select formControlName="location_id" optionValue="id" optionLabel="city_state" styleClass="w-full" [options]="stateCityList" [filter]="true" placeholder="Select Location" appendTo="body"> </p-select>
+              <div *ngIf="submitted && f.location_id.errors" class="text-danger text-xs">
+                <div *ngIf="f.location_id.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Company Name</label>
+              <input type="text" pInputText class="form-control" placeholder="Enter the company name" formControlName="company_name" />
+              <div *ngIf="submitted && f.company_name.errors" class="text-danger text-xs">
+                <div *ngIf="f.company_name.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Designation</label>
+              <input type="text" pInputText class="form-control" placeholder="Enter the designation" formControlName="company_designation" />
+              <div *ngIf="submitted && f.company_designation.errors" class="text-danger text-xs">
+                <div *ngIf="f.company_designation.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Company Website</label>
+              <input type="url" pInputText class="form-control" placeholder="Enter the website" formControlName="company_website" />
+              <div *ngIf="submitted && f.company_website.errors" class="text-danger text-xs">
+                <div *ngIf="f.company_website.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 text-right">
+            <button class="btn btn-primary" type="submit">Add Employer</button>
+          </div>
+        </div>
+      </form>
+    </p-accordion-content>
+  </p-accordion-panel>
+  <p-accordion-panel value="2">
+    <p-accordion-header>Filter Employer</p-accordion-header>
+    <p-accordion-content>
+      <form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()">
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>User Name</label>
+              <input type="text" class="form-control" formControlName="name" placeholder="Enter the username" pInputText />
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Mobile Number</label>
+              <ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [phoneValidation]="false" [selectedCountryISO]="CountryISO.India" name="phone" formControlName="phone" customPlaceholder="Enter Mobile Number"> </ngx-intl-tel-input>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-control" pInputText placeholder="Enter the email" formControlName="email" />
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Gender</label>
+              <p-select formControlName="gender" optionValue="value" optionLabel="label" styleClass="w-full" [options]="genderList" placeholder="Select Gender" [showClear]="true"> </p-select>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Country</label>
+              <p-select formControlName="country_id" optionValue="id" optionLabel="country_name" styleClass="w-full" [options]="countryList" [filter]="true" placeholder="Select Country" (onChange)="onChangeCountry($event)"> </p-select>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Location</label>
+              <p-select formControlName="location_id" optionValue="id" optionLabel="city_state" styleClass="w-full" [options]="stateCityList" [filter]="true" placeholder="Select Location" appendTo="body"> </p-select>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Company Name</label>
+              <input type="text" pInputText class="form-control" placeholder="Enter the company name" formControlName="company_name" />
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Designation</label>
+              <input type="text" pInputText class="form-control" placeholder="Enter the designation" formControlName="company_designation" />
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <div class="form-group">
+              <label>Company Website</label>
+              <input type="url" pInputText class="form-control" placeholder="Enter the website" formControlName="company_website" />
+            </div>
+          </div>
+          <div class="col-md-4 mb-3" *ngIf="isShowApproveStatus == 1">
+            <div class="form-group">
+              <label>Company Creation</label>
+              <p-select styleClass="w-full" formControlName="company_creation" placeholder="Yes/No" optionLabel="label" optionValue="value" [options]="coBranding"></p-select>
+            </div>
+          </div>
+          <div class="col-md-4 mt-2" *ngIf="isShowApproveStatus == 4">
+            <div class="form-group">
+              <label>Remarks By</label>
+              <p-multiselect [filter]="true" [showClear]="true" [showToggleAll]="true" [display]="'chip'" styleClass="w-full" formControlName="assign_to" placeholder="Select who it is Assigned to" optionLabel="name" optionValue="id" [options]="assignToDropdownList"> </p-multiselect>
+            </div>
+          </div>
+          <div class="col-md-4 mt-2" *ngIf="isShowApproveStatus == 4">
+            <div class="form-group">
+              <label>Remarks Status</label>
+              <p-multiselect [filter]="true" [showClear]="true" [showToggleAll]="true" [display]="'chip'" styleClass="w-full" formControlName="remarks" placeholder="Select Remarks Status" optionLabel="label" optionValue="value" [options]="filterStatusOptions"> </p-multiselect>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 text-right">
+            <button class="btn btn-danger" type="button" (click)="resetFilter()">Reset Filter</button>
+            <button class="btn btn-primary" type="submit">Filter Employer</button>
+          </div>
+        </div>
+      </form>
+    </p-accordion-content>
+  </p-accordion-panel>
+</p-accordion>
+<div style="width: 100%; height: 80vh; overflow: auto; overflow-x: hidden" class="mt-2 table-employer">
+  <p-table size="small" scrollHeight="600px"  [value]="employerList" [totalRecords]="employerStatusCount" [paginator]="true" [lazy]="true" (onPage)="pageChange($event)" [rows]="pageSize" [first]="first" [rowsPerPageOptions]="[10, 50, 100]" [tableStyle]="{ 'min-width': '120rem', width: '100%' }">
+    <ng-template pTemplate="caption">
+      <div class="d-flex w-full align-items-center justify-content-between pb-2" style="padding-left: 1rem !important">
+        <div class="d-flex gap-4">
+          <span
+            >Employer Verification <br />
+            <div style="color: #a1a1a1; font-size: 10px" class="d-flex gap-2">
+              <span>Total Users:{{ totalEmployerCount }}</span>
+              <span>{{ selectedStatus.name }} : {{ employerStatusCount }}</span>
+            </div>
+          </span>
+          <div style="width: 350px">
+            <input type="text" pInputText [(ngModel)]="searchText" (ngModelChange)="onSearch()" placeholder="Search" class="w-100" />
+          </div>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton (click)="importEmployer()">Import &nbsp; <i class="pi pi-file-import"></i></button>
+          <button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton (click)="exportEmployerList()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+        </div>
+      </div>
+      <div class="d-flex justify-conent-center w-100 bg-white fw-bold">
+        <div *ngFor="let status of statusTypesList" [ngStyle]="status.name == selectedStatus.name ? { 'background-color': 'var(--p-primary-500)', color: 'white' } : { color: 'var(--p-primary-500)', 'background-color': '#A0AACE' }" (click)="selectStatus(status)" role="button" class="border border-gray-200 p-3 user-select">
+          {{ status.name }}
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="name">User Name <p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="gender">Gender <p-sortIcon field="gender"></p-sortIcon></th>
+        <th pSortableColumn="location">Location <p-sortIcon field="location"></p-sortIcon></th>
+        <th pSortableColumn="company_name">Company Name <p-sortIcon field="company_name"></p-sortIcon></th>
+        <th pSortableColumn="company_designation">Designation <p-sortIcon field="company_designation"></p-sortIcon></th>
+        <th pSortableColumn="company_website">Website <p-sortIcon field="company_website"></p-sortIcon></th>
+        <th pSortableColumn="usertype">User Type <p-sortIcon field="usertype"></p-sortIcon></th>
+        <th pSortableColumn="last_logintime">Last Active <p-sortIcon field="last_logintime"></p-sortIcon></th>
+        <th pSortableColumn="total_active_hours">Total Active <p-sortIcon field="total_active_hours"></p-sortIcon></th>
+        <th *ngIf="isShowApproveStatus != 4">Status</th>
+        <th *ngIf="isShowApproveStatus == 4">Remarks Status</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-employer>
+      <tr>
+        <td>
+          {{ employer.name }}<br />
+          <small class="text-muted">{{ employer.phone_country_code }} {{ employer.phone }}</small
+          ><br />
+          <small class="text-muted">{{ employer.email }}</small>
+        </td>
+        <td>{{ employer.gender }}</td>
+        <td>{{ employer.location }}</td>
+        <td>{{ employer.company_name }}</td>
+        <td>{{ employer.company_designation }}</td>
+        <td>{{ employer.company_website }}</td>
+        <td>{{ employer.usertype }}</td>
+        <td>{{ employer.last_logintime }}</td>
+        <td>{{ employer.total_active_hours }}</td>
+        <td *ngIf="isShowApproveStatus != 4">
+          <span
+            [ngClass]="{
+              'text-warning': selectedStatus.name == 'Pending Users',
+              'text-success': selectedStatus.name == 'Approved Users',
+              'text-danger': selectedStatus.name == 'Rejected Users',
+              'text-primary': selectedStatus.name == 'Active Users',
+              'text-secondary': selectedStatus.name == 'InActive Users'
+            }"
+            >{{ employer.status }}</span
+          ><br />
+          <span *ngIf="isShowApproveStatus == 1" class="mb-2 text-muted text-small"> Company Creation :{{ employer.company_creation == 1 ? "Yes" : "No" }} </span>
+        </td>
+        <td *ngIf="isShowApproveStatus == 4">
+          <span *ngIf="employer.status_option" class="badge rounded-pill mb-2 px-3 py-2 text-white" [ngStyle]="{ 'background-color': getStatusColor(employer.status_option), 'font-size': '0.85rem' }">
+            {{ employer.status_option }}
+          </span>
+          <span *ngIf="!employer.status_option">No Status</span><br />
+          <span *ngIf="employer.follow_date" class="text-muted" style="font-size: 0.85rem">
+            Follow Up{{ employer.follow_date }} |
+            {{ "1970-01-01T" + employer.follow_time | date : "hh:mm a" }}
+          </span>
+        </td>
+        <td>
+          <div *ngIf="isShowApproveStatus == 2" class="uniprep-primary" role="button" (click)="editEmployer(employer)"><i class="fa-solid fa-pen"></i> Edit</div>
+          <div *ngIf="isShowApproveStatus == 1 || isShowApproveStatus == 3" class="uniprep-primary" role="button">
+            <span style="cursor: pointer" (click)="viewInformation(employer)"
+              ><b><i class="fa-solid fa-file"></i>&nbsp; View Info</b></span
+            ><br />
+            <span *ngIf="isShowApproveStatus == 1" style="cursor: pointer" (click)="rejectOrApproveEmployee(employer, 'Reject')"
+              ><b><i class="fa-solid fa-xmark"></i>&nbsp; Reject</b>
+            </span>
+            <span *ngIf="isShowApproveStatus == 3" style="cursor: pointer" (click)="rejectOrApproveEmployee(employer, 'Approve')"
+              ><b><i class="fa-solid fa-check"></i>&nbsp; Approve</b>
+            </span>
+          </div>
+          <div *ngIf="isShowApproveStatus == 4" class="uniprep-primary" role="button">
+            <span style="cursor: pointer" (click)="addRemarksDialogPopUp(employer)"
+              ><b><i class="fa-regular fa-rectangle-list"></i>&nbsp; Add Remarks</b></span
+            ><br />
+            <span style="cursor: pointer" (click)="showRemarksDialogPopUp(employer)"
+              ><b><i class="fa-light fa-gallery-thumbnails"></i>&nbsp; View Remarks</b>
+            </span>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-scrollTop target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>
+</div>
+<!-- request-details-modal.component.html -->
+
+<p-dialog [(visible)]="showModal" [header]="'Request Details'" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: '800px' }" [baseZIndex]="10000" [dismissableMask]="true">
+  <div class="modal-content">
+    <p class="mb-2"><strong>User Name :</strong> {{ selectedInfo?.name }}</p>
+    <p class="mb-2"><strong>Phone Number :</strong> {{ selectedInfo?.phone_country_code }} {{ selectedInfo?.phone }}</p>
+    <p class="mb-2"><strong>Email Address :</strong> {{ selectedInfo?.email }}</p>
+    <p class="mb-2"><strong>Gender :</strong> {{ selectedInfo?.gender }}</p>
+    <p class="mb-2"><strong>Location :</strong> {{ selectedInfo?.location }}</p>
+    <p class="mb-2"><strong>Company Name :</strong> {{ selectedInfo?.company_name }}</p>
+    <p class="mb-2"><strong>Company Website :</strong> {{ selectedInfo?.company_website }}</p>
+    <p class="mb-2"><strong>Company Designation :</strong> {{ selectedInfo?.company_designation }}</p>
+    <form [formGroup]="verifyForm" (ngSubmit)="submitVerifyForm()">
+      <div class="row">
+        <div class="col-12 mb-2">
+          <div class="form-group">
+            <label><strong>Company Size </strong>:</label>
+            <p-select formControlName="company_size_id" [options]="companySizeList" optionLabel="size" optionValue="id" styleClass="w-full" placeholder="Select Company Size"> </p-select>
+            <div *ngIf="submittedVerify && vF.company_size_id.errors" class="text-danger text-xs">
+              <div *ngIf="vF.company_size_id.errors.required">Required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mb-2">
+          <div class="form-group">
+            <label><strong>Number of Expected Job Postings </strong>:</label>
+            <p-inputnumber formControlName="job_posting" mode="decimal" inputId="withoutgrouping" [useGrouping]="false" class="w-full" [maxlength]="10"> </p-inputnumber>
+            <div *ngIf="submittedVerify && vF.job_posting.errors" class="text-danger text-xs">
+              <div *ngIf="vF.job_posting.errors.required">Required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mb-3">
+          <div class="form-group">
+            <label><strong>Comments </strong>:</label>
+            <textarea class="w-full" rows="5" cols="30" pInputTextarea formControlName="comments"> </textarea>
+            <div *ngIf="submittedVerify && vF.comments.errors" class="text-danger text-xs">
+              <div *ngIf="vF.comments.errors.required">Required</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 text-right">
+          <button *ngIf="isShowApproveStatus == 1 || isShowApproveStatus == 2" class="btn btn-danger" type="button" (click)="onRejectEmployer()">Reject</button>
+          <button *ngIf="isShowApproveStatus == 3 || isShowApproveStatus == 2" class="btn btn-primary" type="submit">Approve</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</p-dialog>
+<!-- View Information -->
+<p-dialog [(visible)]="showModalApprove" [header]="'Request Details'" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: '800px' }" [baseZIndex]="10000" [dismissableMask]="true">
+  <div class="modal-content">
+    <p class="mb-2"><strong>User Name :</strong> {{ selectedInfo?.name }}</p>
+    <p class="mb-2"><strong>Phone Number :</strong> {{ selectedInfo?.phone_country_code }} {{ selectedInfo?.phone }}</p>
+    <p class="mb-2"><strong>Email Address :</strong> {{ selectedInfo?.email }}</p>
+    <p class="mb-2"><strong>Company Name :</strong> {{ selectedInfo?.company_name }}</p>
+    <p class="mb-2"><strong>Company Size :</strong> {{ selectedInfo?.company_size_id }}</p>
+    <p class="mb-2"><strong>Expected Job Postings :</strong> 50</p>
+    <p class="mb-2"><strong>Approved By :</strong> Saurabh</p>
+    <p class="mb-2">
+      <strong>Remarks : <br /></strong> {{ selectedInfo?.comments }}
+    </p>
+    <br />
+    <p class="mb-2 text-muted text-small" *ngIf="isShowApproveStatus == 1">Approved On :{{ selectedInfo?.approved_at }}</p>
+    <p class="mb-2 text-muted text-small" *ngIf="isShowApproveStatus == 3">Rejected On :{{ selectedInfo?.rejected_at }}</p>
+  </div>
+</p-dialog>
+<p-dialog header="" [(visible)]="isEmployerImport" [modal]="true" [style]="{ width: '50vw' }" (onHide)="closeModal()">
+  <div>
+    <label for="file" class="reading-drop-container">
+      <i class="pi pi-upload reading-drop-title"></i>
+      <input type="file" id="file" class="d-none" (change)="onFileChange($event)" (click)="$event['target']['value'] = ''" accept=".csv" /><br />
+      <div class="reading-sm-font" *ngIf="selectedFile?.name">{{ selectedFile.name }}</div>
+      <div *ngIf="!selectedFile?.name" class="d-flex flex-column gap-1 text-center">
+        <span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+        <span class="reading-sm-font">Please maintain the format of uploading to stop failures</span>
+      </div> </label
+    ><br />
+    <div class="text-center">
+      <button class="btn btn-primary" (click)="uploadFile()"><i class="fa-solid fa-upload"></i> Upload</button>
+      <a [href]="sampleDoc">
+        <button class="btn btn-primary"><i class="fa-solid fa-download"></i> Download Sample Doc</button>
+      </a>
+    </div>
+  </div>
+</p-dialog>
+<!-- <div *ngIf="showRejectConfirmation" class="confirm-overlay">
+    <div class="confirm-box">
+        <p>Are you sure you want to {{rejectOrActive}} ?</p>
+        <div class="d-flex justify-content-end gap-2 mt-3">
+            <button class="btn btn-secondary" (click)="cancelRejectOrApproveEmployee()">Cancel</button>
+            <button class="btn btn-danger" (click)="confirmRejectOrApproveEmployee()">{{rejectOrActive}}</button>
+        </div>
+    </div>
+</div> -->
+<!-- add remarks -->
+<p-dialog header="Add Remarks" [(visible)]="addRemarksDialog" [modal]="true" [style]="{ width: '500px' }" [closable]="true" [contentStyle]="{ overflow: 'visible' }">
+  <form [formGroup]="remarksForm" (ngSubmit)="submitFormRemarks()">
+    <!-- Status -->
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group">
+          <div class="d-flex justify-content-between align-items-center mb-1">
+            <label>Status</label>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="rnr" formControlName="rnr" [checked]="remarksForm.get('rnr')?.value === 1" (change)="onRnrChange($event)" />
+              <label class="form-check-label" for="status">RNR</label>
+            </div>
+          </div>
+          <p-select optionValue="value" optionLabel="label" [options]="statusOptions" formControlName="status" placeholder="Select status" styleClass="w-full"> </p-select>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="form-group">
+          <label>Follow Up Required?</label>
+          <p-select (onChange)="onFollowUpChange($event)" styleClass="w-full" formControlName="followUp" placeholder="Select Yes/No" optionLabel="label" optionValue="value" [options]="coBranding"></p-select>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="form-group mb-3">
+          <label>Follow Up Date</label>
+          <input type="date" class="form-control" formControlName="followUpDate" placeholder="Date Selection" />
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="form-group mb-3">
+          <label>Follow Up Time</label>
+          <input type="time" class="form-control" formControlName="followUpTime" placeholder="Time Selection" />
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="form-group mb-3">
+          <label>Remarks</label>
+          <textarea class="form-control" formControlName="remarks" rows="3" placeholder="Type your remarks here..."> </textarea>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <button type="submit" pButton label="Add Remark" class="p-button-primary"></button>
+    </div>
+  </form>
+</p-dialog>
+<!-- view remarks -->
+<p-dialog header="View Remarks" [(visible)]="showRemarksDialog" [modal]="true" [style]="{ width: '90vw' }" [closable]="true" [contentStyle]="{ overflow: 'visible' }">
+  <div class="card border p-3 mt-2" *ngFor="let item of getRemarksList">
+    <div class="d-flex justify-content-between align-items-start flex-wrap">
+      <!-- Left content -->
+      <div class="col-md-8 col-12 mb-3 mb-md-0">
+        <p class="mb-2 text-secondary" style="font-size: 0.95rem">
+          {{ item.remarks }}
+        </p>
+        <div class="fw-semibold text-primary mb-1">{{ item.created_by }}</div>
+        <div class="text-muted" style="font-size: 0.85rem">
+          {{
+            item?.created_at
+              | date
+                : "dd-MM-yyyy
+                    'at' hh:mm a"
+          }}
+        </div>
+      </div>
+
+      <!-- Right content -->
+      <div class="col-md-4 col-12 mb-3 mb-md-0">
+        <div class="row">
+          <div class="col-md-6 col-12 d-flex flex-column align-items-md-end text-md-end">
+            <span *ngIf="item.status_option" class="badge rounded-pill mb-2 px-3 py-2 text-white" [ngStyle]="{ 'background-color': getStatusColor(item.status_option), 'font-size': '0.85rem' }">
+              {{ item.status_option }}
+            </span>
+            <span *ngIf="!item.status_option">No Remarks</span>
+          </div>
+          <div class="col-md-6 col-12 d-flex flex-column align-items-md-end text-md-end">
+            <div>
+              <span class="fw-semibold text-primary d-block">Next Follow Up</span>
+              <span *ngIf="item.follow_date" class="text-muted" style="font-size: 0.85rem">
+                {{ item.follow_date | date : "dd-MM-yyyy" }}|
+                {{ "1970-01-01T" + item.follow_time | date : "hh:mm a" }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>

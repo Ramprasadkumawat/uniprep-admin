@@ -1,0 +1,281 @@
+<p-toast />
+<p-accordion value="0"styleClass="white-accordian" activeIndex="0">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Add Talents</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #addFormElm>
+				<div class="row">
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Username *</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+								<div *ngIf="f.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Email ID *</label>
+							<input formControlName="email" type="email" class="form-control" pInputText />
+							<div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
+								<div *ngIf="f.email.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label><span>Contact Number (Optional)</span></label>
+							<ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [phoneValidation]="false" [selectedCountryISO]="preferredCountry" name="phone" formControlName="phone" customPlaceholder="Enter Contact Number" (keyup)="onChangeContact($event)"> </ngx-intl-tel-input>
+							<!-- <div *ngIf="submitted && f.phone.errors" class="text-danger text-xs">
+                            <div *ngIf="f.phone.errors.required">Required</div>
+                            <div *ngIf="f.phone.errors.minlength">Minimum 10 numbers Required</div>  
+                        </div> -->
+						</div>
+					</div>
+					<!-- 
+                <div class="col-md-4 mt-2">
+                    <div class="form-group">
+                        <label>Whatsapp Mobile (Optional)</label>
+                        <ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'"
+                            [preferredCountries]="['in', 'gb']" [enableAutoCountrySelect]="true"
+                            [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10"
+                            [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                            [phoneValidation]="false" [selectedCountryISO]="preferredCountry" name="whatsapp_phoneno"
+                            formControlName="whatsapp_phoneno" customPlaceholder="Enter Whatsapp Number"
+                            (keyup)="onChangeContact($event)">
+                        </ngx-intl-tel-input>
+                    </div>
+                </div>
+                -->
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Gender *</label>
+							<p-select styleClass="w-full" formControlName="gender" [options]="genderoption" optionValue="code" optionLabel="name"></p-select>
+							<div *ngIf="submitted && f.gender.errors" class="text-danger text-xs">
+								<div *ngIf="f.gender.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Country</label>
+							<p-select formControlName="country_id" (onChange)="changeCountry($event)" [filter]="true" filterBy="country" placeholder="Select country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="homeCountries"> </p-select>
+
+							<div *ngIf="submitted && f.country_id.errors" class="text-danger text-xs">
+								<div *ngIf="f.country_id.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select [virtualScrollItemSize]="38" [virtualScroll]="true" formControlName="location_id" optionValue="id" optionLabel="work_location" styleClass="w-100" [options]="locationList" placeholder="Select State" [filter]="true" filterBy="work_location" [appendTo]="'body'"> </p-select>
+							<div *ngIf="submitted && f.location_id.errors" class="text-danger text-xs">
+								<div *ngIf="f.location_id.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Student Type *</label>
+							<p-select formControlName="student_type" optionValue="id" optionLabel="subtypeName" styleClass="w-full" (onChange)="changeStudentType($event)" [options]="StudentType" [filter]="true" filterBy="subtypeName"></p-select>
+							<div *ngIf="submitted && f.student_type.errors" class="text-danger text-xs">
+								<div *ngIf="f.student_type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2" *ngIf="notadmin">
+						<div class="form-group">
+							<label>Source Type *</label>
+							<p-select formControlName="source_type" optionValue="id" optionLabel="name" styleClass="w-full" [options]="sourceTypes" (onChange)="changeSourceType($event)" [filter]="true" filterBy="name"></p-select>
+							<div *ngIf="submitted && f.source_type.errors" class="text-danger text-xs">
+								<div *ngIf="f.source_type.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2" *ngIf="notadmin">
+						<div class="form-group">
+							<label>{{ customSourceName }}</label>
+							<p-select formControlName="source_name" optionValue="id" optionLabel="source_name" styleClass="w-full" *ngIf="form.get('source_type').value != '2'" [options]="sourceName" (onChange)="changeSourceName()" [filter]="true" filterBy="source_name" appendTo="body"></p-select>
+							<p-select formControlName="source_name" optionValue="id" optionLabel="institutename" styleClass="w-full" *ngIf="form.get('source_type').value == '2'" [options]="sourceName" (onChange)="changeSourceName()" [filter]="true" filterBy="institutename" appendTo="body"></p-select>
+							<div *ngIf="submitted && f.source_name.errors" class="text-danger text-xs">
+								<div *ngIf="f.source_name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Last Degree Passing Year</label>
+							<p-datepicker appendTo="body" view="year" styleClass="w-full" dateFormat="yy" inputId="yearpicker" formControlName="last_degree_passing_year" placeholder="Last Degree Passing"></p-datepicker>
+							<div *ngIf="submitted && f.last_degree_passing_year.errors" class="text-danger text-xs">
+								<div *ngIf="f.last_degree_passing_year.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Current Education *</label>
+							<p-select formControlName="programlevel_id" optionValue="id" optionLabel="programlevel" styleClass="w-full" [options]="programLevels" [filter]="true" filterBy="programlevel"></p-select>
+							<div *ngIf="submitted && f.programlevel_id.errors" class="text-danger text-xs">
+								<div *ngIf="f.programlevel_id.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-4 mt-2" *ngIf="isCollegeSelected">
+						<div class="form-group">
+							<label>Current Specialization </label>
+							<p-select formControlName="current_specialization_id" optionValue="id" optionLabel="specialization_name" styleClass="w-full" [options]="currentSpecializationList" [filter]="true" filterBy="specialization_name"></p-select>
+							<div *ngIf="submitted && f.current_specialization_id.errors" class="text-danger text-xs">
+								<div *ngIf="f.current_specialization_id.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-1">
+						<div class="form-group">
+							<label>Subscription </label>
+							<p-select formControlName="subscription_id" optionValue="id" optionLabel="subscription" styleClass="w-full" [options]="subscriptions" [filter]="true" filterBy="subscription"></p-select>
+							<div *ngIf="submitted && f.subscription_id.errors" class="text-danger text-xs">
+								<div *ngIf="f.subscription_id.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<!-- <div class="col-md-4 mt-1">
+                    <div class="form-group">
+                        <label>Current Specialization {{form.get('programlevel_id')?.value !== 1 ? '*' : '' }}</label>
+                        <p-select formControlName="current_specialization_id" optionValue="id" optionLabel="specialization_name"
+                            styleClass="w-full" [options]="currentSpecializationList" [filter]="true"
+                            filterBy="specialization_name" (onChange)="onChangeCurrentSpecialization($event)"
+                            [readonly]="form.get('programlevel_id')?.value==1 ? true : false"></p-select>
+                        <div *ngIf="submitted && f.current_specialization_id.errors" class="text-danger text-xs">
+                            <div *ngIf="f.current_specialization_id.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-1">
+                    <div class="form-group">
+                        <label>Current Study Year {{form.get('programlevel_id')?.value !== 1 ? '*' : '' }}</label>
+                        <p-select formControlName="current_study_years_id" optionValue="id" optionLabel="study_level_name"
+                            styleClass="w-full" [options]="currentStudyYearList" [filter]="true"
+                            filterBy="study_level_name" [readonly]="form.get('programlevel_id')?.value==1 ? true : false"></p-select>
+                        <div *ngIf="submitted && f.current_study_years_id.errors" class="text-danger text-xs">
+                            <div *ngIf="f.current_study_years_id.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div> -->
+
+					<!--
+                <div class="col-md-4 mt-1">
+                    <div class="form-group">
+                        <label>Interested Country *</label>
+                        <p-select styleClass="w-full" formControlName="interested_country_id" [options]="countries"
+                            optionValue="id" optionLabel="country" [filter]="true" filterBy="country"></p-select>
+                        <div *ngIf="submitted && f.interested_country_id.errors" class="text-danger text-xs">
+                            <div *ngIf="f.interested_country_id.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                -->
+					<!--
+                <div class="col-md-4 mt-2"
+                    *ngIf="form.value?.source_type!=1 && form.value?.source_type!==null && notadmin">
+                    <div class="form-group">
+                        <label>Source Name 2</label>
+                        <p-select formControlName="source_name_two" optionValue="id" optionLabel="source_name"
+                            styleClass="w-full" [options]="sourceNameTwo" [filter]="true"
+                            filterBy="source_name"></p-select>
+                        <div *ngIf="submitted && f.source_name_two.errors" class="text-danger text-xs">
+                            <div *ngIf="f.source_name_two.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="col-md-4 mt-1" *ngIf="currentUserId == 21">
+                    <div class="form-group">
+                        <label>Subscription</label>
+                        <p-select formControlName="subscription" optionValue="subscription_id"
+                            optionLabel="" styleClass="w-full" [options]="Subscription"
+                            [filter]="true" filterBy="institutename"></p-select>
+                        <div *ngIf="submitted && f.subscription.errors" class="text-danger text-xs">
+                            <div *ngIf="f.subscription.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+            -->
+					<!--
+                <div class="col-md-4 mt-1">
+                    <div class="form-group">
+                        <label>Intake Year</label>
+                        <p-datepicker [minDate]="today" appendTo="body" view="year" styleClass="w-full" dateFormat="yy"
+                            inputId="yearpicker" formControlName="intake_year_looking"
+                            (onSelect)="yearChage($event)"></p-datepicker>
+                        <div *ngIf="submitted && f.intake_year_looking.errors" class="text-danger text-xs">
+                            <div *ngIf="f.intake_year_looking.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-1">
+                    <div class="form-group">
+                        <label>Intake Month Looking</label>
+                        <p-datepicker view="month" dateFormat="M" styleClass="w-full"
+                            formControlName="intake_month_looking" incalendarputId="pickMonth" [readonlyInput]="false"
+                            [minDate]="dateTime" [maxDate]="maximumTime">
+                        </p-datepicker>
+                        <div *ngIf="submitted && f.intake_month_looking.errors" class="text-danger text-xs">
+                            <div *ngIf="f.intake_month_looking.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+             -->
+					<!--  <div class="col-md-4 mt-1" *ngIf="currentUserId == 21">
+                    <div class="form-group">
+                        <label>Enterprise Subscription</label>
+                        <p-select formControlName="enterprise_subscription" optionValue="subscription_manager_id"
+                            optionLabel="institutename" styleClass="w-full" [options]="EnterpriseSubscription"
+                            [filter]="true" filterBy="institutename"></p-select>
+                        <div *ngIf="submitted && f.enterprise_subscription.errors" class="text-danger text-xs">
+                            <div *ngIf="f.enterprise_subscription.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div>
+                 <div class="col-md-4 mt-1">
+                    <div class="form-group">
+                        <label>Student/College ID (Optional)</label>
+                        <input formControlName="college_ref_id" type="college_ref_id" class="form-control" pInputText>
+                       <div *ngIf="submitted && f.college_ref_id.errors" class="text-danger text-xs">
+                            <div *ngIf="f.college_ref_id.errors.required">Required</div>
+                        </div>
+                    </div>
+                </div> -->
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="submit">Add Custom User</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<p-accordion value="0"styleClass="white-accordian" activeIndex="0" *ngIf="notadmin">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Bulk Upload</p-accordion-header>
+		<p-accordion-content>
+			<label for="file" class="reading-drop-container">
+				<i class="pi pi-upload reading-drop-title"></i>
+				<input type="file" id="file" class="d-none" (change)="onFileChange($event)" (click)="$event['target']['value'] = ''" accept=".csv" /><br />
+				<div class="reading-sm-font" *ngIf="selectedFile?.name">{{ selectedFile.name }}</div>
+				<div *ngIf="!selectedFile?.name" class="d-flex flex-column gap-1 text-center">
+					<span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+					<span class="reading-sm-font">Please maintain the format of uploading to stop failures</span>
+				</div> </label
+			><br />
+			<div class="text-center">
+				<button class="btn btn-primary" (click)="uploadFile()"><i class="fa-solid fa-upload"></i> Upload</button>
+				<a href="https://uniprep.ai/uniprepapi/storage/app/public/SampleUploadDocuments/SampleDocumentAndReadme.zip">
+					<button class="btn btn-primary"><i class="fa-solid fa-download"></i> Download Sample Doc</button>
+				</a>
+			</div>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>

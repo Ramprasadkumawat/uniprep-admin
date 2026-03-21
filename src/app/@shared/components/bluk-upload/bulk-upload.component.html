@@ -1,0 +1,30 @@
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{ 'display': importModal }" id="top-layer"
+  style="backdrop-filter: brightness(0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content p-2" style="width: 150%;">
+      <span (click)="importModal = 'none'" style="color: var(--p-primary-500); text-align: right; cursor: pointer;">
+        <i class="fa-solid fa-xmark"></i>
+      </span>
+      <div>
+        <label for="file" class="reading-drop-container">
+          <i class="pi pi-upload reading-drop-title"></i>
+          <input type="file" id="file" class="d-none" (change)="onFileChange($event)" (click)="$event['target']['value']=''" accept=".csv"><br />
+          <div class="reading-sm-font" *ngIf="selectedFile?.name">{{selectedFile.name}}</div>
+          <div *ngIf="!selectedFile?.name" class="d-flex flex-column gap-1 text-center">
+            <span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+            <span class="reading-sm-font">Please maintain the format of uploading to stop failures</span>
+          </div>
+        </label><br />
+        <div class="text-center">
+          <button class="btn btn-primary" (click)="uploadFile()">
+            <i class="fa-solid fa-upload"></i> Upload
+          </button>
+          <a class="btn btn-primary" role="link" [href]="sampleFileUrl" download>
+            <i class="fa-solid fa-download"></i> Download Sample Doc
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<button pButton type="button" label="Import" icon="pi pi-upload" (click)="importModal = 'block'" class="p-button-primary"></button>

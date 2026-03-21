@@ -1,0 +1,68 @@
+.subscription_header {
+  border-bottom: 1px solid grey;
+}
+
+.subscription {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.ptb_10 {
+  padding: 20px 0;
+}
+
+.pt10 {
+  padding-top: 10px;
+}
+
+.submit_btn {
+  text-align: end;
+  margin-top: 50px;
+}
+
+label {
+  padding-bottom: 5px;
+}
+
+.assignDialog ::ng-deep.p-dialog-header {
+  border-bottom: 2px solid #bfcad6;
+  padding: 5px 10px;
+}
+.assignDialog ::ng-deep.p-dialog-content {
+  border-bottom: 2px solid #bfcad6;
+  padding-bottom: 0px !important;
+}
+.assignDialog ::ng-deep.p-dialog-footer {
+  text-align: left;
+  padding-top: 15px !important;
+}
+.studentHistory ::ng-deep.p-dialog-content {
+  border-bottom: 2px solid #bfcad6;
+  padding-top: 10px !important;
+}
+.adduserDialog ::ng-deep.p-dialog-header {
+  border-bottom: 2px solid #bfcad6;
+  padding: 5px 10px;
+}
+.adduserDialog ::ng-deep.p-dialog-content {
+  border-bottom: 2px solid #bfcad6;
+  padding-bottom: 0px !important;
+}
+.adduserDialog ::ng-deep.p-dialog-footer {
+  text-align: left;
+  padding-top: 15px !important;
+}
+::ng-deep .fixed-dropdown,
+::ng-deep .fixed-dropdown .p-dropdown,
+::ng-deep .fixed-dropdown .p-dropdown-label {
+  box-sizing: border-box;
+  width: 101px;
+}
+::ng-deep .fixed-dropdown {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  z-index: 2;
+}

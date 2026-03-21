@@ -1,0 +1,26 @@
+::ng-deep .p-button-label {
+    font-weight: 500 !important;
+}
+
+::ng-deep label {
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    padding-bottom: 3px !important;
+}
+
+::ng-deep.p-calendar {
+    height: 40px !important;
+}
+
+::ng-deep .p-paginator-bottom {
+    .pi-cloud {
+        display: none !important;
+    }
+
+    .pi-plus {
+        display: none !important;
+    }
+}
+.columnClick{
+    text-decoration: underline; color: dodgerblue; cursor: pointer;
+  }

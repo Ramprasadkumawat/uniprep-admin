@@ -1,0 +1,21 @@
+ul {
+  list-style: none;
+  padding-left: 0px;
+  margin-bottom: 0px;
+  li {
+    padding: 10px;
+    border-bottom: 1px solid #e7e4e4;
+    &:last-child {
+      border-bottom-width: 0px;
+    }
+    &:first-child {
+    }
+    &:hover {
+      background-color: lightgray;
+      cursor: pointer;
+    }
+    &:active {
+      opacity: .8;
+    }
+  }
+}

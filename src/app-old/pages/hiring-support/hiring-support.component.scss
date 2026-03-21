@@ -1,0 +1,84 @@
+.candidate-card {
+  border-radius: 8px;
+  transition: transform 0.2s;
+  border: 1px solid #e9ecef;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.bookmark-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+
+  i {
+    font-size: 1.2rem;
+    color: #e9ecef;
+
+    &:hover {
+      color: #ffc107;
+    }
+  }
+}
+
+:host ::ng-deep {
+  .p-progressbar {
+    height: 8px;
+    background: #e9ecef;
+
+    .p-progressbar-value {
+      background: #ff9800;
+    }
+  }
+}
+
+.stat-label,
+.detail-label {
+  font-weight: 600;
+  font-size: smaller;
+}
+
+.stat-value,
+.detail-value {
+  font-size: smaller;
+}
+
+/* Button styling */
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: white;
+}
+::ng-deep .p-selectbutton .p-button.p-highlight:hover {
+  background: #3f4c83 !important;
+  border-color: #3f4c83 !important;
+  color: #fff;
+}
+::ng-deep .p-selectbutton .p-button.p-highlight {
+  background: #3f4c83 !important;
+  border-color: #3f4c83 !important;
+  color: #fff;
+}
+
+.list-view,
+.card-view {
+  background-color: #ffffff;
+}
+.share-button {
+  background-color: #ff6c00;
+  color: white;
+}
+
+  .pi-star-fill {
+    color: gold;
+  }
+
+  .pi-star {
+    color: lightgray;
+  }
+

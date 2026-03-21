@@ -1,0 +1,407 @@
+<div style="width: 100%; height: 80vh; overflow: unset !important; overflow-x: unset !important">
+	<p-accordion styleClass="white-accordian" (onClose)="activeIndex = -1" (onOpen)="activeIndex = 1" value="{{activeIndex}}">
+		<p-accordion-panel value="1">
+			<p-accordion-header>{{ title }}</p-accordion-header
+			><p-accordion-content>
+				<form [formGroup]="form" (ngSubmit)="submitForm()" (keydown.enter)="formEnter($event)">
+					<input formControlName="id" type="hidden" class="form-control" pInputText />
+					<div class="row">
+						<div class="col-12">
+							<div class="row">
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Course Name</label>
+										<!-- <p-select placeholder="Select Course Name" [editable]="true" optionValue="id" formControlName="course_name"
+                                     [filter]="true" [filterBy]="'course_name'" (keydown.enter)="onEnterKeyPress('course')" optionLabel="course_name"
+                                      styleClass="w-full" [options]="courseName"></p-select>                                      -->
+										<input formControlName="course_name" type="text" class="form-control" pInputText />
+										<div *ngIf="submitted && form.get('course_name').errors" class="text-danger text-xs">
+											<div *ngIf="form.get('course_name').hasError('required')">Course Name Required</div>
+											<div *ngIf="form.get('course_name').hasError('pattern')">Please add the Course first.</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">University Name</label>
+										<p-select placeholder="University Name" optionValue="id" formControlName="university_name" [filter]="true" (onChange)="universityOnChange($event)" [filterBy]="'university_name'" optionLabel="university_name" styleClass="w-full" [options]="universityName"></p-select>
+										<div *ngIf="submitted && form.get('university_name').errors" class="text-danger text-xs">
+											<div *ngIf="form.get('university_name').hasError('required')">University Name Required</div>
+											<div *ngIf="form.get('university_name').hasError('pattern')">Please add the University first.</div>
+										</div>
+									</div>
+								</div>
+								<!-- <div class="col-md-4 p-2">
+                                <div class="form-group">
+                                    <label class="mb-1">University Link</label>
+                                    <input formControlName="university_link" type="text" class="form-control" pInputText />
+                                    <div *ngIf="submitted && form.get('university_link').errors" class="text-danger text-xs">
+                                        <div *ngIf="form.get('university_link').hasError('required')">University Link Required</div>
+                                    </div>
+                                </div>
+                            </div> -->
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Subject</label>
+										<p-select placeholder="Select Subject" optionValue="id" formControlName="subject" [filter]="true" (onChange)="subjectOnChange($event)" [filterBy]="'category_name'" optionLabel="category_name" styleClass="w-full" [options]="subjectName"></p-select>
+										<div *ngIf="submitted && form.get('subject').errors" class="text-danger text-xs">
+											<div *ngIf="form.get('subject').hasError('required')">Subject Name Required</div>
+											<div *ngIf="form.get('subject').hasError('pattern')">Please add the Subject first.</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Subject Category</label>
+										<p-select placeholder="Select Subject Category" [options]="subjectCategory" optionValue="id" formControlName="subject_category" [filter]="true" [filterBy]="'subject_name'" optionLabel="subject_name" styleClass="w-full"></p-select>
+										<div *ngIf="submitted && form.get('subject_category').errors" class="text-danger text-xs">
+											<div *ngIf="form.get('subject_category').hasError('required')">Subject Category Required</div>
+											<div *ngIf="form.get('subject_category').hasError('pattern')">Please add the Subject Category first.</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Country</label>
+										<p-select placeholder="Select country" optionValue="id" formControlName="country" [filter]="true" [filterBy]="'country'" (onChange)="countryOnChange($event)" optionLabel="country" styleClass="w-full" [options]="country"></p-select>
+										<div *ngIf="submitted && form.get('country').errors" class="text-danger text-xs">
+											<div *ngIf="form.get('country').hasError('required')">country Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Campus</label>
+										<p-select placeholder="Select Campus Location" optionValue="id" formControlName="campus" [filter]="true" [filterBy]="'location_name'" (keydown.enter)="onEnterKeyPress('location')" optionLabel="location_name" styleClass="w-full" [options]="locations"></p-select>
+										<div *ngIf="submitted && form.get('campus').errors" class="text-danger text-xs">
+											<div *ngIf="form.get('campus').hasError('required')">Campus Name Required</div>
+											<div *ngIf="form.get('campus').hasError('pattern')">Please add the Campus first.</div>
+										</div>
+									</div>
+								</div>
+								<!-- <div class="col-md-4 p-2">
+                                <div class="form-group">
+                                    <label class="mb-1">Estd.</label>
+                                    <input formControlName="estd_year" type="text" class="form-control" pInputText />
+                                </div>
+                            </div> -->
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Duration (Months)</label>
+										<input formControlName="duration" type="text" class="form-control" pInputText />
+										<div *ngIf="submitted && form.get('duration').errors" class="text-danger text-xs">
+											<div *ngIf="form.get('duration').hasError('required')">Duration Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Intake Months</label>
+										<p-multiselect [options]="monthList" styleClass="w-full" formControlName="intake" [filter]="true" [filterBy]="'name'" optionValue="id" defaultLabel="Select Intake" display="chip" [showClear]="true" optionLabel="name"> </p-multiselect>
+										<div *ngIf="submitted && form.get('intake').errors" class="text-danger text-xs">
+											<div *ngIf="form.get('intake').hasError('required')">Intake Months Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Stay Back</label>
+										<input formControlName="stayback" type="text" class="form-control" pInputText />
+										<div *ngIf="submitted && form.get('stayback').errors" class="text-danger text-xs">
+											<div *ngIf="form.get('stayback').hasError('required')">Stay Back Required</div>
+										</div>
+									</div>
+								</div>
+								<!-- <div class="col-md-4 p-2">
+                                <div class="form-group">
+                                    <label class="mb-1">World Rank</label>
+                                    <input formControlName="world_rank" type="text" class="form-control" pInputText />
+                                </div>
+                            </div> -->
+								<div class="col-md-4 p-2">
+									<div class="form-group">
+										<label class="mb-1">Study Level</label>
+										<p-select placeholder="Select Study Level" optionValue="id" formControlName="study_level" optionLabel="name" styleClass="w-full" [options]="studyLevel"></p-select>
+										<div *ngIf="submitted && form.get('study_level').errors" class="text-danger text-xs">
+											<div *ngIf="form.get('study_level').hasError('required')">Study Level Required</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6 p-2">
+									<div class="form-group">
+										<label class="mb-1">Course Link</label>
+										<input formControlName="course_link" type="text" class="form-control" pInputText />
+										<div *ngIf="submitted && form.get('course_link').errors" class="text-danger text-xs">
+											<div *ngIf="form.get('course_link').hasError('required')">Course Link Required</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="reset()">Reset Field</button>&nbsp;
+							<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">{{ btntxt }}</button>
+						</div>
+					</div>
+				</form>
+			</p-accordion-content>
+		</p-accordion-panel>
+		<p-accordion-panel value="2">
+			<p-accordion-header>Filter Course List</p-accordion-header>
+			<p-accordion-content>
+				<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()">
+					<div class="row">
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">Course Name</label>
+								<!-- <p-select placeholder="Select Course Name" optionValue="id" formControlName="course_name"
+                                [filter]="true" [filterBy]="'course_name'" optionLabel="course_name" styleClass="w-full"
+                                [options]="courseName"></p-select> -->
+								<!-- <p-multiselect styleClass="w-100" formControlName="course_name" placeholder="Select Course Name" [options]="courseName" display="chip" 
+                                optionLabel="course_name" optionValue="id" [appendTo]="'body'"></p-multiselect> -->
+								<!-- <p-multiselect 
+                                styleClass="w-100" 
+                                formControlName="course_name" 
+                                placeholder="Select Course Name" 
+                                [options]="courseName" 
+                                display="chip" 
+                                optionLabel="course_name" 
+                                optionValue="id" 
+                                [virtualScroll]="true" 
+                                [virtualScrollItemSize]="40" 
+                                [lazy]="true" 
+                                [filterBy]="'course_name'"                               
+                                (onLazyLoad)="loadCoursesLazy($event)" 
+                                [filter]="true" 
+                                [appendTo]="'body'">
+                            </p-multiselect> -->
+								<input formControlName="course_name" type="text" class="form-control" pInputText />
+							</div>
+						</div>
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">College Name</label>
+								<!-- <p-select placeholder="Select University Name" optionValue="id"
+                                formControlName="college_name" [filter]="true" [filterBy]="'university_name'"
+                                optionLabel="university_name" styleClass="w-full"
+                                [options]="universityName"></p-select> -->
+								<p-multiselect styleClass="w-100" formControlName="college_name" placeholder="Select University Name" [options]="universityName" display="chip" optionLabel="university_name" optionValue="id" [appendTo]="'body'"></p-multiselect>
+							</div>
+						</div>
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">Country</label>
+								<!-- <p-select placeholder="Select country" optionValue="id" formControlName="country"
+                                [filter]="true" (onChange)="countryOnChange($event)" [filterBy]="'country'"
+                                optionLabel="country" styleClass="w-full" [options]="country"></p-select> -->
+								<p-multiselect styleClass="w-100" placeholder="Select country" (onChange)="countryOnChange($event)" formControlName="country" [options]="country" display="chip" optionLabel="country" optionValue="id" [appendTo]="'body'"></p-multiselect>
+							</div>
+						</div>
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">Campus</label>
+								<!-- <p-select placeholder="Select Campus Location" optionValue="id" formControlName="campus"
+                                [filter]="true" [filterBy]="'location_name'" optionLabel="location_name"
+                                styleClass="w-full" [options]="locations"></p-select> -->
+								<p-multiselect styleClass="w-100" placeholder="Select Campus Location" formControlName="campus" [options]="locations" display="chip" optionLabel="location_name" optionValue="id" [appendTo]="'body'"></p-multiselect>
+							</div>
+						</div>
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">Subject</label>
+								<!-- <p-select placeholder="Select Subject" optionValue="id" formControlName="subject"
+                                [filter]="true" [filterBy]="'subject_name'" optionLabel="subject_name"
+                                styleClass="w-full" [options]="subjectName"></p-select> -->
+								<p-multiselect styleClass="w-100" placeholder="Select Subject" formControlName="subject" [options]="subjectName" display="chip" optionLabel="category_name" optionValue="id" [appendTo]="'body'"></p-multiselect>
+							</div>
+						</div>
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">Duration (Months)</label>
+								<!-- <input formControlName="duration" type="text" class="form-control" pInputText /> -->
+								<p-multiselect [options]="durationName" styleClass="w-full" formControlName="duration" [filter]="true" [filterBy]="'duration'" defaultLabel="Duration" display="chip" [showClear]="true" optionLabel="duration"> </p-multiselect>
+							</div>
+						</div>
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">Intake Months</label>
+								<p-multiselect [options]="monthList" styleClass="w-full" formControlName="intake_months" [filter]="true" [filterBy]="'name'" optionValue="id" defaultLabel="Select Intake" display="chip" [showClear]="true" optionLabel="name"> </p-multiselect>
+							</div>
+						</div>
+						<div class="col-md-4 p-2">
+							<div class="form-group">
+								<label class="mb-1">Stay Back </label>
+								<!-- <input formControlName="stay_back" type="text" class="form-control" pInputText /> -->
+								<p-multiselect [options]="stayBack" styleClass="w-full" formControlName="stay_back" [filter]="true" [filterBy]="'key'" defaultLabel="Stay Back" display="chip" [showClear]="true" optionLabel="key"> </p-multiselect>
+							</div>
+						</div>
+						<!-- <div class="col-md-4 p-2">
+                        <div class="form-group">
+                            <label class="mb-1">World Rank </label>
+                            <input formControlName="world_rank" type="text" class="form-control" pInputText />
+                            <p-multiselect [options]="worldRank" styleClass="w-full" formControlName="world_rank"
+                            [filter]="true" [filterBy]="'value'" optionValue="id" defaultLabel="Select Rank"
+                            display="chip" [showClear]="true" optionLabel="value"> </p-multiselect>
+                        </div>
+                    </div> -->
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="filterReset()">Reset Field</button>&nbsp;
+							<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">Filter</button>
+						</div>
+					</div>
+				</form>
+			</p-accordion-content>
+		</p-accordion-panel>
+	</p-accordion>
+	<p-table size="small" scrollHeight="600px" [scrollable]="true" styleClass="p-datatable-gridlines" [value]="courseListData" [totalRecords]="totalCourses" [tableStyle]="{ 'min-width': '40rem' }">
+		<ng-template pTemplate="caption">
+			<div class="d-flex w-full align-items-center justify-content-between">
+				<div>
+					<span>Course List</span> <br />
+					<span class="text-muted text-small">Total Courses : {{ totalCourses }}</span>
+				</div>
+				<div>
+					<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" pButton (click)="subjectRedirect()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Add Subject &nbsp;</button>
+					<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" pButton (click)="universityRedirect()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Add University &nbsp;</button>
+					<!-- <i class="fa-solid fa-user-graduate"></i> -->
+					<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" pButton (click)="openFileModal()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Import &nbsp; <i class="pi pi-file-export"></i></button>
+
+					<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" (click)="exportCourses()" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Export &nbsp;<i class="pi pi-file"></i></button>
+				</div>
+			</div>
+		</ng-template>
+		<ng-template pTemplate="header">
+			<tr>
+				<th class="border-cell">Course Name</th>
+				<th class="border-cell">College</th>
+				<th class="border-cell">Country</th>
+				<th class="border-cell">Campus</th>
+				<!-- <th class="border-cell">Estd</th> -->
+				<th class="border-cell">Subject</th>
+				<!-- <th class="border-cell">Subject Category</th> -->
+				<th class="border-cell">Study Level</th>
+				<th class="border-cell">Duration</th>
+				<th class="border-cell">Intake</th>
+				<th class="border-cell">Stay Back</th>
+				<!-- <th class="border-cell">World Rank</th> -->
+				<th class="border-cell">Actions</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-course>
+			<tr>
+				<td>
+					{{ course.course_name }}&nbsp;<a target="_blank" href="{{ course.course_url }}"><i class="fa-solid fa-link"></i></a>
+				</td>
+				<td>
+					{{ course.university_name }}&nbsp;<a target="_blank" href="{{ course.university_url }}"><i class="fa-solid fa-link"></i></a>
+				</td>
+				<td>{{ course.country }}</td>
+				<td>{{ course.location }}</td>
+				<!-- <td>{{course.estd_year}}</td> -->
+				<td>{{ course.subject_name }}</td>
+				<!-- <td>{{course.category_name}}</td> -->
+				<td>{{ course.study_level }}</td>
+				<td>{{ course.duration }}</td>
+				<td>{{ course.intake_month }}</td>
+				<td>{{ course.stay_back }}</td>
+				<!-- <td>{{course.world_rank}}</td> -->
+				<td>
+					<div class="view-btn m-1" style="cursor: pointer">
+						<a (click)="EditCourses(course); $event.preventDefault()"><i class="fa-solid fa-pen"></i> Edit</a>
+					</div>
+					<div class="view-btn m-1" style="cursor: pointer; white-space: nowrap">
+						<a (click)="DeleteCourse(course.id); $event.preventDefault()"><i class="fa-solid fa-trash"></i> Delete</a>
+					</div>
+				</td>
+			</tr>
+		</ng-template>
+	</p-table>
+	<div class="card-footer">
+		<p-paginator [rows]="pageSize" [totalRecords]="totalCourses" (onPageChange)="pageChange($event)" [rowsPerPageOptions]="[100, 500, 1000]"></p-paginator>
+	</div>
+	<p-scrollTop #scrollTopButton target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>
+</div>
+
+<!-- <p-dialog header="File Upload" [(visible)]="fileUploadModal" [modal]="true" [style]="{ width: '50vw' }">
+    <label for="file" class="reading-drop-container">
+        <i class="pi pi-upload reading-drop-title"></i>
+        <input type="file" id="file" class="d-none" (change)="onFileChange($event)" accept=".csv" /><br />
+        <span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+        <span class="reading-sm-font">Please maintain the format of uploading to stop failures</span> </label
+    ><br />
+    <div class="text-center">
+        <button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="uploadFile()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Upload</button>
+    </div>
+</p-dialog> -->
+<div [ngStyle]="{ display: fileUploadModal }" class="modal modal-bg" role="dialog" tabindex="-1" *ngIf="fileUploadModal">
+	<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+		<div class="modal-content card">
+			<div class="modal-body">
+				<div class="d-flex justify-content-between">
+					<div>
+						<h5>File Upload</h5>
+					</div>
+					<div>
+						<span (click)="closeFileModal()" style="cursor: pointer"><i class="fa-solid fa-xmark"></i></span>
+					</div>
+				</div>
+				<form action="" [formGroup]="dragform" (ngSubmit)="dragsubmit()">
+					<!-- <div class="row mt-3">
+                        <div class="col-6">
+                            <button class="ps-3 pe-3 pt-2 pb-2"
+                                style="background-color: #001631;;border-radius: 8px; border: aliceblue; color: #fff;"
+                                (click)="downloadsamplereport()">Sample Report</button>&nbsp;
+
+                        </div>
+                        <div class="col-6 text-right">
+                            <button class="ps-3 pe-3 pt-2 pb-2"
+                                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                                (click)="downloadReadme()">Download Read Me</button>
+                        </div>
+                    </div> -->
+					<label *ngIf="hideVisibility" for="file" class="reading-drop-container mt-2" (drop)="onFileDrop($event)" (dragover)="onDragOver($event)">
+						<i class="pi pi-upload reading-drop-title"></i>
+						<input type="file" id="file" class="d-none" formControlName="dragexcel" (change)="onFileSelected($event)" accept=".csv" /><br />
+						<span style="text-align: center" class="reading-sm-font">Drag and drop .csv files here or click to upload</span>
+						<span style="text-align: center">Please maintain the format of uploading to prevent failures</span> </label
+					><br />
+					<label *ngIf="fileName" for="file" class="reading-drop-container mt-2">
+						<span *ngIf="fileName" style="text-align: center; display: block; margin-top: 10px">
+							{{ fileName }}
+						</span> </label
+					><br />
+					<!-- <div class="progress  mb-2" *ngIf="progressdisplay">
+                        <div class="progress w-100">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                                aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width':this.progress}">{{progress}}
+                            </div>
+                        </div>
+                    </div> -->
+					<!-- <div class="" *ngIf="filedisplay && selectedFile!=null">
+                        <div class="row p-1">
+                            <div class="col-2 text-center" style="margin-top: 30px !important;">
+                                <a style="cursor: pointer; font-size:80px;" (click)="previewfile()"><i
+                                        class="fa fa-solid fa-file-csv"></i></a>
+                            </div>
+                            <div class="col-2 text-center" style="margin-top: 80px !important; margin-left: 20px;">
+                                <a style="cursor: pointer; font-size:20px;" (click)="previewfile()"><i
+                                        class="fa fa-solid fa-eye"></i></a>
+                            </div>
+                            <div class="col-2 text-center" style="margin-top: 80px !important; margin-left: 20px;">
+                                <a style="cursor: pointer; font-size:20px;" (click)="deletefile()"><i
+                                        class="fa fa-solid fa-trash"></i></a>
+                            </div>
+                        </div>
+                    </div> -->
+					<div class="text-center">
+						<button type="submit" class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Upload</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

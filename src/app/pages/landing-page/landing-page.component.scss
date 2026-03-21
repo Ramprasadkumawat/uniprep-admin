@@ -1,0 +1,129 @@
+:host ::ng-deep {
+    // Accordion styling
+    .p-accordion {
+      .p-accordion-header {
+        .p-accordion-header-link {
+          background: #f8f9fa;
+          color: #495057;
+          border: 1px solid #dee2e6;
+          border-radius: 4px;
+          font-weight: 600;
+          
+          &:focus {
+            box-shadow: none;
+            border-color: #ced4da;
+          }
+          
+          .p-accordion-toggle-icon {
+            color: #6c757d;
+          }
+        }
+        
+        &.p-highlight .p-accordion-header-link {
+          background: #f8f9fa;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      }
+      
+      .p-accordion-content {
+        border: 1px solid #dee2e6;
+        border-top: 0;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        background: #fff;
+      }
+    }
+    
+    // Input styling
+    .p-inputtext {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+      
+      &:focus {
+        box-shadow: none;
+        border-color: #80bdff;
+      }
+    }
+    
+    // Dropdown styling
+    .p-dropdown {
+      .p-dropdown-label {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+      }
+      
+      &:not(.p-disabled).p-focus {
+        box-shadow: none;
+        border-color: #80bdff;
+      }
+    }
+    
+    // Button styling
+    .p-button {
+      &.p-button-danger {
+        background: #dc3545;
+        border-color: #dc3545;
+        
+        &:hover {
+          background: #c82333;
+          border-color: #bd2130;
+        }
+      }
+      
+      &.p-button-primary {
+        background: var(--p-primary-500);
+        border-color: var(--p-primary-500);
+        
+        &:hover {
+          background: var(--p-primary-500);
+          border-color: #283593;
+        }
+      }
+    }
+    
+    // Paginator styling
+    .p-paginator {
+      .p-paginator-pages {
+        .p-paginator-page.p-highlight {
+          background: var(--p-primary-500);
+          color: #fff;
+        }
+      }
+    }
+  }
+  
+  // Card styling
+  .card {
+    border-radius: 0.5rem;
+    border: none;
+    
+    .card-header {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+    }
+  }
+  
+  // Badge styling
+  .badge {
+    font-weight: 500;
+    font-size: 0.75rem;
+    
+    &.bg-success {
+      background-color: #28a745 !important;
+    }
+    
+    &.bg-primary {
+      background-color: #3f51b5 !important;
+    }
+  }
+  
+p.description {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+  }
+
+  

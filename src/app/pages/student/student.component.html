@@ -1,0 +1,101 @@
+<p-accordion styleClass="white-accordian" activeIndexChange="indextchange($event)" value="{{activeIndex}}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Add Student</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Usernameaaaaaaaaaa</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+								<div *ngIf="f.name.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Email</label>
+							<input formControlName="email" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
+								<div *ngIf="f.email.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Mobile</label>
+							<input formControlName="mobile" type="number" class="form-control" pInputText />
+							<div *ngIf="submitted && f.mobile.errors" class="text-danger text-xs">
+								<div *ngIf="f.mobile.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Gender</label>
+							<p-select formControlName="gender" optionValue="id" optionLabel="name" styleClass="w-full" [options]="gender"></p-select>
+							<div *ngIf="submitted && f.gender.errors" class="text-danger text-xs">
+								<div *ngIf="f.gender.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Student's Home Country</label>
+							<p-select formControlName="country" optionValue="id" optionLabel="name" styleClass="w-full" [options]="country"></p-select>
+							<div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+								<div *ngIf="f.country.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="name" styleClass="w-full" [options]="locations"></p-select>
+							<div *ngIf="submitted && f.location.errors" class="text-danger text-xs">
+								<div *ngIf="f.location.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Program Level Looking</label>
+							<p-select formControlName="programlevel" optionValue="id" optionLabel="name" styleClass="w-full" [options]="programlevel"></p-select>
+							<div *ngIf="submitted && f.programlevel.errors" class="text-danger text-xs">
+								<div *ngIf="f.programlevel.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Last Degree Passing Year</label>
+							<p-select formControlName="passingyear" optionValue="id" optionLabel="name" styleClass="w-full" [options]="passingyear"></p-select>
+							<div *ngIf="submitted && f.passingyear.errors" class="text-danger text-xs">
+								<div *ngIf="f.passingyear.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Interested Country</label>
+							<p-select formControlName="intrestedcountry" optionValue="id" optionLabel="name" styleClass="w-full" [options]="intcountries"></p-select>
+							<div *ngIf="submitted && f.intrestedcountry.errors" class="text-danger text-xs">
+								<div *ngIf="f.intrestedcountry.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button pButton type="submit" label="Add"></button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>

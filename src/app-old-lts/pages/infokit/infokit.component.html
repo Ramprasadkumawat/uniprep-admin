@@ -1,0 +1,177 @@
+<p-accordion
+  styleClass="white-accordian"
+  activeIndexChange="indextchange($event)"
+  value="{{activeIndex}}"
+>
+  <p-accordion-panel value="1">
+    <p-accordion-header>{{headertext}}</p-accordion-header>
+    <p-accordion-content>
+    <form [formGroup]="form" (ngSubmit)="submitForm()">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Folder Name</label>
+            <input
+              style="height: 40px !important"
+              formControlName="name"
+              type="text"
+              class="form-control"
+              pInputText
+            />
+            <div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
+              <div *ngIf="f.name.errors.required">Required</div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="col-md-4">
+          <label>Folder Icon</label>
+          <div class="form-group" (dragover)="onDragOver($event)">
+            <div class="input-wrapper">
+              <input
+                type="file"
+                (change)="onFileChange($event)"
+                formControlName="image"
+                style="display: none; color: black"
+                #fileInput
+              />
+              <input
+                style="height: 40px !important"
+                type="text"
+                class="form-control"
+                pInputText
+                readonly
+                formControlName="filename"
+                (click)="fileInput.click()"
+              />
+              <button
+                type="button"
+                style="border-radius: 0rem 0.375rem 0.375rem 0rem"
+                class="upload-button"
+                (click)="fileInput.click()"
+              >
+                Upload
+              </button>
+              <div
+                *ngIf="submitted && f.image.errors"
+                class="text-danger text-xs"
+              >
+                <div *ngIf="f.image.errors.required">Required</div>
+              </div>
+            </div>
+          </div>
+        </div> -->
+        <div class="col-md-4">
+          <div class="form-group">
+            <label>Status</label>
+            <p-select
+              placeholder="Select"
+              styleClass="w-full"
+              formControlName="status"
+              [options]="statusOptions"
+              [(ngModel)]="selectedStatus"
+            ></p-select>
+          </div>
+        </div>
+      </div>
+      <div class="mt-4 text-right">
+        <button
+          class="ps-3 pe-3 pt-2 pb-2"
+          pButton
+          style="
+            background-color: var(--p-primary-500);
+            border-radius: 8px;
+            border: aliceblue;
+            color: #fff;
+          "
+          type="submit"
+        >
+          {{ btntxt }}
+        </button>
+      </div>
+    </form>
+  </p-accordion-content>
+</p-accordion-panel>
+</p-accordion>
+<div class="card">
+  <div class="card-header">
+    <div class="info">
+      <p style="font-size: medium">
+        Startup Kit<br /><span
+          >Total Folders : {{ parentfolderlists?.length }}</span
+        >
+      </p>
+    </div>
+    <div class="filebtndiv">
+      <input
+        type="file"
+        (change)="onfilesChange($event)"
+        (click)="filesInput.value=null"
+        formControlName="files"
+        style="display: none; color: black"
+        #filesInput
+      />
+      <button pbutton class="btn btn-primary" (click)="filesInput.click()">
+        Add File <i class="pi pi-file"></i>
+      </button>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row p-2">
+      <div style="display: flex" class="routedata">
+        <span (click)="redirectTo('info', -1)">Startup Kit / </span
+        ><span
+          *ngFor="let data of routedata; let i = index; let isLast = last"
+          (click)="redirectTo(data, i)"
+          [ngClass]="isLast ? 'fontcolor' : ''"
+          >{{ data.name }} /
+        </span>
+      </div>
+    </div>
+    <div class="row gap-2 p-3">
+      <div class="col-3 card" *ngFor="let folder of parentfolderlists">
+        <div class="card-body">
+          <div
+            class="d-flex justify-content-start folder"
+            (click)="getchildinfo(folder)"
+          >
+            <div class="me-2 d-flex align-items-center">
+              <img
+                style="width: 100%"
+                class="img-responsive"
+                *ngIf="folder?.isFolder == 1; else fileimage"
+                [src]="folder?.img_path"
+              /><ng-template #fileimage>
+                <a (click)="openFile(folder.img_path)">
+                <img
+                
+                  class="img-responsive"
+                  src="../../../assets/images/pdf.svg"
+              /></a></ng-template>
+            </div>
+            <div class="folderinfo">
+              <h5>{{ folder?.name }}</h5>
+              <p>
+                Last Updated:<span>{{ folder?.last_updated }}</span>
+              </p>
+            </div>
+          </div>
+          <div style="float: right">
+            <div class="dropup" *ngIf="folder?.isFolder == 1; else deleteicn">
+              <i class="pi pi-ellipsis-v"></i>
+              <div class="dropup-content">
+                <a (click)="editdata(folder)">Edit</a>
+                <a (click)="deletedata(folder)">Delete</a>
+              </div>
+            </div>
+            <ng-template #deleteicn>
+              <a (click)="deletedata(folder)"
+                ><i class="fa-solid fa-trash" style="color: var(--p-primary-500);"></i></a
+            ></ng-template>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-confirmpopup></p-confirmpopup>

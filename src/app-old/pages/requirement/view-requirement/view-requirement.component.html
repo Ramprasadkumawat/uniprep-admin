@@ -1,0 +1,89 @@
+<div class="card">
+	<div class="row mb-3">
+		<div class="d-flex col-sm-5 col-md-6 justify-content-between">
+			<div class="d-flex align-items-center">
+				<div class="d-flex flex-column px-2">
+					<span style="font-size: 20px">View Requirement</span>
+					<span class="text-xs" style="color: rgb(205, 203, 203)">Total Count: {{ totalRecords }}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<p-accordion value="0" styleClass="white-accordian">
+		<p-accordion-panel value="1">
+			<p-accordion-header>Filter Requirement</p-accordion-header>
+			<p-accordion-content>
+				<form [formGroup]="filterForm" (ngSubmit)="applyFilter()">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Job Title</label>
+								<input type="text" formControlName="jobTitle" class="form-control paddingfive mt-2" pInputText />
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Requirement Type</label>
+								<input type="text" formControlName="requirementType" class="form-control paddingfive mt-2" pInputText />
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>Location</label>
+								<input type="text" formControlName="location" class="form-control paddingfive mt-2" pInputText />
+							</div>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="btn btn-primary" type="button" (click)="resetFilter()">Reset Filter</button>
+							<button class="btn btn-primary" type="submit">Filter Data</button>
+						</div>
+					</div>
+				</form>
+			</p-accordion-content>
+		</p-accordion-panel>
+	</p-accordion>
+
+	<div class="container-fluid mb-2 mt-3">
+		<p-table [value]="requirementList" [loading]="loading" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords" 
+			[first]="first" (onPage)="pageChange($event)" [rowsPerPageOptions]="[10, 20, 30]" styleClass="p-datatable-sm">
+			<ng-template pTemplate="header">
+				<tr>
+					<th>Job Title</th>
+					<th>Requirement Type</th>
+					<th>Profiles Required</th>
+					<th>Salary Range</th>
+					<th>Start Date</th>
+					<th>Experience</th>
+					<th>Work Mode</th>
+					<th>Location</th>
+					<th>Actions</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-requirement>
+				<tr>
+					<td>{{ requirement.jobTitle || 'N/A' }}</td>
+					<td>{{ requirement.requirementType || 'N/A' }}</td>
+					<td>{{ requirement.profilesRequired || 'N/A' }}</td>
+					<td>{{ requirement.minSalary }} - {{ requirement.maxSalary }}</td>
+					<td>{{ requirement.startDate || 'N/A' }}</td>
+					<td>{{ requirement.experience || 'N/A' }}</td>
+					<td>{{ requirement.workMode || 'N/A' }}</td>
+					<td>{{ requirement.location || 'N/A' }}</td>
+					<td>
+						<button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-primary" pTooltip="Edit"></button>
+						<button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger" pTooltip="Delete"></button>
+					</td>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="emptymessage">
+				<tr>
+					<td colspan="9" class="text-center">No requirements found</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+</div>
+

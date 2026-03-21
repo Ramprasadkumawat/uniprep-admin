@@ -1,0 +1,218 @@
+<!-- 
+<ul class="menu-items">
+  <ng-container *ngFor="let menu of menus;let index = index">
+    <ng-container *ngIf="menu.header == true; else list">
+      <ng-container *ngTemplateOutlet="header; context: {$implicit: menu}"></ng-container>
+    </ng-container>
+    <ng-template #list>
+      <li [ngClass]="activeMenuIndex == index ? 'menu-item active': 'menu-item'" (click)="toggleMenu(index, menu)">
+        <a>
+            <i *ngIf="menu.icon" [ngClass]="menu.icon | icon:'menu-icon'"></i>
+            <span class="menu-title">{{menu.title}}</span>
+        </a>
+        <ng-container *ngIf="activeMenuIndex == index" @accordion>
+          <ul class="menu-items" *ngFor="let submenu of menu.children || []">
+            <ng-container *ngIf="submenu.header == true; else list">
+              <ng-container *ngTemplateOutlet="header; context: {$implicit: menu}"></ng-container>
+            </ng-container>
+            <ng-template #list>
+              <li class="meni-item">
+                <a>
+                    <i *ngIf="submenu.icon" [ngClass]="submenu.icon | icon:'menu-icon'"></i>
+                    <span class="menu-title">{{submenu.title}}</span>
+                </a>
+            </li>
+            </ng-template>
+          </ul>
+        </ng-container>
+    </li>
+    </ng-template>
+  </ng-container>
+</ul>
+
+<ng-template #header let-menu>
+  <li class="'menu-item">
+    <a class="header">
+        {{menu.title}}
+    </a>
+  </li>
+</ng-template>
+
+ -->
+
+<div class="app-title">
+  <ng-container *ngTemplateOutlet="appTitle || defaultTitle"></ng-container>
+  <br /><br />
+</div>
+
+<ng-template #defaultTitle>
+  <img class="lightmodelogo" src="../../../../assets/images/uniprep-light.svg" />
+</ng-template>
+<div class="footer"></div>
+<!--<uni-side-menu [menus]="menus"></uni-side-menu>-->
+<ul id="menu-items">
+  <li class="menutitle">
+    <p class="mb-0 px-2 pb-0 font-secondarycolor text-small fw-semibold">Main Menu</p>
+  </li>
+  <ng-container *ngFor="let item of menus">
+    <li [ngClass]="{ 'menu-item': true, active: item.active, overlap: isOverlap }" *ngIf="item.permissions | permission : userPermissions">
+      <!-- System header -->
+      <div class="small ps-3 submenuitem fw-semibold" *ngIf="isCategory(item)">
+        {{ item.title }}
+      </div>
+
+      <!-- Expandable menu -->
+      <div class="system-main__apps d-flex justify-content-between" *ngIf="!isCategory(item) && item.children" (click)="toggleExpand(item, $event)">
+        <div>
+          <span class="system-main__icon">
+            <i [class]="item.icon"></i>
+          </span>
+          <span class="system-main__name"> {{ item.title }} </span>
+        </div>
+
+        <span class="chevron">
+          <i class="fa-solid" [ngClass]="item.expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+        </span>
+      </div>
+
+      <!-- Normal clickable item -->
+      <div class="system-main__apps" *ngIf="!isCategory(item) && !item.children" (click)="onexpand(item)" [routerLink]="item.url">
+        <span class="system-main__icon">
+          <i [class]="item.icon"></i>
+        </span>
+        <span class="system-main__name"> {{ item.title }} </span>
+      </div>
+
+      <!-- Submenu -->
+      <ul class="system-main__apps-submenu" style="list-style: disc" *ngIf="item.children && item.expanded">
+        <div *ngFor="let i of item.children">
+          <div class="small fw-semibold" *ngIf="i.title == 'Study' || i.title == 'Career' || i.title == 'Life'">
+            {{ i.title }}
+          </div>
+
+          <!-- Nested expandable item (like Requirement) -->
+          <li *ngIf="i.children && i.title != 'Study' && i.title != 'Career' && i.title != 'Life'" style="font-size: 0.9rem">
+            <div class="system-main__apps-child d-flex justify-content-between" (click)="toggleExpand(i, $event)" style="cursor: pointer;">
+              <div>
+                <span class="system-main__icon"><i [class]="i.icon"></i></span>
+                <span class="system-main__name"> {{ i.title }} </span>
+              </div>
+              <span class="chevron">
+                <i class="fa-solid" [ngClass]="i.expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+              </span>
+            </div>
+            <!-- Nested submenu -->
+            <ul class="system-main__apps-submenu" style="list-style: circle; margin-left: 20px;" *ngIf="i.expanded">
+              <li *ngFor="let subItem of i.children" style="font-size: 0.85rem">
+                <div class="system-main__apps-child" [routerLink]="subItem.url">
+                  <span class="system-main__icon"><i [class]="subItem.icon"></i></span>
+                  <span class="system-main__name"> {{ subItem.title }} </span>
+                </div>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Regular child item (no nested children) -->
+          <li *ngIf="!i.children && i.title != 'Study' && i.title != 'Career' && i.title != 'Life'" style="font-size: 0.9rem">
+            <div class="system-main__apps-child" [routerLink]="i.url" [queryParams]="i.queryParams || {}">
+              <span class="system-main__icon"><i [class]="i.icon"></i></span>
+              <span class="system-main__name"> {{ i.title }} </span>
+            </div>
+          </li>
+        </div>
+      </ul>
+    </li>
+  </ng-container>
+</ul>
+
+<div class="offcanvas offcanvas-start w-75" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+  <div class="offcanvas-header pb-0">
+    <div class="app-title w-75 m-0">
+      <ng-container *ngTemplateOutlet="appTitle || defaultTitle"></ng-container>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body overflow-y-hidden pt-0">
+    <ul id="menu-items">
+      <li class="menutitle">
+        <p class="mb-0 px-2 pb-0 font-secondarycolor text-small fw-semibold">Main Menu</p>
+      </li>
+      <ng-container *ngFor="let item of menus">
+        <li [ngClass]="{ 'menu-item': true, active: item.active, overlap: isOverlap }" *ngIf="item.permissions | permission : userPermissions">
+          <ng-container *ngIf="item.header; else menu">
+            <div class="system-main__apps header">
+              <span class="system-main__icon"><i [class]="item.icon"></i></span>
+              <span class="system-main__name"> {{ item.title }} </span>
+            </div>
+          </ng-container>
+          <ng-template #menu>
+            <!-- Category headers -->
+            <div class="small ps-3 submenuitem fw-semibold" *ngIf="isCategory(item)">
+              {{ item.title }}
+            </div>
+
+            <!-- Expandable items (with children) -->
+            <div class="system-main__apps d-flex justify-content-between" *ngIf="!isCategory(item) && item.children" (click)="toggleExpand(item, $event)">
+              <div>
+                <span class="system-main__icon">
+                  <i [class]="item.icon"></i>
+                </span>
+                <span class="system-main__name"> {{ item.title }} </span>
+              </div>
+              <span class="chevron">
+                <i class="fa-solid" [ngClass]="item.expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+              </span>
+            </div>
+
+            <!-- Normal non-expandable clickable items -->
+            <div class="system-main__apps" *ngIf="!isCategory(item) && !item.children" data-bs-dismiss="offcanvas" (click)="onexpand(item)">
+              <span class="system-main__icon">
+                <i [class]="item.icon"></i>
+              </span>
+              <span class="system-main__name"> {{ item.title }} </span>
+            </div>
+          </ng-template>
+
+          <!-- Submenu -->
+          <ul class="system-main__apps-submenu" *ngIf="item.children && item.expanded" style="list-style: disc">
+            <div *ngFor="let i of item.children">
+              <div class="small fw-semibold" *ngIf="i.title == 'Study' || i.title == 'Career' || i.title == 'Life'">
+                {{ i.title }}
+              </div>
+
+              <!-- Nested expandable item (like Requirement) -->
+              <li *ngIf="i.children && i.title != 'Study' && i.title != 'Career' && i.title != 'Life'" style="font-size: 0.9rem">
+                <div class="system-main__apps-child d-flex justify-content-between" (click)="toggleExpand(i, $event)" style="cursor: pointer;">
+                  <div>
+                    <span class="system-main__icon"><i [class]="i.icon"></i></span>
+                    <span class="system-main__name"> {{ i.title }} </span>
+                  </div>
+                  <span class="chevron">
+                    <i class="fa-solid" [ngClass]="i.expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                  </span>
+                </div>
+                <!-- Nested submenu -->
+                <ul class="system-main__apps-submenu" style="list-style: circle; margin-left: 20px;" *ngIf="i.expanded">
+                  <li *ngFor="let subItem of i.children" style="font-size: 0.85rem">
+                    <div class="system-main__apps-child" [routerLink]="subItem.url" data-bs-dismiss="offcanvas">
+                      <span class="system-main__icon"><i [class]="subItem.icon"></i></span>
+                      <span class="system-main__name"> {{ subItem.title }} </span>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+
+              <!-- Regular child item (no nested children) -->
+              <li *ngIf="!i.children && i.title != 'Study' && i.title != 'Career' && i.title != 'Life'" style="font-size: 0.9rem">
+                <div class="system-main__apps-child" [routerLink]="i.url" [queryParams]="i.queryParams || {}" data-bs-dismiss="offcanvas">
+                  <span class="system-main__icon"><i [class]="i.icon"></i></span>
+                  <span class="system-main__name"> {{ i.title }} </span>
+                </div>
+              </li>
+            </div>
+          </ul>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+</div>

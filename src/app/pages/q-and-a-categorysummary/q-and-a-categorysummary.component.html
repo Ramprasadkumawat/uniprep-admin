@@ -1,0 +1,166 @@
+<p-accordion value="0">
+	<p-accordion-panel value="1" class="p-element">
+		<p-accordion-header>Filter Q&A Category Summary</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="qaCategorySummaryForm" (ngSubmit)="submitFilter()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Home Country Name</label>
+							<p-multiselect class="border-black paddingfive mt-2" styleClass="w-full" [options]="homecountries" optionValue="id" formControlName="homecountryId" placeholder="Select Country" optionLabel="country" selectedItemsLabel="{0} items selected" [maxSelectedLabels]="0"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Country Name</label>
+							<p-multiselect class="border-black paddingfive mt-2" styleClass="w-full" [options]="countryList" optionValue="id" formControlName="countryId" placeholder="Select Country" optionLabel="country" selectedItemsLabel="{0} items selected" [maxSelectedLabels]="0"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Module</label>
+							<p-multiselect class="border-black paddingfive mt-2" (onChange)="loadSubmodulesList()" styleClass="w-full" [options]="modulesList" optionValue="id" formControlName="moduleId" placeholder="Select Module" optionLabel="module_name" selectedItemsLabel="{0} items selected" [maxSelectedLabels]="0"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Sub-Module</label>
+							<p-multiselect [options]="listOfSubmodules" [group]="true" styleClass="w-100" defaultLabel="Select a Module" scrollHeight="250px" display="chip" formControlName="submodule_id" optionValue="value">
+								<ng-template let-group pTemplate="group">
+									<div class="flex align-items-center">
+										<span>{{ group.label }}</span>
+									</div>
+								</ng-template>
+							</p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Generic</label>
+							<p-select optionValue="id" optionLabel="name" styleClass="w-full" formControlName="generic" [options]="categoryDropdownList"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>International</label>
+							<p-select optionValue="id" optionLabel="name" styleClass="w-full" formControlName="international" [options]="categoryDropdownList"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>National</label>
+							<p-select optionValue="id" optionLabel="name" styleClass="w-full" formControlName="national" [options]="categoryDropdownList"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>UG</label>
+							<p-select optionValue="id" optionLabel="name" styleClass="w-full" formControlName="ug" [options]="categoryDropdownList"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>PG</label>
+							<p-select optionValue="id" optionLabel="name" styleClass="w-full" formControlName="pg" [options]="categoryDropdownList"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Others</label>
+							<p-select optionValue="id" optionLabel="name" styleClass="w-full" formControlName="others" [options]="categoryDropdownList"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-12 text-right">
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton (click)="resetFilter()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" label="Reset Filter"></button>&nbsp;
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit" label="Filter"></button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div>
+	<p-table size="small" scrollHeight="600px" [scrollable]="true" styleClass="p-datatable-gridlines" [value]="loadCategorySummaryData" [totalRecords]="totalSubmoduleCount" [tableStyle]="{ 'min-width': '40rem' }" sortMode="multiple" [globalFilterFields]="['submodule_name', 'questioncount', 'generic', 'national', 'foundation', 'ug', 'diploma', 'pg', 'pg_diploma']">
+		<ng-template pTemplate="caption">
+			Q&A Summary<br />
+			<div class="d-flex justify-content-between">
+				<div class="p-2">
+					<div class="row">
+						<div class="col">
+							<small style="color: #7d7574">Total Modules : {{ totalModuleCount }}</small
+							>&nbsp;&nbsp; <small style="color: #7d7574">Total Sub-Modules : {{ totalSubmoduleCount }}</small
+							>&nbsp;&nbsp; <small style="color: #7d7574">Total Countries : {{ total_countries }}</small
+							>&nbsp;&nbsp; <small style="color: #7d7574">Total Questions : {{ totalquestioncount }}</small
+							>&nbsp;&nbsp; <small style="color: #7d7574">Total Foundation : {{ totalFoundation }}</small
+							>&nbsp;&nbsp;
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<small style="color: #7d7574">Total Generic: {{ total_generic }}</small
+							>&nbsp;&nbsp;
+							<!-- <small style="color: #7d7574;">Total International : {{total_international}}</small>&nbsp;&nbsp; -->
+							<small style="color: #7d7574">Total National : {{ total_national }}</small
+							>&nbsp;&nbsp; <small style="color: #7d7574">Total UG : {{ total_ug }}</small
+							>&nbsp;&nbsp; <small style="color: #7d7574">Total PG : {{ total_pg }}</small
+							>&nbsp;&nbsp; <small style="color: #7d7574">Total Diploma : {{ totalDiploma }}</small
+							>&nbsp;&nbsp; <small style="color: #7d7574">Total PG Diploma : {{ totalPgDiploma }}</small
+							>&nbsp;&nbsp; <small style="color: #7d7574">Total Others : {{ total_others }}</small
+							>&nbsp;&nbsp;
+						</div>
+					</div>
+				</div>
+				<div class="p-2 ml-auto">
+					<div class="d-flex">
+						<div class="p-2">
+							<button class="btn btn-primary" (click)="updateQuesCountSummary()">Update Counts &nbsp; <i class="fa-solid fa-arrows-rotate"></i></button>
+						</div>
+						<div class="p-2">
+							<button class="btn btn-primary" (click)="exportQuestionSummary()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-template>
+		<ng-template pTemplate="header">
+			<tr>
+				<th>Home Country</th>
+				<th>Country</th>
+				<th>Module</th>
+				<th pSortableColumn="submodule_name">Sub Module<p-sortIcon field="submodule_name"></p-sortIcon></th>
+				<th pSortableColumn="questioncount">Total<p-sortIcon field="questioncount"></p-sortIcon></th>
+				<th pSortableColumn="generic">Generic<p-sortIcon field="generic"></p-sortIcon></th>
+				<!-- <th pSortableColumn="international">International<p-sortIcon field="international"></p-sortIcon></th> -->
+				<th pSortableColumn="national">National<p-sortIcon field="national"></p-sortIcon></th>
+				<th pSortableColumn="foundation">Foundation<p-sortIcon field="foundation"></p-sortIcon></th>
+				<th pSortableColumn="ug">UG<p-sortIcon field="ug"></p-sortIcon></th>
+				<th pSortableColumn="diploma">Diploma<p-sortIcon field="diploma"></p-sortIcon></th>
+				<th pSortableColumn="pg">PG<p-sortIcon field="pg"></p-sortIcon></th>
+				<th pSortableColumn="pg_diploma">PG Diploma<p-sortIcon field="pg_diploma"></p-sortIcon></th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-item>
+			<tr>
+				<td>{{ item.homecountry }}</td>
+				<td>{{ item.country }}</td>
+				<td>{{ item.module_name }}</td>
+				<td>{{ item.submodule_name }}</td>
+				<td>{{ item.questioncount ? item.questioncount : 0 }}</td>
+				<td class="columnClick" (click)="onCountClick('Generic', item, item.generic ? item.generic : 0)">{{ item.generic ? item.generic : 0 }}</td>
+				<!-- <td>{{ item.international ?  item.international : 0}}</td> -->
+				<td class="columnClick" (click)="onCountClick('National', item, item.national ? item.national : 0)">{{ item.national ? item.national : 0 }}</td>
+				<td class="columnClick" (click)="onCountClick('Foundation', item, item.foundation ? item.foundation : 0)">{{ item.foundation ? item.foundation : 0 }}</td>
+				<td class="columnClick" (click)="onCountClick('Undergraduate', item, item.ug ? item.ug : 0)">{{ item.ug ? item.ug : 0 }}</td>
+				<td class="columnClick" (click)="onCountClick('Diploma', item, item.diploma ? item.diploma : 0)">{{ item.diploma ? item.diploma : 0 }}</td>
+				<td class="columnClick" (click)="onCountClick('Postgraduate', item, item.pg ? item.pg : 0)">{{ item.pg ? item.pg : 0 }}</td>
+				<td class="columnClick" (click)="onCountClick('PG Diploma', item, item.pg_diploma ? item.pg_diploma : 0)">{{ item.pg_diploma ? item.pg_diploma : 0 }}</td>
+				<!-- <td>{{ item.others ?  item.other : 0 }}</td> -->
+			</tr>
+		</ng-template>
+	</p-table>
+	<div class="card-footer">
+		<p-paginator [rows]="rows" [totalRecords]="totalSubmoduleCount" (onPageChange)="pageChange($event)" [rowsPerPageOptions]="[100, 500, 1000]"></p-paginator>
+	</div>
+</div>

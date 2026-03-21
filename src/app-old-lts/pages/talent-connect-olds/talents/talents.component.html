@@ -1,0 +1,1082 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Employees</p-accordion-header>
+		<p-accordion-content>
+    <form [formGroup]="filterForm" (ngSubmit)="filterEmployees()">
+      <!-- First Row -->
+	<div class="row mt-2">
+		<div class="col-12 col-md-3 mb-3">
+			<label class="fw-bold mb-2 d-block">Talent ID</label>
+			<input pInputText formControlName="talent_id" class="w-100" placeholder="Enter the Talent ID" />
+		</div>
+		        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Candidate Name</label>
+          <input pInputText formControlName="candidate_name" class="w-100"
+            placeholder="Enter the Talent Name" />
+        </div> 
+		<div class="col-12 col-md-3 mb-3">
+			<label class="fw-bold mb-2 d-block">Email</label>
+			<input pInputText formControlName="email" class="w-100" placeholder="Enter the Email" />
+		</div>
+		<div class="col-12 col-md-3 mb-3">
+			<label class="fw-bold mb-2 d-block">Phone No</label>
+			<div class="w-100 position-relative">
+				<ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']"
+					[enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10"
+					[searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [phoneValidation]="false"
+					[selectedCountryISO]="preferredCountry" name="phone" formControlName="phone"
+					customPlaceholder="Enter phone number"> </ngx-intl-tel-input>
+			</div>
+		</div>
+	</div>
+      <div class="row mt-2">
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Nationality</label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="nationalityList"
+            formControlName="nationality" placeholder="Select the Nationality" styleClass="w-100"
+            optionLabel="nationality_name" optionValue="id" [filter]="true" filterBy="nationality_name"></p-multiselect>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Candidate Country</label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="countryList"
+            formControlName="candidate_country" placeholder="Select the Country" styleClass="w-100"
+            optionLabel="country" optionValue="id" [filter]="true" filterBy="country"></p-multiselect>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Candidate Location</label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="locations" formControlName="location" placeholder="Enter Location" styleClass="w-100"
+            optionLabel="work_location" optionValue="id" [filter]="true" filterBy="work_location"></p-multiselect>
+        </div>
+		        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Gender</label>
+          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="genderOptions" formControlName="gender" placeholder="Gender"
+            styleClass="w-100"></p-select>
+        </div>
+      </div>
+
+      <!-- Second Row -->
+      <div class="row">
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Institute Name</label>
+          <input pInputText formControlName="institute_name" class="w-100"
+            placeholder="Search Talent by Institute" />
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Campus Hiring Country</label>
+          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="campushiringcountrylist"
+            formControlName="campus_hiring_country" placeholder="Select the Country" styleClass="w-100"
+            optionLabel="country" optionValue="id" [filter]="true" filterBy="country"></p-select>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Campus Hiring Institute</label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="filteredinstitutelist"
+            formControlName="campus_hiring_institute" placeholder="Select the Institute" styleClass="w-100"
+            optionLabel="institutename" optionValue="id" [filter]="true" filterBy="institutename"></p-multiselect>
+        </div>
+		        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Highest (Last) Qualification</label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="qualifications" formControlName="qualification"
+            placeholder="Select your Highest Qualification" styleClass="w-100" optionLabel="qualification_name"
+            optionValue="id" [filter]="true" filterBy="qualification_name"></p-multiselect>
+        </div>
+      </div>
+
+      <!-- Third Row -->
+      <div class="row">
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Field Of Study </label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="fieldsOfStudy" formControlName="fieldofstudy" placeholder="Select the Field Of Study"
+            styleClass="w-100" optionLabel="field_name" optionValue="id" [filter]="true"
+            filterBy="field_name"></p-multiselect>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Total Years Of Experience</label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="totalYearExperienceList" formControlName="experience"
+            placeholder="Select total years of experience" styleClass="w-100"></p-multiselect>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Career Status</label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="careerStatus" formControlName="career_status_id"
+            placeholder="Select your Career Status" styleClass="w-100" [filter]="true" appendTo="body"></p-multiselect>
+        </div>
+		       <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Job Title(s) Looking For </label>
+          <input pInputText formControlName="job_title" class="w-100"
+            placeholder="Search Job Title"/>
+        </div>
+      </div>
+
+      <!-- Fourth Row -->
+      <div class="row">
+        <div class="col-12 col-md-6 mb-3">
+        <label class="fw-bold mb-2 d-block">Salary Expected</label>
+        <div class="row g-2 align-items-center">
+          <div class="col-4">
+            <p-select
+              formControlName="currency_id"
+              [options]="currencies"
+              [filter]="true"
+              filterBy="currency_code"
+              placeholder="Code"
+              styleClass="w-100"
+              optionLabel="currency_code"
+              optionValue="id">
+            </p-select>
+          </div>
+          <div class="col-4">
+            <p-inputNumber
+              formControlName="min_salary"
+              inputStyleClass="w-100"
+              placeholder="Min.">
+            </p-inputNumber>
+          </div>
+          <div class="col-4">
+            <p-inputNumber
+              formControlName="max_salary"
+              inputStyleClass="w-100"
+              placeholder="Max.">
+            </p-inputNumber>
+          </div>
+        </div>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Languages Known </label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="languagelist" formControlName="langauge_id" placeholder="Select the Languages Known"
+            styleClass="w-100" optionLabel="language" optionValue="id" [filter]="true" filterBy="language"
+            appendTo="body"></p-multiselect>
+        </div>
+		        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Interested Industry
+          </label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="careerInterests" formControlName="career_interest_id" placeholder="Select the Industry"
+            styleClass="w-100" optionLabel="interest" optionValue="id" [filter]="true" filterBy="interest"
+            appendTo="body"></p-multiselect>
+        </div>
+      </div>
+
+      <!-- Fifth Row -->
+      <div class="row">
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Preferred Work Location(s)
+          </label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="preferredLocationList" [virtualScroll]="true" [virtualScrollItemSize]="50"
+            formControlName="work_location_id" placeholder="Select the Preferred Work Location(s)" styleClass="w-100"
+            optionLabel="work_location" optionValue="id" appendTo="body" [filter]="true"
+            filterBy="work_location"></p-multiselect>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Preferred Employment Type </label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="preferredEmploymentType" formControlName="employment_type"
+            placeholder="Select the Preferred Employment Type" styleClass="w-100" appendTo="body"></p-multiselect>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Preferred Work Type </label>
+          <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="preferredWorkplaceType" formControlName="workplace_type_id"
+            placeholder="Select the Preferred Work Type" styleClass="w-100" appendTo="body"></p-multiselect>
+        </div>
+		        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Profile Completion</label>
+          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="profileCompletionOption" formControlName="profile_completion"
+            placeholder="Select the Completion Range" optionLabel="label" optionValue="value"styleClass="w-100" appendTo="body"></p-select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Willingness to Relocate?</label>
+          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="['Yes', 'No']" formControlName="relocate" placeholder="Choose Yes/No"
+            styleClass="w-100" appendTo="body"></p-select>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Profile Verification Status</label>
+          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="verifiedOptions" formControlName="verification_status"
+            placeholder="Verified, Not Verified" styleClass="w-100" appendTo="body"></p-select>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <div class="form-group">
+            <label class="fw-bold mb-2 d-block">Introduction Video</label>
+            <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" styleClass="w-full" formControlName="introduction_video" placeholder="Yes/No"
+              optionLabel="label" optionValue="value" [options]="introductionVideo"></p-select>
+          </div>
+        </div>
+      </div>
+
+				<!-- Action Buttons -->
+				<div class="d-flex justify-content-end mt-1 gap-2">
+					<button pButton type="button" label="Reset Filter" class="p-button-outlined btn-danger" (click)="resetFilter()"></button>
+					<button pButton type="submit" label="Filter Talents" class="p-button-primary"></button>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<div class="employer-verification-container">
+  <div class="header-section p-3 bg-white border-bottom">
+    <div class="d-flex justify-content-between align-items-center pb-3">
+      <div class="d-flex gap-2">
+        <div>
+          <h4 class="mb-0">Talent Verification</h4>
+          <small class="text-muted">Total Employees:
+            {{ totalEmployeeCount.toString().padStart(2, "0") }}</small>
+        </div>
+        <!-- <div class="my-auto">
+          <div class="p-inputgroup p-0 rounded-3 my-auto" style="width: 200px">
+            <input pInputText placeholder="Keyword" class="p-0" />
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-search"> </i>
+            </span>
+          </div>
+        </div> -->
+      </div>
+      <div class="d-flex align-items-center">
+        <div class="me-3">
+          <span *ngIf="selectedCard === 'list'">Selected : {{ selectedCount }}</span>
+          <span *ngIf="selectedCard === 'card'" class="my-auto">
+            <button pButton class="btn-primary me-2" label="Select All" (click)="oncardSelectAll()"></button>
+            <span class="my-auto">Selected : {{ selectedCardIds.length }}</span>
+          </span>
+          <button pButton type="button" class="p-button-success p-button-raised ms-2" (click)="verifyselected()">
+            Verify Selected
+          </button>
+        </div>
+        <!-- <p-selectButton [options]="viewOptions" [(ngModel)]="selectedCard" optionLabel="label"
+          optionValue="value"></p-selectButton> -->
+      </div>
+      <div class="btn-group">
+        <!-- <button pButton class="btn-primary me-2" icon="pi pi-upload" label="Import"></button> -->
+        <button pButton class="btn-primary" icon="pi pi-download" (click)="exportTalentList()" label="Export"></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="selectedCard == 'list'" style="width: 100%; height: 80vh; overflow: auto; overflow-x: hidden"
+  class="mt-2 table-employer bg-white">
+  <p-table size="small" scrollHeight="600px" [value]="employeesList" [tableStyle]="{ 'min-width': '110rem' }" [(selection)]="selectedEmployees"
+    (selectionChange)="onSelectionChange()" dataKey="id" [rowHover]="true" [scrollable]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th pSortableColumn="employeeName">
+          Employee Name <p-sortIcon field="employeeName"></p-sortIcon>
+        </th>
+        <th pSortableColumn="location">
+          Location <p-sortIcon field="location"></p-sortIcon>
+        </th>
+        <th pSortableColumn="desiredJobTitle">
+          Desired Job Title <p-sortIcon field="desiredJobTitle"></p-sortIcon>
+        </th>
+        <th pSortableColumn="expectedSalary">
+          Expected Salary <p-sortIcon field="expectedSalary"></p-sortIcon>
+        </th>
+        <th pSortableColumn="totalExperience">
+          Total Experience <p-sortIcon field="totalExperience"></p-sortIcon>
+        </th>
+        <th pSortableColumn="completion">
+          Completion <p-sortIcon field="completion"></p-sortIcon>
+        </th>
+        <th pSortableColumn="appliedJobs">
+          Applied Jobs <p-sortIcon field="appliedJobs"></p-sortIcon>
+        </th>
+				<th pSortableColumn="employer_seen">
+					Employer Seen <p-sortIcon field="employer_seen"></p-sortIcon>
+				</th>
+        <!-- <th pSortableColumn="companyConnect">
+          Company Connect <p-sortIcon field="companyConnect"></p-sortIcon>
+        </th> -->
+		<th pSortableColumn="placement" style="width: 200px;">
+          Placement <p-sortIcon field="placement"></p-sortIcon>
+        </th>
+        <th pSortableColumn="actions">
+          Actions <p-sortIcon field="actions"></p-sortIcon>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-employee>
+      <tr>
+        <td>
+          <p-tableCheckbox [value]="employee"></p-tableCheckbox>
+        </td>
+        <td>
+          <div class="d-flex align-items-center">
+            <img [src]="employee?.image" class="rounded-circle mr-2" width="40" height="40" />
+            <div>
+              {{ employee?.full_name }}
+              <i *ngIf="employee?.verified" class="pi pi-check-circle text-success"></i><br />
+              <small class="text-muted">Profile Updated On {{ employee?.updated_at_format }}</small>
+            </div>
+          </div>
+        </td>
+        <td>
+          <span *ngIf="employee?.district">{{ employee?.district }},</span><span *ngIf="employee?.state">{{
+            employee?.state }},</span>{{ employee?.country }}
+        </td>
+        <td>{{ employee?.job_title }}</td>
+        <td>{{ employee?.expected_salary }}</td>
+        <td>{{ employee?.total_years_of_experience }}</td>
+        <td>
+          <p-progressBar [value]="employee?.profile_completion" [showValue]="false"></p-progressBar>
+          <span>{{ employee?.profile_completion }}%</span>
+        </td>
+        <td>
+          {{ employee?.appliedJobs }}&nbsp;
+          <i class="fa-solid fa-arrow-up-right-from-square"
+            [routerLink]="['/talent-connect/talents/jobs', employee.id]"></i>
+        </td>
+				<td>
+					{{ employee?.employer_seen || 0 }}&nbsp;
+					<i class="fa-solid fa-arrow-up-right-from-square" style="cursor: pointer;"
+						[routerLink]="['/companies/view-companies', employee.id]"></i>
+				</td>
+        <!-- <td>
+          {{ employee?.companyConnect }}&nbsp;
+          <i class="fa-solid fa-arrow-up-right-from-square"
+            [routerLink]="['/talent-connect/talents/company', employee.id]"></i>
+        </td> -->
+		<td class="text-center">
+			<div class="mb-1 text-end" *ngIf="!employee.is_placed">
+				<button pButton type="button" class="share-button p-1" icon="pi pi-plus" (click)="openPlacementModal(employee.id)">
+				</button>
+			</div>
+          	<div>{{employee.is_placed ? 'Placed': '-' }}</div>
+			<div *ngIf="employee.is_placed">
+				<div class="mt-1">{{ employee?.placed_designation + ' - ' + employee?.placed_company_name }}</div>
+				<div class=mt-1>
+					<p-confirmpopup></p-confirmpopup>
+					<button pButton type="button" class="p-button-danger p-button-raised" (click)="deletePlacement($event, employee.id)">
+						<div style="font-size:12px">
+							<i class="pi pi-trash"></i>&nbsp;<span>Delete Success Stories</span>
+						</div>
+					</button>
+				</div>
+			</div>
+        </td>
+        <td>
+          <div class="d-flex flex-column gap-2 align-items-center" style="font-size: 15px">
+            <span *ngIf="employee?.verify == 0" (click)="verifystudent(employee.id)" style="cursor: pointer"><i
+                class="pi pi-check"></i>&nbsp; Verify</span>
+            <!-- <span *ngIf="employee?.verify" style="cursor: pointer"><i
+            ></i>&nbsp; Verified</span> -->
+            <span style="cursor: pointer" (click)="viewMoreInfo(employee)"><i class="pi pi-briefcase"></i>&nbsp;More
+              Info</span>
+			<div class="d-flex gap-2">
+            <button pButton class="share-button" (click)="shareOverlay.toggle($event)">
+              <i class="fa-solid fa-share-nodes"></i>&nbsp;<span>Share</span>
+            </button>
+			<button pButton *ngIf="employee?.verify == 1" (click)="rejectstudent(employee.id)" class="delete-button">Deactivate</button>
+			</div>
+            <p-popover #shareOverlay>
+              <ul style="list-style: none; cursor: pointer; padding-left: 0;">
+                <li (click)="shareQuestion($event, 'Whatsapp', employee)"><i class="pi pi-whatsapp"></i>
+                  Whatsapp</li>
+                <li (click)="shareQuestion($event, 'Mail', employee)"><i class="pi pi-envelope"></i>
+                  Email</li>
+                <li (click)="shareQuestion($event, 'Facebook', employee)"><i class="pi pi-facebook"></i>
+                  Facebook</li>
+                <li (click)="shareQuestion($event, 'Twitter', employee)"><i class="pi pi-twitter"></i>
+                  Twitter</li>
+                <li (click)="shareQuestion($event, 'Instagram', employee)"><i class="pi pi-instagram"></i> Instagram
+                </li>
+                <li (click)="shareQuestion($event, 'LinkedIn', employee)"><i class="pi pi-linkedin"></i>
+                  LinkedIn</li>
+                <li (click)="copyLink($event, employee)"><i class="pi pi-link"></i> Copy Link</li>
+              </ul>
+            </p-popover>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <p-scrollTop target="parent" styleClass="custom-scrolltop" [threshold]="100" icon="pi pi-arrow-up"></p-scrollTop>
+
+	<div class="footer-section p-3 d-flex justify-content-center">
+		<p-paginator (onPageChange)="pageChange($event)" [rows]="perPage" [totalRecords]="totalEmployeeCount" [rowsPerPageOptions]="[10, 50, 100]"></p-paginator>
+	</div>
+</div>
+<div *ngIf="selectedCard === 'card'" class="card-view p-3">
+	<div class="row g-3">
+		<div *ngFor="let employee of employeesList" class="col-xxl-3 col-xl-3 col-lg-4 col-md-6 mb-3">
+				<div class="card">
+					<div class="card-body">
+						<!-- Header -->
+						<div class="d-flex justify-content-between align-items-start mb-3">
+							<div class="d-flex gap-3">
+								<!-- Company Logo -->
+								<div class="company-logo border rounded-3 overflow-hidden object-fit-cover" style="aspect-ratio:1;max-width:60px;object-position:center;">
+									<img [src]="employee?.image" alt="Company Logo" class="w-100" />
+								</div>
+
+								<!-- Company Name and Info -->
+								<div>
+									<div class="d-flex align-items-center">
+										<h6 class="mb-0 fw-bold">{{ employee?.full_name }}</h6>
+										<i *ngIf="employee?.verified" class="pi pi-check-circle ms-2 text-warning"></i>
+									</div>
+									<p class="text-muted small mb-1">Profile Updated On : {{ employee?.updated_at_format }}</p>
+
+									<!-- Profile Completion -->
+									<div>
+										<div class="d-flex justify-content-between small mb-1">
+											<span>Profile Completion: {{ employee?.profile_completion }}%</span>
+										</div>
+										<p-progressBar [value]="employee?.profile_completion" [showValue]="false" [style]="{ height: '6px' }" styleClass="profile-progress"></p-progressBar>
+									</div>
+								</div>
+							</div>
+
+							<!-- Bookmark Icon -->
+							<div>
+								<p-checkbox [ngModel]="selectedCardIds.includes(employee.id)" (onChange)="onSelectCard(employee.id, $event)" [binary]="true"></p-checkbox>
+							</div>
+						</div>
+
+						<!-- Stats -->
+						<div class="row mb-4">
+							<!-- Open Jobs -->
+							<div class="col-6">
+								<div class="d-flex align-items-center">
+									<div class="stats-icon me-2">
+										<i class="pi pi-briefcase text-primary"></i>
+									</div>
+									<div>
+										<p class="text-muted mb-0 small">Applied Jobs</p>
+										<p class="fw-bold mb-0">
+											{{ employee?.appliedJobs.toString().padStart(2, "0") }}
+										</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Talent Connect -->
+							<div class="col-6">
+								<div class="d-flex align-items-center">
+									<div class="stats-icon me-2">
+										<i class="pi pi-users text-success"></i>
+									</div>
+									<div>
+										<p class="text-muted mb-0 small">Company Connect</p>
+										<p class="fw-bold mb-0">{{ employee?.companyConnect }}</p>
+									</div>
+								</div>
+							</div>
+							<!-- NEW: Employer Seen -->
+							<div class="col-4">
+								<div class="d-flex align-items-center" style="cursor: pointer;">
+									<div class="stats-icon me-2">
+										<i class="pi pi-eye text-info"></i>
+									</div>
+									<div>
+										<p class="text-muted mb-0 small">Employer Seen</p>
+										<p class="fw-bold mb-0">{{ employee?.employer_seen.toString().padStart(2, "0") || 0 }}
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row mb-4">
+							<div class="col-12">
+								<div class="d-flex align-items-center">
+									<div class="stats-icon me-2">
+										<i class="pi pi-map-marker text-success"></i>
+									</div>
+									<div>
+										<p class="text-muted mb-0 small">Desired Job Title</p>
+										<p class="fw-bold mb-0">{{ employee?.job_title }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Company Details -->
+						<div class="row mb-4">
+							<!-- Company Type -->
+							<div class="col-6">
+								<div class="d-flex align-items-center">
+									<div class="stats-icon me-2">
+										<i class="pi pi-building text-warning"></i>
+									</div>
+									<div>
+										<p class="text-muted mb-0 small">Expected Salary per month</p>
+										<p class="fw-bold mb-0">{{ employee?.expected_salary }}</p>
+									</div>
+								</div>
+							</div>
+
+							<!-- Industry -->
+							<div class="col-6">
+								<div class="d-flex align-items-center">
+									<div class="stats-icon me-2">
+										<i class="pi pi-chart-bar text-secondary"></i>
+									</div>
+									<div>
+										<p class="text-muted mb-0 small">Total Experience</p>
+										<p class="fw-bold mb-0">{{ employee?.total_years_of_experience }}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+            <!-- Location -->
+            <div class="row mb-4">
+              <div class="col-12">
+                <div class="d-flex align-items-center">
+                  <div class="stats-icon me-2">
+                    <i class="pi pi-map-marker text-success"></i>
+                  </div>
+                  <div>
+                    <p class="text-muted mb-0 small">Current Location</p>
+                    <p class="fw-bold mb-0">{{ employee?.country }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+						<!-- Action Buttons -->
+						<div class="row">
+							<div class="col pe-1">
+								<button pButton type="button" label="Company Connect" [routerLink]="['/talent-connect/talents/company', employee.id]" class="p-button-warning p-button-raised w-100 p-2"></button>
+							</div>
+							<div class="col ps-1">
+								<button pButton type="button" label="Job Applied" [routerLink]="['/talent-connect/talents/jobs', employee.id]" class="p-button-primary p-button-raised w-100 p-2"></button>
+							</div>
+							<div class="col">
+								<button pButton class="share-button" (click)="shareOverlay.toggle($event)"><i class="fa-solid fa-share-nodes"></i>&nbsp;<span>Share</span></button>
+								<p-popover #shareOverlay>
+									<ul style="list-style: none; cursor: pointer; padding-left: 0">
+										<li (click)="shareQuestion($event, 'Whatsapp', employee)"><i class="pi pi-whatsapp"></i> Whatsapp</li>
+										<li (click)="shareQuestion($event, 'Mail', employee)"><i class="pi pi-envelope"></i> Email</li>
+										<li (click)="shareQuestion($event, 'Facebook', employee)"><i class="pi pi-facebook"></i> Facebook</li>
+										<li (click)="shareQuestion($event, 'Twitter', employee)"><i class="pi pi-twitter"></i> Twitter</li>
+										<li (click)="shareQuestion($event, 'Instagram', employee)"><i class="pi pi-instagram"></i> Instagram</li>
+										<li (click)="shareQuestion($event, 'LinkedIn', employee)"><i class="pi pi-linkedin"></i> LinkedIn</li>
+										<li (click)="copyLink($event, employee)"><i class="pi pi-link"></i> Copy Link</li>
+									</ul>
+								</p-popover>
+							</div>
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>
+	<div class="footer-section p-3 d-flex justify-content-center">
+		<p-paginator (onPageChange)="pageChange($event)" [rows]="perPage" [totalRecords]="totalEmployeeCount" [rowsPerPageOptions]="[10, 50, 100]"></p-paginator>
+	</div>
+</div>
+<!-- request-details-modal.component.html -->
+<p-dialog [(visible)]="showModal" [modal]="true" [draggable]="false" [resizable]="false" [style]="{ width: '80%' }"
+  [baseZIndex]="10000" [dismissableMask]="true">
+  <div class="container-fluid student-details">
+    <div class="card mb-4 mt-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3 col-lg-2">
+            <img [src]="
+                profileData?.dp_image || 'uniprep-assets/images/avatar.webp'
+              " alt="Profile Photo" class="img-fluid rounded" />
+          </div>
+          <div class="col-md-6 col-lg-7">
+            <h2 class="fw-bold">{{ profileData?.full_name }}</h2>
+            <p class="text-muted">
+              Profile Updated On:
+              {{ profileData?.updated_at_formatted }}
+            </p>
+            <div class="row g-2 mt-2">
+              <div class="col-md-3">
+                <div class="d-flex align-items-center">
+                  <i class="fa-solid fa-calendar text-primary me-2"></i>
+                  <div>
+                    <div class="text-muted small">Date of Birth</div>
+                    <div>{{ profileData.date_of_birth }}</div>
+                  </div>
+                </div>
+              </div>
+			   <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                  <i class="fa-solid fa-envelope text-primary me-2"></i>
+                  <div>
+                    <div class="text-muted small">Email</div>
+                    <div>{{ profileData.email }}</div>
+                  </div>
+                </div>
+              </div>
+			   <div class="col-md-3">
+                <div class="d-flex align-items-center">
+                  <i class="fa-solid fa-phone text-primary me-2"></i>
+                  <div>
+                    <div class="text-muted small">Phone</div>
+                    <div>{{ profileData.phone }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="d-flex align-items-center">
+                  <i class="fa-solid fa-venus-mars text-danger me-2"></i>
+                  <div>
+                    <div class="text-muted small">Gender</div>
+                    <div>{{ profileData.gender }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                  <i class="fa-solid fa-earth-asia text-primary me-2"></i>
+                  <div>
+                    <div class="text-muted small">Nationality</div>
+                    <div>{{ profileData.nationality_name }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="d-flex align-items-center">
+                  <i class="fa-solid fa-location-crosshairs text-warning me-2"></i>
+                  <div>
+                    <div class="text-muted small">Current Location</div>
+                    <div>{{ profileData.current_location }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+						<div class="mt-3">
+							<div class="text-muted small mb-1">Profile Completion: {{ profileData.profile_completion }}%</div>
+							<p-progressBar [value]="profileData.profile_completion" [showValue]="false" styleClass="mb-3" [style]="{ height: '10px' }" [style.color]="'var(--p-secondary-500)'"></p-progressBar>
+						</div>
+					</div>
+					<div class="col-md-3 col-lg-3 d-flex flex-column gap-2 align-items-end">
+						<button pButton label="Edit Profile" icon="pi pi-pencil" class="p-button-outlined" routerLink="/pages/talent-connect/my-profile"></button>
+						<!-- <button pButton label="Share Profile" icon="pi pi-share-alt" class="p-button-outlined p-button-warning"></button> -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Education Details Section -->
+		<div class="card mb-4" *ngIf="profileData.education && profileData.education.length > 0">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-3">
+						<h3 class="fw-bold text-navy">Education Details</h3>
+					</div>
+					<div class="col-md-9">
+						<div class="row" *ngFor="let edu of profileData.education">
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Highest Qualification</div>
+								<div>{{ edu.qualification_name }}</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">University / Institution Name</div>
+								<div>{{ edu.university_name }}</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Field of Study / Major</div>
+								<div>{{ edu.field_of_study || "Not specified" }}</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Course Name</div>
+								<div>{{ edu.course_name }}</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Graduation Year</div>
+								<div>{{ edu.graduation_year_name }}</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">GPA / Percentage</div>
+								<div>{{ edu.gpa_percentage }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Work Experience Section -->
+		<div class="card mb-4">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-3">
+						<h3 class="fw-bold text-navy">Work Experience & Internships</h3>
+					</div>
+					<div class="col-md-9">
+						<div class="mb-4">
+							<div class="text-primary fw-bold">Total Years of Experience</div>
+							<div>
+								{{ profileData.total_years_of_experience || profileData.overall_years_experience }}
+							</div>
+						</div>
+
+						<div class="fw-bold fs-5 mb-3" *ngIf="profileData.work_experience && profileData.work_experience.length > 0">Work Experience Details</div>
+
+						<div class="row" *ngIf="profileData.work_experience && profileData.work_experience.length > 0">
+							<ng-container *ngFor="let exp of profileData.work_experience">
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Years of Experience</div>
+									<div>{{ exp.years_of_experience || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Company Name</div>
+									<div>{{ exp.company_name || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Job Title</div>
+									<div>{{ exp.job_title || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Employment Type</div>
+									<div>{{ exp.employment_type || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Duration</div>
+									<div>{{ exp.duration || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Salary</div>
+									<div>{{ exp.salary || "Not specified" }}</div>
+								</div>
+							</ng-container>
+						</div>
+
+						<div *ngIf="!profileData.work_experience || profileData.work_experience.length === 0" class="text-muted">No work experience details available</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Career Preferences Section -->
+		<div class="card mb-4" *ngIf="profileData.careerPreference">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-3">
+						<h3 class="fw-bold text-navy">Career Preferences & Aspirations</h3>
+						<div class="mt-3 text-warning">Confused about your career?</div>
+						<button pButton label="Click here to plan now!" class="p-button-outlined p-button-warning mt-2"></button>
+					</div>
+					<div class="col-md-9">
+						<div class="row">
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Career Status</div>
+								<div>{{ profileData.careerPreference.career_status }}</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Preferred Work Location</div>
+								<div>
+									{{ profileData.careerPreference.preferred_work_location?.join(",") || "Not specified" }}
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Willingness to Relocate?</div>
+								<div>
+									{{ profileData.careerPreference.willingness_to_relocate }}
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Job Title</div>
+								<div>
+									{{ profileData.careerPreference.job_title || "Not specified" }}
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Preferred Employment Type</div>
+								<div>
+									{{ profileData.careerPreference.preferred_employment_type?.join(",") }}
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Salary Range</div>
+								<div>{{ profileData.careerPreference.expected_salary }}</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Career Interest / Industry</div>
+								<div>
+									{{ profileData.careerPreference.career_interest_name || "Not specified" }}
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Preferred Workplace Type</div>
+								<div>
+									{{ profileData.careerPreference.preferred_workplace_type?.join(",") }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Certifications Section -->
+		<div class="card mb-4" *ngIf="profileData.certifications && profileData.certifications.length > 0">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-3">
+						<h3 class="fw-bold text-navy">Certifications & Achievements</h3>
+						<div class="mt-3 text-warning">Want to add more skills?</div>
+						<button pButton label="Click here to add more to your list!" class="p-button-outlined p-button-warning mt-2"></button>
+					</div>
+					<div class="col-md-9">
+						<div class="row">
+							<div class="col-md-8">
+								<ng-container *ngFor="let cert of profileData.certifications">
+									<div class="mb-3" *ngIf="cert.type === 'Certificate'">
+										<div class="text-primary fw-bold">Professional / online Certifications</div>
+										<div>{{ cert.name || "Not specified" }}</div>
+									</div>
+									<div class="mb-3" *ngIf="cert.type === 'Achievement'">
+										<div class="text-primary fw-bold">Achievement Name</div>
+										<div>{{ cert.name || "Not specified" }}</div>
+									</div>
+								</ng-container>
+							</div>
+							<div class="col-md-4">
+								<ng-container *ngFor="let cert of profileData.certifications">
+									<button *ngIf="cert.file_name" pButton [label]="extractFileName(cert.file_name)" icon="pi pi-download" class="p-button-outlined p-button-secondary mb-2 w-100 justify-content-between" (click)="openView(cert.file_name)"></button>
+								</ng-container>
+								<div class="text-muted">No certification files available</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    <!-- Additional Details Section -->
+    <div class="card mb-4" *ngIf="profileData.languages && profileData.languages.length > 0">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+            <h3 class="fw-bold text-navy">Additional Details</h3>
+            <div class="mt-3 text-warning">Looking to add more languages?</div>
+            <button pButton label="Click here to start learning!"
+              class="p-button-outlined p-button-warning mt-2"></button>
+          </div>
+          <div class="col-md-9">
+            <div class="row mb-4">
+              <div class="col-12">
+                <div class="text-primary fw-bold mb-2">Languages Known</div>
+                <ng-container *ngFor="let lang of profileData.languages">
+                  <div class="mb-2">
+                    <div class="d-flex align-items-center">
+                      <span class="me-2" style="width: 100px">{{
+                        lang.language_name.language
+                        }}</span>
+                     <div class="star-rating">
+                      <ng-container *ngFor="let star of starsArray(lang.proficiency)">
+                        <i class="pi" [ngClass]="star"></i>
+                      </ng-container>
+                    </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+		<!-- Key Strengths Section -->
+		<div class="card mb-4" *ngIf="profileData.careerPreference">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-3">
+						<h3 class="fw-bold text-navy">Key Strengths & Professional Traits</h3>
+						<div class="mt-3 text-warning">Want to add more skills?</div>
+						<button pButton label="Click here to add more to your list!" class="p-button-outlined p-button-warning mt-2"></button>
+					</div>
+					<div class="col-md-9">
+						<div class="mb-4">
+							<div class="text-primary fw-bold">What sets you apart in your industry?</div>
+							<p>
+								{{ profileData.careerPreference.set_industry_apart || "Not specified" }}
+							</p>
+						</div>
+
+						<div class="row">
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Have you solved a real-world challenge in your field?</div>
+								<div>
+									{{ profileData.careerPreference.real_world_challenge || "Not specified" }}
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Your top professional strength</div>
+								<div>
+									{{ profileData.careerPreference.professional_strength || "Not specified" }}
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6 mb-3">
+								<div class="text-primary fw-bold">Have you taken on leadership roles?</div>
+								<div>
+									{{ profileData.careerPreference.leadership_experience || "Not specified" }}
+								</div>
+							</div>
+							<div class="col-md-6 mb-3">
+								<div class="text-primary fw-bold">One quality others admire most about you</div>
+								<div>
+									{{ profileData.careerPreference.admired_quality || "Not specified" }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Professional Networking Section -->
+		<div class="card mb-4">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-3">
+						<h3 class="fw-bold text-navy">Professional Networking & Online Presence</h3>
+					</div>
+					<div class="col-md-9">
+						<div class="row">
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">LinkedIn Profile</div>
+								<a [href]="profileData.linkedin_profile" target="_blank" class="text-break" *ngIf="profileData.linkedin_profile">
+									{{ profileData.linkedin_profile }}
+								</a>
+								<div *ngIf="!profileData.linkedin_profile" class="text-muted">Not specified</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Personal Website</div>
+								<a [href]="profileData.personal_website" target="_blank" class="text-break" *ngIf="profileData.personal_website">
+									{{ profileData.personal_website }}
+								</a>
+								<div *ngIf="!profileData.personal_website" class="text-muted">Not specified</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Attachments Section -->
+		<div class="card mb-4" *ngIf="profileData.careerPreference">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-3">
+						<h3 class="fw-bold text-navy">Attachments & Media</h3>
+						<div class="mt-3 text-warning">Want to update your CV?</div>
+						<button pButton label="Click here to create or edit your resume!" class="p-button-outlined p-button-warning mt-2"></button>
+					</div>
+					<div class="col-md-9">
+						<div class="row">
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Introduction Video</div>
+								<div>
+									{{ profileData.careerPreference.video_link || "Not specified" }}
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Portfolio</div>
+								<div>
+									{{ profileData.careerPreference.portfolio_upload_link || "Not specified" }}
+								</div>
+							</div>
+							<div class="col-md-4 mb-3">
+								<div class="text-primary fw-bold">Upload CV / Resume</div>
+								<button *ngIf="profileData.careerPreference.cv_filename" pButton label="CV.pdf" icon="pi pi-download" class="p-button-outlined p-button-secondary w-100 justify-content-between"></button>
+								<div *ngIf="!profileData.careerPreference.cv_filename" class="text-muted">No CV uploaded</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- References Section -->
+		<div class="card mb-4" *ngIf="profileData.references && profileData.references.length > 0">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-3">
+						<h3 class="fw-bold text-navy">References & Endorsements</h3>
+					</div>
+					<div class="col-md-9">
+						<div class="mb-4" *ngIf="profileData.references && profileData.references.length > 0">
+							<div class="fw-bold fs-5 mb-3">Academic Reference</div>
+							<div class="row" *ngFor="let ref of profileData.references">
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">College Name</div>
+									<div>{{ ref.college_name || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Reference Name</div>
+									<div>{{ ref.reference_name || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Designation</div>
+									<div>{{ ref.designation || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Phone Number</div>
+									<div>{{ ref.phone_number || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Email</div>
+									<div>{{ ref.email || "Not specified" }}</div>
+								</div>
+							</div>
+						</div>
+
+						<div *ngIf="profileData.professional_references && profileData.professional_references.length > 0">
+							<div class="fw-bold fs-5 mb-3">Professional Reference</div>
+							<div class="row" *ngFor="let ref of profileData.professional_references">
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Organization Name</div>
+									<div>{{ ref.organization_name || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Reference Name</div>
+									<div>{{ ref.reference_name || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Designation</div>
+									<div>{{ ref.designation || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Phone Number</div>
+									<div>{{ ref.phone_number || "Not specified" }}</div>
+								</div>
+								<div class="col-md-4 mb-3">
+									<div class="text-primary fw-bold">Email</div>
+									<div>{{ ref.email || "Not specified" }}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</p-dialog>
+<p-dialog header="Placement Data" [(visible)]="isAddPlacementVisible" [modal]="true" [style]="{ width: '50vw' }" (onHide)="closePlacementModal()">
+	<form [formGroup]="placementForm" (ngSubmit)="submitPlacementForm()" #placementFormElm>
+		<div class="row">
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>Company Name</label>
+					<p-select formControlName="company_id" optionValue="id" optionLabel="company_name" styleClass="w-full" [options]="companyList" placeholder="Select Company" [virtualScroll]="true" [virtualScrollItemSize]="30" [filter]="true" appendTo="body"></p-select>
+					<div *ngIf="placementFormSubmitted && pf.company_id.errors" class="text-danger text-xs">
+						<div *ngIf="pf.company_id.errors.required">Company Name is Required</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 mb-2">
+				<div class="form-group">
+					<label>Designation</label>
+					<input formControlName="designation" type="text" class="form-control" pInputText  placeholder="Enter the Designation"/>
+					<div *ngIf="placementFormSubmitted && pf.designation.errors" class="text-danger text-xs">
+						<div *ngIf="pf.designation.errors.required">Designation is Required</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row mt-3">
+			<div class="col-12 text-right">
+				<button class="btn btn-primary" type="submit">Add Placement</button>
+			</div>
+		</div>
+	</form>
+</p-dialog>

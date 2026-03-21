@@ -1,0 +1,149 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1" selected="isAccordionSelected">
+		<p-accordion-header>{{ subModuleName }}</p-accordion-header
+		><p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+				<div class="row">
+					<div class="col-md-4">
+						<input formControlName="id" type="text" class="form-control" hidden pInputText />
+						<div class="form-group">
+							<label>Name</label>
+							<input formControlName="submodulename" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.submodulename.errors" class="text-danger text-xs">
+								<div *ngIf="f.submodulename.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>URL Slug</label>
+							<input formControlName="urlslug" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.urlslug.errors" class="text-danger text-xs">
+								<div *ngIf="f.urlslug.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<label>Image</label>
+						<div class="form-group">
+							<div class="input-wrapper">
+								<input type="file" (change)="onFileChange($event)" class="form-control w-100" pInputText style="display: none" #fileInput />
+								<input type="text" formControlName="image" class="form-control w-100" pInputText readonly (click)="fileInput.click()" />
+								<button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem" class="upload-button">Upload</button>
+								<div *ngIf="submitted && f.image.errors" class="text-danger text-xs">
+									<div *ngIf="f.image.errors.required">Required</div>
+								</div>
+							</div>
+							<img *ngIf="editImage" src="{{ editImage }}" alt="image" width="200px" height="200px" />
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="resetForm(form)" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button">Reset Field</button>&nbsp;
+
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">{{ !isEditClicked ? "Add" : "Update" }} Class</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content></p-accordion-panel
+	>
+	<p-accordion-panel value="2">
+		<p-accordion-header>Filter Class</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="onClickSubmitFilter()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-2">
+						<div class="form-group">
+							<label>From</label>
+							<p-datepicker styleClass="w-full" formControlName="fromdate" dateFormat="dd-mm-yy"></p-datepicker>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="form-group w-100">
+							<label>To </label>
+							<p-datepicker styleClass="w-full" formControlName="todate" dateFormat="dd-mm-yy"></p-datepicker>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Sub-Module</label>
+							<p-multiselect class="border-black paddingfive mt-2" styleClass="w-full" [options]="subModuleList" optionValue="id" formControlName="filter_category_id" placeholder="Select Submodule" optionLabel="category_name" selectedItemsLabel="{0} items selected" [maxSelectedLabels]="0"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Favourite</label>
+							<p-select class="" optionValue="id" optionLabel="name" [options]="categoryDropdownList" styleClass="w-full" formControlName="favourite"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-2">
+					<div class="col-12 text-right">
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton (click)="resetFilter()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" label="Reset Filter"></button>&nbsp;
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit" label="Filter"></button>
+					</div>
+				</div>
+			</form> </p-accordion-content
+	></p-accordion-panel>
+</p-accordion>
+
+<div class="card mt-2">
+	<div class="card-header d-flex w-full align-items-center justify-content-between" style="background-color: transparent">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6 col-sm-12 col-12">
+					<div class="d-flex gap-3 align-items-center">
+						<p-button (click)="goBack()" icon="pi pi-arrow-left" styleClass="p-button-rounded p-button-text text-dark"></p-button>
+
+						<h5 class="mb-0">{{ subModuleName }} List</h5>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12 col-12">
+					<div class="d-flex justify-content-end">
+						<span style="color: #a1a1a1; font-size: 12px">Total Class: {{ categoryCount }}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		<div class="row mt-5">
+			<div class="col-lg-3 col-md-6 col-sm-6 mb-3" *ngFor="let item of subModuleList">
+				<div class="card p-3">
+					<div class="text-center fw-bold" *ngIf="item.submodule">
+						{{ item.submodule }}
+					</div>
+					<div class="text-center fw-bold" *ngIf="item.category_name">
+						{{ item.category_name }}
+					</div>
+					<div class="text-center pt-2 pb-2">
+						<img src="{{ item.icon }}" alt="" style="height: 100px; width: 100px" />
+					</div>
+					<div class="text-center">
+						<!--                        <span class="fw-bold">{{ item.questioncount ? item.questioncount : 0 }}</span><br/>-->
+						<!--                        <span class="sm-font">Total Questions</span>-->
+					</div>
+					<br />
+					<div class="row text-center">
+						<div class="d-flex gap-2">
+							<div class="flex-grow-1">
+								<button (click)="editSubCategoryName(item)" class="w-100 justify-content-center" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Edit</button>
+							</div>
+							<div class="flex-grow-1">
+								<button (click)="redirect(item)" class="w-100 justify-content-center" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">View</button>
+							</div>
+							<p-confirmpopup></p-confirmpopup>
+							<div class="flex-grow-1" *ngIf="submodulePermission === 1">
+								<button (click)="delete(item)" class="w-100 justify-content-center" pButton style="background-color: red; border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">
+									<i class="fa-solid fa-trash"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<p-paginator (onPageChange)="pageChange($event)" [rows]="rows" [totalRecords]="categoryCount" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+</div>

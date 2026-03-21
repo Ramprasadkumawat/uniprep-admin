@@ -1,0 +1,178 @@
+#container {
+  display: flex;
+  width: 100%;
+
+  #main {
+    padding: 10px;
+    border-right: 1px solid #dee2e6;
+  }
+
+  #body {
+    padding: 10px;
+    flex: 1;
+  }
+}
+
+.header-border {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.top-header {
+  border: solid #cbe176;
+  border-width: 1px 1px 0 1px;
+}
+
+.backButton {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 575.98px) {
+
+  #container {
+    display: block;
+  }
+
+  .btn-mt-2 {
+    margin-top: 5px;
+  }
+}
+
+::ng-deep .p-calendar {
+  height: 42px;
+}
+
+.border-cell {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-width: 1px !important;
+}
+
+// .p-column-filter-menu-button {
+//   color: white !important;
+// }
+
+// :host ::ng-deep .p-columnFilter .p-column-filter-menu-button {
+//   color: white !important;
+// }
+::ng-deep .p-column-filter-menu-button span {
+  color: white !important;
+}
+
+::ng-deep .p-column-filter-menu-button-active,
+::ng-deep .p-column-filter-menu-button-open {
+  background: black !important;
+}
+
+::ng-deep .p-column-filter-menu-button {
+
+  &:hover,
+  &:focus {
+    background: transparent;
+  }
+}
+
+// .cardremarks {
+//   cursor: pointer;
+//   overflow: hidden;
+//   transition: height 0.3s ease;
+// }
+
+// .cardremarks p {
+//   margin: 0;
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   width: 100%;
+// }
+
+// .cardremarks.expanded p {
+//   white-space: normal;
+// }
+.cardremarks {
+  transition: height 0.3s;
+  overflow: hidden;
+}
+
+.cardremarks.expanded {
+  width: auto;
+  height: auto;
+}
+
+.cardremarks.collapsed {
+  height: 2.5rem;
+}
+
+.editor-wrapper {
+  height: 400px;
+  /* Adjust as needed */
+}
+
+p-editor {
+  height: 100%;
+  /* Make the editor fill the wrapper */
+}
+
+.border-cell {
+  border: 1px solid #ccc;
+  padding: 8px;
+  border-width: 1px !important;
+}
+
+.badge-style {
+  font-size: 14px;
+  padding: 7px 20px;
+}
+
+.custom-danger {
+  color: red !important;
+}
+.status-failed {
+  color: red;
+}
+
+.status-expired {
+  color: black;
+}
+
+.status-started {
+  color: purple;
+}
+
+.status-completed {
+  color: green;
+}
+
+.copy-container {
+  display: flex;
+  align-items: center;
+  background: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 6px;
+}
+
+.copy-input {
+  flex: 1;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  font-size: 14px;
+  padding-left: 12px;
+}
+
+.copy-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.copy-btn {
+  border-radius: 8px;
+  font-size: 13px;
+  padding: 6px 14px;
+  white-space: nowrap;
+}
+
+:host ::ng-deep .p-dialog-mask {
+  z-index: 10000 !important;
+}

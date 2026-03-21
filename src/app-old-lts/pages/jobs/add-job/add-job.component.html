@@ -1,0 +1,1330 @@
+<div class="card readingcard p-2">
+    <div class="card-header border-0 bg-white header-section">
+        <div class="row justify-content-center">
+            <div class="col-md-12 d-flex gap-2">
+                <div class="select-title bg-white d-flex justify-content-between align-items-center"
+                    style="width: 100%">
+                    <div>
+                        <h5 class="mb-0 form-title text-dark">
+                            <span>{{ pageTitle }}</span>
+                        </h5>
+                    </div>
+                    <div class="d-flex gap-2 align-items-center" *ngIf="pageTitle === 'Create Job'">
+                        <button pButton type="button" class="how-it-works-btn p-2 px-4 py-2" (click)="openSample()">
+                            View Sample
+                        </button>
+                        <button pButton type="button" class="how-it-works-btn p-2 px-4 py-2" (click)="showPreview()">
+                            Preview
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 mb-3 mt-2">
+        <form [formGroup]="jobForm" (ngSubmit)="submitJob()">
+            <!-- Advertised Company: show only when NOT Co-hiring (hiring type !== 2) -->
+            <div class="row" *ngIf="showAdvertisedCompanySection">
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Company ID</label>
+                    <input pInputText type="text" class="w-100" formControlName="companyId" placeholder="Company ID" />
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('companyId')?.invalid && jobForm.get('companyId')?.touched">
+                        Company ID is required.
+                    </small>
+                </div>
+
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Company</label>
+                    <p-select formControlName="company" class="w-100" placeholder="Select Company" [options]="company"
+                        optionLabel="company_name" optionValue="company_id" [virtualScroll]="true"
+                        [virtualScrollItemSize]="20" [filter]="true" filterBy="company_name"></p-select>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('company')?.invalid && jobForm.get('company')?.touched">
+                        Company is required.
+                    </small>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Hiring Type</label>
+                    <p-select formControlName="hiringType" class="w-100" placeholder="Hiring Type"
+                        [options]="hiringType" optionLabel="type" optionValue="id" [filter]="true"
+                        filterBy="type" dataKey="id" [showClear]="true" appendTo="body"></p-select>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('hiringType')?.invalid && jobForm.get('hiringType')?.touched">
+                        Hiring type is required.
+                    </small>
+                </div>
+
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Job Title</label>
+                    <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" formControlName="jobTitle"
+                        [options]="positions" placeholder="Select the job" optionLabel="position_title" optionValue="id"
+                        styleClass="w-100" [filter]="true" dataKey="id" filterBy="position_title" [showClear]="true"
+                        (mouseover)="onFocusInput('jobTitle')" (mouseout)="resetMessageBox()" fluid appendTo="body">
+                        <ng-template #header>
+                            <div class="d-flex p-2">
+                                <p-inputgroup>
+                                    <input pInputText class="rounded-end-2 me-1" placeholder="Custom Job Title"
+                                        #jobTitleExp (click)="focusInput(jobTitleExp)" />
+                                    <button class="btn btn-primary" (click)="confirmationPanel($event, jobTitleExp)"><i
+                                            class="fa fa-plus"></i>&nbsp;Add New</button>
+                                </p-inputgroup>
+                                <p-confirmpopup>
+                                </p-confirmpopup>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('jobTitle')?.invalid && jobForm.get('jobTitle')?.touched">
+                        Job title is required.
+                    </small>
+                </div>
+            </div>
+
+            <!-- Co-Hiring Company Section: show only when Co-hiring (hiring type id = 2) -->
+            <div class="row mt-3" *ngIf="isCoHiringType">
+                <div class="col-md-12">
+                    <label class="fw-semibold">
+                        <i class="pi pi-check-circle text-warning me-2"></i>Co-Hiring Company
+                        <span class="text-danger">*</span>
+                    </label>
+                    <input pInputText formControlName="cohire_company_name" class="w-100"
+                        placeholder="Enter the co-hiring company name" />
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('cohire_company_name')?.invalid && jobForm.get('cohire_company_name')?.touched">
+                        Co-hiring company is required.
+                    </small>
+
+                    <!-- Upload area: only in add/edit mode -->
+                    <ng-container *ngIf="!isViewMode">
+                        <label class="mt-3 fw-semibold d-block">Upload Company Logo</label>
+                        <div class="rounded-3 text-center"
+                            style="border: 1.5px dashed #3b4cca; min-height: 300px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 40px 20px;">
+                            <div class="mb-4">
+                                <div *ngIf="!customCoHireLogo"
+                                    style="width:120px;height:120px;background:#e8eaf6;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;">
+                                    <i class="pi pi-building" style="font-size:48px;color:#9fa8da;"></i>
+                                </div>
+                                <img *ngIf="customCoHireLogo" [src]="customCoHireLogo" width="120" height="120"
+                                    style="object-fit:contain;border-radius:12px;background:#f8f9fa;" />
+                            </div>
+                            <div class="d-flex flex-column gap-2 align-items-center">
+                                <label class="btn btn-sm px-4 py-2 mb-0"
+                                    style="cursor:pointer;background:#1e2a5e;color:#fff;border:none;border-radius:6px;">
+                                    <i class="pi pi-upload me-2"></i>Upload Company Logo
+                                    <input type="file" accept="image/*" style="display:none"
+                                        #coHireLogoInput
+                                        (change)="onCoHireLogoSelected($event, coHireLogoInput)" />
+                                </label>
+                                <button *ngIf="customCoHireLogo" type="button"
+                                    class="btn btn-danger btn-sm px-4 py-2"
+                                    style="border-radius:6px;"
+                                    (click)="removeCoHireLogo()">
+                                    Remove Company Logo
+                                </button>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <!-- View mode: clean DP-style display -->
+                    <div *ngIf="isViewMode" class="mt-3 d-flex align-items-center gap-3 p-3 rounded-3"
+                        style="background:#f8f9fa; border:1px solid #e9ecef;">
+                        <div style="width:72px;height:72px;flex-shrink:0;border-radius:50%;border:2px solid #e8eaf6;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:4px;">
+                            <img *ngIf="customCoHireLogo" [src]="customCoHireLogo"
+                                style="width:100%;height:100%;object-fit:contain;" />
+                            <i *ngIf="!customCoHireLogo" class="pi pi-building"
+                                style="font-size:28px;color:#9fa8da;"></i>
+                        </div>
+                        <div>
+                            <div class="fw-semibold text-dark fs-6">
+                                {{ jobForm.get('cohire_company_name')?.value || '—' }}
+                            </div>
+                            <span class="badge mt-1"
+                                style="background:#e8eaf6;color:#3b4cca;padding:4px 10px;font-size:11px;">
+                                Co-Hiring Partner
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3" *ngIf="jobForm.get('hiringType')?.value === 3">
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Institute Country</label>
+                    <p-select fluid appendTo="body" class="w-100" formControlName="institute_country_id"
+                        [options]="instituteCountry || []" placeholder="Select Country" optionLabel="country"
+                        optionValue="id" [filter]="true" filterBy="country" dataKey="id"
+                        (onChange)="onCountryChange($event.value, false)">
+                    </p-select>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('institute_country_id')?.invalid && jobForm.get('institute_country_id')?.touched">
+                        Institute country is required.
+                    </small>
+                </div>
+
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Institute</label>
+                    <p-multiSelect fluid appendTo="body" class="w-100" formControlName="institute_id"
+                        [options]="filteredInstitutes || []" placeholder="Select a Institute"
+                        optionLabel="institutename" optionValue="id" [filter]="true" filterBy="institutename"
+                        dataKey="id" [virtualScroll]="true" [virtualScrollItemSize]="30">
+                    </p-multiSelect>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('institute_id')?.invalid && jobForm.get('institute_id')?.touched">
+                        Institute is required.
+                    </small>
+                </div>
+            </div>
+
+            <div class="row mt-3" *ngIf="jobForm.get('hiringType')?.value === 4">
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Job Fair Start Date</label>
+                    <input pInputText type="date" formControlName="job_fair_start_date" class="w-100" />
+                </div>
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Job Fair End Date</label>
+                    <input pInputText type="date" formControlName="job_fair_end_date" class="w-100" />
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('job_fair_end_date')?.hasError('jobFairEndBeforeStart') && (jobForm.get('job_fair_end_date')?.dirty || jobForm.get('job_fair_end_date')?.touched)">
+                        End date cannot be before start date.
+                    </small>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Available Vacancies</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" pInputText formControlName="availableVacancies"
+                            placeholder="Available Vacancies">
+                        <button *ngIf="!isViewMode" type="button" class="btn btn-primary no-radius" (click)="dec()">-
+                        </button>
+                        <button *ngIf="!isViewMode" type="button" class="btn btn-primary no-radius" (click)="inc()">+
+                        </button>
+                    </div>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('availableVacancies')?.invalid && jobForm.get('availableVacancies')?.touched">
+                        Available Vacancies is required.
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Job Start Date</label>
+                    <input pInputText type="date" [min]="minStartDate" formControlName="jobStartDate" class="w-100"
+                        (change)="onChangeStartDate($event)" (mouseover)="onFocusInput('jobStartDate')"
+                        (mouseout)="resetMessageBox()" placeholder="Select the job Start Date" />
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('jobStartDate')?.hasError('required') && jobForm.get('jobStartDate')?.touched">
+                        Start Date is required.
+                    </small>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('jobStartDate')?.hasError('dateNotAfterTenDays') && jobForm.get('jobStartDate')?.touched">
+                        Start Date is required & must be 10 days after today.
+                    </small>
+                </div>
+
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Job Application Deadline</label>
+                    <input pInputText type="date" [max]="maxEndDate" [min]="minEndDate"
+                        formControlName="jobApplicationDeadline" class="w-100"
+                        (mouseover)="onFocusInput('jobApplicationDeadline')" (mouseout)="resetMessageBox()"
+                        placeholder="Select the job Application Deadline" />
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('jobApplicationDeadline')?.hasError('required') && jobForm.get('jobApplicationDeadline')?.touched">
+                        Due Date is required.
+                    </small>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('jobApplicationDeadline')?.hasError('dueDateTooSoon')">
+                        Due Date must be at least 10 days before Start Date.
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Work Location</label>
+                    <p-select fluid appendTo="body" class="w-100" formControlName="workLocation"
+                        [options]="workLocation" placeholder="City, Country" optionLabel="work_location"
+                        optionValue="id" [virtualScroll]="true" [virtualScrollItemSize]="20" [filter]="true"
+                        filterBy="work_location" [showClear]="false" dataKey="id"></p-select>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('workLocation')?.invalid && jobForm.get('workLocation')?.touched">
+                        Work Location is required.
+                    </small>
+                </div>
+
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Work Mode</label>
+                    <p-multiSelect class="w-100" placeholder="Work Mode" formControlName="workMode" [options]="workMode"
+                        optionLabel="work_mode" optionValue="id" [filter]="true" filterBy="work_mode"></p-multiSelect>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('workMode')?.invalid && jobForm.get('workMode')?.touched">
+                        Work Mode is required.
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Work Type</label>
+                    <p-multiSelect class="w-100" placeholder="Work Type" formControlName="workType" [options]="workType"
+                        optionLabel="employment_type" optionValue="id" [filter]="true"
+                        filterBy="employment_type"></p-multiSelect>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('workType')?.invalid && jobForm.get('workType')?.touched">
+                        Work Type is required.
+                    </small>
+                </div>
+
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <label class="mb-0"><i class="pi pi-check-circle text-warning me-2"></i>Salary Offered</label>
+                        <div class="d-flex align-items-center">
+                            <p-checkbox formControlName="isPaid" [binary]="true" size="small" inputId="unpaid_check"
+                                (onChange)="changePaidMode($event)" />
+                            <label for="unpaid_check" class="ms-2 mb-0">Unpaid</label>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <p-select class="flex-shrink-0" [style]="{'width': '150px'}" placeholder="Currency"
+                            formControlName="currency" [options]="currency" optionLabel="currency_code"
+                            optionValue="currency_code" [disabled]="jobForm.get('isPaid')?.value || isViewMode" [filter]="true"
+                            filterBy="currency_code">
+                        </p-select>
+                        <p-inputNumber class="flex-grow-1" placeholder="Enter the approx Salary per month"
+                            formControlName="salaryOffered" [disabled]="jobForm.get('isPaid')?.value || isViewMode">
+                        </p-inputNumber>
+                    </div>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('salaryOffered')?.invalid && jobForm.get('salaryOffered')?.touched && !jobForm.get('isPaid')?.value">
+                        Salary Offered is required.
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Gender Requirement</label>
+                    <p-select class="w-100" placeholder="Select Gender" formControlName="genderRequirement"
+                        [options]="gender" optionLabel="gender" optionValue="id" [filter]="true"
+                        filterBy="gender"></p-select>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('genderRequirement')?.invalid && jobForm.get('genderRequirement')?.touched">
+                        Gender Requirement is required.
+                    </small>
+                </div>
+
+
+            </div>
+
+            <div class="row mt-3 mb-3" formArrayName="languageProficiency">
+                <label><i class="pi pi-check-circle text-warning me-2"></i>Language Proficiency</label>
+                <div class="col-12" *ngFor="let lang of languageProficiency1.controls; let i = index"
+                    [formGroupName]="i">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-12 col-md-5">
+                            <p-select fluid appendTo="body" class="w-100" formControlName="language"
+                                [options]="languages" placeholder="Language" optionLabel="language"
+                                optionValue="language" dataKey="id" [filter]="true" filterBy="language"
+                                [showClear]="false" (mouseover)="onFocusInput('langugeProficiency')"
+                                (mouseout)="resetMessageBox()" [disabled]="isViewMode"></p-select>
+                            <small class="text-danger"
+                                *ngIf="lang.get('language')?.touched && lang.get('language')?.invalid">
+                                <span *ngIf="lang.get('language')?.hasError('required')">Language is required.</span>
+                                <span
+                                    *ngIf="!lang.get('language')?.hasError('required') && lang.get('language')?.hasError('duplicateLanguage')">
+                                    Language already selected. Please choose another.
+                                </span>
+                            </small>
+                        </div>
+                        <div class="col-12 col-md-5">
+                            <p-select fluid appendTo="body" class="w-100" formControlName="level"
+                                [options]="languageProficiency" placeholder="Proficiency Level"
+                                optionLabel="proficiencylevel" optionValue="proficiencylevel" dataKey="id"
+                                [filter]="true" filterBy="proficiencylevel" [showClear]="false"
+                                (mouseover)="onFocusInput('proficiencyLevel')" (mouseout)="resetMessageBox()"
+                                [disabled]="isViewMode"></p-select>
+                            <small class="text-danger" *ngIf="lang.get('level')?.touched && lang.get('level')?.invalid">
+                                Level is required.
+                            </small>
+                        </div>
+                        <div class="col-12 col-md-2 text-md-center mt-2 mt-md-0">
+                            <button *ngIf="!isViewMode && i != 0" pButton type="button" icon="pi pi-times"
+                                class="p-button-danger p-button-text p-button-sm" style="background-color: transparent;"
+                                (click)="removeLanguage(i)"></button>
+
+                            <button *ngIf="!isViewMode && i == 0" pButton type="button" label="Add" icon="pi pi-plus"
+                                (click)="addLanguage()" class="add-language-btn"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Min Education Requirement</label>
+                    <p-select class="w-100" placeholder="Education Level" formControlName="minEducation"
+                        [options]="minimumEducation" optionLabel="minimum_education" optionValue="id" [filter]="true"
+                        filterBy="minimum_education"></p-select>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('minEducation')?.invalid && jobForm.get('minEducation')?.touched">
+                        Min Education is required.
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Experience Level</label>
+                    <p-select class="w-100" placeholder="Experience Level" formControlName="experienceLevel"
+                        [options]="experienceLevel" optionLabel="experienceLevel" optionValue="id" [filter]="true"
+                        filterBy="experienceLevel"></p-select>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('experienceLevel')?.invalid && jobForm.get('experienceLevel')?.touched">
+                        Experience Level is required.
+                    </small>
+                </div>
+
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Introduction Video</label>
+                    <p-select class="w-100" placeholder="Required / Not Required" formControlName="introductionVideo"
+                        [options]="introVideo" optionLabel="value" optionValue="id" appendTo="body" [filter]="true"
+                        filterBy="value"></p-select>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('introductionVideo')?.invalid && jobForm.get('introductionVideo')?.touched">
+                        Introduction Video is required.
+                    </small>
+                </div>
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Interview Format</label>
+                    <p-multiSelect class="w-100" placeholder="Interview Format" formControlName="interviewFormat"
+                        [options]="interviewFormat" optionLabel="interviewformat" optionValue="id" appendTo="body"
+                        [filter]="true" filterBy="interviewformat"></p-multiSelect>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('interviewFormat')?.invalid && jobForm.get('interviewFormat')?.touched">
+                        Interview Format is required.
+                    </small>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Verified Talent Requirement</label>
+                    <p-select class="w-100" placeholder="Yes / No" formControlName="verifiedTalentRequirement"
+                        [options]="introVideo" optionLabel="value" optionValue="id" appendTo="body" [filter]="true"
+                        filterBy="value"></p-select>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('verifiedTalentRequirement')?.invalid && jobForm.get('verifiedTalentRequirement')?.touched">
+                        Verified Talent Requirement is required.
+                    </small>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="justify-content-between d-flex mb-2">
+                        <div>
+                            <label><i class="pi pi-check-circle text-warning me-2"></i>Job Overview</label>
+                        </div>
+                        <div>
+                            <button *ngIf="!isNotEmptyHtml(jobForm.get('jobOverview')?.value) && !isViewMode"
+                                type="button" class="btn btn-sm ms-3 text-small text-white"
+                                style="background-color: oklch(62.7% 0.194 149.214);"
+                                (click)="aiGenerate('joboverview', 'AI generate')">
+                                <i class="pi pi-star"></i>AI Generate
+                            </button>
+                            <button *ngIf="isNotEmptyHtml(jobForm.get('jobOverview')?.value) && !isViewMode"
+                                type="button" class="btn bg-secondary btn-sm ms-3 text-small text-white"
+                                (click)="aiGenerate('joboverview', 'Rephrase')">
+                                Rephrase
+                            </button>
+                        </div>
+                    </div>
+                    <p-editor [readonly]="isViewMode" (mouseover)="onFocusInput('jobOverview')"
+                        (mouseout)="resetMessageBox()" formControlName="jobOverview"
+                        placeholder="Enter the job description"
+                        (ngModelChange)="checkMaximumWordsInFields(jobForm.get('jobOverview'), 2000)">
+                    </p-editor>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('jobOverview')?.invalid && jobForm.get('jobOverview')?.touched">
+                        Job Overview is required.
+                    </small>
+                    <small class="text-danger" *ngIf="getWordCountUsingControl(jobForm.get('jobOverview')) > 2000">
+                        Please provide job overview (max 2000 characters) </small>
+                    <div class="text-end mt-1">
+                        <small>{{
+                            getWordCountUsingControl(jobForm.get("jobOverview"))
+                            }}/2000</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="justify-content-between d-flex mb-2">
+                        <div>
+                            <label><i class="pi pi-check-circle text-warning me-2"></i>Key Responsibilities</label>
+                        </div>
+                        <div>
+                            <button *ngIf="!isNotEmptyHtml(jobForm.get('keyResponsibilities')?.value) && !isViewMode"
+                                type="button" class="btn btn-sm ms-3 text-small text-white"
+                                style="background-color: oklch(62.7% 0.194 149.214);"
+                                (click)="aiGenerate('keyresponsibilities', 'AI generate')">
+                                <i class="pi pi-star"></i>AI Generate
+                            </button>
+                            <button *ngIf="isNotEmptyHtml(jobForm.get('keyResponsibilities')?.value) && !isViewMode"
+                                type="button" class="btn bg-secondary btn-sm ms-3 text-small text-white"
+                                (click)="aiGenerate('keyresponsibilities', 'Rephrase')">
+                                Rephrase
+                            </button>
+                        </div>
+                    </div>
+                    <p-editor [readonly]="isViewMode" formControlName="keyResponsibilities"
+                        placeholder="Enter the key responsibilities" (mouseover)="onFocusInput('keyResponsibility')"
+                        (mouseout)="resetMessageBox()"
+                        (ngModelChange)="checkMaximumWordsInFields(jobForm.get('keyResponsibilities'), 2000)">
+                    </p-editor>
+                    <small class="text-danger"
+                        *ngIf="jobForm.get('keyResponsibilities')?.invalid && jobForm.get('keyResponsibilities')?.touched">
+                        Key Responsibilities is required.
+                    </small>
+                    <small class="text-danger"
+                        *ngIf="getWordCountUsingControl(jobForm.get('keyResponsibilities')) > 2000">
+                        Please provide key responsibilities (max 2000 characters) </small>
+                    <div class="text-end mt-1">
+                        <small>{{
+                            getWordCountUsingControl(jobForm.get("keyResponsibilities"))
+                            }}/2000</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <label><i class="pi pi-check-circle text-warning me-2"></i>Additional Notes (Specific Skills,if
+                        any)</label>
+                    <p-editor [readonly]="isViewMode" placeholder="Additional Notes" formControlName="additionalNotes"
+                        (ngModelChange)="checkMaximumWordsInFields(jobForm.get('additionalNotes'), 2000)"></p-editor>
+                    <small class="text-danger" *ngIf="getWordCountUsingControl(jobForm.get('additionalNotes')) > 2000">
+                        Please provide additional notes (max 2000 characters) </small>
+                    <div class="text-end mt-1">
+                        <small>{{
+                            getWordCountUsingControl(jobForm.get("additionalNotes"))
+                            }}/2000</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end mt-4 d-flex justify-content-end gap-2">
+                <button pButton *ngIf="!editingJobId" type="submit" class="job-btn" label="Create Job"
+                    icon="pi pi-plus">
+                </button>
+                <button pButton *ngIf="editingJobId && !isViewMode" type="submit" class="job-btn" label="Update Job"
+                    icon="pi pi-check">
+                </button>
+                <p-button *ngIf="editingJobId && isViewMode" type="button" label="Edit Job" icon="pi pi-pencil"
+                    (onClick)="enableEditMode()">
+                </p-button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<p-dialog header="Job Advertise Sample" [modal]="true" [(visible)]="isSampleVisible"
+    [breakpoints]="{ '1200px': '30vw', '992px': '40vw', '768px': '60vw', '576px': '80vw', '400px': '95vw' }"
+    [style]="{ width: '75vw', padding:'20px' }">
+    <div class="card-body text-start flex-fill overflow-y-auto p-2">
+        <div class="row justify-content-between h-100">
+            <div class="h-100 overflow-hidden col-sm-12">
+                <div class="card h-100 overflow-y-auto">
+                    <div class="card-header bg-transparent p-4">
+                        <div class="row align-items-center">
+                            <div class="col-xxl-1 col-xl-1 col-lg-2 col-md-2 col-sm-3 col-4">
+                                <div class="rounded-2 border overflow-hidden">
+                                    <img class="company-logo" [src]="'uniprep-assets/images/Infosys_LOGO.png'"
+                                        alt="company_logo" height="41" width="67" />
+                                </div>
+                            </div>
+                            <div class="col-xxl-11 col-xl-11 col-lg-10 col-md-10 col-sm-9 col-8">
+                                <div class="row">
+                                    <div class="col-xxl-9 col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12 mb-3">
+                                        <h3 class="fw-bold mb-0">{{ "Process Executive" }}</h3>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="me-2">{{ "Infosys" }}</span>
+                                            <span class="ms-1 text-primary" *ngIf="previewData">
+                                                <i class="fa-solid fa-badge-check icn-blue"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12 mb-3">
+                                        <div class="row">
+                                            <div class="col-12 text-lg-end text-start">
+                                                <span class="badge badge-custom-future px-3 py-2 rounded-pill">
+                                                    <i class="fa-solid fa-hourglass me-2"
+                                                        style="vertical-align: middle"></i>Future Hiring
+                                                </span>
+                                                <p class="posted-date">
+                                                    Posted On : {{ today | date : "dd-MM-yyyy" }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-12 d-none d-md-block">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-2 col-6">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <span><i
+                                                            class="fa-solid fa-user-magnifying-glass fa-lg icn-dark"></i></span>
+                                                    <div>
+                                                        <p class="text-muted text-small mb-0">
+                                                            Total Vacancies
+                                                        </p>
+                                                        <h4 class="mb-0 fw-bold">{{ "50" }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-6">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <span><i class="fa-solid fa-user-tie fa-lg icn-orange"></i></span>
+                                                    <div>
+                                                        <p class="text-muted text-small mb-0">
+                                                            Total Applied
+                                                        </p>
+                                                        <h4 class="mb-0 fw-bold">{{ "10" }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-6">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <span><i class="fa-solid fa-video fa-lg icn-grey"></i></span>
+                                                    <div>
+                                                        <p class="text-muted text-small mb-0">
+                                                            Introduction Video
+                                                        </p>
+                                                        <h6 class="mb-0 fw-bold">
+                                                            {{ "Not Mandatory" }}
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body h-100 overflow-y-auto p-4">
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3">
+                                    <!-- Company Size -->
+                                    <!-- <div
+                    class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6"
+                  >
+                    <div class="d-flex flex-column">
+                      <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-users me-2" style="color: gray"></i>
+                        <div>
+                          <span class="text-muted">Company Size</span>
+                          <div class="fw-bold">{{ "0-50" }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+
+                                    <!-- Position -->
+                                    <!-- <div
+                    class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6"
+                  >
+                    <div class="d-flex flex-column">
+                      <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-suitcase me-2" style="color: blue"></i>
+                        <div>
+                          <span class="text-muted">Position</span>
+                          <div class="fw-bold">{{ "UI Designer" }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+
+                                    <!-- Start Date -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-calendar icn-purple me-2"></i>
+                                                <div>
+                                                    <span class="text-muted">Start Date</span>
+                                                    <div class="fw-bold">{{ "19-02-2025" }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Due Date -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-hourglass me-2 icn-red"></i>
+                                                <div>
+                                                    <span class="text-muted">Job Application Deadline</span>
+                                                    <div class="fw-bold">{{ "25-02-2025" }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Work Location -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-location-dot icn-green me-2"></i>
+                                                <div>
+                                                    <span class="text-muted">Work Location</span>
+                                                    <div class="fw-bold">
+                                                        {{ "Bengaluru, Karnataka, India" }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Work Mode -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-building-user icn-orange me-2 icn-orange"></i>
+                                                <div>
+                                                    <span class="text-muted">Work Mode</span>
+                                                    <div class="fw-bold text-break">
+                                                        {{
+                                                        "Hybrid (Combination of on-site and remote work)"
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Employment Type -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-briefcase icn-red me-2" style="color: red"></i>
+                                                <div>
+                                                    <span class="text-muted">Work Type</span>
+                                                    <div class="fw-bold text-break">
+                                                        {{ "Full-Time Work" }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Salary Range -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fas fa-dollar me-2 icn-green"></i>
+                                                <div>
+                                                    <span class="text-muted">Salary Offered per month</span>
+                                                    <div class="fw-bold">
+                                                        <!--<span class="me-1">{{ "INR" }}</span> -->{{
+                                                        "INR 50,000"
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Experience Level -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-user-plus me-2 icn-dark"></i>
+                                                <div>
+                                                    <span class="text-muted">Experience Level</span>
+                                                    <div class="fw-bold">{{ "3 Years" }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Gender -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-person-half-dress icn-dark me-2"></i>
+                                                <div>
+                                                    <span class="text-muted">Gender Requirement</span>
+                                                    <div class="fw-bold">{{ "Any" }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Educational Degree -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-user-graduate me-2 icn-darkblue"></i>
+                                                <div>
+                                                    <span class="text-muted">Minimum Educational Requirement</span>
+                                                    <div class="fw-bold text-break">
+                                                        {{ "Bachelor's Degree" }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Job Overview -->
+                        <div class="row mb-2">
+                            <div class="col-md-12">
+                                <div class="card-body p-3 p-md-4 bg-secondary-subtle rounded-3">
+                                    <div class="row">
+                                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                                            <h2 class="fs-3 fw-bold">Job Overview</h2>
+                                        </div>
+                                        <div class="col-12 col-md-9 font-bold">
+                                            <p class="mb-0">
+                                                As a Process Executive at Infosys BPM, you will be
+                                                responsible for delivering day-to-day process targets,
+                                                ensuring adherence to customer SLAs, and maintaining
+                                                high-quality standards in all tasks. The role requires
+                                                flexibility with shifts and working hours, and the
+                                                ability to work efficiently in a team-oriented
+                                                environment.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Key Responsibilities -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card-body p-3 p-md-4 bg-secondary-subtle rounded-3">
+                                    <div class="row">
+                                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                                            <h2 class="fs-3 fw-bold">
+                                                Key<br class="d-none d-md-block" />Responsibilities
+                                            </h2>
+                                        </div>
+                                        <div class="col-12 col-md-9 font-bold">
+                                            <div>
+                                                <ul class="list-unstyled">
+                                                    <li class="mb-3">
+                                                        <div>
+                                                            <i class="pi pi-circle-fill me-2"
+                                                                style="font-size: 8px"></i>
+                                                            <span>Deliver on day-to-day process targets in
+                                                                meeting customer SLAs.</span>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-3">
+                                                        <div>
+                                                            <i class="pi pi-circle-fill me-2"
+                                                                style="font-size: 8px"></i>
+                                                            <span>Follow company/client processes accurately and
+                                                                efficiently.</span>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-3">
+                                                        <div>
+                                                            <i class="pi pi-circle-fill me-2"
+                                                                style="font-size: 8px"></i>
+                                                            <span>Demonstrate customer service skills and
+                                                                teamwork.</span>
+                                                        </div>
+                                                    </li>
+                                                    <li class="mb-3">
+                                                        <div>
+                                                            <i class="pi pi-circle-fill me-2"
+                                                                style="font-size: 8px"></i>
+                                                            <span>Adapt to changes in work methods or systems to
+                                                                improve performance beyond agreed standards.
+                                                                Maintain accurate records and
+                                                                documentation.</span>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Language Proficiency -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card-body p-3 p-md-4 bg-secondary-subtle rounded-3">
+                                    <div class="row">
+                                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                                            <h2 class="fs-3 fw-bold">
+                                                Language<br class="d-none d-md-block" />Proficiency
+                                            </h2>
+                                        </div>
+                                        <div class="col-12 col-md-9">
+                                            <ul class="list-unstyled">
+                                                <li class="mb-3" *ngFor="
+                            let lang of [
+                              {
+                                language: 'English',
+                                level: 'Native'
+                              },
+                              {
+                                language: 'Hindi',
+                                level: 'Fluent'
+                              }
+                            ]
+                          ">
+                                                    <div>
+                                                        <ng-container>
+                                                            <div class="mb-2">
+                                                                <div class="d-flex align-items-center">
+                                                                    <span class="me-2" style="width: 100px">{{
+                                                                        lang?.language }}</span>
+                                                                    <div class="star-rating">
+                                                                        <ng-container
+                                                                            *ngFor="let star of starsArray(lang?.level)">
+                                                                            <i class="pi" [ngClass]="star"></i>
+                                                                        </ng-container>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hiring & Recruitment -->
+                        <div class="row mb-4">
+                            <div class="col-md-12">
+                                <div class="card-body p-3 p-md-4 bg-secondary-subtle rounded-3">
+                                    <div class="row">
+                                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                                            <h2 class="fs-3 fw-bold">Hiring & Recruitment</h2>
+                                        </div>
+                                        <div class="col-12 col-md-9 font-bold">
+                                            <h6 class="mb-2">Hiring Process Stages</h6>
+                                            <div class="d-flex flex-wrap gap-2 mb-4">
+                                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                                    <ng-container *ngFor="
+                              let hs of [
+                                'Application Submission: Apply through the Infosys Careers Portal',
+                                'Online Assessment: Aptitude and technical skills evaluation',
+                                'Technical Interview: Assessment of role-specific knowledge',
+                                'HR Interview: Discussion of cultural fit and career aspirations',
+                                'Offer Letter: Issuance of employment offer'
+                              ]
+                            ">
+                                                        <p-tag [value]="hs" class="jobdetailtags"></p-tag>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+
+                                            <h6 class="mb-2">Estimated Hiring Decision Timeframe</h6>
+                                            <p class="mb-4">
+                                                {{ "2 to 4 weeks from application submission" }}
+                                            </p>
+
+                                            <h6 class="mb-2">Interview Format</h6>
+                                            <ng-container *ngFor="
+                          let hs of [
+                            'Technical Round: Virtual interview focusing on technical skills',
+                            'HR Round: Virtual or in-person interview discussing behavioral aspects'
+                          ]
+                        ">
+                                                <p-tag [value]="hs" class="jobdetailtags"></p-tag>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-2">
+                            <div class="col-md-12">
+                                <div class="card-body p-3 p-md-4 bg-secondary-subtle rounded-3">
+                                    <div class="row">
+                                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                                            <h2 class="fs-3 fw-bold">Additional Note</h2>
+                                        </div>
+                                        <div class="col-12 col-md-9 font-bold">
+                                            <p class="mb-0">
+                                                Must be flexible with shifts and work hours.
+                                                Expected to meet daily process targets, follow SOPs, and maintain high
+                                                accuracy.
+                                                Team collaboration and basic communication skills are essential.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Job Advertise Preview" [modal]="true" [(visible)]="isPreviewVisible"
+    [breakpoints]="{ '1200px': '30vw', '992px': '40vw', '768px': '60vw', '576px': '80vw', '400px': '95vw' }"
+    [style]="{ width: '75vw', padding:'20px' }">
+    <div class="card-body text-start flex-fill overflow-y-auto p-2">
+        <div class="row justify-content-between h-100">
+            <div class="h-100 overflow-hidden col-sm-12">
+                <div class="card h-100 overflow-y-auto">
+                    <!-- Preview Card Header -->
+                    <div class="card-header bg-white sticky-top shadow-sm z-3" style="top: 0; z-index: 10">
+                        <div class="row align-items-center">
+                            <div class="col-xxl-1 col-xl-1 col-lg-2 col-md-2 col-sm-3 col-4">
+                                <div class="rounded-2 border overflow-hidden">
+                                    <img class="company-logo"
+                                        [src]="companyData?.company_details?.[0]?.company_logo?companyData?.company_details?.[0]?.company_logo:'uniprep-assets/images/job.webp'"
+                                        alt="company_logo" width="67" height="41" />
+                                </div>
+                            </div>
+                            <div class="col-xxl-11 col-xl-11 col-lg-10 col-md-10 col-sm-9 col-8">
+                                <div class="row">
+                                    <div class="col-xxl-9 col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12 mb-3">
+                                        <h3 class="fw-bold mb-0">{{ previewData?.position_title }}</h3>
+                                        <div class="d-flex align-items-center mb-2">
+                                            <span class="me-2">{{ companyData?.company_details?.[0]?.company_name
+                                                }}</span>
+                                            <span class="ms-1 text-primary" *ngIf="previewData">
+                                                <i class="fa-solid fa-badge-check icn-blue"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-12 col-sm-12 col-12 mb-3">
+                                        <div class="row">
+                                            <div class="col-12 text-lg-end text-start">
+                                                <span class="badge px-3 py-2 rounded-pill"
+                                                    [ngClass]="hiringStatus === 'Future Hiring'?'badge-custom-future':'badge-custom-success'">
+                                                    <i class="fa me-2"
+                                                        [ngClass]="hiringStatus === 'Future Hiring' ? 'fa-hourglass' : 'fa-check'"
+                                                        style="vertical-align: middle"></i>
+                                                    {{ getHiringStatus(previewData?.start_date | date:"yyyy-MM-dd") }}
+                                                </span>
+                                                <p class="posted-date">
+                                                    Posted On : {{ previewData?.created_at | date : "dd-MM-yyyy" }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-12 d-none d-md-block">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-2 col-6">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <span><i
+                                                            class="fa-solid fa-user-magnifying-glass icn-dark fa-lg"></i></span>
+                                                    <div>
+                                                        <p class="text-muted text-small mb-0">Total Vacancies</p>
+                                                        <h4 class="mb-0 fw-bold">{{ previewData?.available_vacancies }}
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-6">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <span><i class="fa-solid fa-user-tie icn-orange fa-lg"></i></span>
+                                                    <div>
+                                                        <p class="text-muted text-small mb-0">Total Applied</p>
+                                                        <h4 class="mb-0 fw-bold">{{ previewData?.total_applied ?? 0 }}
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 col-6">
+                                                <div class="d-flex align-items-center gap-3">
+                                                    <span><i class="fa-solid fa-video icn-grey fa-lg"></i></span>
+                                                    <div>
+                                                        <p class="text-muted text-small mb-0">Introduction Video</p>
+                                                        <h6 class="mb-0 fw-bold">
+                                                            {{ previewData?.intro_video == "No" ? "Not Mandatory" :
+                                                            "Mandatory" }}
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Preview Job Details Row -->
+                        <div class="row mt-4">
+                            <div class="col-md-12">
+                                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 g-3">
+                                    <!-- Start Date -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <i class="fa-solid fa-calendar icn-purple me-2"></i>
+                                            <div>
+                                                <span class="text-muted">Start Date</span>
+                                                <div class="fw-bold">{{ previewData?.start_date | date:'dd-MM-yyyy' }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Due Date -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-hourglass me-2 icn-red"></i>
+                                                <div>
+                                                    <span class="text-muted">Job Application Deadline</span>
+                                                    <div class="fw-bold">{{ previewData?.due_date | date:'dd-MM-yyyy'}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Work Location -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-location-dot me-2 icn-green"></i>
+                                                <div>
+                                                    <span class="text-muted">Work Location</span>
+                                                    <div class="fw-bold">{{ previewData?.work_location }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Work Mode -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-building-user me-2 icn-orange"></i>
+                                                <div>
+                                                    <span class="text-muted">Work Mode</span>
+                                                    <div class="fw-bold text-break">{{
+                                                        getworkModesString(previewData?.work_mode) }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Employment Type -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-briefcase icn-red me-2"></i>
+                                                <div>
+                                                    <span class="text-muted">Work Type</span>
+                                                    <div class="fw-bold text-break">{{
+                                                        getEmploymentString(previewData?.employment_type)}}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Salary Range -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fas fa-dollar me-2 icn-green"></i>
+                                                <div>
+                                                    <span class="text-muted">Salary Offered per month</span>
+                                                    <div class="fw-bold">
+                                                        <span class="me-1">{{ previewData?.currency_code }}</span>{{
+                                                        previewData?.salary_offer }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Experience Level -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-user-plus me-2 icn-dark"></i>
+                                                <div>
+                                                    <span class="text-muted">Experience Level</span>
+                                                    <div class="fw-bold">{{ previewData?.experience_level }} Years</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Gender -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-person-half-dress icn-dark me-2"></i>
+                                                <div>
+                                                    <span class="text-muted">Gender Requirement</span>
+                                                    <div class="fw-bold">
+                                                        {{
+                                                        previewData?.gender===3?'Any':previewData?.gender===2?'Female':'Male'
+                                                        }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Educational Degree -->
+                                    <div class="col-xxl-2 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                        <div class="d-flex flex-column">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <i class="fa-solid fa-user-graduate me-2 icn-darkblue"></i>
+                                                <div>
+                                                    <span class="text-muted">Minimum Educational Requirement</span>
+                                                    <div class="fw-bold text-break">{{ previewData?.minimum_education }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Card Body Content -->
+    <div class="card-body flex-grow-1 overflow-auto p-4 mb-5">
+        <!-- Job Overview -->
+        <div class="row mb-2">
+            <div class="col-md-12">
+                <div class="card-body p-3 p-md-4 bg-secondary-subtle rounded-3">
+                    <div class="row">
+                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                            <h2 class="fs-3 fw-bold">Job Overview</h2>
+                        </div>
+                        <div class="col-12 col-md-9 font-bold">
+                            <p class="mb-0" [innerHTML]="previewData?.job_overview"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Responsibilities -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card-body p-3 p-md-4 bg-secondary-subtle rounded-3">
+                    <div class="row">
+                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                            <h2 class="fs-3 fw-bold">Key<br class="d-none d-md-block" />Responsibilities</h2>
+                        </div>
+                        <div class="col-12 col-md-9 font-bold">
+                            <div [innerHTML]="previewData?.key_responsibilities"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Language Proficiency -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card-body p-3 p-md-4 bg-secondary-subtle rounded-3">
+                    <div class="row">
+                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                            <h2 class="fs-3 fw-bold">Language<br class="d-none d-md-block" />Proficiency</h2>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <ng-container *ngFor="let lang of previewData?.language_proficiency">
+                                <div class="mb-2">
+                                    <div class="d-flex align-items-center">
+                                        <span class="me-2" style="width: 100px">{{ lang[0] }}</span>
+                                        <div class="star-rating">
+                                            <ng-container *ngFor="let star of starsArray(lang[1])">
+                                                <i class="pi" [ngClass]="star"></i>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hiring & Recruitment -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card-body p-3 p-md-4 bg-secondary-subtle rounded-3">
+                    <div class="row">
+                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                            <h2 class="fs-3 fw-bold">Hiring & Recruitment</h2>
+                        </div>
+                        <div class="col-12 col-md-9 font-bold">
+                            <h6 class="mb-2">Hiring Process Stages</h6>
+                            <div class="d-flex flex-wrap gap-2 mb-4">
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <ng-container *ngFor="let hs of previewData?.hiring_stages">
+                                        <p-tag [value]="hs" class="jobdetailtags"></p-tag>
+                                    </ng-container>
+                                </div>
+                            </div>
+
+                            <h6 class="mb-2">Estimated Hiring Decision Timeframe</h6>
+                            <p class="mb-4">{{ previewData?.hiring_timeframe }}</p>
+
+                            <h6 class="mb-2">Interview Format</h6>
+                            <ng-container *ngFor="let hs of previewData?.interview_format">
+                                <p-tag [value]="hs" class="jobdetailtags"></p-tag>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Note -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card-body p-3 p-md-4 bg-secondary-subtle rounded-3">
+                    <div class="row">
+                        <div class="col-12 col-md-3 mb-3 mb-md-0">
+                            <h2 class="fs-3 fw-bold">Additional Note</h2>
+                        </div>
+                        <div class="col-12 col-md-9 font-bold">
+                            <p class="mb-0" [innerHTML]="previewData?.additional_notes"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog [(visible)]="showJobCreditModal" [modal]="true" [closable]="true" [dismissableMask]="false"
+    [style]="{ width: '520px' }" [contentStyle]="{ padding: '2.5rem 2rem' }" styleClass="job-live-dialog">
+    <div class="dialog-content">
+
+        <div class="image-card">
+            <img src="../../../../assets/images/job-talent-credit.jpg" alt="Job Live" />
+        </div>
+
+        <h2>Your Job Is Live! 🎉</h2>
+
+        <p class="credit-text">
+            <span>{{ jobCreditCount }} FREE</span> Talent Credits have been added to your account.
+        </p>
+
+        <button pButton label="Share Job Link" icon="pi pi-share-alt" class="share-btn" (click)="shareJob()">
+        </button>
+
+        <p class="footer-text">
+            Share it with your job seeker network for better reach.
+        </p>
+
+    </div>
+</p-dialog>

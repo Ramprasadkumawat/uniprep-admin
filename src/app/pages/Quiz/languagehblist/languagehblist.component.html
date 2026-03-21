@@ -1,0 +1,43 @@
+<div class="card mt-2" style="height: 100%;">
+    <div class="card-header d-flex w-full align-items-center " style="background-color: #fff;"
+        [ngClass]="currentPageName=='Learning Hub Quiz'? 'justify-content-between':''">
+        <span *ngIf="currentPageName!='Learning Hub Quiz'">
+            <p-button (click)="goBack()" icon="pi pi-arrow-left"
+                styleClass="p-button-rounded p-button-text text-dark"></p-button>
+        </span>
+        <h3 class="bold-text" style="font-size: 23px;">Language Hub Quiz<br><span
+                style="color: #A1A1A1; font-size: 10px;">Total Categories:{{learningHubListCount}}</span></h3>
+    </div>
+    <div class="card-body">
+        <!-- card list -->
+        <div class="row gap-4 mt-5 d-flex">
+            <div class="card" style="width: 23%;" *ngFor="let list of learninghublist">
+                <div class="container-fluid p-4" style="text-align: center;">
+                    <h5 style="font-size: 20px;" *ngIf="currentPageName=='Language Hub Quiz'">{{ list.language }}</h5>
+                    <h5 style="font-size: 20px;" *ngIf="currentPageName!='Language Hub Quiz'">{{ list.type }}
+                    </h5>
+                    <div style="padding-top: inherit;">
+                        <img width="80" height="60" src="{{ list.icon }}" alt="">
+                    </div>
+                    <div style="padding-top: inherit;" class="mt-auto">
+                        <!-- Use 'mt-auto' class to push the button to the bottom -->
+                        <div class="p-1 mt-1" style="text-align: center;">
+                            <button (click)="getlanguageHubSubCategory(list.id)" class="ps-4 pe-4 pt-2 pb-2" pButton
+                                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px; width: -webkit-fill-available; "
+                                *ngIf="currentPageName=='Language Hub Quiz'">
+                                View Module
+                                &nbsp;
+                            </button>
+                            <button routerLink="/quiz/language-hub/{{languageidsaveforquiz}}/{{list.id}}" class="ps-4 pe-4 pt-2 pb-2" pButton
+                                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px; width: -webkit-fill-available; "
+                                *ngIf="currentPageName!='Language Hub Quiz'">
+                                Add Questions
+                                &nbsp;
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

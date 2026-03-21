@@ -1,0 +1,99 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value=1>
+		<p-accordion-header>Filter Students</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filter()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Namessssss</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Mobile</label>
+							<input formControlName="phone" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Country</label>
+							<p-select formControlName="country" optionValue="id" optionLabel="name" styleClass="w-full" [options]="countries"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Passing Year</label>
+							<p-multiselect class="form-control border-black paddingfive" styleClass="w-full" [options]="passingyear" optionValue="id" formControlName="passingyear" defaultLabel="Select Passing Year" optionLabel="name" selectedItemsLabel="{0} items selected" [maxSelectedLabels]="0"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Program Level</label>
+							<p-multiselect class="form-control border-black paddingfive" styleClass="w-full" [options]="programlevel" optionValue="id" formControlName="programlevel" defaultLabel="Select Program Level" optionLabel="name" selectedItemsLabel="{0} items selected" [maxSelectedLabels]="0"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Region</label>
+							<p-multiselect (onChange)="selectRegion()" class="form-control border-black paddingfive" styleClass="w-full" [options]="region" optionValue="id" formControlName="region" defaultLabel="Select Region" optionLabel="name" selectedItemsLabel="{0} items selected" [maxSelectedLabels]="0"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Location</label>
+							<p-multiselect class="form-control border-black paddingfive" styleClass="w-full" [options]="locations" optionValue="id" formControlName="location" defaultLabel="Select Location" optionLabel="name" selectedItemsLabel="{0} items selected" [maxSelectedLabels]="0"></p-multiselect>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button pButton type="button" (click)="filterForm.reset(); filterFormElm.reset()" label="Reset Filter"></button>&nbsp;
+						<button pButton label="Filter Data"></button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="students" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [rows]="pageSize" [totalRecords]="datacount" [rowsPerPageOptions]="[10, 25, 50]">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<span>Students List</span>
+			<button pButton>Export &nbsp; <i class="pi pi-file-export"></i></button>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th>Name</th>
+			<th>Email ID</th>
+			<th>Mobile</th>
+			<th>Interested Country</th>
+			<th>Region</th>
+			<th>Location</th>
+			<th>Degree Passing Year</th>
+			<th>Program Level Looking</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-student>
+		<tr>
+			<td>{{ student.name }}</td>
+			<td>{{ student.email }}</td>
+			<td>{{ student.mobile }}</td>
+			<td>{{ student.interestedcountry }}</td>
+			<td>{{ student.region }}</td>
+			<td>{{ student.location }}</td>
+			<td>{{ student.passingyear }}</td>
+			<td>{{ student.programlevel }}</td>
+		</tr>
+	</ng-template>
+</p-table>

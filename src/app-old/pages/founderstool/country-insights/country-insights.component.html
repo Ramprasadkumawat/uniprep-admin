@@ -1,0 +1,157 @@
+<div class="card mt-2">
+	<div class="card-header d-flex w-full align-items-center justify-content-between" style="background-color: transparent">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6 col-sm-12 col-12">
+					<div class="d-flex gap-3 align-items-center">
+						<h5 class="mb-0">Add Country</h5>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-body d-flex w-full align-items-center justify-content-between" style="background-color: transparent">
+		<div class="container-fluid">
+			<div class="row">
+				<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>Country</label>
+								<p-select formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="countryList" [filter]="true" filterBy="country"></p-select>
+								<div *ngIf="submitted && f.country?.errors" class="text-danger text-xs">
+									<div *ngIf="f?.country?.errors.required">Required</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label>URL Slug</label>
+								<input formControlName="url" type="text" class="form-control" pInputText />
+								<div *ngIf="submitted && f.url.errors" class="text-danger text-xs">
+									<div *ngIf="f.url.errors.required">Required</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<label>Image</label>
+							<div class="form-group">
+								<div class="input-wrapper">
+									<input type="file" (change)="onFileChange($event)" class="form-control w-100" pInputText style="display: none" #fileInput />
+									<input type="text" formControlName="image" class="form-control w-100" pInputText readonly (click)="fileInput.click()" />
+									<button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem" class="upload-button" (click)="fileInput.click()">Upload</button>
+									<div *ngIf="submitted && f.image.errors" class="text-danger text-xs">
+										<div *ngIf="f.image.errors.required">Required</div>
+									</div>
+								</div>
+								<img *ngIf="editImage" src="{{ editImage }}" alt="image" width="200px" height="200px" />
+							</div>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="resetForm()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button">Reset Field</button>&nbsp;
+
+							<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">{{ !selectedCategoryId ? "Add" : "Update" }} Insight</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<p-accordion value="0"styleClass="white-accordian mt-2">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Country Insights</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Country</label>
+							<p-multiselect formControlName="country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="countryList" [filter]="true" filterBy="country" multiple="true" [showClear]="true"></p-multiselect>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="button" (click)="resetButton()">Reset Filter</button>
+						<button class="btn btn-primary" type="submit">Filter Data</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="card mt-2">
+	<div class="card-header d-flex w-full align-items-center justify-content-between" style="background-color: transparent">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6 col-sm-12 col-12">
+					<div class="d-flex gap-3">
+						<div>
+							<h5 class="mb-0">Module Names</h5>
+							<span style="color: #a1a1a1; font-size: 12px">Total Country: {{ countryInsightsCount }}</span>
+						</div>
+						<input type="text" pInputText (input)="searchModules($event)" placeholder="Search" style="height: 40px" />
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-12 col-12" style="text-align: right">
+					<button class="ps-3 pe-3 pt-2 pb-2" (click)="addCountryInsightspopupImport()" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Import &nbsp; <i class="pi pi-file-export"></i></button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		<div class="row mt-5">
+			<div class="col-lg-3 col-md-6 col-sm-6 mb-3" *ngFor="let item of countryInsightsList">
+				<div class="card p-3">
+					<div class="text-center pt-2 pb-2">
+						<img src="{{ item.flag }}" alt="" style="height: 60px; width: 80px; border-radius: 50%" />
+					</div>
+					<div class="text-center fw-bold">{{ item.country }}</div>
+					<br />
+					<div class="row text-center">
+						<div class="d-flex gap-2">
+							<div class="flex-grow-1">
+								<button (click)="viewQuestionsList(item.id, item.country_id)" class="w-100 justify-content-center" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">view</button>
+							</div>
+							<div class="flex-grow-1">
+								<button (click)="editCountryInsights(item)" class="w-100 justify-content-center" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Edit</button>
+							</div>
+							<p-confirmpopup></p-confirmpopup>
+							<div class="flex-grow-1">
+								<button (click)="deleteCountryInsights(item)" class="w-100 justify-content-center" pButton style="background-color: red; border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">
+									<i class="fa-solid fa-trash"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<p-paginator (onPageChange)="pageChange($event)" [rows]="rows" [totalRecords]="countryInsightsCount" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+</div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{ display: countryInsightImport }" id="top-layer" style="backdrop-filter: brightness(0.5)">
+	<div class="modal-dialog">
+		<div class="modal-content p-2" style="width: 150%">
+			<span (click)="closeCountryInghtsPopUpImport()" style="color: var(--p-primary-500); text-align: right; cursor: pointer"><i class="fa-solid fa-xmark"></i></span>
+			<div>
+				<label for="file" class="reading-drop-container">
+					<i class="pi pi-upload reading-drop-title"></i>
+					<input type="file" id="file" class="d-none" (change)="onCSVFileChange($event)" (click)="$event['target']['value'] = ''" accept=".csv" /><br />
+					<div class="reading-sm-font" *ngIf="selectedCSVFile?.name">{{ selectedCSVFile.name }}</div>
+					<div *ngIf="!selectedCSVFile?.name" class="d-flex flex-column gap-1 text-center">
+						<span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+						<span class="reading-sm-font">Please maintain the format of uploading to stop failures</span>
+					</div> </label
+				><br />
+				<div class="text-center">
+					<button class="btn btn-primary" (click)="uploadFile()"><i class="fa-solid fa-upload"></i> Upload</button>
+					<button class="btn btn-primary" (click)="downloadSampleCSV()"><i class="fa-solid fa-download"></i> Download Sample Doc</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

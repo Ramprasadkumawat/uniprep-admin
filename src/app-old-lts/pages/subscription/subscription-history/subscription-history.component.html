@@ -1,0 +1,46 @@
+<div class="card">
+    <div class="card-header">
+        <div class="d-flex w-full align-items-center justify-content-between">
+            <span class="h6 fw-bold">Subscription History</span>
+            <button class="btn btn-primary"
+                (click)="navigateSubscription()">Subscription Manager
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="subscriptionList" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)"
+            [totalRecords]="subscriptionCount" [lazy]="true" [rows]="pageSize" [tableStyle]="{ 'min-width': '70rem' }">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Subscription Type</th>
+                    <th>Subscription Plan</th>
+                    <th>Actual Price</th>
+                    <th>Save</th>
+                    <th>Given Price</th>
+                    <th>Validity</th>
+                 <!--   <th>Country Access</th>
+                    <th>Chat Access Per Day</th>
+                    <th>Coupon Code Access</th>
+                    <th>Country Restriction</th> -->
+                    <th>Updated</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sub>
+                <tr>
+                    <td>{{ sub.subtypeName }}</td>
+                    <td>{{ sub.subscription_plan == 'Popular' ?  sub.subscription_plan + ' *' : sub.subscription_plan}}</td>
+                    <td>{{ sub.actualprice| number: '1.0-0' }} INR</td>
+                    <td>{{ sub.discountpercentage }} %</td>
+                    <td>{{ sub.givenprice| number: '1.0-0' }} INR</td>
+                    <td>{{ sub.validity | number:'2.0-0' }} Months</td>
+                 <!--   <td>{{ sub.countryNames }}</td>
+                    <td>{{ sub.chatlimit | number:'2.0-0' }}</td>
+                    <td>{{ sub.couponcode == 1 ? 'Yes' : 'No' }}</td>
+                    <td>{{ (sub.countryrestriction | number:'2.0-0' ) || '-' }}</td> -->
+                    <td>{{ sub.updated_at | date:'d/M/yy, h:mm a' }}</td>
+
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

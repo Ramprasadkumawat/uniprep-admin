@@ -1,0 +1,247 @@
+<div class="container-fluid p-0">
+  <div class="card mb-4">
+    <div class="card-body p-0">
+      <!-- Header -->
+      <div class="bg-light p-3 d-flex align-items-center">
+        <button pButton pRipple type="button" icon="pi pi-angle-left" class="p-button-rounded p-button-primary text-white p-button-text me-3" routerLink="/landing-page"></button>
+        <h4 class="mb-0">Add Category Information</h4>
+      </div>
+      
+      <form [formGroup]="categoryForm" class="p-3">
+        <!-- Basic Information -->
+        <div class="row g-3 mb-4">
+          <div class="col-12">
+            <label for="categoryName" class="form-label">Category Name</label>
+              <p-select 
+                id="categoryName" 
+                formControlName="category_name" 
+                [options]="categories" 
+                optionLabel="category"
+                optionValue="id"
+                [showClear]="true"
+                placeholder="Select a category"
+                styleClass="w-100" (onChange)="onChangeCategory($event);">
+              </p-select>
+            <small class="text-danger" *ngIf="isInvalid('category_name')">Category Name is required</small>
+          </div>
+
+          <div class="col-12">
+            <label for="pageTitle" class="form-label">Page Title</label>
+            <input pInputText id="pageTitle" formControlName="page_title" class="w-100" />
+            <small class="text-danger" *ngIf="isInvalid('page_title')">Page Title is required</small>
+          </div>
+          
+          <div class="col-12">
+            <label for="pageDescription" class="form-label">Page Description</label>
+            <textarea 
+              pInputTextarea 
+              id="pageDescription" 
+              formControlName="page_description" 
+              rows="3"
+              class="w-100">
+            </textarea>
+            <small class="text-danger" *ngIf="isInvalid('page_description')">Page Description is required</small>
+          </div>
+        </div>
+        
+        <!-- SEO Options -->
+        <div class="section-header mb-3">
+          <h5 class="text-primary">SEO Options</h5>
+        </div>
+        
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label for="seoTitle" class="form-label">SEO Title</label>
+            <input pInputText id="seoTitle" formControlName="seo_title" class="w-100" />
+            <small class="text-danger" *ngIf="isInvalid('seo_title')">SEO Title is required</small>
+          </div>
+          
+          <div class="col-md-6">
+            <label for="metaDescription" class="form-label">META Description</label>
+            <input pInputText id="metaDescription" formControlName="meta_description" class="w-100" />
+            <small class="text-danger" *ngIf="isInvalid('meta_description')">META Description is required</small>
+          </div>
+          
+          <div class="col-md-6">
+            <label for="metaTags" class="form-label">META Tags</label>
+            <input pInputText id="metaTags" formControlName="meta_tag" class="w-100" />
+          </div>
+          
+          <div class="col-md-6">
+            <label for="metaAuthor" class="form-label">META Author</label>
+            <input pInputText id="metaAuthor" formControlName="meta_author" class="w-100" />
+          </div>
+          
+          <div class="col-md-6">
+            <label for="image" class="form-label">Blog Cover Image/Meta Cover Image</label>
+            <div class="p-inputgroup">
+              <input
+                type="text"
+                id="image"
+                pInputText
+                formControlName="image"
+                class="w-full"
+                placeholder="Upload an image"
+                readonly
+              />
+              <p-fileUpload mode="basic" name="image" 
+                [auto]="true"
+                chooseLabel="Upload Image"
+                [files]="files"
+                [customUpload]="true"
+                (uploadHandler)="onFileUpload($event, 'image')"
+                accept="image/*"
+                [maxFileSize]="5000000"
+                styleClass="p-button-outlined p-button-primary h-100 text-white p-2" #fileUpload>
+              </p-fileUpload>
+            </div>
+          </div>
+          
+          <div class="col-md-6" *ngIf="this.id">
+            <label class="form-label">Status</label>
+            <div class="d-flex">
+              <p-selectButton [options]="this.statusOptions" formControlName="seo_status" optionLabel="status" optionValue="id"></p-selectButton>
+              <small class="text-danger" *ngIf="isInvalid('seo_status')">Status is required</small>
+            </div>
+          </div>
+        </div>
+      
+        <!-- Category Cards -->
+        <div class="section-header mb-3">
+          <h5 class="text-primary">Category Cards</h5>
+        </div>
+        
+        <div class="row g-3 mb-4">
+          <div class="col-md-12">
+            <label for="categoryTitle" class="form-label">Category Title</label>
+            <input pInputText id="categoryTitle" formControlName="category_title" class="w-100" />
+            <small class="text-danger" *ngIf="isInvalid('category_title')">Category Title is required</small>
+          </div>
+          
+          <div class="col-md-6">
+            <label for="categoryIcon" class="form-label">Icon</label>
+            <input pInputText id="categoryIcon" formControlName="category_icon" class="w-100" placeholder="Icon" />
+            <small class="text-danger" *ngIf="isInvalid('category_icon')">Icon is required and emoji format</small>
+          </div>
+          
+          <div class="col-md-12">
+            <label for="categoryDescription" class="form-label">Description</label>
+            <textarea 
+              pInputTextarea 
+              id="categoryDescription" 
+              formControlName="category_description" 
+              rows="3"
+              class="w-100">
+            </textarea>
+            <small class="text-danger" *ngIf="isInvalid('category_description')">Description is required</small>
+          </div>
+        </div>
+        
+        <!-- Category Cards Items -->
+        <div formArrayName="categoryCards">
+          <div *ngFor="let item of categoryCardsArray.controls; let i = index" [formGroupName]="i" class="row g-3 mb-3 pb-3 border-bottom">
+            <div class="col-md-2">
+              <label class="form-label">Icon/Emoji</label>
+              <input pInputText formControlName="icon_emoji" class="w-100" placeholder="Icon" />
+              <small class="text-danger" *ngIf="isArrayControlInvalid('categoryCards', i, 'icon_emoji')">Icon is required and emoji format</small>
+            </div>
+            
+            <div class="col-md-4">
+              <label class="form-label">Title</label>
+              <input pInputText formControlName="title" class="w-100" />
+              <small class="text-danger" *ngIf="isArrayControlInvalid('categoryCards', i, 'title')">Title is required</small>
+            </div>
+            
+            <div class="col-md-4">
+              <label class="form-label">Sub Title</label>
+              <input pInputText formControlName="sub_title" class="w-100" />
+              <small class="text-danger" *ngIf="isArrayControlInvalid('categoryCards', i, 'sub_title')">Sub Title is required</small>
+            </div>
+            
+            <div class="col-md-2 d-flex align-items-end justify-content-end">
+              <button 
+                pButton 
+                type="button" 
+                label="Delete"
+                icon="pi pi-trash" 
+                class="p-button-danger p-button-rounded"
+                (click)="removeCategoryCard(i)">
+              </button>
+            </div>
+          </div>
+          
+          <div class="d-flex justify-content-end mb-4">
+            <button 
+              pButton 
+              type="button" 
+              icon="pi pi-plus" 
+              label="Add More" 
+              class="p-button-secondary"
+              (click)="addCategoryCard()">
+            </button>
+          </div>
+        </div>
+        
+        <!-- Add Tags Section -->
+        <div class="section-header mb-3">
+          <h5 class="text-primary">Add Tags</h5>
+        </div>
+                <!-- Category Cards Items -->
+                <div formArrayName="tagCards">
+                  <div *ngFor="let item of tagCardsArray.controls; let i = index" [formGroupName]="i" class="row g-3 mb-3 pb-3 border-bottom">
+                    <div class="col-md-2">
+                      <label class="form-label">Icon/Emoji</label>
+                      <input pInputText formControlName="icon_emoji" class="w-100" placeholder="Icon" />
+                      <small class="text-danger" *ngIf="isArrayControlInvalid('tagCards', i, 'icon_emoji')">Icon is required and valid format
+                        of emoij</small>
+                    </div>
+                    
+                    <div class="col-md-4">
+                      <label class="form-label">Title</label>
+                      <input pInputText formControlName="title" class="w-100" />
+                      <small class="text-danger" *ngIf="isArrayControlInvalid('tagCards', i, 'title')">Title is required</small>
+                    </div>
+                    
+                    <div class="col-md-4">
+                      <label class="form-label">Sub Title</label>
+                      <input pInputText formControlName="sub_title" class="w-100" />
+                      <small class="text-danger" *ngIf="isArrayControlInvalid('tagCards', i, 'sub_title')">Sub Title is required</small>
+                    </div>
+                    
+                    <div class="col-md-2 d-flex align-items-end justify-content-end">
+                      <button 
+                        pButton 
+                        type="button" 
+                        label="Delete"
+                        icon="pi pi-trash" 
+                        class="p-button-danger p-button-rounded"
+                        (click)="removeTagCard(i)">
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div class="d-flex justify-content-end mb-4">
+                    <button 
+                      pButton 
+                      type="button" 
+                      icon="pi pi-plus" 
+                      label="Add More" 
+                      class="p-button-secondary"
+                      (click)="addTagCard()">
+                    </button>
+                  </div>
+                </div>
+        <!-- Form Actions -->
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button 
+            pButton 
+            type="button" 
+            label="Update Category" 
+            class="p-button-primary"
+            (click)="updateCategory()">
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

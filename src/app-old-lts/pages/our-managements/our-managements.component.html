@@ -1,0 +1,194 @@
+<div class="container-fluid p-0">
+    <div class="card-body">
+        <form [formGroup]="memberManagementForm">
+          <p-accordion value="0"activeIndex="0">
+            <p-accordion-panel value="1">
+              <p-accordion-header>{{id ? 'Update': 'Add'}} Management Team</p-accordion-header><p-accordion-content>
+              <div class="row g-3">
+                <!-- Feature Name -->
+                <div class="col-md-3">
+                  <label for="feature_name" class="form-label">Name <span class="text-danger">*</span></label>
+                  <input pInputText id="featureName" formControlName="name" placeholder="Enter the Name" class="w-100" 
+                         [ngClass]="{'ng-invalid ng-dirty': f.name.touched && f.name.errors}" />
+                  <small *ngIf="f.name.touched && f.name.errors?.required" class="p-error">
+                     Name is required.
+                  </small>
+                </div>
+                
+                <!-- Category -->
+                <div class="col-md-3">
+                  <label for="category" class="form-label">Designation <span class="text-danger"><span class="text-danger">*</span></span></label>
+                  <input pInputText id="featureName" formControlName="designation" placeholder="Enter Designation Name" class="w-100" 
+                         [ngClass]="{'ng-invalid ng-dirty': f.designation.touched && f.designation.errors}" />
+                  <small *ngIf="f.designation.touched && f.designation.errors?.required" class="p-error">
+                    Designation is required.
+                  </small>
+                </div>
+                
+                <!-- Tag -->
+                <div class="col-md-3">
+                  <label for="tag" class="form-label">LinkedIn Url <span class="text-danger"></span></label>
+                  <input pInputText id="featureName" formControlName="linkedin_url" placeholder="Enter linkedin url" class="w-100" 
+                         [ngClass]="{'ng-invalid ng-dirty': f.linkedin_url.touched && f.linkedin_url.errors}" />
+                  <small *ngIf="(f.linkedin_url.touched && f.linkedin_url.errors) " class="p-error">
+                    LinkedIn Url is required and valid.
+                  </small>
+                </div>
+                
+                <!-- Status -->
+                <div class="col-md-3">
+                  <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                  <p-select id="status"
+                    formControlName="status"
+                    [options]="statuses"
+                    optionLabel="status"
+                    optionValue="id"
+                    placeholder="Select your status"
+                    [showClear]="true"
+                    styleClass="w-100"
+                    [ngClass]="{'ng-invalid ng-dirty': f.status.touched && f.status.errors}">
+                  </p-select>
+                  <small *ngIf="f.status.touched && f.status.errors?.required" class="p-error">
+                    Status is required.
+                  </small>
+                </div>
+                
+                <!-- Icon -->
+                <div class="col-md-12">
+                  <label for="icon" class="form-label">User Image<span class="text-danger">*</span></label>
+                  <div class="p-inputgroup rounded-2">
+                    <input
+                      id="image"
+                      pInputText
+                      formControlName="image"
+                      class="w-full rounded-2"
+                      placeholder="Upload an image"
+                      readonly
+                    />
+                    <p-fileUpload mode="basic" name="image" 
+                      [auto]="true"
+                      chooseLabel="Upload"
+                      [files]="files"
+                      [customUpload]="true"
+                      (uploadHandler)="onFileSelected($event)"
+                      accept="image/*"
+                      [maxFileSize]="5000000"
+                      styleClass="p-button-outlined p-button-primary h-100 text-white p-2 rounded-0" #fileUpload>
+                    </p-fileUpload>
+                  </div>
+                  <small *ngIf="f.image.touched && f.image.errors?.required" class="p-error">
+                    Image is required.
+                  </small>
+                </div>
+                
+                
+                <!-- Filter Buttons -->
+                <div class="col-12 d-flex justify-content-end gap-2 mt-4">
+                  <button 
+                  pButton 
+                  type="button" 
+                  label="Reset Fields" 
+                  class="p-button-danger  mt-auto"
+                  (click)="resetManagementFields();">
+                </button>
+                  <button pButton
+                    type="button"
+                    label="{{id ? 'Update': 'Add'}} Management Team"
+                    class="p-button-primary"
+                    (click)="submitmemberManagement()">
+                  </button>
+                </div>
+              </div>
+            </p-accordion-content></p-accordion-panel>
+          </p-accordion>
+        </form>
+    </div>
+  
+  <!-- Landing Pages List -->
+  <div class="card">
+    <div class="card-header bg-white py-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="mb-0">Management Teams</h5>
+          <small class="text-muted">Total Team: {{totalRecords}}</small>
+        </div>
+        <span class="p-input-icon-left me-3">
+            <input pInputText type="text" placeholder="Search" (input)="searchManagement($event);" class="me-1"/>
+            <uni-bulk-upload uploadApiUrl="/managementImport" sampleFileUrl="/assets/files/management.csv" (uploadSuccess)="getMemberManagementList();"></uni-bulk-upload>
+        </span>
+      </div>
+    </div>
+    
+    <div class="card-body">
+        <div class="team-members-grid">
+            <div class="row">
+              <div class="col-md-4 col-lg-3 mb-4 h-100" *ngFor="let member of memberManagements">
+                <div class="card team-member-card">
+                  <div class="status-badge" [ngClass]="getStatusClass(member.status)">
+                    {{ getStatusLabel(member.status) }}
+                  </div>
+                  <img [src]="member.image" class="card-img-top team-member-image" alt="{{ member.name }}">
+                  <div class="card-body text-center">
+                    <h5 class="card-title mb-1">{{ member.name }}</h5>
+                    <p class="card-text text-muted">{{ member.designation }}</p>
+                    <div class="d-flex justify-content-center mb-3">
+                      <a  [href]="member.linkedin_url" target="_blank" class="linkedin-link">
+                        <span *ngIf="member.linkedin_url">LinkedIn<span class="linkedin-icon">in</span></span>&nbsp; 
+                      </a>
+                    </div>
+                    <button class="btn btn-primary w-100 mt-auto" (click)="editMemberManagement(member, $event);">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <hr *ngIf="totalRecords > 0">      
+      <!-- Pagination -->
+      <div class="d-flex justify-content-end align-items-center">        
+        <p-paginator 
+        *ngIf="totalRecords > 0"
+          [first]="first" 
+          [rows]="pageSize" 
+          [totalRecords]="totalRecords" 
+          [rowsPerPageOptions]="[2,10, 25]"
+          (onPageChange)="onPageChange($event)">
+        </p-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<p-scrollTop 
+    target="parent" 
+    styleClass="custom-scrolltop" 
+    [threshold]="20" 
+    icon="pi pi-arrow-up"></p-scrollTop>
+<!-- <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':importModal}" id="top-layer"
+style="backdrop-filter: brightness(0.5);">
+<div class="modal-dialog">
+  <div class="modal-content p-2" style="width: 150%;">
+    <span (click)="importModal = 'none'"
+      style="color: var(--p-primary-500); text-align: right; cursor: pointer;"><i
+        class="fa-solid fa-xmark"></i></span>
+    <div>
+      <label for="file" class="reading-drop-container">
+        <i class="pi pi-upload reading-drop-title"></i>
+        <input type="file" id="file" class="d-none" (change)="onFileChange($event)"
+          (click)="$event['target']['value']=''" accept=".csv"><br />
+        <div class="reading-sm-font" *ngIf="selectedFile?.name">{{selectedFile.name}}</div>
+        <div *ngIf="!selectedFile?.name" class="d-flex flex-column gap-1 text-center">
+          <span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+          <span class="reading-sm-font">Please maintain the format of uploading to stop failures</span>
+        </div>
+      </label><br />
+      <div class="text-center">
+        <button class="btn btn-primary" (click)="uploadFile()">
+          <i class="fa-solid fa-upload"></i> Upload
+        </button>
+        <a class="btn btn-primary" role="link" href="/assets/files/Landingpage.csv" [download]="'landingpage'">
+          <i class="fa-solid fa-download"></i> Download Sample Doc
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</div> -->

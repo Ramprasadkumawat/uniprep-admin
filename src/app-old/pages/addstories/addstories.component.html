@@ -1,0 +1,94 @@
+<p-accordion styleClass="white-accordian" activeIndexChange="indextchange($event)" value="{{activeIndex}}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>{{ namentxt }}</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Title</label>
+							<input formControlName="title" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.title.errors" class="text-danger text-xs">
+								<div *ngIf="f.title.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Link</label>
+							<input formControlName="link" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.link.errors" class="text-danger text-xs">
+								<div *ngIf="f.link.errors.required">Required</div>
+								<div *ngIf="f.link.hasError('invalidLinkFormat')">Invalid link format.Please use 'http://' or 'https://'.</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>description</label>
+							<input formControlName="decription" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.decription.errors" class="text-danger text-xs">
+								<div *ngIf="f.decription.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<label>Cover Image</label>
+						<div class="form-group" (dragover)="onDragOver($event)">
+							<div class="input-wrapper">
+								<input type="file" (change)="onFileChange($event)" formControlName="image" accept=".png, .svg, .webp" style="display: none; color: black" #fileInput />
+								<input style="height: 40px !important" type="text" (change)="onFileChange($event)" formControlName="image" class="form-control" pInputText readonly [value]="form.controls.image.value ? form.controls.image.value.name : ''" (click)="fileInput.click()" />
+								<button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem" class="upload-button" (click)="fileInput.click()">Upload</button>
+							</div>
+							<!-- <div *ngIf="submitted && f.image.errors" class="text-danger text-xs">
+                            <div *ngIf="f.image.errors.required">Required</div>
+                        </div> -->
+						</div>
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="form.reset()">Reset Field</button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">{{ btntxt }}</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<div style="background-color: #fff">
+	<h5 class="p-2 ps-3">Success Stories List</h5>
+	<hr />
+	<div class="card-container p-4">
+		<div class="row">
+			<div class="col-md-3 p-2" *ngFor="let list of tutoriallist">
+				<div class="card p-2 pe-3 ps-3 h-100">
+					<div style="text-align: center">
+						<img class="img-fluid" style="width: 280px; height: 200px; object-fit: cover; border-radius: 15px" [src]="list.coverimage" alt="" loading="lazy" />
+					</div>
+					<div class="mt-2 text-start">
+						<a style="text-decoration: none; color: #001631" href="{{ list.link }}" target="_blank">
+							<h6 style="font-size: medium">
+								<b>{{ list.title }}</b>
+							</h6>
+						</a>
+					</div>
+					<p class="text-start" style="font-size: small">
+						{{ list.description.length > 65 ? list.description.slice(0, 65) + "..." : list.description }}
+					</p>
+					<div class="mt-auto d-flex justify-content-around">
+						<button (click)="edittutorialdetails(list)" class="mt-2 pt-2 pb-2" pButton style="flex-direction: column-reverse; background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: small; width: 40%" type="button">Edit</button>
+						<button class="mt-2 pt-2 pb-2" (click)="deletetutorialist(list)" pButton style="flex-direction: column-reverse; background-color: var(--p-primary-500); border-radius: 8px; font-size: small; border: aliceblue; color: #fff; width: 40%" type="submit">Delete</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-footer">
+		<p-paginator [rows]="10" [totalRecords]="totalcount" (onPageChange)="paginate($event)" [rowsPerPageOptions]="[12, 36, 72, 100]"></p-paginator>
+	</div>
+
+	<p-confirmDialog></p-confirmDialog>
+</div>

@@ -1,0 +1,275 @@
+<div class="row h-100 overflow-y-auto">
+	<div class="col-md-4 h-100 order-2 order-md-1">
+		<div class="d-flex flex-column h-100">
+			<div>
+				<p-accordion value="0" class="col-12" styleClass="white-accordian">
+					<p-accordion-panel value="1">
+						<p-accordion-header>Filter By</p-accordion-header>
+						<p-accordion-content>
+							<form [formGroup]="filterForm" (ngSubmit)="filtersubmit()" #filterFormElm>
+								<div class="row">
+									<div class="col-md-6 mt-1">
+										<div class="form-group">
+											<label>From</label>
+											<p-datepicker formControlName="createdFrom" styleClass="w-full" appendTo="body" dateFormat="yy-mm-dd"></p-datepicker>
+										</div>
+									</div>
+									<div class="col-md-6 mt-1">
+										<div class="form-group">
+											<label>To</label>
+											<p-datepicker formControlName="createdTo" styleClass="w-full" appendTo="body" dateFormat="yy-mm-dd"></p-datepicker>
+										</div>
+									</div>
+									<div class="col-md-12 mt-2">
+										<div class="form-groupm">
+											<label>Country</label>
+											<p-multiselect styleClass="w-full" formControlName="country" defaultLabel="Select" optionValue="id" optionLabel="country" [options]="countryList"></p-multiselect>
+										</div>
+									</div>
+									<div class="col-md-12 mt-2">
+										<div class="form-groupm">
+											<label>Lead Type</label>
+											<p-select styleClass="w-full" formControlName="leadtype" optionValue="id" optionLabel="name" [options]="leadList"></p-select>
+										</div>
+									</div>
+									<div class="col-md-12 mt-2">
+										<div class="form-groupm">
+											<label>Status</label>
+											<p-select styleClass="w-full" formControlName="messagestatus" optionValue="id" optionLabel="name" [options]="statusList"></p-select>
+										</div>
+									</div>
+								</div>
+								<div class="row mt-3 mt-1">
+									<div class="col-12 text-right">
+										<button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton type="button" (click)="reset()">Reset Filter</button>&nbsp;
+										<button class="ps-3 pe-3 pt-2 pb-2 btn btn-primary" pButton type="submit">Filter</button>
+									</div>
+								</div>
+							</form>
+						</p-accordion-content>
+					</p-accordion-panel>
+				</p-accordion>
+			</div>
+
+			<div class="card overflow-y-auto">
+				<div class="card-header">
+					<div style="font-size: large">
+						<a style="font-size: 1.2rem; font-weight: 600">Messages</a>
+					</div>
+					<hr style="color: var(--p-primary-500)" />
+					<div class="gap-5 d-flex">
+						<div style="font-size: 0.9rem; font-weight: 600">
+							Total Chat Users -
+							<span style="color: var(--p-primary-500)">{{ totalchatusers || 0 }}</span>
+						</div>
+						<div style="font-size: 0.9rem; font-weight: 600">
+							Total Questions -
+							<span style="color: var(--p-primary-500)">{{ totalquestions || 0 }}</span>
+						</div>
+					</div>
+					<div class="gap-5 d-flex">
+						<div style="font-size: 0.9rem; font-weight: 600">
+							Total Answered -
+							<span style="color: var(--p-primary-500)">{{ totalansweres || 0 }}</span>
+						</div>
+						<div style="font-size: 0.9rem; font-weight: 600">
+							Total Non Answered -
+							<span style="color: var(--p-primary-500)">{{ totalnonansweres || 0 }}</span>
+						</div>
+					</div>
+					<div class="d-flex align-items-center">
+						<input type="text" class="form-control" placeholder="Search Chat" id="search" [(ngModel)]="searchdata" (keyup)="searchinputchange()" />
+						<div style="text-align: end">
+							<button (click)="reset()" class="btn btn-sm btn-primary">Clear</button>
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+					<p-tabs activeIndex="1" value="{{ tabIndex }}">
+						<p-tablist>
+							<p-tab value="1">Total Chats</p-tab>
+							<p-tab value="2">Not Replied</p-tab>
+							<p-tab value="3">Skipped</p-tab>
+							<p-tab value="4">Report</p-tab>
+						</p-tablist>
+						<p-tabpanels>
+							<p-tabpanel value="1">
+								<ng-template pTemplate="header"><span class="p-tabview-title" pBadge [badgeDisabled]="totalchatsbadge == ''" [value]="totalchatsbadge" severity="danger">Total Chats</span></ng-template>
+								<br />
+
+								<div *ngFor="let chats of Chatlists">
+									<div class="discussion message-active row" [class.active]="chatUserId === chats.id" (click)="loadUserChat(chats)">
+										<div class="col-9">
+											<span class="name notification"
+												>{{ chats.name }}<span class="notification badge" *ngIf="chats?.notification != 0">{{ chats.notification }}</span></span
+											><br />
+											<span class="message">{{ chats.email }}</span>
+										</div>
+										<div class="timer col-3">
+											<span [class]="chats.questions_left == 0 ? 'bg-black' : ''">{{ chats.questions_left }}/{{ chats.chatlimit }}</span
+											><br />{{ chats.lastchat | date : "shortTime" }}
+										</div>
+									</div>
+								</div>
+							</p-tabpanel>
+							<p-tabpanel value="2">
+								<ng-template pTemplate="header"><span class="p-tabview-title" pBadge [badgeDisabled]="totalnonrepliedbadge == ''" [value]="totalnonrepliedbadge" severity="danger">Not Replied</span></ng-template>
+								<br />
+								<div *ngFor="let chats of NotrepliedChatlists">
+									<div class="discussion message-active row" [class.active]="chatUserId === chats.id" (click)="loadUserChat(chats)">
+										<div class="col-9">
+											<span class="name notification"
+												>{{ chats.name }}<span class="notification badge" *ngIf="chats?.notification != 0">{{ chats.notification }}</span></span
+											><br />
+											<span class="message">{{ chats.email }}</span>
+										</div>
+										<div class="timer col-3">
+											<span [class]="chats.questions_left == 0 ? 'bg-black' : ''">{{ chats.questions_left }}/{{ chats.chatlimit }}</span
+											><br />{{ chats.lastchat | date : "shortTime" }}
+										</div>
+									</div>
+								</div>
+							</p-tabpanel>
+							<p-tabpanel value="3">
+								<ng-template pTemplate="header"><span class="p-tabview-title" pBadge [badgeDisabled]="totalskippedbadge == ''" [value]="totalskippedbadge" severity="danger">Skipped</span></ng-template>
+								<br />
+								<div *ngFor="let chats of SkippedChatlists">
+									<div class="discussion message-active row" [class.active]="chatUserId === chats.id" (click)="loadUserChat(chats)">
+										<div class="col-9">
+											<span class="name notification"
+												>{{ chats.name }}<span class="notification badge" *ngIf="chats?.notification != 0">{{ chats.notification }}</span></span
+											><br />
+											<span class="message">{{ chats.email }}</span>
+										</div>
+										<div class="timer col-3">
+											<span [class]="chats.questions_left == 0 ? 'bg-black' : ''">{{ chats.questions_left }}/{{ chats.chatlimit }}</span
+											><br />
+											<!-- 10.20AM -->
+										</div>
+									</div>
+								</div>
+							</p-tabpanel>
+							<p-tabpanel value="4">
+								<ng-template pTemplate="header"><span class="p-tabview-title" pBadge [badgeDisabled]="totalreportbadge == ''" [value]="totalreportbadge" severity="danger">Report</span></ng-template>
+								<br />
+								<div *ngFor="let chats of ReportChatlists">
+									<div class="discussion message-active row" [class.active]="chatUserId === chats.id" (click)="loadUserChat(chats)">
+										<div class="col-9">
+											<span class="name notification"
+												>{{ chats.name }}<span class="notification badge" *ngIf="chats?.notification != 0">{{ chats.notification }}</span></span
+											><br />
+											<span class="message">{{ chats.email }}</span>
+										</div>
+										<div class="timer col-3">
+											<span [class]="chats.questions_left == 0 ? 'bg-black' : ''">{{ chats.questions_left }}/{{ chats.chatlimit }}</span
+											><br />
+											<!-- 10.20AM -->
+										</div>
+									</div>
+								</div>
+							</p-tabpanel>
+						</p-tabpanels>
+					</p-tabs>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-8 chatscreen h-100 order-md-2 order-1" *ngIf="chatUserName">
+		<div class="card h-100">
+			<div class="card-header flex-shrink-0">
+				<span class="text-right mt-2 credits"
+					>Question Credits &nbsp;<span class="credits-span ml-2">{{ chatUserQuestionLeft }}/{{ chatUserChatLimit }}</span
+					><br />
+					<div style="display: flex; margin-left: 2rem" class="gap-2 mb-3">
+						<div style="font-size: 0.8rem; font-weight: 600">
+							Total Questions Asked-
+							<span style="color: var(--p-primary-500)" class="mr-2">{{ totalquestionsasked || 0 }}</span>
+							|
+						</div>
+						<div style="font-size: 0.8rem; font-weight: 600">
+							Total Answered -
+							<span style="color: var(--p-primary-500)">{{ totalquestionsanswered || 0 }}</span>
+						</div>
+					</div>
+				</span>
+				<span class="chatwindow">{{ chatUserName }}</span>
+			</div>
+			<div class="card-body h-100 overflow-y-auto">
+				<section class="chat overflow-y-auto">
+					<div *ngFor="let message of messages; let index = index">
+						<div class="chat-section-container" *ngIf="message.questionNumber">
+							<div class="chat-section mb-2">
+								<div class="photo receiver-bg">
+									<ng-container *ngIf="message?.countryFlag">
+										<span class="countryimage"><img [src]="message?.countryFlag" /></span>
+									</ng-container>
+									<ng-container *ngIf="!message?.countryFlag">
+										<span class="name"> {{ message.sendByName.slice(0, 1) }}</span>
+									</ng-container>
+								</div>
+								<div>
+									<span class="full-name">{{ message.sendByName }}</span
+									><br />
+									<span class="msg-info1">Post Application | {{ message.sendDateTime }}</span>
+								</div>
+							</div>
+							<span class="msg-info" style="padding-left: 3rem">Question - {{ message.questionNumber }} <span style="color: red" *ngIf="message.messageStatus == 1">(Not Replied)</span></span>
+							<br />
+							<div class="chat-section msg-bottom">
+								<div class="checkbox-container">
+									<input type="checkbox" [ngModel]="selectedIndex === index" (change)="checkboxchange($event, index, message.questionNumber)" />
+								</div>
+								<div class="messages" [innerHTML]="message.message"></div>
+							</div>
+						</div>
+						<div class="chat-section-container" style="display: flex" *ngIf="message.answerForQuestion">
+							<div class="msg-bottom">
+								<div class="response">
+									<div class="chat-section mb-2">
+										<div class="photo sender-bg">
+											<span class="name">{{ message.sendByName.slice(0, 1) }}</span>
+										</div>
+										<div>
+											<span class="full-name">{{ message.sendByName }}</span
+											><br />
+											<span class="msg-info1">Post Application | {{ message.sendDateTime }}</span>
+										</div>
+									</div>
+									<div>
+										<span class="reply-msg-info">Replying for Question - {{ message.answerForQuestion }}</span
+										><br />
+										<p *ngIf="message.message" class="response-msg" [innerHtml]="message.message"></p>
+										<p *ngIf="message.attachment" [pTooltip]="message.filename" class="response-msg-attach">
+											<label>{{ message.filename }}</label> &nbsp;&nbsp;
+											<a (click)="openAttachment(message.attachment)"><i class="pi pi-arrow-circle-down"></i> </a>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<div class="card-footer flex-shrink-0">
+				<input type="file" style="display: none" #fileInput (change)="onUpload($event)" />
+				<div class="field col-12" [class]="fullscreen" #fullscreeneditor>
+					<p-editor [(ngModel)]="textMessage" [modules]="modules" placeholder="Reply">
+						<ng-template pTemplate="header">
+							<i class="pi pi-paperclip mr-2" style="cursor: pointer" (click)="fileInput.click()"></i>
+							<i [ngClass]="screensize" class="pi mr-2" style="cursor: pointer" (click)="fullscreentoggle()"></i>
+						</ng-template>
+					</p-editor>
+					<div style="padding-bottom: 3.5rem">
+						<button pButton class="btn btn-sm btn-primary" (click)="sendMessage()" style="float: right" [loading]="sendmessageLoading">Reply</button>
+						<ul *ngIf="uploadedFiles.length" class="mt-1" style="float: left">
+							<li *ngFor="let file of uploadedFiles" type="none">
+								<p-chip [removable]="true" (onRemove)="clearFiles()">{{ file.name }} - {{ file.size }} bytes</p-chip>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

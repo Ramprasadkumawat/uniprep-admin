@@ -1,0 +1,41 @@
+<section>
+	<div id="sidenav" [ngClass]="sidebarClass">
+		<uni-sidenav>
+			<ng-template #appTitle>
+				<img class="lightmodelogo w-100" src="../../assets/images/uniprep-light.svg" />
+			</ng-template>
+		</uni-sidenav>
+	</div>
+	<div id="page" (scroll)="onWindowScroll($event)">
+		<uni-header (logout)="logout()" [ngClass]="{ sticky: stickHeader }" [expandicon]="expandicon"> </uni-header>
+		<div id="page-container">
+			<router-outlet></router-outlet>
+		</div>
+		<footer [ngClass]="{ alignleft: !!sidebarClass }">
+            <div class="container-fluid py-2">
+                <div class="row align-items-center">
+                    <div class="col-md-12 text-md-end text-center">
+                        <p class="mb-0 fw-semibold small">2023 &#169; All rights reserved by UNIABROAD Technology Pvt. LTD.</p>
+                    </div>
+                    <!-- <ul class="nav justify-content-md-end justify-content-center col-md-6 small">
+                        <li class="nav-item">
+                            <a href="/pages/termsandcondition" style="cursor: pointer" class="nav-link px-2 py-0 text-body-secondary">Terms & Conditions</a>
+                        </li>
+                        <li class="nav-item">|</li>
+                        <li class="nav-item">
+                            <a href="/pages/privacypolicy" style="cursor: pointer" class="nav-link px-2 py-0 text-body-secondary">Privacy Policy</a>
+                        </li>
+                        <li class="nav-item">|</li>
+                        <li class="nav-item">
+                            <a href="/pages/refundpolicy" style="cursor: pointer" class="nav-link px-2 py-0 text-body-secondary">Refund Policy</a>
+                        </li>
+                        <li class="nav-item">|</li>
+                        <li class="nav-item">
+                            <a href="/pages/cancellationpolicy" style="cursor: pointer" class="nav-link px-2 py-0 text-body-secondary">Cancellation Policy</a>
+                        </li>
+                    </ul> -->
+                </div>
+            </div>
+		</footer>
+	</div>
+</section>

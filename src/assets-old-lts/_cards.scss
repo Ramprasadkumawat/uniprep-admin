@@ -1,0 +1,145 @@
+.uni-card{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border-radius: 1rem;
+}
+.card-title{
+    font-size: 1rem;
+    text-transform: capitalize;
+    font-weight: 700;
+}
+  a i{
+    font-size: 0.6rem;
+  }
+//   .list-group {
+//     padding-left: revert !important;
+//   }
+  .card-header {
+    background-color: var(--white-color) !important;
+    font-size: 1rem !important;
+  }
+  .list-group-item {
+    background-color: var(--white-color) !important;
+    border: 1px solid var(--white-color) !important;
+  }
+  .cardimage img {
+    height: 40px;
+    width: 40px;
+    float: left;
+    border: 1px solid #9586865c;
+    border-radius: 50%;
+    margin: -2px 15px 0px 0px;
+  }
+  .userduration {
+    font-size: xx-small;
+    text-transform: capitalize;
+  }
+  .username {
+    font-size: 0.69rem;
+    text-transform: capitalize;
+  }
+  /* Price Cards With Icon */
+  .primary {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+  }
+  .card {
+    border-radius: 0%;
+    margin-bottom: 0.5rem;
+    border:none;
+    overflow: hidden;
+    text-transform: uppercase;
+  }
+  .row {
+    margin-bottom: 1rem;
+  }
+  .card-secondary-color {
+    background-color: var(--secondary-color);
+    color: var(--white-color);
+  }
+  .card-warning {
+    background-color: var(--warning);
+    color: var(--white-color);
+  }
+  .font-large {
+    font-size: 5rem !important;
+  }
+  .float-right {
+    float: right !important;
+  }
+  .cardicn {
+    position: absolute;
+    right: -20px;
+    bottom: -14px;
+    color: #00000030;
+  }
+  h6 {
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  /* Cards with Icons */
+  .card-body-main {
+    flex: 1 1 auto;
+    padding: 0.5rem 1.5rem;
+  }
+  .card-body-main span {
+    font-size: 0.7rem;
+    text-transform: capitalize !important;
+  }
+  .card-body-main h3 {
+    font-size: large;
+    font-weight: 600;
+  }
+  .card-main {
+    border-radius: 12px !important;
+  }
+  .card-body-main i {
+    font-size: 18px;
+    padding: 0.6rem;
+    background-color: var(--card-color);
+    border-radius: 10px;
+    color: var(--white-color);
+    margin: 0.4rem 0.4rem 0.4rem 0.4rem;
+  }
+  .successrate {
+    color: var(--primary-color);
+    font-weight: 600;
+  }
+  .failurerate {
+    color: var(--danger);
+    font-weight: 600;
+  }
+  .descriptionmore {
+    color: var(--primary-color);
+    font-size: x-small;
+  }
+  .descriptionmore:hover {
+    color: var(--dark);
+  }
+  .descriptionmore span {
+    margin: 0.25rem;
+  }
+  h6 {
+    font-size: 0.875rem;
+    text-transform: capitalize;
+  }
+  .card-text {
+    font-size: 0.7rem;
+    text-transform: capitalize;
+  }
+  .card-image {
+      width: 100px;
+      place-self: center;
+      border-radius: 50%;
+      overflow: visible;
+      margin: -25px 0px 0px 0px;
+      height: 100px;
+  }
+  .profile .card{
+    overflow: visible;
+  }

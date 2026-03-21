@@ -1,0 +1,157 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Payout</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filterFormValue()">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Organization Name</label>
+							<input placeholder="Enter organization Name" formControlName="inst_name" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Subscription</label>
+							<p-multiselect [filter]="true" [showClear]="true" [showToggleAll]="true" [display]="'chip'" styleClass="w-full" formControlName="subscription_id" placeholder="Select Subscription" optionLabel="subscription" optionValue="id" [options]="subscriptions"> </p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Payout Status</label>
+							<p-multiselect [filter]="true" [showClear]="true" [showToggleAll]="true" [display]="'chip'" styleClass="w-full" formControlName="status" placeholder="Select Remarks Status" optionLabel="label" optionValue="value" [options]="statusOptions"> </p-multiselect>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div><label class="form-label">Date</label></div>
+						<div class="row gx-2">
+							<!-- From Date -->
+							<div class="col-md-6 col-sm-12 mb-3">
+								<p-datepicker formControlName="fromDate" placeholder="From Date" dateFormat="dd-mm-yy" inputStyleClass="form-control w-100" class="w-100"> </p-datepicker>
+							</div>
+
+							<!-- To Date -->
+							<div class="col-md-6 col-sm-12 mb-3">
+								<p-datepicker formControlName="toDate" placeholder="To Date" dateFormat="dd-mm-yy" inputStyleClass="form-control w-100" class="w-100"> </p-datepicker>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" (click)="resetField()" type="button">Reset Field</button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">Filter</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<div class="card">
+	<div class="card-header">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<h6 class="mb-0 fw-bold">Payout Details</h6>
+			<div>
+				<span> Total Payout Till Date: INR {{ datacount }}</span
+				>&nbsp;&nbsp;
+				<span> Total Payout Due/Failed: INR {{ totalPayoutDue }}</span>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		<!-- list -->
+		<p-table size="small" scrollHeight="600px" [scrollable]="true" class="custom-table" [value]="payoutList" [paginator]="true" [lazy]="true" [rows]="pageSize" [totalRecords]="datacount" (onPage)="pageChange($event)" [rowsPerPageOptions]="[10, 25, 50]" styleClass="gray-header">
+			<ng-template pTemplate="header">
+				<tr>
+					<th class="border-cell">Student</th>
+					<th class="border-cell">Organization</th>
+					<th class="border-cell">Transaction ID</th>
+					<th class="border-cell">Payment Method</th>
+					<th class="border-cell">Plan</th>
+					<th class="border-cell">Price</th>
+					<th class="border-cell">Date & Time</th>
+					<th class="border-cell">Payment Status</th>
+					<th class="border-cell">Payout Status</th>
+					<th class="border-cell">Actions</th>
+				</tr>
+			</ng-template>
+
+			<ng-template pTemplate="body" let-user>
+				<tr>
+					<!-- Student -->
+					<td class="border-cell">
+						<div>
+							<b>{{ user.name }}</b>
+						</div>
+						<div class="text-muted" style="font-size: 0.85rem">{{ user.email }}</div>
+						<div class="text-muted" style="font-size: 0.85rem">{{ user.country_code }} {{ user.phone }}</div>
+					</td>
+
+					<!-- Organization -->
+					<td class="border-cell">
+						<div style="cursor: pointer" (click)="openOrganizationDetails(user.marketing_id)">
+							<b>{{ user.organization_name }}</b>
+						</div>
+						<div class="text-muted" style="font-size: 0.85rem">{{ user.location_name }}</div>
+					</td>
+
+					<!-- Transaction ID -->
+					<td class="border-cell">
+						<span class="text-primary">{{ user.transaction_id }}</span>
+					</td>
+
+					<!-- Payment Method -->
+					<td class="border-cell">{{ user.payment_method }}</td>
+
+					<!-- Plan -->
+					<td class="border-cell">{{ user.subscription_plan }}</td>
+
+					<!-- Price -->
+					<td class="border-cell">{{ user.currency }} {{ user.price }}</td>
+
+					<!-- Date & Time -->
+					<td class="border-cell">{{ user.created_at | date : "dd-MM-yyyy hh:mm a" }}</td>
+
+					<!-- Payment Status -->
+					<td class="border-cell">
+						<ng-container *ngIf="user.payment_status === 'Completed'; else failedBlockPayment">
+							<span class="badge rounded-pill bg-success px-3 py-1" *ngIf="user.payment_status">✔{{ user.payment_status }}</span
+							><br />
+							<!-- <a href="#" class="text-primary" style="font-size: 0.85rem;">Download Invoice</a> -->
+						</ng-container>
+						<ng-template #failedBlockPayment>
+							<span class="badge rounded-pill bg-danger px-3 py-1" *ngIf="user.payment_status">❌ {{ user.payment_status }}</span
+							><br />
+						</ng-template>
+					</td>
+
+					<!-- Payout Status -->
+					<td class="border-cell">
+						<ng-container *ngIf="user.payout_status === 'Completed'; else failedBlock">
+							<span class="badge rounded-pill bg-success px-3 py-1" *ngIf="user.payout_status">✔ {{ user.payout_status }}</span
+							><br />
+							<span class="text-muted" style="font-size: 0.75rem" *ngIf="user.commission">Commission: {{ user.commission }}%</span><br />
+							<span class="text-muted" style="font-size: 0.75rem" *ngIf="user.amount">Amount: {{ user.currency }} {{ user.amount }}</span>
+
+							<!-- <a href="#" class="text-primary" style="font-size: 0.85rem;">Download Invoice</a> -->
+						</ng-container>
+						<ng-template #failedBlock>
+							<span class="badge rounded-pill bg-danger px-3 py-1" *ngIf="user.payout_status">❌ {{ user.payout_status }}</span
+							><br />
+							<div class="text-muted" style="font-size: 0.75rem" *ngIf="user.commission">Commission: {{ user.commission }}%</div>
+							<div class="text-muted" style="font-size: 0.75rem" *ngIf="user.amount">Amount: {{ user.currency }} {{ user.amount }}</div>
+						</ng-template>
+					</td>
+
+					<!-- Actions -->
+					<td class="border-cell">
+						<button pButton type="button" label="Manual Payout" class="p-button-outlined p-button-sm p-button-secondary"></button>
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+</div>

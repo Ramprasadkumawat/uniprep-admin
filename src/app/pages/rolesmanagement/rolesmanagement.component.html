@@ -1,0 +1,194 @@
+<p-accordion styleClass="white-accordian" value="{{activeIndex}}">
+	<p-accordion-panel value="1" *ngIf="Addformshow">
+		<p-accordion-header>Assign Roles</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()" #formElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Select Employee</label>
+							<p-select formControlName="employee" optionValue="id" optionLabel="name" styleClass="w-full" [options]="employeelist" [filter]="true" filterBy="name" (onChange)="nameChange()"></p-select>
+							<div *ngIf="submitted && f.employee.errors" class="text-danger text-xs">
+								<div *ngIf="f.employee.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Sub-Role</label>
+							<p-select formControlName="subrole" optionValue="id" optionLabel="name" styleClass="w-full" [options]="subrolelist" [filter]="true" filterBy="name" (onChange)="changesubrole()"></p-select>
+							<div *ngIf="submitted && f.subrole.errors" class="text-danger text-xs">
+								<div *ngIf="f.subrole.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3" *ngIf="presaleRolesDisplay">
+						<div class="form-group">
+							<label>Roles handled by Presales</label>
+							<p-multiselect formControlName="presaleroles" optionValue="id" optionLabel="name" styleClass="w-full" [options]="presalerolelist" [filter]="true" filterBy="name" multiple="true" [showClear]="true"></p-multiselect>
+							<div *ngIf="submitted && f.presaleroles.errors" class="text-danger text-xs">
+								<div *ngIf="f.presaleroles.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3" *ngIf="bdtRegionDisplay">
+						<div class="form-group">
+							<label>Region handled by BDT</label>
+							<p-multiselect formControlName="bdtregion" optionValue="id" optionLabel="name" styleClass="w-full" [options]="bdtregionlist" [filter]="true" filterBy="name" multiple="true" [showClear]="true"></p-multiselect>
+							<div *ngIf="submitted && f.bdtregion.errors" class="text-danger text-xs">
+								<div *ngIf="f.bdtregion.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="submit">Assign Role</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+
+	<p-accordion-panel value="2" *ngIf="EditFormshow">
+		<p-accordion-header>Edit Roles</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="Editform" (ngSubmit)="submitEditForm()" #formElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Select Employee</label>
+							<p-select formControlName="employee" optionValue="id" optionLabel="name" styleClass="w-full" [options]="employeelist" [filter]="true" filterBy="name"></p-select>
+							<div *ngIf="submitted && g.employee.errors" class="text-danger text-xs">
+								<div *ngIf="g.employee.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Sub-Role</label>
+							<p-select formControlName="subrole" optionValue="id" optionLabel="name" styleClass="w-full" [options]="subrolelist" [filter]="true" filterBy="name"></p-select>
+							<div *ngIf="submitted && g.subrole.errors" class="text-danger text-xs">
+								<div *ngIf="g.subrole.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3" *ngIf="presaleRolesDisplay">
+						<div class="form-group">
+							<label>Roles handled by Presales</label>
+							<p-multiselect formControlName="presaleroles" optionValue="id" optionLabel="name" styleClass="w-full" [options]="presalerolelist" [filter]="true" filterBy="name" multiple="true" [showClear]="true"></p-multiselect>
+							<div *ngIf="submitted && g.presaleroles.errors" class="text-danger text-xs">
+								<div *ngIf="g.presaleroles.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3" *ngIf="bdtRegionDisplay">
+						<div class="form-group">
+							<label>Region handled by BDT</label>
+							<p-multiselect formControlName="bdtregion" optionValue="id" optionLabel="name" styleClass="w-full" [options]="bdtregionlist" [filter]="true" filterBy="name" multiple="true" [showClear]="true"></p-multiselect>
+							<div *ngIf="submitted && g.bdtregion.errors" class="text-danger text-xs">
+								<div *ngIf="g.bdtregion.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="submit">Update Role</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Roles</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Select Employee</label>
+							<p-multiselect formControlName="employee" optionValue="id" optionLabel="name" styleClass="w-full" [options]="filteremployeelist" [filter]="true" filterBy="name" multiple="true" [showClear]="true"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Select Role</label>
+							<p-multiselect formControlName="subrole" optionValue="id" optionLabel="name" styleClass="w-full" [options]="filtersubrolelist" [filter]="true" filterBy="name"></p-multiselect>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="btn btn-primary" type="submit">Filter</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<br />
+
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="assignedemployees" [paginator]="true" (onPage)="pageChange($event)" [first]="first" [lazy]="true" [rows]="pageSize" [totalRecords]="usersCount" [tableStyle]="{ 'min-width': '110rem' }">
+	<ng-template pTemplate="caption">
+		<div class="row">
+			<div class="d-flex col-sm-5 col-md-6 justify-content-between">
+				<div class="d-flex align-items-center">
+					<div class="d-flex flex-column">
+						<span style="font-size: 20px">Employee Roles</span>
+						<span class="text-xs" style="color: rgb(205, 203, 203)">Total Assigned Users:{{ usersCount }}</span>
+					</div>
+				</div>
+			</div>
+			<div class="d-flex col-sm-5 col-md-6 justify-content-end">
+				<div class="p-2">
+					<button class="btn btn-primary" (click)="exportFile()">Export &nbsp; <i class="pi pi-file-export"></i></button>
+				</div>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell">Employee</th>
+			<th class="border-cell">Sub Role</th>
+			<th class="border-cell">Presale Roles</th>
+			<th class="border-cell">Locations</th>
+			<th class="border-cell">Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-employee>
+		<tr>
+			<td>{{ employee.user_name }}</td>
+			<td>{{ employee.subrole }}</td>
+			<td>{{ employee.presalrole }}</td>
+			<td>{{ employee.locations }}</td>
+			<td>
+				<span style="cursor: pointer" (click)="getactivity(employee.id)"
+					><span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span>&nbsp; Activity</span
+				>
+				<span style="cursor: pointer" (click)="edit(employee)"
+					><span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span>&nbsp; Edit</span
+				>
+				<p-confirmpopup></p-confirmpopup>
+				<span style="cursor: pointer" (click)="deleteassigned($event, employee.id)"
+					>&nbsp;&nbsp;<span class="ms-2" style="color: var(--p-primary-500)"><i class="fa-solid fa-trash"></i></span> &nbsp;Delete</span
+				>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+
+<p-dialog header="Activities" [(visible)]="isModalOpen" [modal]="true" [closable]="true" [style]="{ width: '50vw' }">
+	<div class="modal-body">
+		<ul>
+			<li *ngFor="let activity of activities">{{ activity }}</li>
+		</ul>
+	</div>
+	<p-footer>
+		<button type="button" pButton class="btn btn-primary" label="Close" (click)="closeModal()">Close</button>
+	</p-footer>
+</p-dialog>

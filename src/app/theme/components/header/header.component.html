@@ -1,0 +1,86 @@
+<nav class="px-0">
+    <div class="container-fluid">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-md-1 col-4">
+                <!-- <p-breadcrumb [model]="breadcrumb"></p-breadcrumb>
+        <i class="p-2 pi" [ngClass]="expandicon" (click)="togleSidebar.emit()"></i>
+        <div class="page-title">Page Title</div> -->
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="d-md-none d-block">
+                            <a class="text-decoration-none uniprep-primary" data-bs-toggle="offcanvas"
+                                href="#offcanvasWithBothOptions" role="button" aria-controls="offcanvasWithBothOptions">
+                                <i class="fa-solid fa-bars fa-2xl"></i>
+                            </a>
+                        </div>
+                        <!-- <div class="d-flex me-3">
+                            <label class="me-2"><i class="fa-solid fa-sun"></i></label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="button" id="darkmodeswitch" />
+                            </div>
+                            <label class="ms-1"><i class="fa-solid fa-moon"></i></label>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-11 col-8">
+                <!--            <a href="javascript:void(0);" class="icon-button">-->
+                <!--                <i class="pi pi-verified"></i>-->
+                <!--            </a>-->
+                <!--            <a href="javascript:void(0);" class="icon-button position-relative">-->
+                <!--                <i class="pi pi-bell"></i>-->
+                <!--                <div class="notification-dot"></div>-->
+                <!--            </a>-->
+                <div class="d-flex justify-content-md-end justify-content-end align-items-center mt-md-0">
+                    <form class="me-2" [formGroup]="headForm">
+                    </form>
+                    <p-select [options]="countries" [(ngModel)]="selectedCountry" (onChange)="selectCountryy($event)"
+                        optionLabel="country" [filter]="true" filterBy="name" [showClear]="true"
+                        class="me-3 headercountry" placeholder="Select a Country" *ngIf="usertype">
+                        <ng-template pTemplate="selectedItem">
+                            <div class="country-item country-item-value d-flex" *ngIf="selectedCountry">
+                                <img src="{{selectedCountry.flag}}" class="me-2" style="width:20px" />
+                                <div>{{selectedCountry.country}}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-country pTemplate="item">
+                            <div class="country-item d-flex">
+                                <img src="{{country.flag}}" class="me-2" width="20px" />
+                                <div>{{country.country}}</div>
+                            </div>
+                        </ng-template>
+                    </p-select>
+                    <div class="dropdown">
+                        <button class="button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="width:max-content;">
+                            <span class="nme">{{firstletter}}</span>
+                            <div class="text-start d-flex flex-column">
+                                <span class="h5 mb-1 fw-semibold">{{name}}</span>
+                                <span class="fw-regular">{{usertypename}}</span>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item pt-2 pb-2" routerLink="/profile">
+                                    <div class="d-flex justify-content-top">
+                                        <i class="fa-solid fa-user me-2 mt-1"></i>
+                                        <div>
+                                            <p class="fw-semibold mb-1">{{name}}</p>
+                                            <p class="mb-0">{{email}}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item pt-2 pb-2" (click)="logout.emit()"><i
+                                        class="fa-solid fa-power-off me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <i class="pi pi-user p-2"></i>
+        <i class="pi pi-cog p-2"></i>
+        <i class="pi pi-bell p-2"></i> -->
+    <!-- <p-avatar (click)="togleSidebar.emit()" label="P"></p-avatar> -->
+</nav>

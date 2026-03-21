@@ -1,0 +1,476 @@
+<div class="container-fluid">
+	<div class="row align-items-center">
+		<div class="col-md-6 col-12">
+			<h4 class="mb-0">Lead Dashboard</h4>
+		</div>
+		<div class="col-md-6 col-12 text-md-end">
+			<p class="text-small text-danger fw-semibold mb-0">{{ message }}</p>
+			<button pButton type="button" severity="warn" (click)="refreshDashboardData()">
+				<i class="pi pi-refresh"></i> Refresh Data
+			</button>
+			<p class="text-small text-success mt-1">Last Refreshed : <b>{{ lastRefreshedTime || 'Not refreshed yet'
+					}}</b></p>
+		</div>
+	</div>
+</div>
+<p-accordion>
+	<p-accordion-panel value="1">
+		<p-accordion-header>Advanced Filter</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="postData(filterForm)">
+				<div class="row">
+					<div class="col-md-3">
+						<div class="row">
+							<div class="col-md-6">
+								<label class="form-label">From</label>
+								<input type="date" formControlName="createdFrom" style="padding: 0.5rem !important"
+									class="form-control border-black paddingfive" pInputText />
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">To</label>
+								<input type="date" formControlName="createdTo" style="padding: 0.5rem !important"
+									class="form-control border-black paddingfive" pInputText />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<label class="form-label">Home Country</label>
+						<p-select class="form-control paddingfive" formControlName="country" optionValue="id"
+							optionLabel="country" styleClass="w-full" [options]="countries" [filter]="true"
+							filterBy="country" (onChange)="changeCountry()"></p-select>
+					</div>
+					<div class="col-md-3">
+						<label class="form-label">Region</label>
+						<p-select class="form-control paddingfive" formControlName="region" optionValue="id"
+							optionLabel="state" styleClass="w-full" [options]="regions" [filter]="true" filterBy="state"
+							(onChange)="changeRegion($event)"></p-select>
+					</div>
+					<div class="col-md-3">
+						<label class="form-label">Location</label>
+						<p-select class="form-control paddingfive" formControlName="location" optionValue="id"
+							optionLabel="district" styleClass="w-full" [options]="locations" [filter]="true"
+							filterBy="district"></p-select>
+					</div>
+					<div class="col-md-3">
+						<label class="form-label">Passing Year</label>
+						<p-select class="form-control paddingfive" formControlName="passingyear" optionValue="year"
+							optionLabel="label" styleClass="w-full" [options]="years" [filter]="true"
+							filterBy="name"></p-select>
+					</div>
+					<div class="col-md-3">
+						<label class="form-label">Program Level Looking</label>
+						<p-multiselect class="form-control" formControlName="programlevel" optionValue="id"
+							optionLabel="programlevel" [options]="programs" defaultLabel="Select" placeholder="Select"></p-multiselect>
+					</div>
+					<div class="col-md-3">
+						<label class="form-label">Source</label>
+						<p-select class="form-control paddingfive" formControlName="sourcetype" optionValue="id"
+							optionLabel="name" styleClass="w-full" [options]="sourcetypes"
+							(onChange)="getSource($event)"></p-select>
+					</div>
+					<div class="col-md-3">
+						<label class="form-label">Source Name</label>
+						<p-select class="form-control paddingfive" formControlName="source_name" optionValue="id"
+							optionLabel="name" styleClass="w-full" [options]="sourcelist" [filter]="true"
+							filterBy="name"></p-select>
+					</div>
+					<div class="col-md-3">
+						<label class="form-label">Lead Status</label>
+						<p-multiselect class="form-control paddingfive" [options]="statuses" optionValue="id"
+							formControlName="leadstatus" defaultLabel="Select Status"
+							optionLabel="status_name"></p-multiselect>
+					</div>
+					<div class="col-md-3">
+						<label class="form-label">Lead Type</label>
+						<p-select class="form-control paddingfive" formControlName="lead_type" optionValue="id"
+							optionLabel="name" styleClass="w-full" [options]="leadList" [filter]="true"
+							filterBy="name"></p-select>
+					</div>
+					<div class="col-md-12">
+						<div class="d-flex justify-content-end align-items-center">
+							<a class="btn btn-green" (click)="resetFilter()">Reset Filter</a>
+							<input class="btn btn-green" type="submit" value="Filter Data" />
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<div class="row mt-20">
+	<div class="col-md-4">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('allStudents')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Registered Users</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.registeredusers?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-users" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('allStudents')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Talents Profile</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.totaltalentprofiles?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-user-check" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('allStudents')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Intro Video</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.introvideocount?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-video" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row mt-20">
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('paidUsersWithFilters')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Talent Verified</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.verifieduserscount?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-square-check" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('activePaidLeads')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Paid Leads</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.paidleads?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-circle-dollar" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('exhuastedUsers')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Active Paid Leads</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.activeleads?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-chart-line" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Clicked apply</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.clickedapplycount?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-computer-mouse-scrollwheel"
+							style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row mt-20">
+	<!-- <div class="col-md-4">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">
+							Total Questions Asked
+						</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.totalquestionsasked }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-file-lines" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> -->
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('unPaidLoggedinUsers')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Clicked Checkout</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.clickedcheckoutcount?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-cart-shopping" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('unPaidNotLoggedinUsers')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total closed Payment screen</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.closedpaymentscreencount?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-xmark-to-slot" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('directUsers')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total closed premium pop up</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.closedpremiumpopupcount?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-computer-classic"
+							style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('directUsers')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total closed browser screen</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.closedbrowsercount?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-window-maximize" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row mt-20">
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('directUsers')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Payment Success</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.paymentsuccesscount?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-file-invoice-dollar"
+							style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('collegeUsers')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Payment failed</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.paymentfailedcount?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-hexagon-xmark" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('collegeUsers')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Premium Jobs applied</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.premiumjobsappliedcount?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-stars" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-250">
+			<div class="card-body2" style="cursor: pointer" (click)="openStudentsModule('collegeUsers')">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Total Jobs applied</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ leadDashboardCounts?.jobsappliedcount?.count }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-file-lines" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-20">
+	<div class="col-md-6">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-header">
+				<div style="display: flex; justify-content: space-between; align-items: center">
+					<p class="text-muted fw-semibold">Users Daily</p>
+					<span style="font-size: smaller">Total user : {{ usersDaily?.daily_count }}</span>
+				</div>
+			</div>
+			<div class="card-body2">
+				<div class="" style="width: 100%; height: 400px">
+					<p-chart type="bar" [data]="usersDailyData" [options]="chartOptions" class="w-100 h-100" type="bar" height="100% !important">
+					</p-chart>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-header">
+				<p class="text-muted fw-semibold">Source Wise</p>
+			</div>
+			<div class="card-body2">
+				<div class="" style="width: 100%; height: 400px">
+					<p-chart class="w-100 h-100" height="100% !important" type="pie" [data]="sourcedata"
+						[options]="leadOptions"></p-chart>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row mt-20">
+	<!--    <div class="col-md-6">-->
+	<!--        <div class="card card-stats mb-4 mb-xl-0 p-3">-->
+	<!--            <div class="card-header">-->
+	<!--                <p class="text-muted fw-semibold">Program Level Looking</p>-->
+	<!--            </div>-->
+	<!--            <div class="card-body2">-->
+	<!--                <div class="" style="width: 100%; height: 400px">-->
+	<!--                    <p-chart height="100% !important" type="pie" [data]="programLevelChart" [style]="{ width: '40%' }"-->
+	<!--                             [options]="planOptionsProgram"></p-chart>-->
+	<!--                </div>-->
+	<!--            </div>-->
+	<!--        </div>-->
+	<!--    </div>-->
+
+	<div class="col-md-6">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-header">
+				<p class="text-muted fw-semibold">User Type</p>
+			</div>
+			<div class="card-body2">
+				<div class="" style="width: 100%; height: 400px">
+					<p-chart hclass="w-100 h-100" height="100% !important" type="pie" [data]="usertypedata"
+						[options]="userOptions"></p-chart>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="card card-stats mb-4 mb-xl-0 p-3">
+			<div class="card-header">
+				<p class="text-muted fw-semibold">Plan Wise</p>
+			</div>
+			<div class="card-body2">
+				<div class="" style="width: 100%; height: 400px">
+					<p-chart class="w-100 h-100" height="100% !important" type="pie" [data]="planchartdata"
+						[options]="planOptions"></p-chart>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-20">
+	<div class="col-md-6">
+		<!--        <div class="card card-stats mb-4 mb-xl-0 p-3">-->
+		<!--            <div class="card-header">-->
+		<!--                <p class="text-muted fw-semibold">User Type</p>-->
+		<!--            </div>-->
+		<!--            <div class="card-body2">-->
+		<!--                <div class="" style="width: 100%; height: 400px">-->
+		<!--                    <p-chart height="100% !important" type="pie" [data]="usertypedata"-->
+		<!--                             [options]="userOptions"></p-chart>-->
+		<!--                </div>-->
+		<!--            </div>-->
+		<!--        </div>-->
+	</div>
+</div>

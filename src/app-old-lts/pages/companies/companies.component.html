@@ -1,0 +1,281 @@
+<div class="card readingcard">
+    <div class="card-body overflow-y-auto">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="card readingcard">
+                    <div class="card-body overflow-y-auto">
+                        <div class="container-fluid">
+                            <div class="filter-header-card bg-white px-4 py-3 rounded d-flex justify-content-between align-items-center mb-3" (click)="isFilterExpanded = !isFilterExpanded" style="cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-radius: 8px;">
+                                <span class="fw-bold text-dark" style="font-size: 14px;">Filter By</span>
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;">
+                                    <i class="pi" [ngClass]="isFilterExpanded ? 'pi-angle-up' : 'pi-angle-down'" style="color: #666; font-size: 14px;"></i>
+                                </div>
+                            </div>
+                            <div class="filter-section mb-4" *ngIf="isFilterExpanded">
+                                <div class="filter-form-container bg-white p-4 rounded" style="box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+                                    <form [formGroup]="companyFilterForm">
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-md-3">
+                                                <label class="form-label">Company ID</label>
+                                                <input pInputText class="w-100" placeholder="Enter Company ID" formControlName="companyId" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Company Name</label>
+                                                <input pInputText class="w-100" placeholder="Enter Company Name" formControlName="companyName" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Email ID</label>
+                                                <input pInputText class="w-100" placeholder="Enter Email ID" formControlName="email" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Company Size (Multi-Select)</label>
+                                                <p-multiSelect [options]="companySizes" formControlName="companySize" optionLabel="size" optionValue="id" placeholder="Select size of your company" styleClass="w-100" appendTo="body"></p-multiSelect>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-md-3">
+                                                <label class="form-label">Country (Multi-Select)</label>
+                                                <p-multiSelect [options]="countries" formControlName="country" optionLabel="country_name" placeholder="Select Your Country" styleClass="w-100" appendTo="body" [filter]="true" [virtualScroll]="true" [virtualScrollItemSize]="38"></p-multiSelect>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Headquarters Location (Multi-Select)</label>
+                                                <p-multiSelect [options]="headquarters" formControlName="headquartersLocation" optionLabel="city_name" optionValue="city_id" placeholder="City, Country" styleClass="w-100" appendTo="body"></p-multiSelect>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Services Type (Multi-Select)</label>
+                                                <p-multiSelect [options]="serviceTypes" formControlName="serviceType" optionLabel="service_type" optionValue="id" placeholder="Select Services" styleClass="w-100" appendTo="body"></p-multiSelect>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Company Created by</label>
+                                                <p-select [options]="companiesCreatedBy" formControlName="companyCreatedBy" placeholder="Select Recruiter/UNIPREP" styleClass="w-100" appendTo="body"></p-select>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-md-3">
+                                                <label class="form-label">Company Created</label>
+                                                <p-select [options]="yesNoOptions" formControlName="companyCreated" placeholder="Choose Yes/No" styleClass="w-100" appendTo="body"></p-select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Advertised Jobs</label>
+                                                <p-select [options]="yesNoOptions" formControlName="advertisedJobs" placeholder="Choose Yes/No" styleClass="w-100" appendTo="body"></p-select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Total Jobs</label>
+                                                <p-select [options]="yesNoOptions" formControlName="totalJobs" placeholder="Choose Yes/No" styleClass="w-100" appendTo="body"></p-select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Active Jobs</label>
+                                                <p-select [options]="yesNoOptions" formControlName="activeJobs" placeholder="Choose Yes/No" styleClass="w-100" appendTo="body"></p-select>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-md-3">
+                                                <label class="form-label">Applications</label>
+                                                <p-select [options]="yesNoOptions" formControlName="applicants" placeholder="Choose Yes/No" styleClass="w-100" appendTo="body"></p-select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Talent Credit</label>
+                                                <p-select [options]="talentCredits" formControlName="talentCredit" placeholder="Choose Yes/No/Exhausted" styleClass="w-100" appendTo="body"></p-select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Subscription Plan</label>
+                                                <p-select [options]="subscriptionPlans" formControlName="subscriptionPlan" placeholder="Select a Plan" styleClass="w-100" appendTo="body"></p-select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Remarks Status (Multi-Select)</label>
+                                                <p-multiSelect [options]="remarkStatuses" formControlName="remarkStatus" placeholder="Select a Status" styleClass="w-100" appendTo="body"></p-multiSelect>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-md-3">
+                                                <label class="form-label">Source Type</label>
+                                                <p-select [options]="sourceTypes" formControlName="source_type" placeholder="Select Source Type" styleClass="w-100" appendTo="body"></p-select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Source Name</label>
+                                                <p-select [options]="sourceNames" formControlName="source_name" placeholder="Select Source Name" styleClass="w-100" optionLabel="name" optionValue="id" appendTo="body"></p-select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Relationship Manager</label>
+                                                <input pInputText class="w-100" placeholder="Enter Relationship Manager Name" formControlName="relationshipManager" />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Remarks Added by (Multi-Select)</label>
+                                                <p-multiSelect [options]="remarksAddBy" formControlName="remarkAddedBy" optionLabel="label" placeholder="Select Remarks Added by" styleClass="w-100" appendTo="body"></p-multiSelect>
+                                            </div>
+                                        </div>
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-3">
+                                                <label class="form-label">Remarks Date</label>
+                                                <div class="d-flex gap-2 date-range-container">
+                                                    <input pInputText type="date" class="w-100" formControlName="remarkFromDate" placeholder="From Date" />
+                                                    <input pInputText type="date" class="w-100" formControlName="remarkToDate" placeholder="To Date" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Company Created</label>
+                                                <div class="d-flex gap-2 date-range-container">
+                                                    <input pInputText type="date" class="w-100" formControlName="createdFromDate" placeholder="From Date" />
+                                                    <input pInputText type="date" class="w-100" formControlName="createdToDate" placeholder="To Date" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Report Date</label>
+                                                <div class="d-flex gap-2 date-range-container">
+                                                    <input pInputText type="date" class="w-100" formControlName="reportFromDate" placeholder="From Date" />
+                                                    <input pInputText type="date" class="w-100" formControlName="reportToDate" placeholder="To Date" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label">Last Login</label>
+                                                <div class="d-flex gap-2 date-range-container">
+                                                    <input pInputText type="date" class="w-100" formControlName="lastLoginFromDate" placeholder="From Date" />
+                                                    <input pInputText type="date" class="w-100" formControlName="lastLoginToDate" placeholder="To Date" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-end pt-3">
+                                            <button type="button" class="btn btn-reset-filter me-3" (click)="resetFilters()">Reset Filter</button>
+                                            <button type="button" class="btn btn-apply-filter" (click)="applyFilters()">Apply Filter</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card-header d-flex align-items-center justify-content-between bg-white border-0 py-3 px-4 rounded mb-3" style="box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-radius: 8px;">
+                        <div class="d-flex align-items-center gap-4">
+                            <h5 class="mb-0 fw-bold text-dark" style="font-size: 16px;">Leads List</h5>
+                            <div class="d-flex gap-3">
+                                <button type="button" class="btn rounded-pill px-3 py-1 fw-bold d-flex align-items-center" style="font-size: 11px; color: #ff8e4b; border: 1px solid #ff8e4b; background-color: transparent;">Total Count: {{ totalCompanies }}</button>
+                                <button type="button" class="btn rounded-pill px-3 py-1 fw-bold d-flex align-items-center" style="font-size: 11px; color: #ff8e4b; border: 1px solid #ff8e4b; background-color: transparent;">Get Count: {{ totalCompanies }}</button>
+                                <button type="button" class="btn rounded-pill px-3 py-1 fw-bold d-flex align-items-center gap-1 cursor-pointer" (click)="refreshData()" pTooltip="Refresh" tooltipPosition="top" style="font-size: 11px; color: #ff8e4b; border: 1px solid #ff8e4b; background-color: transparent;">Refresh <i class="pi pi-refresh" style="font-size: 11px; font-weight: bold;"></i></button>
+                            </div>
+                        </div>
+                        <div class="d-flex">
+                            <button pButton type="button" class="px-4 py-1 fw-semibold rounded-pill shadow-sm" style="background-color: #6a7bc9; border: none; font-size: 12px; color: white;" label="Export" (click)="exportCompanies()"></button>
+                        </div>
+                    </div>
+                    <div class="card bg-transparent border-0">
+                        <uni-companies-stats-header
+                            class="mb-4 mt-2 p-2"
+                            [todayData]="todayData"
+                            [totalCompanies]="totalCompanies"
+                            [totalRevenue]="totalRevenue"
+                            [activeSubscribedEmployers]="activeSubscribedEmployers"
+                            [totalActiveJobs]="totalActiveJobs"
+                            [totalApplicants]="totalApplicants"
+                            [totalCardsSeen]="totalCardsSeen"
+                            [totalUsers]="totalUsers"
+                            [totalRevenuePercentage]="totalRevenuePercentage"
+                            [totalJobsPercentage]="totalJobsPercentage"
+                            [totalJobs]="[totalJobs]"
+                            [totalActiveJobsPercentage]="totalActiveJobsPercentage"
+                            [totalApplicantsPercentage]="totalApplicantsPercentage"
+                            [totalActiveSubscriptionsPercentage]="totalActiveSubscriptionsPercentage"></uni-companies-stats-header>
+                        <div class="d-flex justify-content-between align-items-center mb-3"
+                            *ngIf="selectedCompanies.length > 0">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="text-muted">{{ selectedCompanies.length }} company(s) selected</span>
+                            </div>
+                            <p-button label="Delete Selected" icon="pi pi-trash" styleClass="p-button-danger" (click)="deleteSelectedCompanies()" [disabled]="selectedCompanies.length === 0"></p-button>
+                        </div>
+                        <div class="table-container bg-white rounded" style="box-shadow: 0 1px 3px rgba(0,0,0,0.05); overflow: hidden; border-radius: 8px;">
+                            <p-table #dt [value]="filteredCompanies" [paginator]="true" [rows]="pageSize" [rowsPerPageOptions]="[25, 50, 100]" [totalRecords]="totalCompanies" [lazy]="true" (onLazyLoad)="onPageChange($event)" scrollDirection="horizontal" [scrollable]="true" [tableStyle]="{ 'min-width': '120rem' }">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th pSortableColumn="company_name" class="text-center"><span style="color: #333 !important;">Company Details</span> <p-sortIcon field="company_name"></p-sortIcon></th>
+                                        <th pSortableColumn="created_by" class="text-center"><span style="color: #333 !important;">Created By</span> <p-sortIcon field="created_by"></p-sortIcon></th>
+                                        <th pSortableColumn="hq" class="text-center"><span style="color: #333 !important;">Headquarter<br>location</span> <p-sortIcon field="hq"></p-sortIcon></th>
+                                        <th pSortableColumn="plan_name" class="text-center"><span style="color: #333 !important;">Subscriptions</span> <p-sortIcon field="plan_name"></p-sortIcon></th>
+                                        <th pSortableColumn="source" class="text-center"><span style="color: #333 !important;">Source</span> <p-sortIcon field="source"></p-sortIcon></th>
+                                        <th pSortableColumn="relationship_manager" class="text-center"><span style="color: #333 !important;">Relationship Manager</span> <p-sortIcon field="relationship_manager"></p-sortIcon></th>
+                                        <th pSortableColumn="total_revenue" class="text-center"><span style="color: #333 !important;">Revenue(INR)</span> <p-sortIcon field="total_revenue"></p-sortIcon></th>
+                                        <th class="text-center" pSortableColumn="jobs"><span style="color: #333 !important;">No of jobs<br>Advertised</span> <p-sortIcon field="jobs"></p-sortIcon></th>
+                                        <th class="text-center" pSortableColumn="applicants"><span style="color: #333 !important;">Total<br>Applicants</span> <p-sortIcon field="applicants"></p-sortIcon></th>
+                                        <th class="text-center" pSortableColumn="viewed_talents_count"><span style="color: #333 !important;">Talent Cards<br>Seen</span> <p-sortIcon field="viewed_talents_count"></p-sortIcon></th>
+                                        <th pSortableColumn="users" class="text-center"><span style="color: #333 !important;">No of<br>Users</span> <p-sortIcon field="users"></p-sortIcon></th>
+                                        <th pSortableColumn="invites" class="text-center"><span style="color: #333 !important;">Total<br>Invites(0/1)</span> <p-sortIcon field="invites"></p-sortIcon></th>
+                                        <th class="text-center"><span style="color: #333 !important;">Remarks<br>Details</span></th>
+                                        <th class="text-center"><span style="color: #333 !important;">Action</span></th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-company>
+                                    <tr style="font-size: 12px; color: #444; border-bottom: 1px solid #eee; background-color: #ffffff;">
+                                        <td class="text-center" style="padding-top: 14px; padding-bottom: 14px;">
+                                            <div class="d-flex flex-column align-items-center justify-content-center" style="gap: 2px;">
+                                                <strong style="font-size: 13px; color: #222;">{{ company.company_name || 'N/A' }}</strong>
+                                                <span style="font-size: 11px; color: #555;">ID : {{ company.company_id || company.id || 'N/A' }}</span>
+                                                <span style="font-size: 11px; color: #555;">Size : {{ company.company_size || 'N/A' }}</span>
+                                                <span style="font-size: 11px; color: #555;">Type : <span style="font-size: 10px;">{{ company.service_type ? (company.service_type.length > 30 ? (company.service_type | slice:0:30) + '...' : company.service_type) : 'N/A' }}</span></span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center fw-bold" style="font-size: 13px; color: #333;">{{ company.created_by || 'N/A' }}</td>
+                                        <td class="text-center fw-bold" style="font-size: 13px; color: #333;">{{ company.hq || 'N/A' }}</td>
+                                        <td class="text-center fw-bold" style="font-size: 13px; color: #333;"> {{ getPlanLabel(company) }}</td>
+                                        <td class="text-center" style="font-size: 12px; color: #444;">
+                                            <ng-container *ngIf="company.source_type; else noSource">
+                                                <div class="d-flex flex-column align-items-center justify-content-center text-wrap mx-auto" style="width: 100px; line-height: 1.3;">
+                                                    <strong style="font-size: 13px; color: #333;">{{ company.source_type || 'N/A' }}</strong>
+                                                    <span style="font-size: 11px; color: #666;">{{ company.source_name || 'N/A' }}</span>
+                                                </div>
+                                            </ng-container>
+                                            <ng-template #noSource>N/A</ng-template>
+                                        </td>
+                                        <td class="text-center fw-bold" style="font-size: 12px; color: #444;">{{ company.relationship_manager || 'N/A' }}</td>
+                                        <td class="text-center fw-bold" style="font-size: 13px; color: #333;">{{ company.total_revenue || 0 }}</td>
+                                        <td style="cursor: pointer; text-align: center;" (click)="goToViewJob(company.id)">
+                                            <div class="d-flex flex-column align-items-center justify-content-center" style="font-size: 11px; gap: 2px;">
+                                                <span>Active Jobs : {{ company.active_jobs || company.jobs || 0 }}</span>
+                                                <span>Total Jobs : {{ company.jobs || 0 }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center" style="cursor: pointer; font-size: 13px;" (click)="goToViewTalent(company.id)">{{ company.applicants || 0 }}</td>
+                                        <td class="text-center" style="cursor: pointer; font-size: 13px;" (click)="goToViewTalentSeen(company.id)">{{ company.viewed_talents_count || 0 }}</td>
+                                        <td class="text-center" style="font-size: 13px;">{{ company.users || 0 }}</td>
+                                        <td class="text-center" style="font-size: 13px;">{{ company.invites || 0 }}</td>
+                                        <td class="text-center">
+                                            <ng-container *ngIf="company.remark_status; else noRemark">
+                                                <div class="remark-box">
+                                                    <span class="remark-status">{{ company.remark_status }}</span>
+                                                    <span class="remark-user">{{ company.remark_added_by || 'N/A' }}</span>
+                                                    <span class="remark-date">
+                                                        {{ company.remark_date | date:'dd/MM/yyyy' }}
+                                                        <span *ngIf="company.remark_time">- {{ company.remark_time | date:'h:mm a' }}</span>
+                                                    </span>
+                                                </div>
+                                            </ng-container>
+                                            <ng-template #noRemark>N/A</ng-template>
+                                        </td>
+                                        <td class="text-center align-middle" style="min-width: 130px;">
+                                            <div class="d-flex flex-column align-items-start justify-content-center mx-auto" style="gap: 4px; font-size: 11px; max-width: 110px;">
+                                                <div class="d-flex w-100 justify-content-between align-items-center">
+                                                    <a class="d-flex align-items-center gap-1" style="color: #4b66d4; font-weight: 600; font-size: 12px; text-decoration: none; cursor: pointer;" (click)="handleView(company)" pTooltip="View" tooltipPosition="top">
+                                                        <i class="pi pi-eye" style="font-size: 12px; cursor: pointer;"></i>View
+                                                    </a>
+                                                    <a class="cursor-pointer text-danger d-flex align-items-center" (click)="softDeleteCompany(company.id)" pTooltip="Delete" tooltipPosition="top">
+                                                        <i class="pi pi-trash" style="font-size: 13px; color: #ff5252;"></i>
+                                                    </a>
+                                                </div>
+                                                <span style="color: #555; font-size: 10px; margin-top: 2px;">Last Login- <span *ngIf="company.last_login_time">{{ company.last_login_time }}</span><span *ngIf="!company.last_login_time">9:43 Am</span></span>
+                                                <span style="color: #555; font-size: 10px;">{{ company.last_login_date || '03/03/2026' }}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="12" class="text-center">No companies found</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p-confirmDialog></p-confirmDialog>

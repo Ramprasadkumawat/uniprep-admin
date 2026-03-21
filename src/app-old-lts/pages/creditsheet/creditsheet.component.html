@@ -1,0 +1,256 @@
+<div class="row mt-3 mb-3">
+	<div class="col-md-4">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-350">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Received Revenue</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ potentialrevenue }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-user" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-350">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">Creditable Revenue</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ receivablerevenue }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-users" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card card-stats mb-4 mb-xl-0 p-3 w-350">
+			<div class="card-body2" style="cursor: pointer">
+				<div class="row">
+					<div class="col">
+						<h5 class="card-title text-muted mb-0" style="font-size: 15px">credited Revenue</h5>
+						<span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631">
+							{{ receivedrevenue }}
+						</span>
+					</div>
+					<div class="col-auto d-flex align-items-center">
+						<i class="fa-solid fa-user" style="color: var(--p-primary-500); font-size: 2rem"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+						<p-accordion-header>Filter By</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filter()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Valid From</label>
+							<input class="form-control" formControlName="valid_from" pInputText type="text" />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Valid To</label>
+							<input class="form-control" formControlName="valid_to" pInputText type="text" />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Student Name</label>
+							<input formControlName="name" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Mobile</label>
+							<input class="form-control" formControlName="phone" pInputText type="tel" />
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Email ID</label>
+							<input formControlName="email" type="email" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Country Looking</label>
+							<p-select [options]="countries" formControlName="country" optionLabel="name" optionValue="id" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Country Looking</label>
+							<p-select [options]="countries" formControlName="interested_country_id" optionLabel="name" optionValue="id" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Region</label>
+							<p-select [options]="countries" formControlName="region" optionLabel="name" optionValue="id" styleClass="w-full"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select [options]="countries" formControlName="location_id" optionLabel="name" optionValue="id" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Source Type</label>
+							<p-select [options]="countries" formControlName="source_type" optionLabel="name" optionValue="id" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Source Name</label>
+							<p-select [options]="countries" formControlName="source" optionLabel="name" optionValue="id" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Subscription Plan</label>
+							<p-select [options]="countries" formControlName="subscription_id" optionLabel="name" optionValue="id" styleClass="w-full"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Student Type</label>
+							<p-select [options]="countries" formControlName="student_type_id" optionLabel="name" optionValue="id" styleClass="w-full"></p-select>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="form-group">
+							<label>Credit Status</label>
+							<p-select [options]="creditstatus" formControlName="creditStatus" optionLabel="name" optionValue="id" placeholder="Select Credit Status" styleClass="w-full"></p-select>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button (click)="filterForm.reset(); filterFormElm.reset()" label="Reset Filter" pButton type="button"></button>&nbsp;
+						<button pButton label="Filter Data"></button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<!-- card -->
+<!-- <div class="d-flex justify-content-between mt-30" >
+
+<div class="d-flex justify-content-between mt-3 mb-3" >
+    <div class="card card-stats mb-4 mb-xl-0 p-3 w-350" >
+        <div class="card-body2" style="cursor: pointer">
+            <div class="row">
+                <div class="col">
+                    <h5 class="card-title  text-muted mb-0" style="font-size: 15px;">
+                      Potential Revenue
+                    </h5>
+                    <span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631;">
+                        {{ potentialrevenue }}
+                    </span>
+                </div>
+                <div class="col-auto d-flex align-items-center">
+                  <i class="fa-solid fa-users " style="color: var(--p-primary-500);font-size: 2rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-stats mb-4 mb-xl-0 p-3 w-350" >
+        <div class="card-body2" style="cursor: pointer">
+            <div class="row">
+                <div class="col">
+                    <h5 class="card-title  text-muted mb-0" style="font-size: 15px;">
+                      Receivable Revenue
+                    </h5>
+                    <span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631;">
+                        {{ receivablerevenue }}
+                    </span>
+                </div>
+                <div class="col-auto d-flex align-items-center">
+                  <i class="fa-solid fa-user " style="color: var(--p-primary-500);font-size: 2rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-stats mb-4 mb-xl-0 p-3 w-350" >
+        <div class="card-body2" style="cursor: pointer">
+            <div class="row">
+                <div class="col">
+                    <h5 class="card-title  text-muted mb-0" style="font-size: 15px;">
+                      Received Revenue
+                    </h5>
+                    <span class="h2 font-weight-bold mb-0" style="font-size: 25px; color: #001631;">
+                        {{ receivedrevenue }}
+                    </span>
+                </div>
+                <div class="col-auto d-flex align-items-center">
+                  <i class="fa-solid fa-user " style="color: var(--p-primary-500);font-size: 2rem;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+<div class="card">
+	<div class="card-body">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<span class="fw-semibold">Credit Sheet List</span>
+		</div>
+		<span class="text-muted text-small">Total Users : 10</span>
+		<p-table size="small" scrollHeight="600px" [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }" [value]="creditusers">
+			<ng-template pTemplate="header">
+				<tr>
+					<th class="border-cell">User Details</th>
+					<th class="border-cell">Country Looking</th>
+					<th class="border-cell">Location</th>
+					<th class="border-cell">Source Type</th>
+					<th class="border-cell">Subscription Plan</th>
+					<th class="border-cell">Source name</th>
+					<th class="border-cell">Credit Status</th>
+					<th class="border-cell">Creditable Due Date</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-student>
+				<tr>
+					<td class="border-cell">
+						{{ student.studentname }}<br />
+						<span class="text-muted text-small">{{ student.email }}</span
+						><br />
+						<span class="text-muted text-small">{{ student.phone }}</span>
+					</td>
+					<td class="border-cell"></td>
+					<td class="border-cell">{{ student.location }}</td>
+					<td class="border-cell">{{ student.sourcetype }}</td>
+					<td class="border-cell">{{ student.subscriptionplan }}</td>
+					<td class="border-cell">{{ student.sourcename }}</td>
+					<td class="border-cell">{{ student.creditstatus }}</td>
+					<td class="border-cell"></td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+</div>

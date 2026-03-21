@@ -1,0 +1,373 @@
+<div class="d-flex gap-2">
+  <div class="d-flex gap-2" style="cursor: pointer;" [routerLink]="['/contributors/college']">
+    <i class="pi pi-arrow-left"></i>
+    <h6>Back</h6>
+  </div>
+  <h6>College / {{ collegeName }} / {{selectedTab}}</h6>
+</div>
+<div class="mt-4">
+  <p-tabs value="1" styleClass="active-bg-black customtab" activeIndex="1" (onChange)="onChangeTab($event)">
+    <p-tablist>
+      <p-tab value="1">College Details</p-tab>
+      <p-tab value="2">Articles</p-tab>
+      <p-tab value="3">Gallery</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+    <p-tabpanel value="1" header="College Details">
+      <div class="p-2 card border border-0">
+        <div class="card-body border-b-1">
+          <!-- College Details Section -->
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title py-2">College Details</h5>
+            <span>Profile Completion 25%</span>
+          </div>
+          <form [formGroup]="form">
+            <div class="row">
+              <div class="col-md-4 mb-2">
+                <label>Image</label>
+                <div class="form-group">
+                  <div class="input-wrapper">
+                    <input type="file" (change)="onFileChanges($event)" class="form-control w-100" pInputText
+                      style="display: none;" #gFileInput>
+                    <input type="text" formControlName="image" class="form-control w-100" pInputText readonly
+                      (click)="gFileInput.click()">
+                    <button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem;" class="upload-button"
+                      (click)="gFileInput.click()">Upload
+                    </button>
+                  </div>
+                  <img *ngIf="editImage" src="{{editImage}}" class="mt-2" alt="image" width="200px" height="200px" />
+                </div>
+              </div>
+              <div class="col-md-4 mb-2">
+                <div class="form-group">
+                  <label>URL Slug</label>
+                  <input formControlName="url_slug" type="text" class="form-control" pInputText>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="form-group">
+                  <label>Add College Information</label>
+                  <textarea class="form-control" rows="4" formControlName="college_info"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="mb-4">
+              <div class="d-flex justify-content-end mt-2">
+                <button pButton [label]="isSave? 'Save': 'Update'" class="btn btn-primary"
+                  (click)="onSubmitDetails()"></button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div style="width: 100%; height: 80vh; overflow: auto; overflow-x: hidden" class="mt-2">
+          <p-table size="small" scrollHeight="600px" [scrollable]="true" styleClass="p-datatable-gridlines" [value]="contributorsList" [totalRecords]="contributorCount"
+            [tableStyle]="{ width: '100%' }" [globalFilterFields]="[
+              'total_student','name','amount','created_at']" [paginator]="true" (onPage)="pageChange($event)"
+            [rows]="pageSize" [first]="first" [lazy]="true" [rowsPerPageOptions]="[10, 50, 100]">
+            <ng-template pTemplate="caption">
+              <div class="d-flex w-full align-items-center justify-content-between">
+                <div class="d-flex gap-2">
+                  <div>
+                    <div>Contributors</div>
+                    <div style="color: #a1a1a1; font-size: 10px">Total Contributors: {{ contributorCount }}</div>
+                  </div>
+                  <div style="color: #a1a1a1; font-size: 14px">Total Available Students :
+                    {{contributedData?.total_student}}</div>
+                  <div style="color: #a1a1a1; font-size: 14px">Total Contributed :
+                    {{contributedData?.total_contributed}}
+                  </div>
+                  <div style="color: #a1a1a1; font-size: 14px">Total Uncontributed :
+                    {{contributedData?.total_uncontributed}}</div>
+                </div>
+                <div class="d-flex gap-2">
+                  <button class="ps-3 pe-3 pt-2 pb-2 btn btn-teritary" pButton (click)="onShowAddEditContributor()">
+                    Assign Contributor &nbsp; <i class="pi pi-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th pSortableColumn="total_student">
+                  Students<p-sortIcon field="total_student"></p-sortIcon>
+                </th>
+                <th pSortableColumn="name">
+                  Contributor Details<p-sortIcon field="name"></p-sortIcon>
+                </th>
+                <th pSortableColumn="amount">
+                  Location<p-sortIcon field="amount"></p-sortIcon>
+                </th>
+                <th pSortableColumn="created_at">
+                  Assigned Date<p-sortIcon field="created_at"></p-sortIcon>
+                </th>
+                <th>Actions</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+              <tr>
+                <td>{{ item.total_student || '-' }}</td>
+                <td>
+                  <div class="d-flex">
+                    <div class="flex-column">
+                      {{ item.name }} <br />
+                      {{ item.email }} <br />
+                      {{ item.phonenumber }}
+                    </div>
+                  </div>
+                </td>
+                <td>{{ item?.location || "-" }}</td>
+                <td>{{ item?.created_at | date: 'short' }}</td>
+                <td>
+                  <div class="view-btn m-1" style="cursor: pointer" (click)="onShowAddEditContributor(item);">
+                    <a><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </p-tabpanel>
+    <p-tabpanel value="2" header="Articles">
+      <div class="container-fluid p-2 py-3">
+        <div class="row">
+          <div class="d-flex col-sm-5 col-md-6  justify-content-between">
+            <div class="d-flex align-items-center ">
+              <div class="d-flex flex-column px-2">
+                <span style="font-size: 20px;">Articles</span>
+                <span class="text-xs" style="color: rgb(205, 203, 203);">
+                  Total Count:{{ collegeArticleCount}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex col-sm-5 col-md-6 justify-content-end">
+            <div class="d-flex gap-2 align-items-center p-2">
+              <span>Profile Completion 25%</span>
+              <button class="btn btn-primary" (click)="showAddEditArticleModel()"><i class="pi pi-plus"></i> &nbsp; Add
+                Articles</button>
+            </div>
+          </div>
+        </div>
+        <div class="article-grid">
+          <div class="card mb-4" *ngFor="let article of collegeArticleList">
+            <div class="card-body">
+              <h5 class="card-title">{{article.title}}</h5>
+              <p class="text-muted small">{{article.created_at | date: 'short'}}</p>
+              <p class="card-text art-img" [innerHtml]="article.article"></p>
+              <button pButton label="Edit" class="btn btn-primary w-100 m-0"
+                (click)="showAddEditArticleModel(article);"></button>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-4">
+          <div class="d-flex align-items-center">
+          </div>
+          <div class="w-100 d-flex justify-content-end" style="text-align: right">
+            <p-paginator (onPageChange)="articlePageChange($event)" [rows]="articlePageSize"
+              [totalRecords]="collegeArticleCount" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+          </div>
+        </div>
+      </div>
+    </p-tabpanel>
+    <p-tabpanel value="3" header="Gallery">
+      <div class="row">
+        <div class="d-flex col-sm-5 col-md-6  justify-content-between">
+          <div class="d-flex align-items-center ">
+            <div class="d-flex flex-column px-2">
+              <span style="font-size: 20px;">Gallery</span>
+              <span class="text-xs" style="color: rgb(205, 203, 203);">Total Count:{{ galleryItemsCount }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex col-sm-5 col-md-6 justify-content-end">
+          <div class="d-flex gap-2 align-items-center p-2">
+            <span>Profile Completion 25%</span>
+            <button class="btn btn-primary" (click)="showAddEditGalleryModel()"><i class="pi pi-plus"></i> &nbsp; Add
+              Gallery items</button>
+          </div>
+        </div>
+      </div>
+      <div class="gallery-grid p-2">
+        <div *ngFor="let item of galleryItems" class="gallery-item">
+          <div class="position-relative" (click)="showAddEditGalleryModel(item)">
+            <img [src]="item.image_name" [alt]="item.title" class="gallery-media" [title]="item.title">
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="d-flex align-items-center">
+        </div>
+        <div class="w-100 d-flex justify-content-end" style="text-align: right">
+          <p-paginator (onPageChange)="galleryPageChange($event)" [rows]="galleryPageSize"
+            [totalRecords]="galleryItemsCount" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+        </div>
+      </div>
+    </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</div>
+
+<p-dialog [header]="articleId ? 'Edit Article' : 'Add Article'" [(visible)]="isAddEditArticle" [modal]="true"
+  [style]="{ width: '50vw' }" (onHide)="closeArticleModal()">
+  <form [formGroup]="articleForm" (ngSubmit)="onSubmitArticle()">
+    <div class="row">
+      <div class="col-12 mb-2">
+        <div class="form-group">
+          <label>Article Title</label>
+          <input formControlName="title" type="text" class="form-control" pInputText>
+          <div *ngIf="articleSubmitted && artF.title.errors" class="text-danger text-xs">
+            <div *ngIf="artF.title.errors.required">Required</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <div class="form-group">
+          <label>URL Slug</label>
+          <input formControlName="url_slug" type="text" class="form-control" pInputText>
+          <div *ngIf="articleSubmitted && artF.url_slug.errors" class="text-danger text-xs">
+            <div *ngIf="artF.url_slug.errors.required">Required</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <div class="form-group">
+          <label>Article</label>
+          <p-editor #editor formControlName="article" escape="false" class="newClass"
+            [style]="{ height: '200px' }"></p-editor>
+          <div *ngIf="articleSubmitted && artF.article.errors" class="text-danger text-xs">
+            <div *ngIf="artF.article.errors.required">Required</div>
+          </div>
+          <div *ngIf="wordLimitExceeded" class="text-danger text-xs">Word limit exceeded! Maximum 1000 words allowed.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12 text-right">
+        <p-confirmpopup></p-confirmpopup>
+        <button class="btn btn-teritary" type="button"
+          (click)="articleId ? deteteCollegeArticle($event) : closeArticleModal()">
+          {{articleId ? 'Delete': 'Cancel'}}
+        </button>
+        <button class="btn btn-primary" type="submit">{{articleId ? 'Update': 'Submit'}}</button>
+      </div>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog [header]="galleryId ? 'Edit Gallery Item' :'Add Gallery Item'" [(visible)]="isAddEditGallery" [modal]="true"
+  [style]="{ width: '50vw' }" (onHide)="closeGalleryModal()">
+  <form [formGroup]="galleryForm" (ngSubmit)="onSubmitGallery()">
+    <div class="row">
+      <div class="col-12 mb-2">
+        <div class="form-group">
+          <label>Item Title</label>
+          <input formControlName="title" type="text" class="form-control">
+          <div *ngIf="gallerySubmitted && gF.title.errors" class="text-danger text-xs">
+            <div *ngIf="gF.title.errors.required">Required</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <div class="form-group">
+          <label>Youtube Video Link (Optional)</label>
+          <input formControlName="youtube_link" type="text" class="form-control">
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <label>Upload Cover Image</label>
+        <div class="form-group">
+          <div class="input-wrapper">
+            <input type="file" (change)="onFileChange($event)" class="form-control w-100" pInputText
+              style="display: none;" #fileInput>
+            <input type="text" formControlName="image" class="form-control w-100" pInputText readonly
+              (click)="fileInput.click()">
+            <button type="button" (click)="fileInput.click()" style="border-radius: 0rem 0.375rem 0.375rem 0rem;"
+              class="upload-button">Upload
+            </button>
+          </div>
+          <div *ngIf="gallerySubmitted && gF.image.errors" class="text-danger text-xs">
+            <div *ngIf="gF.image.errors.required">Required</div>
+          </div>
+          <img *ngIf="thumbnailImage" src="{{thumbnailImage}}" alt="image" width="200px" height="200px" />
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12 text-right">
+        <p-confirmpopup></p-confirmpopup>
+        <button class="btn btn-teritary" type="button"
+          (click)="galleryId ? deteteCollegeGallery($event) : closeGalleryModal()">
+          {{galleryId ? 'Delete': 'Cancel'}}
+        </button>
+        <button class="btn btn-primary" type="submit">{{galleryId ? 'Update': 'Submit'}}</button>
+      </div>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog [(visible)]="isAassignContributor" [modal]="true" [style]="{ width: '50vw' }" (onHide)="closeAssignModal()">
+  <ng-template pTemplate="header">
+    <div class="d-md-flex items-center justify-center align-items-center gap-2 mb-md-0 mb-2">
+      <div class="p-dialog-title">
+        {{assignContributorId ? 'Edit Assign Contributor' : 'Add Assign Contributor'}}
+      </div>
+      <div style="color: #a1a1a1; font-size: 14px">
+        Total Uncontributed : {{contributedData?.total_uncontributed}}
+      </div>
+    </div>
+  </ng-template>
+  <form [formGroup]="assignForm" (ngSubmit)="onSubmitAssignContributor()">
+    <div class="row">
+      <div class="col-12 mb-2">
+        <div class="form-group">
+          <label>Contributor List</label>
+          <p-select formControlName="contributor_id" optionValue="id" optionLabel="contributor_name"
+            styleClass="w-full" [options]="contributorsDropdownList" placeholder="Select" appendTo="body"
+            [readonly]="assignContributorId ? true: false">
+          </p-select>
+          <div *ngIf="assignConSubmitted && assF.contributor_id.errors" class="text-danger text-xs">
+            <div *ngIf="assF.contributor_id.errors.required">Contributor Required</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <div class="d-md-flex gap-2 mb-md-0 mb-2">
+          <div style="color: #ff0000; font-size: 14px">
+            Available Contributions : {{contributedData?.total_student}}
+          </div>
+          <div style="color: #a1a1a1; font-size: 14px">
+            Used Contributions : {{contributedData?.total_contributed}}
+          </div>
+          <div style="color: #a1a1a1; font-size: 14px">
+            Total Contributions : {{contributedData?.total_uncontributed}}
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mb-2">
+        <div class="form-group">
+          <label>Select Students</label>
+          <p-multiselect formControlName="total_student" optionValue="id" optionLabel="name"
+            styleClass="w-full" [options]="studentUserList" placeholder="Select" appendTo="body">
+          </p-multiselect>
+          <div *ngIf="assignConSubmitted && assF.total_student.errors" class="text-danger text-xs">
+            <div *ngIf="assF.total_student.errors.required">Students Required</div>
+            <div *ngIf="assF.total_student.errors.min">
+              Must be at least 1
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12 text-right">
+        <p-confirmpopup></p-confirmpopup>
+        <button class="btn btn-teritary" type="button"
+          (click)="assignContributorId ? deteteAssignContributor($event) : closeAssignModal()">
+          {{assignContributorId ? 'Delete': 'Cancel'}}
+        </button>
+        <button class="btn btn-primary" type="submit">{{assignContributorId ? 'Update': 'Submit'}}</button>
+      </div>
+    </div>
+  </form>
+</p-dialog>

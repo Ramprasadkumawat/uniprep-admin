@@ -1,0 +1,870 @@
+<div class="card">
+	<div class="card-header">
+		<div class="d-flex align-items-center">
+			<button class="btn btn-link p-0" (click)="back()">
+				<i class="pi pi-arrow-left text-dark"></i>
+			</button>
+			<h5 class="mb-0 fw-semibold">Organization Details</h5>
+		</div>
+	</div>
+	<div class="card-body">
+		<div class="row">
+			<!-- Left Column -->
+			<div class="col-md-3 mb-3 d-flex justify-content-between">
+				<div>
+					<h5 class="fw-semibold">{{ instituteList[0]?.institutename }}</h5>
+					<p class="mb-1">{{ instituteList[0]?.address }}</p>
+					<p class="mb-1">{{ this.instituteList[0]?.country_code }} {{ instituteList[0]?.phone }}</p>
+					<p class="mb-1 text-primary">{{ instituteList[0]?.website }}</p>
+					<p class="mb-0 text-primary">{{ instituteList[0]?.organization_email }}</p>
+				</div>
+				<!-- Vertical Line -->
+				<div class="vr h-100 d-none d-md-flex" style="width: 3px; background-color: #ddd"></div>
+			</div>
+			<!-- Right Column -->
+			<div class="col-md-9">
+				<div class="row">
+					<div class="col-md-2 mb-2"><strong>Country</strong><br />{{ instituteList[0]?.homecountry_name }}</div>
+					<div class="col-md-2 mb-2"><strong>Location</strong><br />{{ instituteList[0]?.state }},{{
+						instituteList[0]?.district }}</div>
+					<div class="col-md-2 mb-2"><strong>Organization Type</strong><br />{{ instituteList[0]?.institutetypeName }}
+					</div>
+					<div class="col-md-2 mb-2"><strong>Co-Branding</strong><br />{{ instituteList[0]?.co_branding == 1 ? "Yes" :
+						"No" }}</div>
+					<div class="col-md-2 mb-2"><strong>Source</strong><br />{{ instituteList[0]?.source }}</div>
+					<div class="col-md-2 mb-2"><strong>Representative Name</strong><br />{{
+						instituteList[0]?.organization_representative }}</div>
+					<div class="col-md-2 mb-2"><strong>Representative Email</strong><br />{{ instituteList[0]?.organization_email
+						}}</div>
+					<div class="col-md-2 mb-2"><strong>Representative Designation</strong><br />{{
+						instituteList[0]?.representative_designation }}</div>
+					<div class="col-md-2 mb-2"><strong>Created Date </strong><br />{{ instituteList[0]?.created_at ?
+						(instituteList[0]?.created_at | date : "dd-MM-yyyy | hh:mm a") : "" }}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="mt-4">
+	<p-tabs value="1" activeIndex="1" styleClass="active-bg-black custom-tab" (onChange)="breedCrumbs($event)">
+		<p-tablist>
+			<p-tab selectOnFocus="true" value="1">Organization Details</p-tab>
+			<p-tab value="2">Users</p-tab>
+			<p-tab value="3">Remarks</p-tab>
+			<p-tab value="4">Document</p-tab>
+			<p-tab value="5">Payout Details</p-tab>
+		</p-tablist>
+		<p-tabpanels>
+			<p-tabpanel selectOnFocus="true" value="1" header="Organization Details">
+				<div class="container-fluid p-3">
+					<h4>Edit Organization</h4>
+					<form [formGroup]="form" (ngSubmit)="submitForm()">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Organization Name</label>
+									<input placeholder="Enter organization name" formControlName="inst_name" type="text"
+										class="form-control" pInputText />
+									<div *ngIf="submitted && f.inst_name.errors" class="text-danger text-xs">
+										<div *ngIf="f.inst_name.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Organization Email ID</label>
+									<input placeholder="Enter organization email ID" formControlName="email" type="text"
+										class="form-control" pInputText />
+									<div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
+										<div *ngIf="f.email.errors.required">Required</div>
+										<div *ngIf="f.email.errors.email">Should be a valid email address</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Organization Contact Number</label>
+									<div class="w-100 position-relative">
+										<ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'"
+											[preferredCountries]="['in', 'gb']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+											[searchCountryFlag]="true" [maxLength]="10"
+											[searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+											[phoneValidation]="false" [selectedCountryISO]="preferredCountry" name="phone"
+											formControlName="phone_number" customPlaceholder="Enter organization phone number"
+											(keyup)="onChangeContact($event)"> </ngx-intl-tel-input>
+									</div>
+									<div *ngIf="submitted && f.phone_number.errors" class="text-danger text-xs">
+										<div *ngIf="f.phone_number.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Website</label>
+									<input placeholder="Enter organization Website" formControlName="website" type="text"
+										class="form-control" pInputText />
+									<div *ngIf="submitted && f.website.errors" class="text-danger text-xs">
+										<div *ngIf="f.website.errors.required">Required</div>
+										<div *ngIf="f.website.errors.pattern">Enter a valid URL (e.g., https://example.com)</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Organization Type</label>
+									<p-select placeholder="Select organization type" styleClass="w-full" formControlName="Institute_type"
+										optionLabel="mitypename" optionValue="id" [options]="instituteDropDownList"></p-select>
+									<div *ngIf="submitted && f.Institute_type.errors" class="text-danger text-xs">
+										<div *ngIf="f.Institute_type.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Country</label>
+									<p-select formControlName="home_country" (onChange)="changeCountry($event)" [filter]="true"
+										filterBy="country" placeholder="Select organization country" optionValue="id" optionLabel="country"
+										styleClass="w-full" [options]="homeCountries"> </p-select>
+									<div *ngIf="submitted && f.home_country.errors" class="text-danger text-xs">
+										<div *ngIf="f.home_country.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Location</label>
+									<p-select [virtualScrollItemSize]="38" [virtualScroll]="true" formControlName="location"
+										optionValue="id" optionLabel="work_location" styleClass="w-100" [options]="locationList"
+										placeholder="Select State" [filter]="true" filterBy="state" [appendTo]="'body'"> </p-select>
+									<div *ngIf="submitted && f.location.errors" class="text-danger text-xs">
+										<div *ngIf="f.location.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Organization Representative Name</label>
+									<input placeholder="Enter the name of the representative" formControlName="org_rep_name" type="text"
+										class="form-control" pInputText />
+									<div *ngIf="submitted && f.org_rep_name.errors" class="text-danger text-xs">
+										<div *ngIf="f.org_rep_name.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Representative Designation</label>
+									<input placeholder="Enter the designation of the representative" formControlName="org_rep_designation"
+										type="text" class="form-control" pInputText />
+									<div *ngIf="submitted && f.org_rep_designation.errors" class="text-danger text-xs">
+										<div *ngIf="f.org_rep_designation.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Co-Branding</label>
+									<p-select styleClass="w-full" formControlName="co_branding" placeholder="Select Yes/No"
+										optionLabel="label" optionValue="value" [options]="coBranding"></p-select>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Address</label>
+									<input placeholder="Enter Address" formControlName="address" type="text" class="form-control"
+										pInputText />
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label>Assign To</label>
+									<p-select [filter]="true" styleClass="w-full" formControlName="assign_to"
+										placeholder="Select Sales rep" optionLabel="name" optionValue="id"
+										[options]="assignToDropdownList"></p-select>
+								</div>
+							</div>
+						</div>
+
+						<div class="row mt-3">
+							<div class="col-12 text-right">
+								<button class="ps-3 pe-3 pt-2 pb-2" pButton
+									style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff"
+									type="submit">{{ detailsUpdate }}</button>
+							</div>
+						</div>
+					</form>
+
+					<form [formGroup]="formCoBranding" (ngSubmit)="submitCoBrandingForm()">
+						<div class="row">
+							<h4>Co-branding Details</h4>
+							<div class="col-md-4 mt-1">
+								<label for="icon" class="form-label">Logo<span class="text-danger">*</span></label>
+								<div class="p-inputgroup rounded-2">
+									<input id="image" pInputText formControlName="image" class="w-full rounded-2"
+										placeholder="Upload an image" readonly />
+									<p-fileUpload #fileUploadLogo mode="basic" name="image" [auto]="true" chooseLabel="Upload"
+										[files]="files" [customUpload]="true" (uploadHandler)="onFileSelectedLogo($event)"
+										accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.svg" [maxFileSize]="5000000"
+										styleClass="p-button-outlined p-button-primary h-100 text-white p-2 rounded-0" #fileUpload>
+									</p-fileUpload>
+								</div>
+							</div>
+							<div class="col-md-4 mt-1">
+								<label for="icon" class="form-label">Icon<span class="text-danger">*</span></label>
+								<div class="p-inputgroup rounded-2">
+									<input id="icon" pInputText formControlName="icon" class="w-full rounded-2"
+										placeholder="Upload an Icon" readonly />
+									<p-fileUpload #fileUploadIcon mode="basic" name="icon" [auto]="true" chooseLabel="Upload"
+										[files]="files" [customUpload]="true" (uploadHandler)="onFileSelectedIcon($event)"
+										accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.svg" [maxFileSize]="5000000"
+										styleClass="p-button-outlined p-button-primary h-100 text-white p-2 rounded-0" #fileUpload>
+									</p-fileUpload>
+								</div>
+							</div>
+							<div class="col-md-4 mt-1">
+								<label>Co-branding Domain</label>
+								<div class="form-group mt-2">
+									<div class="input-wrapper" style="position: relative; display: flex; width: 100%">
+										<input type="text" class="form-control" formControlName="co_brandingDomain" placeholder="Domain"
+											style="height: 40px !important; padding-right: 110px; border-radius: 0.5rem" />
+
+										<span
+											style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #000; font-size: 14px; pointer-events: none">
+											.uniprep.ai </span>
+									</div>
+									<div *ngIf="submitCoBranding && c.co_brandingDomain.errors" class="text-danger text-xs">
+										<div *ngIf="c.co_brandingDomain.errors.required">Domain Name Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 mt-2">
+								<label for="icon" class="form-label">Primary Color</label>
+								<br />
+								<input id="primary_color" type="color" formControlName="primary_color" class="color-pickers" />
+							</div>
+							<div class="col-md-4 mt-2">
+								<label for="icon" class="form-label">Secondary Color</label>
+								<br />
+								<input id="secondary_color" type="color" formControlName="secondary_color" class="color-pickers" />
+							</div>
+							<div class="row mt-3">
+								<div class="col-12 text-right">
+									<button class="ps-3 pe-3 pt-2 pb-2" pButton
+										style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff"
+										type="submit">{{ coBrandingUpdate }}</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</p-tabpanel>
+			<p-tabpanel value="2" header="Users">
+				<div class="container-fluid p-3">
+					<h4>Organization Users</h4>
+					<form [formGroup]="addUserForm" (ngSubmit)="submitUserForm()">
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>User Name</label>
+									<input placeholder="Enter User name" formControlName="user_name" type="text" class="form-control"
+										pInputText />
+									<div *ngIf="submittedUser && u.user_name.errors" class="text-danger text-xs">
+										<div *ngIf="u.user_name.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>Email ID</label>
+									<input placeholder="Enter email ID" formControlName="email" type="text" class="form-control"
+										pInputText />
+									<div *ngIf="submittedUser && u.email.errors" class="text-danger text-xs">
+										<div *ngIf="u.email.errors.required">Required</div>
+										<div *ngIf="u.email.errors.email">Should be a valid email address</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>Mobile Number</label>
+									<ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'"
+										[preferredCountries]="['in', 'gb']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true"
+										[searchCountryFlag]="true" [maxLength]="10"
+										[searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [phoneValidation]="false"
+										[selectedCountryISO]="preferredCountryUser" name="phone" formControlName="phone_number"
+										customPlaceholder="Enter organization phone number" (keyup)="onChangeContact($event)">
+									</ngx-intl-tel-input>
+									<div *ngIf="submittedUser && u.phone_number.errors" class="text-danger text-xs">
+										<div *ngIf="u.phone_number.errors.required">Required</div>
+										<div *ngIf="u.phone_number.errors.pattern">Enter exactly 10 digits</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>User Type</label>
+									<p-select placeholder="Select organization type" styleClass="w-full" formControlName="user_type"
+										optionLabel="label" optionValue="label" [options]="instituteDropDownListAddUser"></p-select>
+									<div *ngIf="submittedUser && u.user_type.errors" class="text-danger text-xs">
+										<div *ngIf="u.user_type.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>Status</label>
+									<p-select placeholder="Select" optionValue="id" formControlName="status" optionLabel="name"
+										styleClass="w-full" [options]="statuses"></p-select>
+									<div *ngIf="submittedUser && u.status.errors" class="text-danger text-xs">
+										<div *ngIf="u.status.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row mt-3">
+							<div class="col-12 text-right">
+								<button class="ps-3 pe-3 pt-2 pb-2" pButton
+									style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff"
+									type="submit">{{ btnTxt }}</button>
+							</div>
+						</div>
+					</form>
+					<p-table size="small" scrollHeight="600px" [scrollable]="true" class="custom-table" [value]="users"
+						[lazy]="true" [totalRecords]="usersCount" [tableStyle]="{ 'min-width': 'Auto' }">
+						<ng-template pTemplate="caption">
+							<div class="row">
+								<div class="d-flex col-sm-5 col-md-6 justify-content-between">
+									<div class="d-flex align-items-center">
+										<div class="d-flex flex-column">
+											<span style="font-size: 20px">Users List</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</ng-template>
+						<ng-template pTemplate="header">
+							<tr>
+								<th class="border-cell">User Name</th>
+								<th class="border-cell">Email ID</th>
+								<th class="border-cell">Mobile</th>
+								<th class="border-cell">User Type</th>
+								<th class="border-cell">Creation Date</th>
+								<th class="border-cell">Status</th>
+								<th class="border-cell">Actions</th>
+							</tr>
+						</ng-template>
+						<ng-template pTemplate="body" let-user>
+							<tr>
+								<td class="border-cell">{{ user.name }}</td>
+								<td class="border-cell">{{ user.email }}</td>
+								<td class="border-cell">{{ user.country_code }} {{ user.phone }}</td>
+								<td class="border-cell">{{ user.sub_usertype }}</td>
+								<td class="border-cell">
+									{{
+									user?.created_at
+									? (user.created_at
+									| date
+									: "dd-MM-yyyy | hh:mm
+									a")
+									: ""
+									}}
+								</td>
+								<td class="border-cell">{{ user.status == 1 ? "Active" : "In-Active" }}</td>
+								<td class="border-cell">
+									<span style="cursor: pointer" (click)="edit(user)"><span class="ms-2"
+											style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span>&nbsp;
+										Edit</span>
+									<p-confirmpopup></p-confirmpopup>
+									<span style="cursor: pointer" (click)="removeUser($event, user.id)">&nbsp;&nbsp;<span class="ms-2"
+											style="color: var(--p-primary-500)"><i class="fa-solid fa-trash"></i></span> &nbsp;Delete</span>
+								</td>
+							</tr>
+						</ng-template>
+					</p-table>
+				</div>
+			</p-tabpanel>
+			<p-tabpanel value="3" header="Remarks">
+				<div class="container-fluid p-3">
+					<div class="d-flex justify-content-between">
+						<h4>Remarks</h4>
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton
+							style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff"
+							type="button" (click)="showRemarksDialog = true">Add Remark</button>
+					</div>
+					<div class="card border p-3 mt-2" *ngFor="let item of getRemarksList">
+						<div class="d-flex justify-content-between align-items-start flex-wrap">
+							<!-- Left content -->
+							<div class="col-md-8 col-12 mb-3 mb-md-0">
+								<p class="mb-2 text-secondary" style="font-size: 0.95rem">
+									{{ item.remarks }}
+								</p>
+								<div class="fw-semibold text-primary mb-1">{{ item.created_by }}</div>
+								<div class="text-muted" style="font-size: 0.85rem">
+									{{
+									item?.created_at
+									| date
+									: "dd-MM-yyyy
+									'at' hh:mm a"
+									}}
+								</div>
+							</div>
+
+							<!-- Right content -->
+							<div class="col-md-4 col-12 mb-3 mb-md-0">
+								<div class="row">
+									<div class="col-md-6 col-12 d-flex flex-column align-items-md-end text-md-end">
+										<span *ngIf="item.status_option" class="badge rounded-pill mb-2 px-3 py-2 text-white"
+											[ngStyle]="{ 'background-color': getStatusColor(item.status_option), 'font-size': '0.85rem' }">
+											{{ item.status_option }}
+										</span>
+										<span *ngIf="!item.status_option">No Remarks</span>
+									</div>
+									<div class="col-md-6 col-12 d-flex flex-column align-items-md-end text-md-end">
+										<div>
+											<span class="fw-semibold text-primary d-block">Next Follow Up</span>
+											<span *ngIf="item.follow_date" class="text-muted" style="font-size: 0.85rem">
+												{{ item.follow_date | date : "dd-MM-yyyy" }}|
+												{{ "1970-01-01T" + item.follow_time | date : "hh:mm a" }}
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p-tabpanel>
+			<p-tabpanel value="4" header="Document">
+				<div class="container-fluid p-3">
+					<div class="d-flex justify-content-between">
+						<h4>Organization Document</h4>
+						<button pButton
+							style="background-color: var(--p-primary-500); border-radius: 8px; border: none; color: #fff"
+							(click)="showUploadDialog = true">Upload Document &nbsp;<i class="fa-regular fa-upload"></i></button>
+					</div>
+					<div class="row mt-2">
+						<div class="col-12">
+							<div class="card border rounded px-3 py-2 mb-2" *ngFor="let item of listDocumentData">
+								<div class="d-flex align-items-center justify-content-between flex-wrap">
+									<!-- Left Section -->
+									<div class="d-flex align-items-center flex-grow-1">
+										<!-- Checkbox -->
+										<!-- <div class="form-check me-3">
+                                        <input (change)="onCheckboxChange(item.id, $event)" class="form-check-input"
+                                            type="checkbox" />
+                                    </div> -->
+
+										<!-- File Thumbnail -->
+										<!-- <img *ngIf="isImage(item.filename)" [src]="item.file_url" alt="Image"
+                                        style="width: 60px; height: auto;" /> -->
+
+										<!-- Document File (DOC, DOCX, etc.) -->
+										<!-- <div *ngIf="isDocument(item.filename)">
+                                        <i class="fa-regular fa-file-doc fa-3x" style="color: #0054b4;"></i>
+                                    </div> -->
+
+										<!-- PDF File -->
+										<!-- <div *ngIf="isPdf(item.filename)">
+                                        <i class="fa-regular fa-file-pdf fa-3x" style="color: #bd2d45;"></i>
+                                    </div> -->
+										<!-- File Info -->
+										&nbsp; &nbsp;
+										<div>
+											<div class="fw-semibold text-primary" (click)="downloadDocumentId(item)"
+												*ngIf="editingRenameId !== item.id" style="cursor: pointer">
+												{{ item.filename }}
+											</div>
+											<!-- <div class="d-flex justify-content-start" *ngIf="editingRenameId === item.id">
+                                            <input placeholder="Enter organization phone number"
+                                                [(ngModel)]="renameDocValue" type="text" class="form-control" pInputText
+                                                (keypress)="preventDot($event)"> &nbsp;
+                                            <button pButton (click)=renameSubmit() class="pe-4" style="background-color: var(--p-primary-500); border-radius: 8px; border: none; color: #fff;
+                                                text-align: center;">
+                                                Submit
+                                            </button>
+                                        </div> -->
+											<div class="text-muted small">
+												{{
+												item?.created_at
+												| date
+												: "dd-MM-yyyy 'at'
+												hh:mm a"
+												}}
+											</div>
+										</div>
+									</div>
+
+									<!-- Right Dropdown Menu -->
+									<!-- <div class="dropdown">
+                                    <button class="btn btn-link text-dark p-0" type="button" data-bs-toggle="dropdown">
+                                        <i class="pi pi-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><span (click)="downloadDocumentId(item)" class="dropdown-item"><i
+                                                    class="pi pi-download me-2"></i>Download</span>
+                                        </li>
+                                        <li><span (click)="editRename(item.id, item.original_name)"
+                                                class="dropdown-item text-primary"><i
+                                                    class="pi pi-pencil me-2"></i>Rename</span></li>
+                                        <li><span (click)="deleteSingleDocuments(item.id)"
+                                                class="dropdown-item text-danger"><i
+                                                    class="pi pi-trash me-2"></i>Delete</span></li>
+                                    </ul>
+                                </div> -->
+								</div>
+							</div>
+						</div>
+						<!-- <div class="row mt-3" *ngIf="listDocumentData.length">
+                        <div class="col-12 text-right">
+                            <button pButton type="button" label="" class="p-button-danger  mt-auto"
+                                (click)="deleteSelectedDocuments();">Deleted Selected &nbsp;<i
+                                    class="pi pi-trash me-2"></i>
+                            </button>
+                        </div>
+                    </div> -->
+					</div>
+				</div>
+			</p-tabpanel>
+			<p-tabpanel value="5" header="Payout Details" *ngIf="isShoOnlyPartner">
+				<div class="container-fluid p-3">
+					<div class="d-flex justify-content-between">
+						<h4>Payout Details</h4>
+					</div>
+					<form [formGroup]="kycForm" (ngSubmit)="submitFormKycForm()" class="container py-3">
+						<div class="row">
+							<div class="col-md-4 mb-3">
+								<div class="form-group">
+									<label><strong>Account Name</strong></label>
+									<input type="text" class="form-control" formControlName="account_name"
+										placeholder="Bank Account Name" />
+									<div *ngIf="submittedKyc && kyc.account_name.errors" class="text-danger text-xs">
+										<div *ngIf="kyc.account_name.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4 mb-3">
+								<div class="form-group">
+									<label><strong>Account Number</strong></label>
+									<input type="text" class="form-control" formControlName="account_number" />
+									<div *ngIf="submittedKyc && kyc.account_number.errors" class="text-danger text-xs">
+										<div *ngIf="kyc.account_number.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4 mb-3">
+								<div class="form-group">
+									<label><strong>IFSC Code</strong></label>
+									<input type="text" class="form-control" (input)="checkValidity($event)" formControlName="ifc_code" />
+									<div *ngIf="submittedKyc && kyc.ifc_code.errors" class="text-danger text-xs">
+										<div *ngIf="kyc.ifc_code.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4 mb-3">
+								<div class="form-group">
+									<label><strong>Bank</strong></label>
+									<input type="text" class="form-control" formControlName="bank_name" />
+									<div *ngIf="submittedKyc && kyc.bank_name.errors" class="text-danger text-xs">
+										<div *ngIf="kyc.bank_name.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4 mb-3">
+								<div class="form-group">
+									<label><strong>Branch, Location</strong></label>
+									<input type="text" class="form-control" formControlName="branch" />
+									<div *ngIf="submittedKyc && kyc.branch.errors" class="text-danger text-xs">
+										<div *ngIf="kyc.branch.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-md-4 mb-3">
+								<div class="form-group">
+									<label><strong>UPI ID <span class="text-muted">(Optional)</span></strong></label><label
+										style="float: right" *ngIf="checkUpiValidity" class="text-success mt-1"><i
+											class="pi pi-check-circle"></i> UPI Valid : Account Name</label>
+									<input (input)="checkUpIdValidity($event)" type="text" class="form-control"
+										formControlName="upi_id" />
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="card border rounded px-3 py-2 mb-2">
+									<div class="d-flex align-items-center justify-content-between flex-wrap">
+										<!-- Left Section -->
+										<div class="d-flex align-items-center flex-grow-1">
+											<div>
+												<i class="fa-solid fa-image fa-2x" style="color: #0054b4"></i>
+											</div>
+											<!-- File Info -->
+											&nbsp; &nbsp;
+											<div>
+												<div (click)="downloadDocument()" class="fw-semibold text-primary" style="cursor: pointer">
+													{{ documentName ? documentName?.split("/").pop() : "" }}
+												</div>
+												<div class="text-muted small">
+													{{
+													bankDetails?.created_at
+													| date
+													: "dd-MM-yyyy
+													'at' hh:mm a"
+													}}
+												</div>
+											</div>
+										</div>
+										<div *ngIf="isShowUploadDocButton">
+											<p-fileUpload #fileUploadDoc mode="basic" name="kyc_document" [auto]="true" chooseLabel="Upload"
+												[customUpload]="true" (uploadHandler)="onFileSelectedDoc($event)"
+												accept=".jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.pdf,.doc" [maxFileSize]="5000000"
+												styleClass="p-button-primary text-white rounded-0 px-3" chooseIcon="pi pi-upload">
+											</p-fileUpload>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-5">
+								<div class="form-group">
+									<label>Verify & Activate</label>
+									<p-select styleClass="w-full" formControlName="verify" placeholder="Select Yes/No" optionLabel="label"
+										optionValue="value" [options]="coBranding"></p-select>
+									<div *ngIf="submittedKyc && kyc.verify.errors" class="text-danger text-xs">
+										<div *ngIf="kyc.verify.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-5">
+								<div class="form-group">
+									<label>Commission Percentage</label>
+									<p-select styleClass="w-full" formControlName="commission" placeholder="Select" optionLabel="label"
+										optionValue="value" [options]="percentage"></p-select>
+									<div *ngIf="submittedKyc && kyc.commission.errors" class="text-danger text-xs">
+										<div *ngIf="kyc.commission.errors.required">Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-2 text-end mt-3">
+								<button class="btn btn-primary" type="submit">{{ btnKycSubmit }}</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="card">
+					<div class="card-header">
+						<div class="d-flex w-full align-items-center justify-content-between">
+							<h6 class="mb-0 fw-bold">Payout Details</h6>
+							<div>
+								<span> Total Payout Till Date: INR {{ datacount }}</span>&nbsp;&nbsp;
+								<span> Total Payout Due/Failed: INR {{ totalPayoutDue }}</span>
+							</div>
+						</div>
+					</div>
+					<div class="card-body">
+						<!-- list -->
+						<p-table size="small" scrollHeight="600px" [scrollable]="true" class="custom-table" [value]="payoutList"
+							[paginator]="false" [lazy]="true" styleClass="gray-header">
+							<ng-template pTemplate="header">
+								<tr>
+									<th class="border-cell">Student</th>
+									<th class="border-cell">Organization</th>
+									<th class="border-cell">Transaction ID</th>
+									<th class="border-cell">Payment Method</th>
+									<th class="border-cell">Plan</th>
+									<th class="border-cell">Price</th>
+									<th class="border-cell">Date & Time</th>
+									<th class="border-cell">Payment Status</th>
+									<th class="border-cell">Payout Status</th>
+									<th class="border-cell">Actions</th>
+								</tr>
+							</ng-template>
+
+							<ng-template pTemplate="body" let-user>
+								<tr>
+									<!-- Student -->
+									<td class="border-cell">
+										<div>
+											<b>{{ user.name }}</b>
+										</div>
+										<div class="text-muted" style="font-size: 0.85rem">{{ user.email }}</div>
+										<div class="text-muted" style="font-size: 0.85rem">{{ user.country_code }} {{ user.phone }}</div>
+									</td>
+
+									<!-- Organization -->
+									<td class="border-cell">
+										<div style="cursor: pointer">
+											<b>{{ user.organization_name }}</b>
+										</div>
+										<div class="text-muted" style="font-size: 0.85rem">{{ user.location_name }}</div>
+									</td>
+
+									<!-- Transaction ID -->
+									<td class="border-cell">
+										<span class="text-primary">{{ user.transaction_id }}</span>
+									</td>
+
+									<!-- Payment Method -->
+									<td class="border-cell">{{ user.payment_method }}</td>
+
+									<!-- Plan -->
+									<td class="border-cell">{{ user.subscription_plan }}</td>
+
+									<!-- Price -->
+									<td class="border-cell">{{ user.currency }} {{ user.price }}</td>
+
+									<!-- Date & Time -->
+									<td class="border-cell">
+										{{
+										user?.created_at
+										? (user.created_at
+										| date
+										: "dd-MM-yyyy hh:mm
+										a")
+										: ""
+										}}
+									</td>
+
+									<!-- Payment Status -->
+									<td class="border-cell">
+										<ng-container *ngIf="user.payment_status === 'Completed'; else failedBlockPayment">
+											<span class="badge rounded-pill bg-success px-3 py-1" *ngIf="user.payment_status">✔{{
+												user.payment_status }}</span><br />
+											<!-- <a href="#" class="text-primary" style="font-size: 0.85rem;">Download Invoice</a> -->
+										</ng-container>
+										<ng-template #failedBlockPayment>
+											<span class="badge rounded-pill bg-danger px-3 py-1" *ngIf="user.payment_status">❌ {{
+												user.payment_status }}</span><br />
+										</ng-template>
+									</td>
+
+									<!-- Payout Status -->
+									<td class="border-cell">
+										<ng-container *ngIf="user.payout_status === 'Completed'; else failedBlock">
+											<span class="badge rounded-pill bg-success px-3 py-1" *ngIf="user.payout_status">✔ {{
+												user.payout_status }}</span><br />
+											<span class="text-muted" style="font-size: 0.75rem" *ngIf="user.commission">Commission: {{
+												user.commission }}%</span><br />
+											<span class="text-muted" style="font-size: 0.75rem" *ngIf="user.amount">Amount: {{ user.currency
+												}} {{ user.amount }}</span>
+
+											<!-- <a href="#" class="text-primary" style="font-size: 0.85rem;">Download Invoice</a> -->
+										</ng-container>
+										<ng-template #failedBlock>
+											<span class="badge rounded-pill bg-danger px-3 py-1" *ngIf="user.payout_status">❌ {{
+												user.payout_status }}</span><br />
+											<div class="text-muted" style="font-size: 0.75rem" *ngIf="user.commission">
+												Commission:
+												{{ user.commission }}%
+											</div>
+											<div class="text-muted" style="font-size: 0.75rem" *ngIf="user.amount">Amount: {{ user.currency }}
+												{{ user.amount }}</div>
+										</ng-template>
+									</td>
+
+									<!-- Actions -->
+									<td class="border-cell">
+										<button pButton type="button" label="Manual Payout"
+											class="p-button-outlined p-button-sm p-button-secondary bg-white"></button>
+									</td>
+								</tr>
+							</ng-template>
+						</p-table>
+					</div>
+				</div>
+			</p-tabpanel>
+		</p-tabpanels>
+	</p-tabs>
+</div>
+<!-- add remarks pop-up-->
+<p-dialog header="Add Remarks" [(visible)]="showRemarksDialog" [modal]="true" [style]="{ width: '500px' }"
+	[closable]="true" [contentStyle]="{ overflow: 'visible' }">
+	<form [formGroup]="remarksForm" (ngSubmit)="submitFormRemarks()">
+		<!-- Status -->
+		<div class="row">
+			<div class="col-12">
+				<div class="form-group">
+					<div class="d-flex justify-content-between align-items-center mb-1">
+						<label>Status</label>
+						<div class="form-check">
+							<input type="checkbox" class="form-check-input" id="rnr" formControlName="rnr"
+								[checked]="remarksForm.get('rnr')?.value === 1" (change)="onRnrChange($event)" />
+							<label class="form-check-label" for="status">RNR</label>
+						</div>
+					</div>
+					<p-select optionValue="value" optionLabel="label" [options]="statusOptions" formControlName="status"
+						placeholder="Select status" styleClass="w-full"> </p-select>
+				</div>
+			</div>
+			<div class="col-12">
+				<div class="form-group">
+					<label>Follow Up Required?</label>
+					<p-select (onChange)="onFollowUpChange($event)" styleClass="w-full" formControlName="followUp"
+						placeholder="Select Yes/No" optionLabel="label" optionValue="value" [options]="coBranding"></p-select>
+				</div>
+			</div>
+			<div class="col-12">
+				<div class="form-group mb-3">
+					<label>Follow Up Date</label>
+					<input type="date" class="form-control" formControlName="followUpDate" placeholder="Date Selection" />
+				</div>
+			</div>
+			<div class="col-12">
+				<div class="form-group mb-3">
+					<label>Follow Up Time</label>
+					<input type="time" class="form-control" formControlName="followUpTime" placeholder="Time Selection" />
+				</div>
+			</div>
+			<div class="col-12">
+				<div class="form-group mb-3">
+					<label>Remarks</label>
+					<textarea class="form-control" formControlName="remarks" rows="3"
+						placeholder="Type your remarks here..."> </textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row justify-content-center align-items-center">
+			<p-button type="submit" label="Add Remark" severity="primary" fluid class="w-100"></p-button>
+		</div>
+	</form>
+</p-dialog>
+
+<!-- document upload  -->
+<p-dialog header="Upload Document" [(visible)]="showUploadDialog" [modal]="true" [style]="{ width: '400px' }"
+	[closable]="true">
+	<div class="p-fluid">
+		<label for="fileUpload">Select Document:</label>
+		<input type="file" id="fileUpload" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+			class="form-control" [(ngModel)]="fileInputDummy" name="fileInput" />
+	</div>
+
+	<ng-template pTemplate="footer">
+		<button pButton label="Cancel" class="p-button-text" (click)="showUploadDialog = false"></button>
+		<button pButton label="Upload" (click)="uploadFile()"></button>
+	</ng-template>
+</p-dialog>
+<!-- <p-confirmDialog></p-confirmDialog> -->
+<!-- 🧾 Manual Confirm Dialog -->
+<!-- <div *ngIf="showConfirmation" class="confirm-overlay">
+    <div class="confirm-box">
+        <p>Are you sure you want to delete this documents?</p>
+        <div class="d-flex justify-content-end gap-2 mt-3">
+            <button *ngIf="isShowDeleteDocumentsCancelButton" class="btn btn-secondary"
+                (click)="cancelDelete()">Cancel</button>
+            <button *ngIf="!isShowDeleteDocumentsCancelButton" class="btn btn-secondary"
+                (click)="cancelSingleDelete()">Cancel</button>
+            <button class="btn btn-danger" (click)="confirmDelete()">Yes, Delete</button>
+        </div>
+    </div>
+</div> -->
+<div *ngIf="showUserConfirmation" class="confirm-overlay">
+	<div class="confirm-box">
+		<p>Are you sure you want to delete this user?</p>
+		<div class="d-flex justify-content-end gap-2 mt-3">
+			<button class="btn btn-secondary" (click)="cancelDeleteUser()">Cancel</button>
+			<button class="btn btn-danger" (click)="confirmDeleteUser()">Yes, Delete</button>
+		</div>
+	</div>
+</div>

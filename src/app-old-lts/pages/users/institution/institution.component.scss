@@ -1,0 +1,10 @@
+.action-sec {
+    display: flex;
+    gap: 15px;
+
+    span {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+}

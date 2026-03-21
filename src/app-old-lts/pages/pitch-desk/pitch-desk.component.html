@@ -1,0 +1,222 @@
+<p-accordion styleClass="white-accordian" (onClose)="activeIndex = -1" activeIndexChange="activeIndex = $event.index" value="{{activeIndex}}" #topOfPage>
+	<p-accordion-panel value="1">
+		<p-accordion-header>{{ title }}</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<input formControlName="id" type="hidden" class="form-control" pInputText />
+				<div class="row">
+					<div class="col-12">
+						<div class="row">
+							<div class="col-md-4 p-2">
+								<div class="form-group">
+									<label class="mb-1">Pitch Deck Name</label>
+									<input formControlName="pitch_deck_name" type="text" class="form-control" pInputText />
+									<div *ngIf="submitted && f.pitch_deck_name.errors" class="text-danger text-xs">
+										<div *ngIf="f.pitch_deck_name.errors.required">Pitch Deck Name Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 p-2">
+								<div class="form-group">
+									<label class="mb-1">Sector</label>
+									<p-select placeholder="Select Sector" optionValue="id" formControlName="sector" [filter]="true" [filterBy]="'sector_name'" optionLabel="sector_name" styleClass="w-full" [options]="sectorSelectBox"></p-select>
+									<div *ngIf="submitted && f.sector.errors" class="text-danger text-xs">
+										<div *ngIf="f.sector.errors.required">Sector Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 p-2">
+								<div class="form-group">
+									<label class="mb-1">Funding Type</label>
+									<p-select placeholder="Select Funding Type" optionValue="id" formControlName="funding_type" [filter]="true" [filterBy]="'funding_type_name'" optionLabel="funding_type_name" styleClass="w-full" [options]="fundingTypeSelectBox"></p-select>
+									<div *ngIf="submitted && f.funding_type.errors" class="text-danger text-xs">
+										<div *ngIf="f.funding_type.errors.required">Funding Type Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 p-2">
+								<div class="form-group">
+									<label class="mb-1">Country</label>
+									<p-select placeholder="Select Country" (onChange)="onChangeCountry($event.value)" [filter]="true" [filterBy]="'country'" optionValue="id" formControlName="country" optionLabel="country" styleClass="w-full" [options]="countrySelectBox"></p-select>
+									<div *ngIf="submitted && f.country.errors" class="text-danger text-xs">
+										<div *ngIf="f.country.errors.required">Country Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 p-2">
+								<div class="form-group">
+									<label class="mb-1">Head Quarters</label>
+									<p-select placeholder="Select Headquarters" optionValue="id" formControlName="head_quarters" [filter]="true" [filterBy]="'head_quarters_name'" optionLabel="head_quarters_name" styleClass="w-full" [options]="headQuartersSelectBox"></p-select>
+									<div *ngIf="submitted && f.head_quarters.errors" class="text-danger text-xs">
+										<div *ngIf="f.head_quarters.errors.required">Head Quarters Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 p-2">
+								<div class="form-group">
+									<label class="mb-1">Founding Year</label>
+									<div class="custom-calendar">
+										<!-- Hide the default calendar icon -->
+										<input formControlName="founding_year" type="text" class="form-control" pInputText />
+										<div *ngIf="submitted && f.founding_year.errors" class="text-danger text-xs">
+											<div *ngIf="f.founding_year.errors.required">Founding Year Required</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 p-2">
+								<div class="form-group">
+									<label class="mb-1">Funding Amount</label>
+									<input formControlName="funding_amount" type="text" class="form-control" pInputText />
+									<div *ngIf="submitted && f.funding_amount.errors" class="text-danger text-xs">
+										<div *ngIf="f.funding_amount.errors.required">Funding Amount Required</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 p-2">
+								<div class="form-group">
+									<label>Icon</label>
+									<div class="d-flex flex-row align-items-center">
+										<p-fileUpload mode="basic" [chooseLabel]="PatchImageName || 'Upload Icon'" name="pitch_deck_image" accept="image/*" (onSelect)="onImageSelect($event)" #fileImageUpload></p-fileUpload>
+										<button type="button" (click)="clearImage()" class="btn btn-danger">X</button>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4 p-2">
+								<div class="form-group">
+									<label>Document</label>
+									<div class="d-flex flex-row align-items-center">
+										<p-fileUpload mode="basic" [chooseLabel]="patchDocumentName || 'Upload Document'" name="pitch_deck_document" #fileDocUpload (onSelect)="onDocumentSelect($event)" accept=".pdf, .pptx"></p-fileUpload>
+										<button type="button" (click)="clearDocument()" class="btn btn-danger">X</button>
+									</div>
+									<div *ngIf="submitted && f.pitch_deck_document.errors" class="text-danger text-xs">
+										<div *ngIf="f.pitch_deck_document.errors.required">Document Required</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="reset()">Reset Field</button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">{{ btntxt }}</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+	<p-accordion-panel value="2">
+		<p-accordion-header>Filter Pitch Deck</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()">
+				<div class="row">
+					<div class="col-md-4 p-2">
+						<div class="form-group">
+							<label>Pitch Deck Name</label>
+							<input formControlName="pitch_deck_name" type="text" class="form-control" pInputText />
+						</div>
+					</div>
+					<div class="col-md-4 p-2">
+						<div class="form-group">
+							<label>Sector</label>
+							<p-multiselect [options]="sectorSelectBox" styleClass="w-100" formControlName="sector" optionValue="id" defaultLabel="Select Sector" display="chip" [showClear]="true" optionLabel="sector_name"> </p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4 p-2">
+						<div class="form-group">
+							<label>Funding Type</label>
+							<p-multiselect [options]="fundingTypeSelectBox" formControlName="funding_type" styleClass="w-100" optionValue="id" defaultLabel="Select Funding Type" display="chip" [showClear]="true" optionLabel="funding_type_name"> </p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4 p-2">
+						<div class="form-group">
+							<label>Country</label>
+							<p-multiselect [options]="countrySelectBox" (onChange)="onChangeCountry($event.value)" styleClass="w-100" formControlName="country" optionValue="id" defaultLabel="Select Country" display="chip" [showClear]="true" optionLabel="country" #multiSelect> </p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4 p-2">
+						<div class="form-group">
+							<label>Head Quarters</label>
+							<p-multiselect [options]="headQuartersSelectBox" formControlName="head_quarters" styleClass="w-100" optionValue="id" defaultLabel="Select Headquarters" display="chip" [showClear]="true" optionLabel="head_quarters_name"> </p-multiselect>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-12 text-right">
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="filterReset()">Reset Field</button>&nbsp;
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">Filter</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content></p-accordion-panel
+	>
+</p-accordion>
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="pitchDeckList" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [totalRecords]="PitchDeckCounts" [rows]="pageSize" [rowsPerPageOptions]="[50, 300, 500, 1000]">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<div>
+				<span>Pitch Deck List</span> <br />
+				<span class="text-muted text-small">Total Pitch Deck : {{ PitchDeckCounts }}</span>
+			</div>
+			<!-- <button pButton>Export &nbsp; <i class="pi pi-file"></i></button> -->
+			<div>
+				<p-confirmpopup></p-confirmpopup>
+				<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" pButton (click)="deleteSelected()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Delete Selected &nbsp; <i class="fa-solid fa-trash me-2"></i></button>
+				<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" pButton (click)="fileUploadModal = true" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Import &nbsp; <i class="pi pi-file-export"></i></button>
+
+				<button type="button" class="ms-2 me-2 ps-3 pe-2 pt-2 pb-2" (click)="exportTable()" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Export &nbsp;<i class="pi pi-file"></i></button>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell"><input type="checkbox" (click)="selectAllCheckbox()" [(ngModel)]="selectAllCheckboxes" style="transform: scale(1.5)" /></th>
+			<th class="border-cell">Pitch Deck Name</th>
+			<th class="border-cell">Country</th>
+			<th class="border-cell">Headquarters</th>
+			<th class="border-cell">Sector</th>
+			<th class="border-cell">Funding Type</th>
+			<th class="border-cell">Fouding Year</th>
+			<th class="border-cell">Funding Amount</th>
+			<th class="border-cell">Download Pitch</th>
+			<th class="border-cell">Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-Pitch let-expanded="expanded">
+		<tr>
+			<th class="border-cell" style="text-align: center">
+				<input type="checkbox" style="transform: scale(1.5); vertical-align: middle" [value]="Pitch.id" [(ngModel)]="Pitch.isChecked" />
+			</th>
+			<td class="border-cell">{{ Pitch.pitchdeck_name }}</td>
+			<td class="border-cell">{{ Pitch.country_name }}</td>
+			<td class="border-cell">{{ Pitch.head_quarters_name }}</td>
+			<td class="border-cell">{{ Pitch.sector_name }}</td>
+			<td class="border-cell">{{ Pitch.funding_type_name }}</td>
+			<td class="border-cell">{{ Pitch.founding_year }}</td>
+			<td class="border-cell">{{ Pitch.funding_amount }}</td>
+			<td class="border-cell">
+				<a (click)="DownloadPitch(Pitch.document_name)" style="cursor: pointer"><i class="fa-solid fa-down-to-line"></i>&nbsp;Download</a>
+			</td>
+			<td class="border-cell">
+				<div class="view-btn m-1" style="cursor: pointer">
+					<a (click)="editPitchDeck(Pitch)"><i class="fa-solid fa-pen"></i> Edit</a>
+				</div>
+				<div class="view-btn m-1" style="cursor: pointer; white-space: nowrap">
+					<a (click)="deletePitch(Pitch.id)"><i class="fa-solid fa-trash"></i> Delete</a>
+				</div>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
+<p-dialog header="File Upload" [(visible)]="fileUploadModal" [modal]="true" [style]="{ width: '50vw' }">
+	<label for="file" class="reading-drop-container">
+		<i class="pi pi-upload reading-drop-title"></i>
+		<input type="file" id="file" class="d-none" (change)="onFileChange($event)" accept=".csv" /><br />
+		<span class="reading-sm-font">Only .csv file formats are supported for uploads</span>
+		<span class="reading-sm-font">Please maintain the format of uploading to stop failures</span> </label
+	><br />
+	<div class="text-center">
+		<button class="ps-4 pe-4 pt-2 pb-2" pButton (click)="uploadFile()" style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: 13px">Upload</button>
+	</div>
+</p-dialog>

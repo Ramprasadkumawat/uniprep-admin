@@ -1,0 +1,88 @@
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Filter Country</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="filterData()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Country Name</label>
+							<p-multiselect [filter]="true" class="custom-multiselect" formControlName="country" optionValue="id" optionLabel="name" styleClass="w-full" [options]="intcountries"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Module Name</label>
+							<p-select [filter]="true" placeholder="Select" class="custom-multiselect" formControlName="module" optionValue="id" optionLabel="module_name" styleClass="w-full" [options]="certificatesample"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Student Name</label>
+							<p-multiselect [filter]="true" class="custom-multiselect" formControlName="studentname" optionValue="id" optionLabel="name" styleClass="w-full" [options]="studentlistdrop"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row">
+							<div class="col-md-6">
+								<label class="form-label">From</label>
+								<input type="date" formControlName="createdFrom" class="form-control border-black paddingfive" pInputText />
+							</div>
+							<div class="col-md-6">
+								<label class="form-label">To</label>
+								<input type="date" formControlName="createdTo" class="form-control border-black paddingfive" pInputText />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12 mt-4 text-right">
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="filterFormReset()">Reset Filter</button>&nbsp;
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">Filter</button>
+					</div>
+				</div>
+
+				<!-- <div class="row mt-2">
+                <div class="col-12 text-right">
+                    <button class="ps-3 pe-3 pt-2 pb-2" pButton
+                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                        type="button" label="Reset Filter" (click)="filterForm.reset()">Reset Filter</button>&nbsp;
+                    <button class="ps-4 pe-4 pt-2 pb-2" pButton
+                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                        type="submit" label="Filter"> Filter</button>
+                </div>
+            </div> -->
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="card readingcard h-100">
+	<div class="card-body">
+		<h4>Certificates</h4>
+		<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="certificatesamplelist" styleClass="gray-header" [lazy]="true">
+			<ng-template pTemplate="header">
+				<tr>
+					<th class="border-cell">Module</th>
+					<th class="border-cell">Country</th>
+					<th class="border-cell">Student Name</th>
+					<th class="border-cell">Generated Date</th>
+					<th class="border-cell">Valid Till</th>
+					<th class="border-cell">Certfication ID</th>
+					<th class="border-cell">Dounload Certificates</th>
+				</tr>
+			</ng-template>
+			<ng-template pTemplate="body" let-certificatesamplelist let-expanded="expanded">
+				<tr>
+					<td class="border-cell">{{ certificatesamplelist.module_name }}</td>
+					<td class="border-cell">{{ certificatesamplelist.country }}</td>
+					<td class="border-cell">{{ certificatesamplelist.name }}</td>
+					<td class="border-cell">{{ certificatesamplelist.created }}</td>
+					<td class="border-cell">{{ certificatesamplelist.validtill }}</td>
+					<td class="border-cell">{{ certificatesamplelist.certificateID }}</td>
+					<td class="border-cell"><button class="btn btn-primary" (click)="downloadSampleCertificate(certificatesamplelist.certificatelink)" pButton type="button" label="">Download</button></td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
+	<div class="card-footer">
+		<p-paginator [rows]="8" [totalRecords]="paginationcount" (onPageChange)="pageChange($event)" [rowsPerPageOptions]="[10, 25, 50, 100]"></p-paginator>
+	</div>
+</div>

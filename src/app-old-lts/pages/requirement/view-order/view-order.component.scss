@@ -1,0 +1,957 @@
+.view-orders-container {
+  padding: 1.5rem;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+// Filter Section
+.filter-section {
+  .filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+
+    .filter-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #333;
+    }
+
+    i {
+      transition: transform 0.3s ease;
+      color: #666;
+
+      &.rotated {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .filter-content {
+    animation: slideDown 0.3s ease;
+  }
+
+  .filter-form-container {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .form-group {
+      margin-bottom: 1rem;
+
+      .form-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+
+      input,
+      ::ng-deep .p-select {
+        width: 100%;
+        background-color: white;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9375rem;
+        color: #333;
+
+        &:focus {
+          border-color: #007bff;
+          outline: none;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+      }
+    }
+
+    // Filter buttons
+    .reset-filter-btn {
+      background-color: #ff8c00;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1.5rem;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #e67e00;
+      }
+    }
+
+    .apply-filter-btn {
+      background-color: #0056b3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.5rem 1.5rem;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #004085;
+      }
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Leads List Header
+.leads-list-header {
+  background-color: white;
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .leads-list-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+  }
+
+  .count-btn {
+    border: 1px solid #ff8c00;
+    color: #ff8c00;
+    background-color: transparent;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: #ff8c00;
+      color: white;
+    }
+
+    ::ng-deep .p-button-label {
+      font-weight: 500;
+    }
+  }
+
+  .refresh-btn {
+    border: 1px solid #ff8c00;
+    color: #ff8c00;
+    background-color: transparent;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    min-width: auto;
+    width: auto;
+
+    &:hover {
+      background-color: #ff8c00;
+      color: white;
+    }
+
+    ::ng-deep .p-button-icon {
+      margin: 0;
+    }
+  }
+
+}
+
+// Summary Cards
+.summary-cards {
+  margin-bottom: 1.5rem;
+
+  .summary-cards-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    white-space: wrap;
+    width: 100%;
+  }
+
+  .summary-card-wrapper {
+    flex: 1;
+    min-width: 0; // Allows flex items to shrink below their content size
+  }
+
+  .summary-card {
+    background-color: #e9ecef;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    height: 100%;
+    width: 100%;
+
+    &.active {
+      border-color: #007bff;
+      border-width: 3px;
+      box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-content {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #333;
+      line-height: 1.4;
+      white-space: wrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    // Card specific styles
+    &.card-total-vacancies {
+      background-color: #eeeeee;
+      border-color: transparent;
+
+      &.active {
+        border-color: #007bff;
+        border-width: 3px;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      }
+
+      .card-content {
+        color: white;
+      }
+    }
+
+    &.card-total-requirements {
+      background-color: #eeeeee;
+      border-color: transparent;
+
+      .card-content {
+        color: #000;
+      }
+
+      &.active {
+        border-color: #007bff;
+        border-width: 3px;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      }
+    }
+
+    &.card-total-talents {
+      background-color: #eeeeee;
+      border-color: transparent;
+
+      .card-content {
+        color: #000;
+      }
+
+      &.active {
+        border-color: #007bff;
+        border-width: 3px;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      }
+    }
+
+    &.card-total-shortlist {
+      background-color: #eeeeee;
+      border-color: transparent;
+
+      .card-content {
+        color: #1976d2;
+      }
+
+      &.active {
+        border-color: #007bff;
+        border-width: 3px;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      }
+    }
+
+    &.card-total-completed {
+      background-color: #eeeeee;
+      border-color: transparent;
+
+      .card-content {
+        color: #1976d2;
+      }
+
+      &.active {
+        border-color: #007bff;
+        border-width: 3px;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      }
+    }
+
+    &.card-approved {
+      background-color: #d4edda;
+      border-color: transparent;
+
+      .card-content {
+        color: #155724;
+      }
+
+      &.active {
+        border-color: #007bff;
+        border-width: 3px;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      }
+    }
+
+    &.card-reject {
+      background-color: #f8d7da;
+      border-color: transparent;
+
+      .card-content {
+        color: #721c24;
+      }
+
+      &.active {
+        border-color: #007bff;
+        border-width: 3px;
+        box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+      }
+    }
+  }
+}
+
+// Table Container
+.table-container {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 8px;
+
+  ::ng-deep .p-datatable {
+    .p-datatable-thead>tr>th {
+      background-color: #f8f9fa;
+      font-weight: 600;
+      color: #333;
+      padding: 0.875rem 1rem;
+      border-bottom: 2px solid #dee2e6;
+      font-size: 0.875rem;
+    }
+
+    .p-datatable-tbody>tr {
+      background-color: white;
+      transition: background-color 0.15s ease;
+
+      &:nth-child(even) {
+        background-color: #f8f9fa;
+      }
+
+      >td {
+        padding: 0.875rem 1rem;
+        vertical-align: middle;
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+// Status Badges
+.status-badge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+
+  &.status-approved {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #28a745;
+  }
+
+  &.status-reject {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #dc3545;
+  }
+
+  &.status-review {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffc107;
+  }
+
+  &.status-process {
+    background-color: #e9ecef;
+    color: #495057;
+    border: 1px solid #6c757d;
+  }
+
+  &.status-paid {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #28a745;
+  }
+
+    &.status-unpaid {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #dc3545;
+    }
+
+    &.status-pending {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #dc3545;
+    }
+
+  &.status-pay-later {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffc107;
+  }
+
+  // View mode status badges - more rounded, better colors
+  &.status-badge-view {
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+
+    &.status-review {
+      background-color: #fff3cd;
+      color: #856404;
+      border: none;
+    }
+
+    &.status-unpaid,
+    &.status-pending {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: none;
+    }
+
+    &.status-paid {
+      background-color: #d4edda;
+      color: #155724;
+      border: none;
+    }
+
+    &.status-pay-later {
+      background-color: #fff3cd;
+      color: #856404;
+      border: none;
+    }
+  }
+}
+
+// View Order Link
+.view-order-link {
+  color: #007bff;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+
+  &:hover {
+    color: #0056b3;
+    text-decoration: underline;
+  }
+
+  i {
+    font-size: 0.875rem;
+  }
+}
+
+// View Talents Link
+.view-talents-link {
+  color: #28a745;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+
+  &:hover:not(.disabled) {
+    color: #218838;
+    text-decoration: underline;
+  }
+
+  &.disabled {
+    color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  i {
+    font-size: 0.875rem;
+  }
+}
+
+// Order Details Dialog
+::ng-deep .order-details-dialog {
+  .p-dialog-header {
+    background-color: white;
+    border-bottom: 1px solid #dee2e6;
+    padding: 1.25rem 1.5rem;
+
+    .dialog-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .p-dialog-header-icon {
+      color: #666;
+      font-size: 1.25rem;
+
+      &:hover {
+        color: #333;
+      }
+    }
+  }
+
+  .p-dialog-content {
+    padding: 1.5rem;
+    background-color: #f5f5f5;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .p-dialog {
+    background-color: #f5f5f5;
+  }
+}
+
+// Payment Link Dialog
+::ng-deep .payment-link-dialog {
+  .p-dialog-header {
+    background-color: white;
+    border-bottom: 1px solid #dee2e6;
+    padding: 1.25rem 1.5rem;
+
+    .dialog-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+
+  .p-dialog-content {
+    padding: 1.5rem;
+    background-color: white;
+  }
+}
+
+// View Talents Dialog
+::ng-deep .view-talents-dialog {
+  .p-dialog-header {
+    background-color: white;
+    border-bottom: 1px solid #dee2e6;
+    padding: 1.25rem 1.5rem;
+
+    .dialog-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+
+  .p-dialog-content {
+    padding: 1.5rem;
+    background-color: white;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .talent-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #dee2e6;
+  }
+}
+
+.payment-link-content {
+  .form-field {
+    margin-bottom: 1rem;
+
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+.order-details-content {
+  .order-section {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+
+    .section-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #333;
+      padding-bottom: 0.75rem;
+      border-bottom: 2px solid #dee2e6;
+      margin-bottom: 1rem;
+    }
+  }
+
+  .form-field {
+    margin-bottom: 1.25rem;
+
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      font-size: 0.9375rem;
+      color: #333;
+      background-color: white;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+      &:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      }
+
+      &[readonly] {
+        background-color: #f8f9fa;
+        cursor: default;
+      }
+    }
+
+    // Readonly input styling - bordered boxes like screenshot
+    .readonly-input {
+      background-color: white !important;
+      border: 1px solid #ced4da !important;
+      border-radius: 4px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9375rem;
+      color: #333;
+      cursor: default;
+    }
+
+    // Created by text - no box, multiline
+    .created-by-text {
+      font-size: 0.9375rem;
+      color: #333;
+      line-height: 1.6;
+      padding: 0.25rem 0;
+      min-height: auto;
+    }
+
+    .roles-responsibilities-display,
+    .notes-display {
+      background-color: white;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      padding: 0.875rem;
+      min-height: 100px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 0.9375rem;
+      color: #333;
+      line-height: 1.6;
+
+      ::ng-deep {
+        p {
+          margin-bottom: 0.5rem;
+        }
+
+        ul,
+        ol {
+          margin-left: 1.5rem;
+          margin-bottom: 0.5rem;
+        }
+
+        li {
+          margin-bottom: 0.25rem;
+        }
+
+        strong {
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  // Payment link buttons
+  .open-link-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    background-color: white;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.75rem;
+    min-width: 80px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+    }
+
+    i {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+
+    span {
+      font-size: 0.75rem;
+    }
+  }
+
+  .copy-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border: 1px solid #6c757d;
+    border-radius: 4px;
+    background-color: white;
+    color: #6c757d;
+    min-width: 40px;
+    height: 40px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    i {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Editor field cards
+.editor-field-card {
+  .form-label {
+    margin-bottom: 0;
+  }
+}
+
+// AI Generate button
+.ai-generate-btn {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+  height: fit-content;
+
+  &:hover:not(:disabled) {
+    background-color: #218838;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  i {
+    font-size: 0.875rem;
+  }
+}
+
+// Rephrase button
+.rephrase-btn {
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background-color: #5a6268;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Character counter
+.char-counter {
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+// Add More Language button
+.add-language-btn {
+  background-color: #ff8c00 !important;
+  color: white !important;
+  border: none !important;
+  white-space: nowrap;
+  height: fit-content;
+  padding: 0.5rem 1rem;
+  min-width: 180px;
+  flex-shrink: 0;
+
+  &:hover {
+    background-color: #e67e00 !important;
+  }
+}
+
+// Language remove button and spacer for alignment
+.language-remove-btn {
+  width: 40px;
+  min-width: 40px;
+  flex-shrink: 0;
+}
+
+// Salary range field widths
+.salary-currency-select {
+  width: 20%;
+  min-width: 100px;
+  flex-shrink: 0;
+}
+
+.salary-min-input,
+.salary-max-input {
+  width: 35%;
+  flex-grow: 1;
+}
+
+// Editor styling
+::ng-deep {
+  .p-editor-container {
+    background-color: white;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+
+    .p-editor-toolbar {
+      background-color: #f8f9fa;
+      border: none;
+      border-bottom: 1px solid #dee2e6;
+      border-radius: 6px 6px 0 0;
+      padding: 0.5rem;
+    }
+
+    .p-editor-content {
+      border: none;
+      border-radius: 0 0 6px 6px;
+      min-height: 150px;
+    }
+
+    .ql-editor {
+      min-height: 150px;
+    }
+  }
+
+  // Input fields styling - ensure white background
+  .p-select,
+  .p-multiselect,
+  .p-inputtext,
+  .p-inputnumber-input,
+  .p-datepicker-input {
+    background-color: white !important;
+    border-radius: 6px;
+    border: 1px solid #ced4da;
+    color: #333;
+
+    &:focus {
+      border-color: #ff8c00;
+      box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, 0.25);
+      background-color: white !important;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .leads-list-header {
+    .d-flex {
+      flex-direction: column;
+      gap: 1rem;
+
+      .d-flex {
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  .summary-cards {
+    .row {
+      .col-md-3 {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  ::ng-deep .order-details-dialog {
+    .p-dialog {
+      width: 95% !important;
+      margin: 1rem auto;
+    }
+
+    .order-details-content {
+      .row {
+        .col-md-6 {
+          flex: 0 0 100%;
+          max-width: 100%;
+        }
+      }
+    }
+  }
+
+  // Language section responsive
+  .d-flex.gap-2.align-items-end {
+    flex-direction: column;
+    align-items: stretch !important;
+
+    .salary-currency-select,
+    .salary-min-input,
+    .salary-max-input {
+      width: 100% !important;
+    }
+  }
+}

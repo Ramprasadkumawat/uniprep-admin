@@ -1,0 +1,170 @@
+<p-accordion styleClass="white-accordian" activeIndexChange="indextchange($event)" value="{{activeIndex}}">
+	<p-accordion-panel value="1">
+		<p-accordion-header>{{ namentxt }}</p-accordion-header
+		><p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Title</label>
+							<input formControlName="title" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.title.errors" class="text-danger text-xs">
+								<div *ngIf="f.title.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Link</label>
+							<input formControlName="link" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.link.errors" class="text-danger text-xs">
+								<div *ngIf="f.link.errors.required">Required</div>
+								<div *ngIf="f.link.hasError('invalidLinkFormat')">Invalid link format.Please use 'http://' or 'https://'.</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<label>Cover Image (.svg, .png, .webp)</label>
+						<div class="form-group" (dragover)="onDragOver($event)">
+							<div class="input-wrapper">
+								<input type="file" (change)="onFileChange($event)" formControlName="image" accept=".png, .svg, .webp" style="display: none; color: black" #fileInput />
+								<input style="height: 40px !important" type="text" (change)="onFileChange($event)" formControlName="image" class="form-control" pInputText readonly [value]="form.controls.image.value ? form.controls.image.value.name : ''" (click)="fileInput.click()" />
+								<button type="button" style="border-radius: 0rem 0.375rem 0.375rem 0rem" class="upload-button" (click)="fileInput.click()">Upload</button>
+							</div>
+							<!-- <div *ngIf="submitted && f.image.errors" class="text-danger text-xs">
+                            <div *ngIf="f.image.errors.required">Required</div>
+                        </div> -->
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group mt-1">
+							<label>Country Name</label>
+							<p-multiselect class="custom-multiselect" placeholder="Select" formControlName="coutryname" optionValue="id" optionLabel="name" styleClass="w-full" [options]="intcountries" [filter]="true" (onChange)="onCitySelect($event)" placeholder="Select"></p-multiselect>
+							<div *ngIf="submitted && f.coutryname.errors" class="text-danger text-xs">
+								<div *ngIf="f.coutryname.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<label>Priority Tag</label>
+						<div class="form-grop mt-1">
+							<p-select class="custom-multiselect" placeholder="Select" formControlName="priority" optionValue="id" optionLabel="name" styleClass="w-full" [options]="priorityTag"></p-select>
+							<div *ngIf="submitted && f.priority.errors" class="text-danger text-xs">
+								<div *ngIf="f.priority.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<label>Resource Description</label>
+						<div class="form-grop mt-1">
+							<textarea type="text" rows="2" class="form-control" formControlName="decription"></textarea>
+							<div *ngIf="submitted && f.decription.errors" class="text-danger text-xs">
+								<div *ngIf="f.decription.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-5">
+						<div class="col-12 text-right">
+							<!-- <button class="ps-4 pe-4 pt-2 pb-2" pButton
+                                style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                                type="button" (click)="form.reset()">Reset Field</button>&nbsp; -->
+							<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">{{ btntxt }}</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+	<p-accordion-panel value="2">
+		<p-accordion-header>Filter Resources</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterform" (ngSubmit)="filterSubmitForm()">
+				<div class="row">
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Country Name</label>
+							<p-multiselect class="custom-multiselect" placeholder="Select" formControlName="coutryname" optionValue="id" placeholder="Select" optionLabel="name" styleClass="w-full" [options]="intcountries" [filter]="true" (onChange)="onLocationSelect($event)"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select placeholder="Select" styleClass="w-full" formControlName="status" [options]="statusOptions"></p-select>
+						</div>
+					</div>
+					<div class="col-md-4 mt-2">
+						<div class="row mt-5">
+							<div class="col-12 text-right">
+								<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" (click)="formReset()">Reset Field</button>&nbsp;
+								<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit">Filter</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+
+	<!-- <p-accordion-panel header="Filter">
+        <form [formGroup]="filterForm" (ngSubmit)="filtersubmit()" #filterFormElm>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input formControlName="title" type="text" class="form-control" pInputText>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col-12 text-right">
+                    <button class="ps-3 pe-3 pt-2 pb-2" pButton
+                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                        type="button"  (click)="filterForm.reset()">Reset Filter</button>&nbsp;
+                    <button class="ps-4 pe-4 pt-2 pb-2" pButton
+                        style="background-color: var(--p-primary-500);border-radius: 8px; border: aliceblue; color: #fff;"
+                        type="submit"> Filter</button>
+                </div>
+            </div>
+        </form>
+    </p-accordion-content></p-accordion-panel> -->
+</p-accordion>
+
+<div style="background-color: #fff">
+	<h4 class="p-2 ps-3">Resource List</h4>
+	<span class="text-muted text-small p-2 ps-3">Total Count: {{ datacount }}</span>
+	<hr />
+	<div class="card-container p-4">
+		<div class="row">
+			<div *ngFor="let resource of resourceslist" class="col-md-3 col-12 mt-3">
+				<div class="card card-style text-black ps-2 pe-2 pt-2 d-flex flex-column" style="height: 100%">
+					<div class="mt-auto" style="display: flex">
+						<span class="resourceimg mt-4 ms-2 me-2"><img src="{{ resource.coverimage }}" alt="" /></span>
+						<div style="text-align: start; overflow: hidden">
+							<a href="{{ resource.link }}" class="fw-semibold text-dark text-start" target="_blank">
+								<h6 style="font-size: medium">
+									<b>{{ resource.title }}</b>
+								</h6>
+							</a>
+							<p style="font-size: small; font-weight: 50px !important">
+								{{ resource.resourcedescription.length > 100 ? resource.resourcedescription.slice(0, 100) + "..." : resource.resourcedescription }}
+							</p>
+							<span *ngFor="let flag of resource.countryFlag.split(',')" class="resourceimg mt-4 ms-2 me-2" style="cursor: pointer">
+								<img [src]="flag" loading="lazy" [style.width.px]="20" tooltipPosition="top" pTooltip="{{ getCountryName(flag) }}" />
+							</span>
+						</div>
+						<span *ngIf="resource.priority == 1 ? true : false" class="pe-1" style="position: absolute; top: 0; right: 0; margin-right: 0px"><i class="fa-solid fa-star" style="color: var(--p-primary-500)"></i></span>
+					</div>
+					<div class="mt-auto d-flex justify-content-around">
+						<button (click)="editresourcesdetails(resource)" class="mt-2 pt-2 pb-2" pButton style="flex-direction: column-reverse; background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff; font-size: small; width: 40%" type="button">Edit</button>
+						<button class="mt-2 pt-2 pb-2" (click)="deleteresourceslist(resource)" pButton style="flex-direction: column-reverse; background-color: var(--p-primary-500); border-radius: 8px; font-size: small; border: aliceblue; color: #fff; width: 40%" type="submit">Delete</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="card-footer">
+	<p-paginator [rows]="rowsPerPage" [totalRecords]="datacount" (onPageChange)="paginate($event)" [rowsPerPageOptions]="rowsPerPageOptions" [first]="currentPage"></p-paginator>
+</div>
+
+<p-confirmDialog></p-confirmDialog>

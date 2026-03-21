@@ -1,0 +1,117 @@
+<p-accordion value="0"styleClass="white-accordian">
+		<p-accordion-panel value="1">
+		<p-accordion-header>Filter Employees</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="filterForm" (ngSubmit)="submitFilterForm()" #filterFormElm>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Name</label>
+							<input class="form-control w-100" pInputText formControlName="username" />
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Location</label>
+							<p-select formControlName="location" optionValue="id" optionLabel="district" styleClass="w-full" [options]="locations" placeholder="Select Type" [filter]="true" [showClear]="true"> </p-select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Interested In</label>
+							<p-multiselect [options]="careerInterests" [virtualScroll]="true" [virtualScrollItemSize]="50" formControlName="interest" placeholder="Country" styleClass="w-100" optionLabel="interest" optionValue="id" [filter]="true" filterBy="interest"></p-multiselect>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select
+								formControlName="status"
+								optionValue="name"
+								optionLabel="name"
+								styleClass="w-full"
+								[options]="[
+									{ id: 0, name: 'Received' },
+									{ id: 1, name: 'Shortlisted' },
+									{ id: 2, name: 'Send' }
+								]"
+								placeholder="Select Status"
+								[filter]="true"
+								[showClear]="true">
+							</p-select>
+						</div>
+					</div>
+					<div class="row mt-3">
+						<div class="col-12 text-right">
+							<button class="btn btn-danger" type="button" (click)="this.getTalentConnectList(); filterForm.reset()">Reset Filter</button>
+							<button class="btn btn-primary" type="submit">Filter Employees</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+<div class="container-fluid p-0">
+	<!-- Header -->
+	<div class="header-section p-3 bg-white border-bottom">
+		<div class="d-flex justify-content-between align-items-center">
+			<div class="d-flex align-items-center gap-2">
+				<p-button (click)="goBack()" icon="pi pi-arrow-left" class="btn-primary br-5 me-3" styleClass="p-button-rounded p-button-text text-white"></p-button>
+				<div>
+					<h4 class="mb-0">{{ companyName | uppercase }} Company Connect</h4>
+					<small class="text-muted">Total Profiles: {{ totalTalents.toString().padStart(2, "0") }}</small>
+				</div>
+			</div>
+			<div class="my-auto">
+				<div class="p-inputgroup p-0 rounded-3 my-auto">
+					<input pInputText placeholder="Search" class="p-0" />
+					<span class="p-inputgroup-addon">
+						<i class="pi pi-search"> </i>
+					</span>
+				</div>
+			</div>
+			<div class="d-flex align-items-center">
+				<button pButton pRipple type="button" label="Import" icon="pi pi-upload" class="p-button-primary me-2"></button>
+				<button pButton pRipple type="button" label="Export" icon="pi pi-download" class="p-button-primary"></button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Job Listings -->
+	<div class="job-listings p-3 bg-white">
+		<div class="row">
+			<div class="col-md-4 mb-4" *ngFor="let candidate of talentConnectList">
+				<div class="card h-100">
+					<div class="card-body p-3">
+						<div class="row align-items-center mb-3">
+							<div class="candidate-avatar me-3 col-md-4">
+								<img [src]="candidate?.image" alt="Profile image" class="rounded-circle img-fluid" />
+							</div>
+							<div class="col">
+								<h5 class="card-title mb-0">{{ candidate?.full_name }}</h5>
+								<p class="card-text text-muted mb-0">
+									<small
+										>Interested in :
+										<ng-container *ngFor="let item of candidate?.career_interest">{{ item + "," }}</ng-container>
+									</small>
+								</p>
+								<div class="d-flex align-items-center mb-3">
+									<i class="pi pi-map-marker text-success me-2"></i>
+									<span>{{ candidate?.state }}</span>
+								</div>
+								<div class="status-badge" [ngClass]="getStatusClass(candidate?.status)">
+									{{ getStatusLabel(candidate?.status) }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="position-static mt-auto">
+		<p-paginator (onPageChange)="pageChange($event)" [rows]="perPage" [totalRecords]="totalTalents" [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
+	</div>
+</div>

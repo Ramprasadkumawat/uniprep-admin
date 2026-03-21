@@ -1,0 +1,147 @@
+<div class="card mb-3">
+	<div class="p-2">
+		<span style="font-size: 20px; font-weight: 430px">Vidyavardhaka College of Engineering</span>
+	</div>
+	<div>
+		<span> <hr style="margin: 0rem 0px" /></span>
+		<div class="d-flex justify-content-between" style="overflow: auto">
+			<td class="p-2">
+				<span style="color: var(--p-primary-500); font-size: 12px">Point of Contact</span><br />
+				<span style="font-size: 20px">Amarnath Embranthiri</span> <br />
+				<span style="font-size: 13px">amarnathembranthiri&#64;gmail.com</span><br />
+				<span style="font-size: 13px">9900920637</span>
+			</td>
+			<td><div class="vertical-line"></div></td>
+			<td class="p-2">
+				<span style="font-size: 20px"></span> <br />
+				<span style="font-size: 20px">Region</span> <br />
+				<span style="font-size: 13px">Karnataka</span>
+			</td>
+			<td class="p-2">
+				<span style="font-size: 20px"></span> <br />
+				<span style="font-size: 20px">District</span> <br />
+				<span style="font-size: 13px">Mysore</span>
+			</td>
+			<td class="p-2">
+				<span style="font-size: 20px"></span> <br />
+				<span style="font-size: 20px">PinCode</span> <br />
+				<span style="font-size: 13px">570020</span>
+			</td>
+			<td class="p-2">
+				<span style="font-size: 20px"></span> <br />
+				<span style="font-size: 20px">College Type</span> <br />
+				<span style="font-size: 13px">12th Grade</span>
+			</td>
+			<td class="p-2">
+				<span style="font-size: 20px"></span> <br />
+				<span style="font-size: 20px">Contact Status</span> <br />
+				<span style="font-size: 13px">Active</span>
+			</td>
+			<td class="p-2">
+				<span style="font-size: 20px"></span> <br />
+				<span style="font-size: 20px">Active Coupons</span> <br />
+				<span style="font-size: 13px">05</span>
+			</td>
+		</div>
+	</div>
+</div>
+
+<!--  -->
+<p-accordion value="0"styleClass="white-accordian">
+	<p-accordion-panel value="1">
+		<p-accordion-header>Add Coupon</p-accordion-header>
+		<p-accordion-content>
+			<form [formGroup]="form" (ngSubmit)="submitForm()">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Validity</label>
+							<input formControlName="validity" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.validity.errors" class="text-danger text-xs">
+								<div *ngIf="f.validity.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Status</label>
+							<p-select styleClass="w-full" formControlName="status" [options]="statusOptions"></p-select>
+							<div *ngIf="submitted && f.status.errors" class="text-danger text-xs">
+								<div *ngIf="f.status.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<label>Coupon Start Date</label>
+							<input formControlName="coupenstartdate" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.coupenstartdate.errors" class="text-danger text-xs">
+								<div *ngIf="f.coupenstartdate.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div class="form-group">
+							<label>Coupon Code Generation</label>
+							<input formControlName="coupencodegen" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.coupencodegen.errors" class="text-danger text-xs">
+								<div *ngIf="f.coupencodegen.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 mt-4">
+						<button class="ps-4 pe-4 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="button" label="Reset Fiel">Auto Generate</button>
+					</div>
+
+					<div class="col-md-10">
+						<div class="form-group">
+							<label>Manual Coupon Entry</label>
+							<input formControlName="manualcoupenentry" type="text" class="form-control" pInputText />
+							<div *ngIf="submitted && f.manualcoupenentry.errors" class="text-danger text-xs">
+								<div *ngIf="f.manualcoupenentry.errors.required">Required</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2 mt-4">
+						<button class="ps-3 pe-3 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff" type="submit" label="Add Quiz Question">Create</button>
+					</div>
+				</div>
+			</form>
+		</p-accordion-content>
+	</p-accordion-panel>
+</p-accordion>
+
+<!-- list -->
+<p-table size="small" scrollHeight="600px" [scrollable]="true" [value]="users" styleClass="gray-header" [paginator]="true" (onPage)="pageChange($event)" [lazy]="true" [rows]="pageSize">
+	<ng-template pTemplate="caption">
+		<div class="d-flex w-full align-items-center justify-content-between">
+			<span>College Coupons</span>
+			<div class="text-right p-1">
+				<button class="ps-3 pe-2 pt-2 pb-2" pButton style="background-color: var(--p-primary-500); border-radius: 8px; border: aliceblue; color: #fff">Add plan &nbsp;<i class="fa-solid fa-circle-plus"></i></button>&nbsp;
+			</div>
+		</div>
+	</ng-template>
+	<ng-template pTemplate="header">
+		<tr>
+			<th class="border-cell">College Name</th>
+			<th class="border-cell">Status</th>
+			<th class="border-cell">Validity</th>
+			<th class="border-cell">Actions</th>
+		</tr>
+	</ng-template>
+	<ng-template pTemplate="body" let-user>
+		<tr>
+			<td class="border-cell">{{ user.no }}</td>
+			<td class="border-cell">{{ user.details }}</td>
+			<td class="border-cell">{{ user.planname }}</td>
+			<td class="border-cell">
+				<span style="cursor: pointer"
+					><span style="color: var(--p-primary-500)"><i class="fa-solid fa-trash-can"></i></span>&nbsp; Delete</span
+				>&nbsp;&nbsp;
+				<span style="cursor: pointer"
+					><span style="color: var(--p-primary-500)"><i class="fa-solid fa-pen-to-square"></i></span>&nbsp; Edit</span
+				>
+			</td>
+		</tr>
+	</ng-template>
+</p-table>
