@@ -1,28 +1,7 @@
+
 import { CommonModule } from "@angular/common";
-import {
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from "@angular/core";
-import {
-  AbstractControl,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  ValidatorFn,
-  Validators,
-} from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
-import { ActivatedRoute, Router } from "@angular/router";
-import { forkJoin } from "rxjs";
+import { Component, CUSTOM_ELEMENTS_SCHEMA, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule, FormControl, ValidatorFn, AbstractControl } from "@angular/forms";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { ConfirmPopupModule } from "primeng/confirmpopup";
@@ -33,15 +12,18 @@ import { SelectModule } from "primeng/select";
 import { TextareaModule } from "primeng/textarea";
 import { MultiSelectModule } from "primeng/multiselect";
 import { EditorModule } from "primeng/editor";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DialogModule } from "primeng/dialog";
 import { CheckboxModule } from "primeng/checkbox";
 import { TagModule } from "primeng/tag";
 import { TableModule } from "primeng/table";
 import { FileUploadModule } from "primeng/fileupload";
-import { CardModule } from "primeng/card";
-import { NgxIntlTelInputModule, SearchCountryField } from "ngx-intl-tel-input";
 import { CompaniesService } from "../companies.service";
 import { JobsService } from "../../jobs/jobs.service";
+import { NgxIntlTelInputModule, SearchCountryField } from "ngx-intl-tel-input";
+import { HttpClient } from "@angular/common/http";
+import { forkJoin } from 'rxjs';
+import { CardModule } from "primeng/card";
 
 @Component({
   selector: "uni-add-company",
@@ -72,7 +54,7 @@ import { JobsService } from "../../jobs/jobs.service";
   providers: [ConfirmationService],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AddCompanyComponent implements OnInit, OnChanges, OnDestroy {
+export class AddCompanyComponent {
   @Input() editingCompanyId: number | null = null;
   @Input() companyDataToEdit: any = null;
   @Output() companySaved = new EventEmitter();
@@ -127,7 +109,6 @@ export class AddCompanyComponent implements OnInit, OnChanges, OnDestroy {
     { label: 'Not happy', value: 'Not happy' },
     { label: 'Neutral', value: 'Neutral' },
     { label: 'No Response Received', value: 'No Response Received' },
-    { label: 'No Remarks', value: 'No Remarks' }
   ];
   yesNoList = [
     { label: 'Yes', value: 'Yes' },
@@ -179,6 +160,13 @@ export class AddCompanyComponent implements OnInit, OnChanges, OnDestroy {
         this.companyService.showCompanyInfo({ id: this.editingCompanyId })
           .subscribe(res => {
             const company = res.data;
+            // console.log("[View Company API] /show-company-by-admin response:", res);
+            console.log("[View Company fields] Email/About/LastLogin:", {
+              email: company?.email ?? company?.user_email ?? company?.company_email ?? null,
+              aboutCompany: company?.insight ?? company?.about_company ?? null,
+              lastLogin: company?.last_login ?? company?.lastLogin ?? company?.last_login_at ?? company?.updated_at ?? null,
+            });
+            this.companyDataToEdit = company;
             this.employerCountryId = company.employer_country_id;
             this.loadSubscriptions(this.employerCountryId);
             this.waitForDropdownsAndPatch(company);
@@ -443,7 +431,7 @@ export class AddCompanyComponent implements OnInit, OnChanges, OnDestroy {
     return formData;
   }
 
-  onSourceTypeChange(sourceType: string, preserveExisting: boolean = false): void {
+  onSourceTypeChange(sourceType: string, preserveExisting: boolean = false) {
     const sourceNameControl = this.companyForm.get("source_name");
     const currentSourceName = (sourceNameControl?.value ?? "").toString().trim();
 
@@ -475,171 +463,151 @@ export class AddCompanyComponent implements OnInit, OnChanges, OnDestroy {
       sourceNameControl?.setValue("");
     }
   }
-
-  onLogoChange(event: any): void {
-    const file = event?.target?.files?.[0];
+  onLogoChange(event: any) {
+    const file = event.target.files[0];
     if (!file) return;
     this.companyForm.patchValue({ companyLogo: file });
     const reader = new FileReader();
-    reader.onload = () => (this.logoPreview = reader.result as string);
+    reader.onload = () => this.logoPreview = reader.result as string;
     reader.readAsDataURL(file);
   }
-
-  removeLogo(): void {
+  removeLogo() {
     this.logoPreview = null;
     this.companyForm.patchValue({ companyLogo: null });
-    this.companyForm.get("companyLogo")?.setValidators(Validators.required);
-    this.companyForm.get("companyLogo")?.markAsTouched();
-    this.companyForm.get("companyLogo")?.updateValueAndValidity();
+    this.companyForm.get('companyLogo')?.setValidators(Validators.required);
+    this.companyForm.get('companyLogo')?.markAsTouched();
+    this.companyForm.get('companyLogo')?.updateValueAndValidity();
   }
-
-  selectTab(tab: any): void {
+  selectTab(tab: any) {
     this.selectedTab = tab;
   }
-
-  saveRemarks(): void {
+  saveRemarks() {
     if (this.remarksForm.invalid) {
       this.remarksForm.markAllAsTouched();
       return;
     }
-    const payload = { company_id: this.editingCompanyId, ...this.remarksForm.value };
-    this.companyService.addCompanyFollowup(payload).subscribe(() => {
+    const payload = { company_id: this.editingCompanyId, ...this.remarksForm.value }
+    this.companyService.addCompanyFollowup(payload).subscribe(res => {
       this.remarksForm.reset();
       this.toast.add({ severity: "success", summary: "Success", detail: "Remark saved successfully" });
       this.showRemarksDialog = false;
-      this.companyService
-        .showCompanyFollowup({ page: this.currentPage, perpage: this.pageSize, company_id: this.editingCompanyId })
-        .subscribe((res) => {
-          this.remarks = res.followups;
-        });
-    });
+      this.companyService.showCompanyFollowup({ page: this.currentPage, perpage: this.pageSize, company_id: this.editingCompanyId }).subscribe(res => {
+        this.remarks = res.followups;
+      })
+    })
   }
-
-  generatePaymentLink(): void {
+  generatePaymentLink() {
     if (this.paymentForm.invalid) {
       this.paymentForm.markAllAsTouched();
       return;
     }
-    const payload = { company_id: this.editingCompanyId, ...this.paymentForm.value };
-    this.companyService.generatePaymentLink(payload).subscribe((res) => {
+    const payload = { company_id: this.editingCompanyId, ...this.paymentForm.value }
+    this.companyService.generatePaymentLink(payload).subscribe(res => {
       this.paymentForm.reset();
       if (res.message !== "Existing unpaid payment link") {
         this.toast.add({ severity: "success", summary: "Success", detail: "Payment saved successfully" });
-      } else {
-        this.toast.add({
-          severity: "warn",
-          summary: "Warning",
-          detail: "An existing unpaid payment link already exists for this company. Please use the existing link.",
-        });
+        this.generatedLink = res.data.payment_link;
+        this.showPaymentDialog = false;
+        this.onPageChangePayment({ first: 0, rows: 25, page: 1 })
+        this.paymentForm.reset();
       }
-      this.generatedLink = res.data.payment_link;
-      this.showPaymentDialog = false;
-      this.onPageChangePayment({ first: 0, rows: 25, page: 1 });
-    });
+      if (res.message === "Existing unpaid payment link") {
+        this.toast.add({ severity: "warn", summary: "Warning", detail: "An existing unpaid payment link already exists for this company. Please use the existing link." })
+        this.generatedLink = res.data.payment_link
+        this.showPaymentDialog = false
+        this.onPageChangePayment({ first: 0, rows: 25, page: 1 })
+        this.paymentForm.reset();
+      }
+    })
   }
-
-  copyLink(): void {
+  copyLink() {
     if (!this.generatedLink) {
       this.toast.add({ severity: "warn", summary: "Warning", detail: "Payment link is empty" });
-      return;
+      return
     }
     navigator.clipboard.writeText(this.generatedLink).then(() => {
       this.toast.add({ severity: "success", summary: "Success", detail: "Payment link copied to clipboard" });
     });
   }
-
-  copyLinkedin(): void {
-    const linkedin = this.companyForm.get("linkedin")?.value;
-    if (!linkedin) {
+  copyLinkedin() {
+    if (!this.companyForm.get('linkedin')?.value) {
       this.toast.add({ severity: "warn", summary: "Warning", detail: "LinkedIn profile is empty" });
-      return;
+      return
     }
-    navigator.clipboard.writeText(linkedin).then(() => {
+    navigator.clipboard.writeText(this.companyForm.get('linkedin')?.value).then(() => {
       this.toast.add({ severity: "success", summary: "Success", detail: "LinkedIn profile copied to clipboard" });
-      window.open(linkedin, "_blank");
+      window.open(this.companyForm.get('linkedin')?.value, "_blank");
     });
   }
-
-  copyWebsite(): void {
-    const website = this.companyForm.get("website")?.value;
-    if (!website) {
-      this.toast.add({ severity: "warn", summary: "Warning", detail: "Website is empty" });
-      return;
+  copyWebsite() {
+    if (!this.companyForm.get('website')?.value) {
+      this.toast.add({ severity: "warn", summary: "Warning", detail: "Website is empty" })
+      return
     }
-    navigator.clipboard.writeText(website).then(() => {
+    navigator.clipboard.writeText(this.companyForm.get('website')?.value).then(() => {
       this.toast.add({ severity: "success", summary: "Success", detail: "Website copied to clipboard" });
-      window.open(website, "_blank");
+      window.open(this.companyForm.get('website')?.value, "_blank");
     });
   }
-
-  downloadInvoice(invoice_url: string): void {
+  downloadInvoice(invoice_url: string) {
     window.open(invoice_url, "_blank");
   }
-
-  onFocusInput(fieldKey: string): void {
+  onFocusInput(fieldKey: string) {
     this.targetInput.emit(fieldKey);
   }
-
-  resetMessageBox(): void {
+  resetMessageBox() {
     this.targetInput.emit("default");
   }
-
-  getServiceText(ids: number[]): string {
-    if (!ids?.length) return "";
+  getServiceText(ids: number[]) {
+    if (!ids?.length) return '';
     const names = this.serviceTypes.filter((i: any) => ids.includes(i.id)).map((i: any) => i.service_type);
-    return names.length > 2 ? `${names.slice(0, 2).join(", ")} +${names.length - 2}` : names.join(", ");
+    return names.length > 2 ? `${names.slice(0, 2).join(', ')} +${names.length - 2}` : names.join(', ');
   }
-
-  getHQText(id: number): string {
-    return this.headQuartersList.find((h: any) => h.city_id === id)?.city_name || "";
+  getHQText(id: number) {
+    return this.headQuartersList.find((h: any) => h.city_id === id)?.city_name || '';
   }
-
-  getCompanySizeText(id: number): string {
-    return this.companySizes.find((s: any) => s.id === id)?.size || "";
+  getCompanySizeText(id: number) {
+    return this.companySizes.find((s: any) => s.id === id)?.size || '';
   }
-
-  getGlobalPresenceText(ids: number[]): string {
-    if (!ids?.length) return "";
+  getGlobalPresenceText(ids: number[]) {
+    if (!ids?.length) return '';
     const names = this.globalPresence.filter((w: any) => ids.includes(w.id)).map((w: any) => w.country);
-    return names.length > 2 ? `${names.slice(0, 2).join(", ")} +${names.length - 2}` : names.join(", ");
+    return names.length > 2 ? `${names.slice(0, 2).join(', ')} +${names.length - 2}` : names.join(', ');
   }
-
-  aiGenerate(mode: string): void {
+  aiGenerate(mode: string) {
     const form = this.companyForm.value;
-    if (mode !== "Rephrase") {
-      const requiredFields = ["company", "serviceType", "headquartersLocation", "companySize", "globalPresence", "yearFounded"];
-      const hasRequiredData = requiredFields.every((field) => form[field]);
+    if (mode !== 'Rephrase') {
+      const requiredFields = ['company', 'serviceType', 'headquartersLocation', 'companySize', 'globalPresence', 'yearFounded'];
+      const hasRequiredData = requiredFields.every(field => form[field]);
       if (!hasRequiredData) {
-        requiredFields.forEach((field) => this.companyForm.get(field)?.markAsTouched());
+        requiredFields.forEach(field => {
+          this.companyForm.get(field)?.markAsTouched();
+        });
         return;
       }
     }
-
-    const yearValue = this.companyForm.get("yearFounded")?.value;
-    const foundedYear = yearValue instanceof Date ? yearValue.getFullYear().toString() : yearValue;
-    const aiGenerateData = {
-      mode,
+    const foundedYear = this.companyForm.get('yearFounded').value instanceof Date ? this.companyForm.get('yearFounded').value.getFullYear().toString() : this.companyForm.get('yearFounded').value;
+    const AiGenerateData = {
+      mode: mode,
       companyname: form.company,
       service_type: this.getServiceText(form.serviceType),
       hq: this.getHQText(form.headquartersLocation),
       company_size: this.getCompanySizeText(form.companySize),
       globalpresence: this.getGlobalPresenceText(form.globalPresence),
-      foundedyear: foundedYear,
+      foundedyear: foundedYear
     };
-    const rephraseData = { mode, content: form.aboutCompany };
-    this.companyService.aiGenerate(mode === "AI generate" ? aiGenerateData : rephraseData).subscribe({
+    const rePharseData = { mode: mode, content: form.aboutCompany };
+    this.companyService.aiGenerate(mode === 'AI generate' ? AiGenerateData : rePharseData).subscribe({
       next: (response: any) => {
         this.companyForm.patchValue({ aboutCompany: this.cleanHtmlList(response.data) });
-      },
-      error: () => {},
+      }, error: () => {
+      }
     });
   }
-
   isNotEmptyHtml(value: string): boolean {
     const val = value || "";
     return !!(val && val.trim() !== "" && val !== "<p></p>" && val !== "<p> </p>" && val.replace(/<[^>]*>/g, "").trim() !== "");
   }
-
   cleanHtmlList(html: string): string {
     html = html.replace(/<\/li>\s*/gi, "");
     const wrapper = document.createElement("div");
@@ -650,185 +618,262 @@ export class AddCompanyComponent implements OnInit, OnChanges, OnDestroy {
     });
     return wrapper.innerHTML;
   }
-
   currentSortFieldUser: string | null = null;
-  currentSortOrderUser = 1;
-  currentFirstUser = 0;
+  currentSortOrderUser: number = 1;
+  currentFirstUser: number = 0;
   currentSortFieldRemark: string | null = null;
-  currentSortOrderRemark = 1;
-  currentFirstRemark = 0;
+  currentSortOrderRemark: number = 1;
+  currentFirstRemark: number = 0;
   currentSortFieldTransaction: string | null = null;
-  currentSortOrderTransaction = 1;
-  currentFirstTransaction = 0;
+  currentSortOrderTransaction: number = 1;
+  currentFirstTransaction: number = 0;
   currentSortFieldPayment: string | null = null;
-  currentSortOrderPayment = 1;
-  currentFirstPayment = 0;
+  currentSortOrderPayment: number = 1;
+  currentFirstPayment: number = 0;
   currentSortFieldInvites: string | null = null;
-  currentSortOrderInvites = 1;
-  currentFirstInvites = 0;
-
-  @ViewChild("dtUser") tableUser: any;
-  @ViewChild("dtRemark") tableRemark: any;
-  @ViewChild("dtTransaction") tableTransaction: any;
-  @ViewChild("dtPayment") tablePayment: any;
-  @ViewChild("dtInvites") tableInvites: any;
-
-  onPageChangeUser(event: any): void {
+  currentSortOrderInvites: number = 1;
+  currentFirstInvites: number = 0;
+  @ViewChild('dtUser') tableUser: any;
+  @ViewChild('dtRemark') tableRemark: any;
+  @ViewChild('dtTransaction') tableTransaction: any;
+  @ViewChild('dtPayment') tablePayment: any;
+  @ViewChild('dtInvites') tableInvites: any;
+  onPageChangeUser(event: any) {
     const isSortToggle =
       event.sortField === this.currentSortFieldUser &&
       event.sortOrder !== this.currentSortOrderUser &&
       event.first === 0 &&
       this.currentFirstUser !== 0;
-    if (isSortToggle) event.first = this.currentFirstUser;
+    if (isSortToggle) {
+      event.first = this.currentFirstUser;
+    }
     this.currentSortFieldUser = event.sortField;
     this.currentSortOrderUser = event.sortOrder;
     this.currentFirstUser = event.first;
-    this.currentPage = event.first / event.rows + 1;
+    this.currentPage = (event.first / event.rows) + 1;
     this.pageSize = event.rows;
     const params = { page: this.currentPage, perpage: this.pageSize, company_id: this.editingCompanyId };
     this.companyService.getEmployerList(params).subscribe({
       next: (res) => {
-        if (res?.data) {
+        if (res && res.data) {
           this.users = res.data || [];
-          if (this.currentSortFieldUser) this.applyClientSort(this.users, this.currentSortFieldUser, this.currentSortOrderUser);
-          if (isSortToggle && this.tableUser) setTimeout(() => (this.tableUser.first = this.currentFirstUser), 0);
+          if (this.currentSortFieldUser) {
+            this.users.sort((a, b) => {
+              let aValue = a[this.currentSortFieldUser!];
+              let bValue = b[this.currentSortFieldUser!];
+              if (aValue == null) aValue = '';
+              if (bValue == null) bValue = '';
+              if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+              if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+              let result = 0;
+              if (aValue < bValue) result = -1;
+              else if (aValue > bValue) result = 1;
+              return this.currentSortOrderUser * result;
+            });
+          }
+          if (isSortToggle && this.tableUser) {
+            setTimeout(() => {
+              this.tableUser.first = this.currentFirstUser;
+            }, 0);
+          }
         }
-      },
-      error: (err) => console.error("Error on page change:", err),
+      }, error: (err) => {
+        console.error('Error on page change:', err);
+      }
     });
   }
-
-  onPageChangeRemark(event: any): void {
+  onPageChangeRemark(event: any) {
     const isSortToggle =
       event.sortField === this.currentSortFieldRemark &&
       event.sortOrder !== this.currentSortOrderRemark &&
       event.first === 0 &&
       this.currentFirstRemark !== 0;
-    if (isSortToggle) event.first = this.currentFirstRemark;
+    if (isSortToggle) {
+      event.first = this.currentFirstRemark;
+    }
     this.currentSortFieldRemark = event.sortField;
     this.currentSortOrderRemark = event.sortOrder;
     this.currentFirstRemark = event.first;
-    this.currentPage = event.first / event.rows + 1;
+    this.currentPage = (event.first / event.rows) + 1;
     this.pageSize = event.rows;
     const params = { page: this.currentPage, perpage: this.pageSize, company_id: this.editingCompanyId };
     this.companyService.showCompanyFollowup(params).subscribe({
       next: (res) => {
-        this.remarks = res?.followups || [];
-        if (this.currentSortFieldRemark) this.applyClientSort(this.remarks, this.currentSortFieldRemark, this.currentSortOrderRemark);
-        if (isSortToggle && this.tableRemark) setTimeout(() => (this.tableRemark.first = this.currentFirstRemark), 0);
-      },
-      error: (err) => console.error("Error on page change:", err),
+        if (res) {
+          this.remarks = res.followups || [];
+          if (this.currentSortFieldRemark) {
+            this.remarks.sort((a, b) => {
+              let aValue = a[this.currentSortFieldRemark!];
+              let bValue = b[this.currentSortFieldRemark!];
+              if (aValue == null) aValue = '';
+              if (bValue == null) bValue = '';
+              if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+              if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+              let result = 0;
+              if (aValue < bValue) result = -1;
+              else if (aValue > bValue) result = 1;
+              return this.currentSortOrderRemark * result;
+            });
+          }
+          if (isSortToggle && this.tableRemark) {
+            setTimeout(() => {
+              this.tableRemark.first = this.currentFirstRemark;
+            }, 0);
+          }
+        }
+      }, error: (err) => {
+        console.error('Error on page change:', err);
+      }
     });
   }
 
-  onPageChangeTransactionHistory(event: any): void {
-    const isSortToggle =
-      event.sortField === this.currentSortFieldTransaction &&
-      event.sortOrder !== this.currentSortOrderTransaction &&
-      event.first === 0 &&
-      this.currentFirstTransaction !== 0;
-    if (isSortToggle) event.first = this.currentFirstTransaction;
+  onPageChangeTransactionHistory(event: any) {
+    const isSortToggle = event.sortField === this.currentSortFieldTransaction && event.sortOrder !== this.currentSortOrderTransaction && event.first === 0 && this.currentFirstTransaction !== 0;
+    if (isSortToggle) {
+      event.first = this.currentFirstTransaction;
+    }
     this.currentSortFieldTransaction = event.sortField;
     this.currentSortOrderTransaction = event.sortOrder;
     this.currentFirstTransaction = event.first;
-    this.currentPage = event.first / event.rows + 1;
+    this.currentPage = (event.first / event.rows) + 1;
     this.pageSize = event.rows;
     const params = { page: this.currentPage, perpage: this.pageSize, company_id: this.editingCompanyId };
     this.companyService.subscriptionTransactionHistory(params).subscribe({
       next: (res) => {
-        this.transactions = res?.histories || [];
-        if (this.currentSortFieldTransaction) this.applyClientSort(this.transactions, this.currentSortFieldTransaction, this.currentSortOrderTransaction);
-        if (isSortToggle && this.tableTransaction) setTimeout(() => (this.tableTransaction.first = this.currentFirstTransaction), 0);
-      },
-      error: (err) => console.error("Error on page change:", err),
+        if (res) {
+          this.transactions = res.histories || [];
+          if (this.currentSortFieldTransaction) {
+            this.transactions.sort((a, b) => {
+              let aValue = a[this.currentSortFieldTransaction!];
+              let bValue = b[this.currentSortFieldTransaction!];
+              if (aValue == null) aValue = '';
+              if (bValue == null) bValue = '';
+              if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+              if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+              let result = 0;
+              if (aValue < bValue) result = -1;
+              else if (aValue > bValue) result = 1;
+              return this.currentSortOrderTransaction * result;
+            });
+          }
+          if (isSortToggle && this.tableTransaction) {
+            setTimeout(() => {
+              this.tableTransaction.first = this.currentFirstTransaction;
+            }, 0);
+          }
+        }
+      }, error: (err) => {
+        console.error('Error on page change:', err);
+      }
     });
   }
-
-  onPageChangePayment(event: any): void {
-    const isSortToggle =
-      event.sortField === this.currentSortFieldPayment &&
-      event.sortOrder !== this.currentSortOrderPayment &&
-      event.first === 0 &&
-      this.currentFirstPayment !== 0;
-    if (isSortToggle) event.first = this.currentFirstPayment;
+  onPageChangePayment(event: any) {
+    const isSortToggle = event.sortField === this.currentSortFieldPayment && event.sortOrder !== this.currentSortOrderPayment && event.first === 0 && this.currentFirstPayment !== 0;
+    if (isSortToggle) {
+      event.first = this.currentFirstPayment;
+    }
     this.currentSortFieldPayment = event.sortField;
     this.currentSortOrderPayment = event.sortOrder;
     this.currentFirstPayment = event.first;
-    this.currentPage = event.first / event.rows + 1;
+    this.currentPage = (event.first / event.rows) + 1;
     this.pageSize = event.rows;
     const params = { page: this.currentPage, perpage: this.pageSize, company_id: this.editingCompanyId };
     this.companyService.getPaymentInfo(params).subscribe({
       next: (res) => {
-        this.payments = res?.data?.payment_info || [];
-        if (this.currentSortFieldPayment) this.applyClientSort(this.payments, this.currentSortFieldPayment, this.currentSortOrderPayment);
-        if (isSortToggle && this.tablePayment) setTimeout(() => (this.tablePayment.first = this.currentFirstPayment), 0);
+        if (res) {
+          this.payments = res.data.payment_info || [];
+          if (this.currentSortFieldPayment) {
+            this.payments.sort((a, b) => {
+              let aValue = a[this.currentSortFieldPayment!];
+              let bValue = b[this.currentSortFieldPayment!];
+              if (aValue == null) aValue = '';
+              if (bValue == null) bValue = '';
+              if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+              if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+              let result = 0;
+              if (aValue < bValue) result = -1;
+              else if (aValue > bValue) result = 1;
+              return this.currentSortOrderPayment * result;
+            });
+          }
+          if (isSortToggle && this.tablePayment) {
+            setTimeout(() => {
+              this.tablePayment.first = this.currentFirstPayment;
+            }, 0);
+          }
+        }
       },
-      error: (err) => console.error("Error on page change:", err),
+      error: (err) => {
+        console.error('Error on page change:', err);
+      }
     });
   }
-
-  onPageChangeInvites(event: any): void {
-    const isSortToggle =
-      event.sortField === this.currentSortFieldInvites &&
-      event.sortOrder !== this.currentSortOrderInvites &&
-      event.first === 0 &&
-      this.currentFirstInvites !== 0;
-    if (isSortToggle) event.first = this.currentFirstInvites;
+  onPageChangeInvites(event: any) {
+    const isSortToggle = event.sortField === this.currentSortFieldInvites && event.sortOrder !== this.currentSortOrderInvites && event.first === 0 && this.currentFirstInvites !== 0;
+    if (isSortToggle) {
+      event.first = this.currentFirstInvites;
+    }
     this.currentSortFieldInvites = event.sortField;
     this.currentSortOrderInvites = event.sortOrder;
     this.currentFirstInvites = event.first;
-    this.currentPage = event.first / event.rows + 1;
+    this.currentPage = (event.first / event.rows) + 1;
     this.pageSize = event.rows;
     const params = { page: this.currentPage, perpage: this.pageSize, company_id: this.editingCompanyId };
     this.companyService.getCompanyInvites(params).subscribe({
       next: (res) => {
-        this.invites = res?.data?.invites || [];
-        if (this.currentSortFieldInvites) this.applyClientSort(this.invites, this.currentSortFieldInvites, this.currentSortOrderInvites);
-        if (isSortToggle && this.tableInvites) setTimeout(() => (this.tableInvites.first = this.currentFirstInvites), 0);
+        if (res) {
+          this.invites = res.data.invites || [];
+          if (this.currentSortFieldInvites) {
+            this.invites.sort((a, b) => {
+              let aValue = a[this.currentSortFieldInvites!];
+              let bValue = b[this.currentSortFieldInvites!];
+              if (aValue == null) aValue = '';
+              if (bValue == null) bValue = '';
+              if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+              if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+              let result = 0;
+              if (aValue < bValue) result = -1;
+              else if (aValue > bValue) result = 1;
+              return this.currentSortOrderInvites * result;
+            });
+          }
+          if (isSortToggle && this.tableInvites) {
+            setTimeout(() => {
+              this.tableInvites.first = this.currentFirstInvites;
+            }, 0);
+          }
+        }
       },
-      error: (err) => console.error("Error on page change:", err),
+      error: (err) => {
+        console.error('Error on page change:', err);
+      }
     });
   }
-
-  private applyClientSort(list: any[], field: string, sortOrder: number): void {
-    list.sort((a, b) => {
-      let aValue = a?.[field];
-      let bValue = b?.[field];
-      if (aValue == null) aValue = "";
-      if (bValue == null) bValue = "";
-      if (typeof aValue === "string") aValue = aValue.toLowerCase();
-      if (typeof bValue === "string") bValue = bValue.toLowerCase();
-      let result = 0;
-      if (aValue < bValue) result = -1;
-      else if (aValue > bValue) result = 1;
-      return sortOrder * result;
-    });
-  }
-
-  getWordCountUsingControl(control: FormControl | any): number {
+  getWordCountUsingControl(control: FormControl | any) {
     let wordCount = 0;
-    if (control?.value) {
+    if (control.value) {
       const words = control.value.replace(/<\/?[^>]+(>|$)/g, "").match(/\b\w+\b/g) || [];
       wordCount = words.length;
     }
     return wordCount;
   }
-
   checkMaximumWordsInFields(control: FormControl | any, maxNumber: number = 2000): void {
-    if (!control?.value) return;
-    const words = control.value.replace(/<\/?[^>]+(>|$)/g, "").match(/\b\w+\b/g) || [];
-    const wordCount = words.length;
-    const wordLimitExceeded = wordCount > maxNumber;
-    if (wordLimitExceeded) {
-      control.setValue(control.value, { emitEvent: false });
-      control.setErrors({ maxWordsExceeded: true });
-    } else if (control.hasError("maxWordsExceeded")) {
-      const errors = { ...control.errors };
-      delete errors["maxWordsExceeded"];
-      control.setErrors(Object.keys(errors).length ? errors : null);
+    if (control?.value) {
+      const words = control.value.replace(/<\/?[^>]+(>|$)/g, "").match(/\b\w+\b/g) || [];
+      const wordCount = words.length;
+      const wordLimitExceeded = wordCount > maxNumber;
+      if (wordLimitExceeded) {
+        control.setValue(control.value, { emitEvent: false });
+        control.setErrors({ maxWordsExceeded: true });
+      } else {
+        if (control.hasError("maxWordsExceeded")) {
+          const errors = { ...control.errors };
+          delete errors["maxWordsExceeded"];
+          control.setErrors(Object.keys(errors).length ? errors : null);
+        }
+      }
     }
   }
-
   notEmptyHtmlValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value || "";
@@ -838,19 +883,21 @@ export class AddCompanyComponent implements OnInit, OnChanges, OnDestroy {
       return null;
     };
   }
-
   nonDecreasingValidator(): ValidatorFn {
     return (control: AbstractControl) => {
-      if (this.initialTalentCredit === null) return null;
+      if (this.initialTalentCredit === null) {
+        return null;
+      }
       const currentValue = Number(control.value);
-      if (isNaN(currentValue)) return null;
+      if (isNaN(currentValue)) {
+        return null;
+      }
       if (currentValue < this.initialTalentCredit) {
         return { decreasingValue: { minAllowed: this.initialTalentCredit } };
       }
       return null;
     };
   }
-
   ngOnDestroy(): void {
     this.companyService.clearCompanyToEdit();
   }
