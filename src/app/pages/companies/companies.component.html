@@ -21,22 +21,22 @@
                                     <form [formGroup]="companyFilterForm">
                                         <div class="row g-3 mb-3">
                                             <div class="col-md-3">
-                                                <label class="form-label">Company ID</label>
+                                                <label class="form-label fw-bold">Company ID</label>
                                                 <input pInputText class="w-100" placeholder="Enter Company ID"
                                                     formControlName="companyId" />
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Company Name</label>
+                                                <label class="form-label fw-bold">Company Name</label>
                                                 <input pInputText class="w-100" placeholder="Enter Company Name"
                                                     formControlName="companyName" />
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Email ID</label>
+                                                <label class="form-label fw-bold">Email ID</label>
                                                 <input pInputText class="w-100" placeholder="Enter Email ID"
                                                     formControlName="email" />
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Company Size (Multi-Select)</label>
+                                                <label class="form-label fw-bold">Company Size (Multi-Select)</label>
                                                 <p-multiSelect [options]="companySizes" formControlName="companySize"
                                                     optionLabel="size" optionValue="id"
                                                     placeholder="Select size of your company" styleClass="w-100"
@@ -45,28 +45,29 @@
                                         </div>
                                         <div class="row g-3 mb-3">
                                             <div class="col-md-3">
-                                                <label class="form-label">Country (Multi-Select)</label>
+                                                <label class="form-label fw-bold">Country (Multi-Select)</label>
                                                 <p-multiSelect [options]="countries" formControlName="country"
                                                     optionLabel="country_name" placeholder="Select Your Country"
                                                     styleClass="w-100" appendTo="body" [filter]="true"
                                                     [virtualScroll]="true" [virtualScrollItemSize]="38"></p-multiSelect>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Headquarters Location (Multi-Select)</label>
+                                                <label class="form-label fw-bold">Headquarters Location
+                                                    (Multi-Select)</label>
                                                 <p-multiSelect [options]="headquarters"
                                                     formControlName="headquartersLocation" optionLabel="city_name"
                                                     optionValue="city_id" placeholder="City, Country" styleClass="w-100"
                                                     appendTo="body"></p-multiSelect>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Services Type (Multi-Select)</label>
+                                                <label class="form-label fw-bold">Services Type (Multi-Select)</label>
                                                 <p-multiSelect [options]="serviceTypes" formControlName="serviceType"
                                                     optionLabel="service_type" optionValue="id"
                                                     placeholder="Select Services" styleClass="w-100"
                                                     appendTo="body"></p-multiSelect>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Company Created by</label>
+                                                <label class="form-label fw-bold">Company Created by</label>
                                                 <p-select [options]="companiesCreatedBy"
                                                     formControlName="companyCreatedBy"
                                                     placeholder="Select Recruiter/UNIPREP" styleClass="w-100"
@@ -75,25 +76,25 @@
                                         </div>
                                         <div class="row g-3 mb-3">
                                             <div class="col-md-3">
-                                                <label class="form-label">Company Created</label>
+                                                <label class="form-label fw-bold">Company Created</label>
                                                 <p-select [options]="yesNoOptions" formControlName="companyCreated"
                                                     placeholder="Choose Yes/No" styleClass="w-100"
                                                     appendTo="body"></p-select>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Advertised Jobs</label>
+                                                <label class="form-label fw-bold">Advertised Jobs</label>
                                                 <p-select [options]="yesNoOptions" formControlName="advertisedJobs"
                                                     placeholder="Choose Yes/No" styleClass="w-100"
                                                     appendTo="body"></p-select>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Total Jobs</label>
+                                                <label class="form-label fw-bold">Total Jobs</label>
                                                 <p-select [options]="yesNoOptions" formControlName="totalJobs"
                                                     placeholder="Choose Yes/No" styleClass="w-100"
                                                     appendTo="body"></p-select>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Active Jobs</label>
+                                                <label class="form-label fw-bold">Active Jobs</label>
                                                 <p-select [options]="yesNoOptions" formControlName="activeJobs"
                                                     placeholder="Choose Yes/No" styleClass="w-100"
                                                     appendTo="body"></p-select>
@@ -101,25 +102,25 @@
                                         </div>
                                         <div class="row g-3 mb-3">
                                             <div class="col-md-3">
-                                                <label class="form-label">Applications</label>
+                                                <label class="form-label fw-bold">Applications</label>
                                                 <p-select [options]="yesNoOptions" formControlName="applicants"
                                                     placeholder="Choose Yes/No" styleClass="w-100"
                                                     appendTo="body"></p-select>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Talent Credit</label>
+                                                <label class="form-label fw-bold">Talent Credit</label>
                                                 <p-select [options]="talentCredits" formControlName="talentCredit"
                                                     placeholder="Choose Yes/No/Exhausted" styleClass="w-100"
                                                     appendTo="body"></p-select>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Subscription Plan</label>
+                                                <label class="form-label fw-bold">Subscription Plan</label>
                                                 <p-select [options]="subscriptionPlans"
                                                     formControlName="subscriptionPlan" placeholder="Select a Plan"
                                                     styleClass="w-100" appendTo="body"></p-select>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Remarks Status (Multi-Select)</label>
+                                                <label class="form-label fw-bold">Remarks Status (Multi-Select)</label>
                                                 <p-multiSelect [options]="remarkStatuses" formControlName="remarkStatus"
                                                     placeholder="Select a Status" styleClass="w-100"
                                                     appendTo="body"></p-multiSelect>
@@ -127,25 +128,26 @@
                                         </div>
                                         <div class="row g-3 mb-3">
                                             <div class="col-md-3">
-                                                <label class="form-label">Source Type</label>
+                                                <label class="form-label fw-bold">Source Type</label>
                                                 <p-select [options]="sourceTypes" formControlName="source_type"
                                                     placeholder="Select Source Type" styleClass="w-100"
                                                     appendTo="body"></p-select>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Source Name</label>
+                                                <label class="form-label fw-bold">Source Name</label>
                                                 <p-select [options]="sourceNames" formControlName="source_name"
                                                     placeholder="Select Source Name" styleClass="w-100"
                                                     optionLabel="name" optionValue="id" appendTo="body"></p-select>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Relationship Manager</label>
+                                                <label class="form-label fw-bold">Relationship Manager</label>
                                                 <input pInputText class="w-100"
                                                     placeholder="Enter Relationship Manager Name"
                                                     formControlName="relationshipManager" />
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Remarks Added by (Multi-Select)</label>
+                                                <label class="form-label fw-bold">Remarks Added by
+                                                    (Multi-Select)</label>
                                                 <p-multiSelect [options]="remarksAddBy" formControlName="remarkAddedBy"
                                                     optionLabel="label" placeholder="Select Remarks Added by"
                                                     styleClass="w-100" appendTo="body"></p-multiSelect>
@@ -153,7 +155,7 @@
                                         </div>
                                         <div class="row g-3 mb-4">
                                             <div class="col-md-3">
-                                                <label class="form-label">Remarks Date</label>
+                                                <label class="form-label fw-bold">Remarks Date</label>
                                                 <div class="d-flex gap-2 date-range-container">
                                                     <input pInputText type="date" class="w-100"
                                                         formControlName="remarkFromDate" placeholder="From Date" />
@@ -162,7 +164,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Company Created</label>
+                                                <label class="form-label fw-bold">Company Created</label>
                                                 <div class="d-flex gap-2 date-range-container">
                                                     <input pInputText type="date" class="w-100"
                                                         formControlName="createdFromDate" placeholder="From Date" />
@@ -171,7 +173,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Report Date</label>
+                                                <label class="form-label fw-bold">Report Date</label>
                                                 <div class="d-flex gap-2 date-range-container">
                                                     <input pInputText type="date" class="w-100"
                                                         formControlName="reportFromDate" placeholder="From Date" />
@@ -180,7 +182,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <label class="form-label">Last Login</label>
+                                                <label class="form-label fw-bold">Last Login</label>
                                                 <div class="d-flex gap-2 date-range-container">
                                                     <input pInputText type="date" class="w-100"
                                                         formControlName="lastLoginFromDate" placeholder="From Date" />
@@ -390,13 +392,15 @@
                                                     </a>
                                                 </div>
                                                 <ng-container *ngIf="company.logintime; else noLoginYet">
-                                                    <span style="color: #555; font-size: 10px; margin-top: 2px;">Last Login-
+                                                    <span style="color: #555; font-size: 10px; margin-top: 2px;">Last
+                                                        Login-
                                                         {{ company.logintime | date:'h:mm a' }}</span>
                                                     <span style="color: #555; font-size: 10px;">{{ company.logintime |
                                                         date:'dd/MM/yyyy' }}</span>
                                                 </ng-container>
                                                 <ng-template #noLoginYet>
-                                                    <span style="color: #555; font-size: 10px; margin-top: 2px;">Not yet logged in</span>
+                                                    <span style="color: #555; font-size: 10px; margin-top: 2px;">Not yet
+                                                        logged in</span>
                                                 </ng-template>
                                             </div>
                                         </td>
