@@ -16,6 +16,37 @@
   color: red;
 }
 
+.company-filter-multiselect-wrap {
+  min-height: 2.75rem;
+}
+
+.company-filter-multiselect-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  color: var(--p-text-muted-color, #6c757d);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--p-content-border-color, #dee2e6);
+  border-radius: var(--p-content-border-radius, 6px);
+  pointer-events: none;
+
+  .pi-spinner {
+    animation: company-filter-spin 0.75s linear infinite;
+  }
+}
+
+@keyframes company-filter-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 
 :host ::ng-deep .p-datatable td,
 :host ::ng-deep .p-datatable th {

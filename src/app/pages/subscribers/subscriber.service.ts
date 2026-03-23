@@ -55,7 +55,10 @@ export class SubscriberService {
     return this.http.post<any>(`${environment.ApiUrl}/user-documents`,data);
   }
   downloadUserDocument(data: any){
-    return this.http.post<any>(`${environment.ApiUrl}/download-user-document`,data);
+    return this.http.post(`${environment.ApiUrl}/download-user-document`, data, {
+      observe: "response",
+      responseType: "blob",
+    });
   }
   renameUserDocument(data: any){
     return this.http.post<any>(`${environment.ApiUrl}/rename-user-document`,data);

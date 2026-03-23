@@ -389,12 +389,15 @@
                                                             style="font-size: 13px; color: #ff5252;"></i>
                                                     </a>
                                                 </div>
-                                                <span style="color: #555; font-size: 10px; margin-top: 2px;">Last Login-
-                                                    <span *ngIf="company.last_login_time">{{ company.last_login_time
-                                                        }}</span><span *ngIf="!company.last_login_time">9:43
-                                                        Am</span></span>
-                                                <span style="color: #555; font-size: 10px;">{{ company.last_login_date
-                                                    || '03/03/2026' }}</span>
+                                                <ng-container *ngIf="company.logintime; else noLoginYet">
+                                                    <span style="color: #555; font-size: 10px; margin-top: 2px;">Last Login-
+                                                        {{ company.logintime | date:'h:mm a' }}</span>
+                                                    <span style="color: #555; font-size: 10px;">{{ company.logintime |
+                                                        date:'dd/MM/yyyy' }}</span>
+                                                </ng-container>
+                                                <ng-template #noLoginYet>
+                                                    <span style="color: #555; font-size: 10px; margin-top: 2px;">Not yet logged in</span>
+                                                </ng-template>
                                             </div>
                                         </td>
                                     </tr>
