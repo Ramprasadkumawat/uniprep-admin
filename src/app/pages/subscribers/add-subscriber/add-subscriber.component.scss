@@ -1,0 +1,34 @@
+/* Uniform sizing/spacing for add subscriber form controls. */
+:host ::ng-deep .add-subscriber-uniform {
+  --add-control-height: 42px;
+}
+
+:host ::ng-deep .add-subscriber-uniform > .row {
+  row-gap: 12px;
+}
+
+:host ::ng-deep .add-subscriber-uniform .form-control,
+:host ::ng-deep .add-subscriber-uniform .p-inputtext,
+:host ::ng-deep .add-subscriber-uniform .p-select,
+:host ::ng-deep .add-subscriber-uniform .p-multiselect,
+:host ::ng-deep .add-subscriber-uniform .p-datepicker input {
+  min-height: var(--add-control-height);
+  height: var(--add-control-height);
+}
+
+:host ::ng-deep .add-subscriber-uniform .p-select-label,
+:host ::ng-deep .add-subscriber-uniform .p-multiselect-label {
+  line-height: calc(var(--add-control-height) - 2px);
+}
+
+/* Keep passing year picker and all datepickers full width. */
+:host ::ng-deep .add-subscriber-uniform .p-datepicker,
+:host ::ng-deep .add-subscriber-uniform .p-datepicker .p-inputtext {
+  width: 100%;
+}
+
+:host ::ng-deep .add-subscriber-uniform ngx-intl-tel-input input,
+:host ::ng-deep .add-subscriber-uniform ngx-intl-tel-input .iti input {
+  min-height: var(--add-control-height);
+  height: var(--add-control-height);
+}

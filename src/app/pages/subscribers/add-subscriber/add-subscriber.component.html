@@ -3,29 +3,29 @@
 	<p-accordion-panel value="1">
 		<p-accordion-header>Add Talents</p-accordion-header>
 		<p-accordion-content>
-			<form [formGroup]="form" (ngSubmit)="submitForm()" #addFormElm>
+			<form class="add-subscriber-uniform" [formGroup]="form" (ngSubmit)="submitForm()" #addFormElm>
 				<div class="row">
-					<div class="col-md-4 mt-1">
+					<div class="col-md-4 mb-3">
 						<div class="form-group">
-							<label>Username *</label>
+							<label class="fw-bold d-block">Username *</label>
 							<input formControlName="name" type="text" class="form-control" pInputText />
 							<div *ngIf="submitted && f.name.errors" class="text-danger text-xs">
 								<div *ngIf="f.name.errors.required">Required</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4 mt-1">
+					<div class="col-md-4 mb-3">
 						<div class="form-group">
-							<label>Email ID *</label>
+							<label class="fw-bold d-block">Email ID *</label>
 							<input formControlName="email" type="email" class="form-control" pInputText />
 							<div *ngIf="submitted && f.email.errors" class="text-danger text-xs">
 								<div *ngIf="f.email.errors.required">Required</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4 mt-1">
+					<div class="col-md-4 mb-3">
 						<div class="form-group">
-							<label><span>Contact Number (Optional)</span></label>
+							<label class="fw-bold d-block"><span>Contact Number (Optional)</span></label>
 							<ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']" [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10" [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]" [phoneValidation]="false" [selectedCountryISO]="preferredCountry" name="phone" formControlName="phone" customPlaceholder="Enter Contact Number" (keyup)="onChangeContact($event)"> </ngx-intl-tel-input>
 							<!-- <div *ngIf="submitted && f.phone.errors" class="text-danger text-xs">
                             <div *ngIf="f.phone.errors.required">Required</div>
@@ -48,18 +48,18 @@
                     </div>
                 </div>
                 -->
-					<div class="col-md-4 mt-2">
+					<div class="col-md-4 mb-3">
 						<div class="form-group">
-							<label>Gender *</label>
+							<label class="fw-bold d-block">Gender *</label>
 							<p-select styleClass="w-full" formControlName="gender" [options]="genderoption" optionValue="code" optionLabel="name"></p-select>
 							<div *ngIf="submitted && f.gender.errors" class="text-danger text-xs">
 								<div *ngIf="f.gender.errors.required">Required</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-4 mb-3">
 						<div class="form-group">
-							<label>Country</label>
+							<label class="fw-bold d-block">Country</label>
 							<p-select formControlName="country_id" (onChange)="changeCountry($event)" [filter]="true" filterBy="country" placeholder="Select country" optionValue="id" optionLabel="country" styleClass="w-full" [options]="homeCountries"> </p-select>
 
 							<div *ngIf="submitted && f.country_id.errors" class="text-danger text-xs">
@@ -67,36 +67,36 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4">
+					<div class="col-md-4 mb-3">
 						<div class="form-group">
-							<label>Location</label>
+							<label class="fw-bold d-block">Location</label>
 							<p-select [virtualScrollItemSize]="38" [virtualScroll]="true" formControlName="location_id" optionValue="id" optionLabel="work_location" styleClass="w-100" [options]="locationList" placeholder="Select State" [filter]="true" filterBy="work_location" [appendTo]="'body'"> </p-select>
 							<div *ngIf="submitted && f.location_id.errors" class="text-danger text-xs">
 								<div *ngIf="f.location_id.errors.required">Required</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4 mt-2">
+					<div class="col-md-4 mb-3">
 						<div class="form-group">
-							<label>Student Type *</label>
+							<label class="fw-bold d-block">Student Type *</label>
 							<p-select formControlName="student_type" optionValue="id" optionLabel="subtypeName" styleClass="w-full" (onChange)="changeStudentType($event)" [options]="StudentType" [filter]="true" filterBy="subtypeName"></p-select>
 							<div *ngIf="submitted && f.student_type.errors" class="text-danger text-xs">
 								<div *ngIf="f.student_type.errors.required">Required</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4 mt-2" *ngIf="notadmin">
+					<div class="col-md-4 mb-3" *ngIf="notadmin">
 						<div class="form-group">
-							<label>Source Type *</label>
+							<label class="fw-bold d-block">Source Type *</label>
 							<p-select formControlName="source_type" optionValue="id" optionLabel="name" styleClass="w-full" [options]="sourceTypes" (onChange)="changeSourceType($event)" [filter]="true" filterBy="name"></p-select>
 							<div *ngIf="submitted && f.source_type.errors" class="text-danger text-xs">
 								<div *ngIf="f.source_type.errors.required">Required</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4 mt-2" *ngIf="notadmin">
+					<div class="col-md-4 mb-3" *ngIf="notadmin">
 						<div class="form-group">
-							<label>{{ customSourceName }}</label>
+							<label class="fw-bold d-block">{{ customSourceName }}</label>
 							<p-select formControlName="source_name" optionValue="id" optionLabel="source_name" styleClass="w-full" *ngIf="form.get('source_type').value != '2'" [options]="sourceName" (onChange)="changeSourceName()" [filter]="true" filterBy="source_name" appendTo="body"></p-select>
 							<p-select formControlName="source_name" optionValue="id" optionLabel="institutename" styleClass="w-full" *ngIf="form.get('source_type').value == '2'" [options]="sourceName" (onChange)="changeSourceName()" [filter]="true" filterBy="institutename" appendTo="body"></p-select>
 							<div *ngIf="submitted && f.source_name.errors" class="text-danger text-xs">
@@ -104,18 +104,18 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4 mt-2">
+					<div class="col-md-4 mb-3">
 						<div class="form-group">
-							<label>Last Degree Passing Year</label>
+							<label class="fw-bold d-block mb-1">Last Degree Passing Year</label>
 							<p-datepicker appendTo="body" view="year" styleClass="w-full" dateFormat="yy" inputId="yearpicker" formControlName="last_degree_passing_year" placeholder="Last Degree Passing"></p-datepicker>
 							<div *ngIf="submitted && f.last_degree_passing_year.errors" class="text-danger text-xs">
 								<div *ngIf="f.last_degree_passing_year.errors.required">Required</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4 mt-2">
+					<div class="col-md-4 mb-3">
 						<div class="form-group">
-							<label>Current Education *</label>
+							<label class="fw-bold d-block">Current Education *</label>
 							<p-select formControlName="programlevel_id" optionValue="id" optionLabel="programlevel" styleClass="w-full" [options]="programLevels" [filter]="true" filterBy="programlevel"></p-select>
 							<div *ngIf="submitted && f.programlevel_id.errors" class="text-danger text-xs">
 								<div *ngIf="f.programlevel_id.errors.required">Required</div>
@@ -123,18 +123,18 @@
 						</div>
 					</div>
 
-					<div class="col-md-4 mt-2" *ngIf="isCollegeSelected">
+					<div class="col-md-4 mb-3" *ngIf="isCollegeSelected">
 						<div class="form-group">
-							<label>Current Specialization </label>
+							<label class="fw-bold d-block">Current Specialization </label>
 							<p-select formControlName="current_specialization_id" optionValue="id" optionLabel="specialization_name" styleClass="w-full" [options]="currentSpecializationList" [filter]="true" filterBy="specialization_name"></p-select>
 							<div *ngIf="submitted && f.current_specialization_id.errors" class="text-danger text-xs">
 								<div *ngIf="f.current_specialization_id.errors.required">Required</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-md-4 mt-1">
+					<div class="col-md-4 mb-3">
 						<div class="form-group">
-							<label>Subscription </label>
+							<label class="fw-bold d-block">Subscription </label>
 							<p-select formControlName="subscription_id" optionValue="id" optionLabel="subscription" styleClass="w-full" [options]="subscriptions" [filter]="true" filterBy="subscription"></p-select>
 							<div *ngIf="submitted && f.subscription_id.errors" class="text-danger text-xs">
 								<div *ngIf="f.subscription_id.errors.required">Required</div>

@@ -2,29 +2,29 @@
   <p-accordion-panel value="1">
     <p-accordion-header>Filter By</p-accordion-header>
     <p-accordion-content>
-      <form [formGroup]="filterForm" (ngSubmit)="filtersubmit()" #filterFormElm>
+      <form class="filter-uniform" [formGroup]="filterForm" (ngSubmit)="filtersubmit()" #filterFormElm>
         <div class="row">
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Talent ID</label>
+              <label class="fw-bold d-block mb-1">Talent ID</label>
               <input formControlName="talent_id" type="text" class="form-control" pInputText />
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Student Name</label>
+              <label class="fw-bold d-block mb-1">Student Name</label>
               <input formControlName="name" type="text" class="form-control" pInputText />
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Email ID</label>
+              <label class="fw-bold d-block mb-1">Email ID</label>
               <input formControlName="email" type="email" class="form-control" pInputText />
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Contact Number</label>
+              <label class="fw-bold d-block mb-1">Contact Number</label>
               <div class="w-100 position-relative">
                 <ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']"
                   [enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true"
@@ -36,29 +36,29 @@
           </div>
           <div class="col-md-3 d-none">
             <div class="form-group">
-              <label>Interested Country</label>
+              <label class="fw-bold d-block mb-1">Interested Country</label>
               <p-select styleClass="w-full" formControlName="country" [options]="countries" optionValue="id"
                 optionLabel="country"></p-select>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Home Country</label>
+              <label class="fw-bold d-block mb-1">Home Country</label>
               <p-multiselect formControlName="hm_country" (onChange)="changeCountry($event)" [filter]="true"
-                filterBy="country" placeholder="Select country" optionValue="id" optionLabel="country"
+                filterBy="country" placeholder="Select Location" optionValue="id" optionLabel="country"
                 styleClass="w-full" [options]="homeCountries"> </p-multiselect>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Location</label>
+              <label class="fw-bold d-block mb-1">Location</label>
               <p-select [virtualScrollItemSize]="38" [virtualScroll]="true" formControlName="location_id"
                 optionValue="id" optionLabel="work_location" styleClass="w-100" [options]="locationList"
-                placeholder="Select State" [filter]="true" filterBy="work_location" [appendTo]="'body'"> </p-select>
+                placeholder="Select Location" [filter]="true" filterBy="work_location" [appendTo]="'body'"> </p-select>
             </div>
           </div>
-          <div class="col-md-3">
-            <div><label class="form-label">User Logged In</label></div>
+          <div class="col-md-3 mb-3">
+            <div><label class="fw-bold d-block mb-1">User Login</label></div>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -78,73 +78,73 @@
               </div>
             </div>
           </div>
-          <div class="col-md-3" *ngIf="isHidePaidLeadsRedirect">
+          <div class="col-md-3 mb-3" *ngIf="isHidePaidLeadsRedirect">
             <div class="form-group">
-              <label>Lead Status</label>
+              <label class="fw-bold d-block mb-1">Lead Status</label>
               <p-multiselect [filter]="true" [showClear]="true" [showToggleAll]="true" [display]="'chip'"
-                styleClass="w-full" formControlName="lead_status" placeholder="Select Lead Status"
+                styleClass="w-full" formControlName="lead_status" placeholder="Select Status"
                 optionLabel="status_name" optionValue="id" [options]="leadList"> </p-multiselect>
             </div>
           </div>
-          <div class="col-md-3" *ngIf="isHidePaidLeadsRedirect">
+          <div class="col-md-3 mb-3" *ngIf="isHidePaidLeadsRedirect">
             <div class="form-group">
-              <label>User Behaviour </label>
+              <label class="fw-bold d-block mb-1">User Behaviour</label>
               <p-multiselect [filter]="true" [showClear]="true" [showToggleAll]="true" [display]="'chip'"
-                styleClass="w-full" formControlName="user_behaviour" placeholder="Select User Behaviour "
+                styleClass="w-full" formControlName="user_behaviour" placeholder="Last Degree Passing"
                 optionLabel="name" optionValue="id" [options]="userBehaviour"> </p-multiselect>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Last Degree Passing Year</label>
+              <label class="fw-bold d-block mb-1">Last Degree Passing Year</label>
               <p-datepicker appendTo="body" view="year" styleClass="w-full" [maxDate]="today" dateFormat="yy"
                 inputId="yearpicker" formControlName="last_degree_passing_year"
                 placeholder="Last Degree Passing"></p-datepicker>
             </div>
           </div>
-          <div class="col-md-3" *ngIf="adminuser">
+          <div class="col-md-3 mb-3" *ngIf="adminuser">
             <div class="form-group">
-              <label>Source Type</label>
+              <label class="fw-bold d-block mb-1">Source Type</label>
               <p-select formControlName="source" optionValue="id" optionLabel="name" styleClass="w-full"
-                [options]="sourceTypes" (onChange)="changeSourceType($event)"></p-select>
+                [options]="sourceTypes" placeholder="Select Source Type" (onChange)="changeSourceType($event)"></p-select>
             </div>
           </div>
-          <div class="col-md-3" *ngIf="adminuser">
+          <div class="col-md-3 mb-3" *ngIf="adminuser">
             <div class="form-group">
-              <label>Source Name</label>
-              <input formControlName="user_type" type="email" class="form-control" pInputText />
+              <label class="fw-bold d-block mb-1">Source Name</label>
+              <input formControlName="user_type" type="email" class="form-control" pInputText placeholder="Enter Source Name" />
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Program Level Looking</label>
+              <label class="fw-bold d-block mb-1">Program Level Looking</label>
               <p-multiselect [filter]="true" [showClear]="true" [showToggleAll]="true" [display]="'chip'"
-                styleClass="w-full" formControlName="programlevel_id" placeholder="Select Lead Type"
+                styleClass="w-full" formControlName="programlevel_id" placeholder="Select Program Level"
                 optionLabel="programlevel" optionValue="id" [options]="programLevels"> </p-multiselect>
             </div>
           </div>
-          <div class="col-md-3 d-none">
+          <div class="col-md-3 mb-3">
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="form-label">From</label>
+                  <label class="fw-bold d-block mb-1">Creation Date</label>
                   <div class="mb-3">
-                    <p-datepicker formControlName="fromDate" dateFormat="dd-mm-yy"></p-datepicker>
+                    <p-datepicker placeholder="From Date" formControlName="fromDate" dateFormat="dd-mm-yy"></p-datepicker>
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-group">
-                  <label class="form-label">To</label>
+                  <label class="fw-bold d-block mb-1 invisible">Creation Date</label>
                   <div class="mb-3">
-                    <p-datepicker formControlName="toDate" dateFormat="dd-mm-yy"></p-datepicker>
+                    <p-datepicker placeholder="To Date" formControlName="toDate" dateFormat="dd-mm-yy"></p-datepicker>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-md-3">
-            <div><label class="form-label">Remarks Date</label></div>
+          <div class="col-md-3 mb-3">
+            <div><label class="fw-bold d-block mb-1">Remarks Date</label></div>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -164,52 +164,52 @@
               </div>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Remarks Status</label>
+              <label class="fw-bold d-block mb-1">Remarks Status</label>
               <p-multiselect [filter]="true" [showClear]="true" [showToggleAll]="true" [display]="'chip'"
                 styleClass="w-full" formControlName="assign_to" placeholder="Select who it is Assigned to"
                 optionLabel="name" optionValue="id" [options]="assignToDropdownList"> </p-multiselect>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Follow Up Status</label>
+              <label class="fw-bold d-block mb-1">Follow Up Status</label>
               <p-multiselect [filter]="true" [showClear]="true" [showToggleAll]="true" [display]="'chip'"
                 styleClass="w-full" formControlName="remarks" placeholder="Select Remarks Status" optionLabel="label"
                 optionValue="value" [options]="statusOptions"> </p-multiselect>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Talent Profile Status</label>
-              <p-select styleClass="w-full" formControlName="talent_users" placeholder="Yes/No/Partial"
+              <label class="fw-bold d-block mb-1">Talent Profile Status</label>
+              <p-select styleClass="w-full" formControlName="talent_users" placeholder="Yes/No"
                 optionLabel="label" optionValue="value" [options]="talentUsers"></p-select>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Source Job</label>
+              <label class="fw-bold d-block mb-1">Source Job</label>
               <input formControlName="source_job" type="email" class="form-control" pInputText />
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Introduction Video</label>
+              <label class="fw-bold d-block mb-1">Introduction Video</label>
               <p-select styleClass="w-full" formControlName="intro_video" placeholder="Yes/No" optionLabel="label"
                 optionValue="value" [options]="coBranding"></p-select>
             </div>
           </div>
-          <div class="col-md-3" *ngIf="adminuser">
+          <div class="col-md-3 mb-3" *ngIf="adminuser">
             <div class="form-group">
-              <label>Device Type</label>
+              <label class="fw-bold d-block mb-1">Device Type</label>
               <p-select formControlName="device_type" optionValue="value" optionLabel="label" styleClass="w-full"
                 [options]="deviceTypes" placeholder="Choose Device Type"></p-select>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-3 mb-3">
             <div class="form-group">
-              <label>Hide Demo/Test Account</label>
+              <label class="fw-bold d-block mb-1">Hide Demo/Test Account</label>
               <p-select styleClass="w-full" formControlName="hide_demo_account" placeholder="Yes/No" optionLabel="label"
                 optionValue="value" [options]="hide_demo"></p-select>
             </div>

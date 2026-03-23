@@ -15,11 +15,11 @@
             placeholder="Enter the Talent Name" />
         </div> 
 		<div class="col-12 col-md-3 mb-3">
-			<label class="fw-bold mb-2 d-block">Email</label>
+			<label class="fw-bold mb-2 d-block">Email ID</label>
 			<input pInputText formControlName="email" class="w-100" placeholder="Enter the Email" />
 		</div>
 		<div class="col-12 col-md-3 mb-3">
-			<label class="fw-bold mb-2 d-block">Phone No</label>
+			<label class="fw-bold mb-2 d-block">Phone Number</label>
 			<div class="w-100 position-relative">
 				<ngx-intl-tel-input class="intel-input w-100" [cssClass]="'custom'" [preferredCountries]="['in', 'gb']"
 					[enableAutoCountrySelect]="true" [enablePlaceholder]="true" [searchCountryFlag]="true" [maxLength]="10"
@@ -57,7 +57,7 @@
       <!-- Second Row -->
       <div class="row">
         <div class="col-12 col-md-3 mb-3">
-          <label class="fw-bold mb-2 d-block">Institute Name</label>
+          <label class="fw-bold mb-2 d-block">Institution Name</label>
           <input pInputText formControlName="institute_name" class="w-100"
             placeholder="Search Talent by Institute" />
         </div>
@@ -84,7 +84,7 @@
       <!-- Third Row -->
       <div class="row">
         <div class="col-12 col-md-3 mb-3">
-          <label class="fw-bold mb-2 d-block">Field Of Study </label>
+          <label class="fw-bold mb-2 d-block">Field Of Study (Multi-Select)</label>
           <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="fieldsOfStudy" formControlName="fieldofstudy" placeholder="Select the Field Of Study"
             styleClass="w-100" optionLabel="field_name" optionValue="id" [filter]="true"
             filterBy="field_name"></p-multiselect>
@@ -100,7 +100,7 @@
             placeholder="Select your Career Status" styleClass="w-100" [filter]="true" appendTo="body"></p-multiselect>
         </div>
 		       <div class="col-12 col-md-3 mb-3">
-          <label class="fw-bold mb-2 d-block">Job Title(s) Looking For </label>
+          <label class="fw-bold mb-2 d-block">Job Title(s) Looking For</label>
           <input pInputText formControlName="job_title" class="w-100"
             placeholder="Search Job Title"/>
         </div>
@@ -140,13 +140,13 @@
         </div>
         </div>
         <div class="col-12 col-md-3 mb-3">
-          <label class="fw-bold mb-2 d-block">Languages Known </label>
+          <label class="fw-bold mb-2 d-block">Languages Known (Multi-Select)</label>
           <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="languagelist" formControlName="langauge_id" placeholder="Select the Languages Known"
             styleClass="w-100" optionLabel="language" optionValue="id" [filter]="true" filterBy="language"
             appendTo="body"></p-multiselect>
         </div>
 		        <div class="col-12 col-md-3 mb-3">
-          <label class="fw-bold mb-2 d-block">Interested Industry
+          <label class="fw-bold mb-2 d-block">Interested Industry (Multi-Select)
           </label>
           <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="careerInterests" formControlName="career_interest_id" placeholder="Select the Industry"
             styleClass="w-100" optionLabel="interest" optionValue="id" [filter]="true" filterBy="interest"
@@ -157,7 +157,7 @@
       <!-- Fifth Row -->
       <div class="row">
         <div class="col-12 col-md-3 mb-3">
-          <label class="fw-bold mb-2 d-block">Preferred Work Location(s)
+          <label class="fw-bold mb-2 d-block">Preferred Work Location(s) (Multi-Select)
           </label>
           <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="preferredLocationList" [virtualScroll]="true" [virtualScrollItemSize]="50"
             formControlName="work_location_id" placeholder="Select the Preferred Work Location(s)" styleClass="w-100"
@@ -165,12 +165,12 @@
             filterBy="work_location"></p-multiselect>
         </div>
         <div class="col-12 col-md-3 mb-3">
-          <label class="fw-bold mb-2 d-block">Preferred Employment Type </label>
+          <label class="fw-bold mb-2 d-block">Preferred Employment Type (Multi-Select)</label>
           <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="preferredEmploymentType" formControlName="employment_type"
             placeholder="Select the Preferred Employment Type" styleClass="w-100" appendTo="body"></p-multiselect>
         </div>
         <div class="col-12 col-md-3 mb-3">
-          <label class="fw-bold mb-2 d-block">Preferred Work Type </label>
+          <label class="fw-bold mb-2 d-block">Preferred Work Type (Multi-Select)</label>
           <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="preferredWorkplaceType" formControlName="workplace_type_id"
             placeholder="Select the Preferred Work Type" styleClass="w-100" appendTo="body"></p-multiselect>
         </div>
@@ -286,8 +286,8 @@
 		<th pSortableColumn="is_placed" style="width: 200px;">
           Hired <p-sortIcon field="is_placed"></p-sortIcon>
         </th>
-		<th pSortableColumn="interviewready" style="width: 200px;">
-          Interview Ready <p-sortIcon field="interviewready"></p-sortIcon>
+<th pSortableColumn="interview_ready" style="width: 200px;">
+          Interview Ready <p-sortIcon field="interview_ready"></p-sortIcon>
         </th>
 		<th pSortableColumn="placement" style="width: 200px;">
           Placement <p-sortIcon field="placement"></p-sortIcon>

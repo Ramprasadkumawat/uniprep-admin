@@ -52,4 +52,39 @@
   font-size: 10px;
   white-space: nowrap;
 }
+
+/* Uniform sizing and spacing for filter controls. */
+:host ::ng-deep .filter-uniform {
+  --filter-control-height: 42px;
+}
+
+:host ::ng-deep .filter-uniform > .row {
+  row-gap: 12px;
+}
+
+:host ::ng-deep .filter-uniform .form-control,
+:host ::ng-deep .filter-uniform .p-inputtext,
+:host ::ng-deep .filter-uniform .p-select,
+:host ::ng-deep .filter-uniform .p-multiselect,
+:host ::ng-deep .filter-uniform .p-datepicker input {
+  min-height: var(--filter-control-height);
+  height: var(--filter-control-height);
+}
+
+:host ::ng-deep .filter-uniform .p-select-label,
+:host ::ng-deep .filter-uniform .p-multiselect-label {
+  line-height: calc(var(--filter-control-height) - 2px);
+}
+
+/* Make datepicker fields (including passing year) use full width. */
+:host ::ng-deep .filter-uniform .p-datepicker,
+:host ::ng-deep .filter-uniform .p-datepicker .p-inputtext {
+  width: 100%;
+}
+
+:host ::ng-deep .filter-uniform ngx-intl-tel-input input,
+:host ::ng-deep .filter-uniform ngx-intl-tel-input .iti input {
+  min-height: var(--filter-control-height);
+  height: var(--filter-control-height);
+}
   
