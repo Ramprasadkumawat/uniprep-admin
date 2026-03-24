@@ -61,7 +61,8 @@ export class VerifyCompanyAccountComponent implements OnInit {
   addRemarksDialog: boolean = false;
   remarksForm: FormGroup;
   getRemarksList: any[] = [];
-  sourceNames: any[] = [];
+  partnerSourceNameOptions: { label: string; value: string }[] = [];
+  sourceNameOptions: { label: string; value: string }[] = [];
   sourceTypes = [
     {label: 'Direct',value: 'Direct'},
     {label: 'Partner',value: 'Partner'}
@@ -170,12 +171,36 @@ export class VerifyCompanyAccountComponent implements OnInit {
   loadSourceNames(){
       this.talentConnectService.getSourceNames().subscribe({
           next: (results) => {
-              this.sourceNames = results?.data || [];
+              const sourceNames = results?.data || [];
+              this.partnerSourceNameOptions = sourceNames.map((item: any) => ({
+                label: item?.name || item?.source_name || '',
+                value: item?.id || item?.name || item?.source_name || '',
+              }));
+              this.onSourceTypeChange(this.verifyForm.get('source_type')?.value || '');
           },error: (err) => {
               console.error('Error loading Source Names:',err);
               this.toaster.add({severity: "error",summary: "Error",detail: "Failed to load Source Names"});
           }
       });
+  }
+
+  onSourceTypeChange(sourceType: string) {
+    const sourceNameControl = this.verifyForm.get('source_name');
+    const currentSourceName = sourceNameControl?.value;
+
+    if (sourceType === 'Direct') {
+      this.sourceNameOptions = [{ label: 'Uniprep', value: 'Uniprep' }];
+      sourceNameControl?.setValue('Uniprep');
+      sourceNameControl?.disable();
+      return;
+    }
+
+    sourceNameControl?.enable();
+    this.sourceNameOptions = [...this.partnerSourceNameOptions];
+    const isCurrentInList = this.sourceNameOptions.some((item) => item.value === currentSourceName);
+    if (!isCurrentInList) {
+      sourceNameControl?.setValue('');
+    }
   }
 
   getEmployerList(value: any) {
@@ -380,6 +405,7 @@ export class VerifyCompanyAccountComponent implements OnInit {
       source_name: employer.source_name,
       comments: employer.comments,
     })
+    this.onSourceTypeChange(employer.source_type ?? '');
     this.selectedInfo = employer;
     this.submittedVerify = false;
     this.showModal = true;

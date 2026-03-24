@@ -114,7 +114,7 @@
                     <div class="col-md-6">
                         <label class="form-label-required">Email ID</label>
                         <input pInputText class="w-100"
-                            [value]="companyForm.get('email')?.value || companyDataToEdit?.email || companyDataToEdit?.user_email || (users && users.length ? users[0]?.email : '') || ''"
+                            [value]="companyDataToEdit?.user?.email || companyDataToEdit?.employer_email || companyForm.get('email')?.value || companyDataToEdit?.email || companyDataToEdit?.user_email || (users && users.length ? users[0]?.email : '') || ''"
                             readonly />
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label-required">Last Login</label>
-                        <input pInputText class="w-100" [value]="companyDataToEdit?.last_login || '-'" readonly />
+                        <input pInputText class="w-100" [value]="(companyDataToEdit?.logintime || companyDataToEdit?.last_login) ? ((companyDataToEdit?.logintime || companyDataToEdit?.last_login) | date:'h:mm a dd/MM/yyyy') : 'Not yet logged in'" readonly />
                     </div>
                 </div>
             </div>

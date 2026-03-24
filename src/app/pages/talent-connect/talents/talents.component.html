@@ -108,7 +108,7 @@
 
       <!-- Fourth Row -->
       <div class="row">
-        <div class="col-12 col-md-6 mb-3">
+        <div class="col-12 col-md-3 mb-3">
         <label class="fw-bold mb-2 d-block">Salary Expected</label>
         <div class="row g-2 align-items-center">
           <div class="col-4">
@@ -152,10 +152,6 @@
             styleClass="w-100" optionLabel="interest" optionValue="id" [filter]="true" filterBy="interest"
             appendTo="body"></p-multiselect>
         </div>
-      </div>
-
-      <!-- Fifth Row -->
-      <div class="row">
         <div class="col-12 col-md-3 mb-3">
           <label class="fw-bold mb-2 d-block">Preferred Work Location(s) (Multi-Select)
           </label>
@@ -164,6 +160,10 @@
             optionLabel="work_location" optionValue="id" appendTo="body" [filter]="true"
             filterBy="work_location"></p-multiselect>
         </div>
+      </div>
+
+      <!-- Fifth Row -->
+      <div class="row">
         <div class="col-12 col-md-3 mb-3">
           <label class="fw-bold mb-2 d-block">Preferred Employment Type (Multi-Select)</label>
           <p-multiselect [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="preferredEmploymentType" formControlName="employment_type"
@@ -177,20 +177,25 @@
 		        <div class="col-12 col-md-3 mb-3">
           <label class="fw-bold mb-2 d-block">Profile Completion</label>
           <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="profileCompletionOption" formControlName="profile_completion"
-            placeholder="Select the Completion Range" optionLabel="label" optionValue="value"styleClass="w-100" appendTo="body"></p-select>
+            placeholder="Yes/No" optionLabel="label" optionValue="value"styleClass="w-100" appendTo="body"></p-select>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Employer Seen</label>
+          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="['Yes', 'No']" formControlName="employer_seen" placeholder="Yes/No"
+            styleClass="w-100" appendTo="body"></p-select>
         </div>
       </div>
 
       <div class="row">
         <div class="col-12 col-md-3 mb-3">
-          <label class="fw-bold mb-2 d-block">Willingness to Relocate?</label>
-          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="['Yes', 'No']" formControlName="relocate" placeholder="Choose Yes/No"
+          <label class="fw-bold mb-2 d-block">Hired</label>
+          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="['Yes', 'No', 'Approval Pending']" formControlName="hired" placeholder="Yes/No/Approval Pending"
             styleClass="w-100" appendTo="body"></p-select>
         </div>
         <div class="col-12 col-md-3 mb-3">
-          <label class="fw-bold mb-2 d-block">Profile Verification Status</label>
-          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="verifiedOptions" formControlName="verification_status"
-            placeholder="Verified, Not Verified" styleClass="w-100" appendTo="body"></p-select>
+          <label class="fw-bold mb-2 d-block">Interview Ready</label>
+          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="['Yes', 'No']" formControlName="interview_ready" placeholder="Yes/No"
+            styleClass="w-100" appendTo="body"></p-select>
         </div>
         <div class="col-12 col-md-3 mb-3">
           <div class="form-group">
@@ -198,6 +203,19 @@
             <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" styleClass="w-full" formControlName="introduction_video" placeholder="Yes/No"
               optionLabel="label" optionValue="value" [options]="introductionVideo"></p-select>
           </div>
+        </div>
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Willingness to Relocate?</label>
+          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="['Yes', 'No']" formControlName="relocate" placeholder="Choose Yes/No"
+            styleClass="w-100" appendTo="body"></p-select>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-3 mb-3">
+          <label class="fw-bold mb-2 d-block">Profile Verification Status</label>
+          <p-select [virtualScroll]="true" [virtualScrollItemSize]="50" [options]="verifiedOptions" formControlName="verification_status"
+            placeholder="Verified, Not Verified" styleClass="w-100" appendTo="body"></p-select>
         </div>
       </div>
 

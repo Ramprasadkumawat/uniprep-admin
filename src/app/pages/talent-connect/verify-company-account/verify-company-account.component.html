@@ -307,16 +307,16 @@
       <div class="row">
         <div class="col-12 mb-4">
             <label class="mb-1 font-medium">Source Type</label>
-            <p-select formControlName="source_type" class="w-100" placeholder="Select Source Type" [options]="sourceTypes" optionLabel="label" optionValue="value" appendTo="body"></p-select>
-            <div *ngIf="submittedVerify && vF.comments.errors" class="text-danger text-xs">
-              <div *ngIf="vF.comments.errors.required">Required</div>
+            <p-select formControlName="source_type" class="w-100" placeholder="Select Source Type" [options]="sourceTypes" optionLabel="label" optionValue="value" appendTo="body" (onChange)="onSourceTypeChange($event.value)"></p-select>
+            <div *ngIf="submittedVerify && vF.source_type.errors" class="text-danger text-xs">
+              <div *ngIf="vF.source_type.errors.required">Required</div>
             </div>
         </div>
         <div class="col-12 mb-4">
             <label class="mb-1 font-medium">Source Name</label>
-            <p-select formControlName="source_name" class="w-100" placeholder="Select Source Name" [options]="sourceNames" optionLabel="name" optionValue="id" appendTo="body"></p-select>
-            <div *ngIf="submittedVerify && vF.comments.errors" class="text-danger text-xs">
-              <div *ngIf="vF.comments.errors.required">Required</div>
+            <p-select formControlName="source_name" class="w-100" placeholder="Select Source Name" [options]="sourceNameOptions" optionLabel="label" optionValue="value" appendTo="body" [disabled]="verifyForm.get('source_type')?.value === 'Direct'"></p-select>
+            <div *ngIf="submittedVerify && vF.source_name.errors" class="text-danger text-xs">
+              <div *ngIf="vF.source_name.errors.required">Required</div>
             </div>
         </div>
         <div class="col-12 mb-4">
