@@ -4,7 +4,7 @@ import { SubscriberseditprofileComponent } from './subscriberseditprofile.compon
 
 describe('SubscriberseditprofileComponent', () => {
   let component: SubscriberseditprofileComponent;
-  let fixture: ComponentFixture<SubscriberseditprofileComponent>;
+  let fixture: ComponentFixture<SubscriberseditprofileComponent>; 
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

@@ -1,12 +1,6 @@
 /.angular/cache
 node_modules
 /dist/
-package.json
-package-lock.json
-/.idea
-/.angular
-/src/environments/
-package-lock.json
 .DS_Store
-/.vscode
-.vscode/settings.json
+.DS_Store
+package-lock.json

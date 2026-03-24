@@ -7,7 +7,7 @@ import {
   FormsModule,
 } from "@angular/forms";
 import { AccordionModule } from "primeng/accordion";
-import { ConfirmationService, MessageService, SharedModule} from "primeng/api";
+import { ConfirmationService, MessageService, SharedModule } from "primeng/api";
 import { ButtonModule } from "primeng/button";
 import { ConfirmPopupModule } from "primeng/confirmpopup";
 import { DatePickerModule } from "primeng/datepicker";
@@ -19,8 +19,16 @@ import { TableModule } from "primeng/table";
 import { TagModule } from "primeng/tag";
 import { TextareaModule } from "primeng/textarea";
 import { JobsService } from "./jobs.service";
+import { CompaniesService } from "../companies/companies.service";
 import { MultiSelectModule } from "primeng/multiselect";
-import { catchError, finalize, of, tap } from "rxjs";
+import {
+  catchError,
+  distinctUntilChanged,
+  finalize,
+  map,
+  of,
+  tap,
+} from "rxjs";
 import { PopoverModule } from "primeng/popover";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Tooltip } from "primeng/tooltip";
@@ -46,7 +54,9 @@ import { AddJobComponent } from "./add-job/add-job.component";
     MultiSelectModule,
     PopoverModule,
     Tooltip,
-    AddJobComponent, SharedModule],
+    AddJobComponent,
+    SharedModule,
+  ],
   templateUrl: "./jobs.component.html",
   styleUrl: "./jobs.component.scss",
   providers: [ConfirmationService],
@@ -73,7 +83,10 @@ export class JobsComponent {
     { id: "Yes", value: "Yes" },
     { id: "No", value: "No" },
   ];
-  company: any[] = [];
+  /** Companies for job filter (from companies-list-for-admin) */
+  companyOptions: any[] = [];
+  /** True while companies API is loading (shows loader on multiselect) */
+  companyOptionsLoading = true;
   languageProficiency: any[] = [];
   currency: any[] = [];
   status: any[] = [];
@@ -145,6 +158,7 @@ export class JobsComponent {
   constructor(
     private fb: FormBuilder,
     private jobsService: JobsService,
+    private companiesService: CompaniesService,
     private toast: MessageService,
     private router: Router,
     private route: ActivatedRoute,
@@ -153,10 +167,31 @@ export class JobsComponent {
   ngOnInit(): void {
     this.getDropdowns();
     this.initializeFilterForm();
-    this.route.queryParams.subscribe((params) => {
-      this.companyId = params["company_id"];
-      this.getJobs(this.companyId);
-    });
+    // Do not call getJobs() here: p-table [lazy]="true" fires (onLazyLoad) → onPageChange()
+    // which already posts to company-job-list-foradmin (duplicate request if we also getJobs).
+    let skipNextReloadBecauseLazyTableWillFetch = true;
+    this.route.queryParams
+      .pipe(
+        map((p) => p["company_id"] ?? null),
+        distinctUntilChanged(),
+      )
+      .subscribe((companyIdParam) => {
+        this.companyId = companyIdParam;
+        if (skipNextReloadBecauseLazyTableWillFetch) {
+          skipNextReloadBecauseLazyTableWillFetch = false;
+          return;
+        }
+        this.currentPage = 1;
+        this.currentFirst = 0;
+        queueMicrotask(() =>
+          this.onPageChange({
+            first: 0,
+            rows: this.pageSize,
+            sortField: this.currentSortField,
+            sortOrder: this.currentSortOrder ?? 1,
+          }),
+        );
+      });
   }
 
   initializeFilterForm(): void {
@@ -166,7 +201,7 @@ export class JobsComponent {
       createdDateFrom: [""],
       createdDateTo: [""],
       hiringType: [""],
-      company: [null],
+      company: [[] as number[]],
       workLocation: [""],
       salaryOffered: [],
       salaryOfferedFrom: [],
@@ -227,9 +262,46 @@ export class JobsComponent {
       this.institute = res.institutes;
     });
 
-    this.jobsService.getCompanies().subscribe((res) => {
-      this.company = res.data;
-    });
+    this.companyOptionsLoading = true;
+    this.companiesService
+      .getCompanyList({
+        page: 1,
+        perpage: 5000,
+        is_admin: true,
+      })
+      .pipe(
+        finalize(() => {
+          this.companyOptionsLoading = false;
+        }),
+      )
+      .subscribe({
+        next: (res) => {
+          const rows = res?.data?.companies || [];
+          this.companyOptions = rows.map((c: any) => ({
+            ...c,
+            id: c.id ?? c.company_id,
+          }));
+          const qid = this.route.snapshot.queryParamMap.get("company_id");
+          if (qid && this.jobFilterForm) {
+            const id = Number(qid);
+            if (
+              this.companyOptions.some(
+                (c: any) => Number(c.id) === id || Number(c.company_id) === id,
+              )
+            ) {
+              this.jobFilterForm.patchValue({ company: [id] });
+            }
+          }
+        },
+        error: (err) => {
+          console.error("Error loading companies for filter:", err);
+          this.toast.add({
+            severity: "error",
+            summary: "Error",
+            detail: "Failed to load company list for filter",
+          });
+        },
+      });
 
     this.jobsService.getDropdownData().subscribe((response: any) => {
       this.status = response?.jobstages;
@@ -250,6 +322,37 @@ export class JobsComponent {
     return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
   }
 
+  /**
+   * Multiselect stores company ids; job list API may use company_name and/or company_ids.
+   */
+  private buildCompanyFilterPart(f: any): {
+    company_name: string;
+    company_ids: number[];
+  } {
+    const raw = f.company;
+    const ids: number[] = Array.isArray(raw)
+      ? raw
+          .map((x: any) => (x != null && x !== "" ? Number(x) : Number.NaN))
+          .filter((n: number) => !Number.isNaN(n))
+      : [];
+    if (!ids.length) {
+      return { company_name: "", company_ids: [] };
+    }
+    const names = ids
+      .map((id) =>
+        this.companyOptions.find(
+          (c: any) => Number(c.id) === id || Number(c.company_id) === id,
+        ),
+      )
+      .filter(Boolean)
+      .map((c: any) => c.company_name)
+      .filter(Boolean);
+    return {
+      company_name: names.join(","),
+      company_ids: ids,
+    };
+  }
+
   getJobs(companyId?: any) {
     const params = {
       page: this.currentPage,
@@ -263,17 +366,18 @@ export class JobsComponent {
     }
 
     this.isLoading = true;
-    this.jobsService.getJobs(params).pipe(
-      finalize(() => this.isLoading = false)
-    ).subscribe((res) => {
-      this.jobs = res.data.jobs;
-      this.totalJobs = res.data.totalactivejobs;
-      this.totalCompanies = res.data.totalcompanies;
-      this.totalVacancies = res.data.totalvacancies;
-      this.totalJobsExhausted = res.data.totalexhaustedjobs;
-      this.updateSummaryCards(res.data);
-      this.applyTabFilter();
-    });
+    this.jobsService
+      .getJobs(params)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe((res) => {
+        this.jobs = res.data.jobs;
+        this.totalJobs = res.data.totalactivejobs;
+        this.totalCompanies = res.data.totalcompanies;
+        this.totalVacancies = res.data.totalvacancies;
+        this.totalJobsExhausted = res.data.totalexhaustedjobs;
+        this.updateSummaryCards(res.data);
+        this.applyTabFilter();
+      });
   }
 
   onEditModeChanged(isViewMode: boolean) {
@@ -347,7 +451,7 @@ export class JobsComponent {
     this.jobsService
       .showJob(req)
       .pipe(
-        finalize(() => this.isLoading = false),
+        finalize(() => (this.isLoading = false)),
         tap((response: any) => {
           this.onPopOverTriggeredJobId = response.data.job[0].uuid;
           this.jobData = response.data.job[0];
@@ -415,6 +519,7 @@ export class JobsComponent {
 
   applyFilters() {
     const f = this.jobFilterForm.value;
+    const cf = this.buildCompanyFilterPart(f);
     const params = {
       page: this.currentPage,
       perpage: this.pageSize,
@@ -425,7 +530,9 @@ export class JobsComponent {
       created_from: this.parseDate(f.createdDateFrom),
       created_to: this.parseDate(f.createdDateTo),
       created_by: f.jobCreatedBy || "",
-      company_name: f.company || "",
+      company_id: cf.company_ids.length ? null : this.companyId,
+      company_ids: cf.company_ids,
+      company_name: cf.company_name || "",
       hiring_type: f.hiringType || "",
 
       job_start_from: this.parseDate(f.jobStartDateFrom),
@@ -462,17 +569,18 @@ export class JobsComponent {
     };
 
     this.isLoading = true;
-    this.jobsService.getJobs(params).pipe(
-      finalize(() => this.isLoading = false)
-    ).subscribe((res) => {
-      this.jobs = res.data.jobs;
-      this.totalJobs = res.data.totalactivejobs;
-      this.totalCompanies = res.data.totalcompanies;
-      this.totalVacancies = res.data.totalvacancies;
-      this.totalJobsExhausted = res.data.totalexhaustedjobs;
-      this.updateSummaryCards(res.data);
-      this.applyTabFilter();
-    });
+    this.jobsService
+      .getJobs(params)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe((res) => {
+        this.jobs = res.data.jobs;
+        this.totalJobs = res.data.totalactivejobs;
+        this.totalCompanies = res.data.totalcompanies;
+        this.totalVacancies = res.data.totalvacancies;
+        this.totalJobsExhausted = res.data.totalexhaustedjobs;
+        this.updateSummaryCards(res.data);
+        this.applyTabFilter();
+      });
   }
 
   resetFilters() {
@@ -542,6 +650,7 @@ export class JobsComponent {
 
   exportJobs() {
     const f = this.jobFilterForm.value;
+    const cf = this.buildCompanyFilterPart(f);
 
     const filterData: any = {
       page: this.currentPage,
@@ -555,7 +664,9 @@ export class JobsComponent {
       created_to: this.parseDate(f.createdDateTo),
 
       created_by: f.jobCreatedBy || "",
-      company_name: f.company || "",
+      company_id: cf.company_ids.length ? null : this.companyId,
+      company_ids: cf.company_ids,
+      company_name: cf.company_name || "",
       hiring_type: f.hiringType || "",
 
       job_start_from: this.parseDate(f.jobStartDateFrom),
@@ -729,11 +840,12 @@ export class JobsComponent {
     this.currentPage = event.first / event.rows + 1;
     this.pageSize = event.rows;
     const f = this.jobFilterForm.value;
+    const cf = this.buildCompanyFilterPart(f);
     const params = {
       page: this.currentPage,
       perpage: this.pageSize,
       is_admin: true,
-      company_id: this.companyId,
+      company_id: cf.company_ids.length ? null : this.companyId,
 
       job_id: f.jobId || "",
       position_title: f.jobTitle || "",
@@ -741,7 +853,8 @@ export class JobsComponent {
       created_from: this.parseDate(f.createdDateFrom),
       created_to: this.parseDate(f.createdDateTo),
       created_by: f.jobCreatedBy || "",
-      company_name: f.company || "",
+      company_ids: cf.company_ids,
+      company_name: cf.company_name || "",
       hiring_type: f.hiringType || "",
 
       job_start_from: this.parseDate(f.jobStartDateFrom),
@@ -777,41 +890,42 @@ export class JobsComponent {
       talent_applied: f.application || "",
     };
     this.isLoading = true;
-    this.jobsService.getJobs(params).pipe(
-      finalize(() => this.isLoading = false)
-    ).subscribe((res) => {
-      this.jobs = res.data.jobs;
-      if (this.currentSortField) {
-        this.jobs.sort((a, b) => {
-          let aValue = a[this.currentSortField!];
-          let bValue = b[this.currentSortField!];
+    this.jobsService
+      .getJobs(params)
+      .pipe(finalize(() => (this.isLoading = false)))
+      .subscribe((res) => {
+        this.jobs = res.data.jobs;
+        if (this.currentSortField) {
+          this.jobs.sort((a, b) => {
+            let aValue = a[this.currentSortField!];
+            let bValue = b[this.currentSortField!];
 
-          if (aValue == null) aValue = "";
-          if (bValue == null) bValue = "";
+            if (aValue == null) aValue = "";
+            if (bValue == null) bValue = "";
 
-          if (typeof aValue === "string") aValue = aValue.toLowerCase();
-          if (typeof bValue === "string") bValue = bValue.toLowerCase();
+            if (typeof aValue === "string") aValue = aValue.toLowerCase();
+            if (typeof bValue === "string") bValue = bValue.toLowerCase();
 
-          let result = 0;
-          if (aValue < bValue) result = -1;
-          else if (aValue > bValue) result = 1;
+            let result = 0;
+            if (aValue < bValue) result = -1;
+            else if (aValue > bValue) result = 1;
 
-          return this.currentSortOrder * result;
-        });
-      }
-      this.filteredJobs = [...this.jobs];
-      this.totalJobs = res.data.totalactivejobs;
-      this.totalCompanies = res.data.totalcompanies;
-      this.totalVacancies = res.data.totalvacancies;
-      this.totalJobsExhausted = res.data.totalexhaustedjobs;
-      this.updateSummaryCards(res.data);
-      this.applyTabFilter();
-      if (isSortToggle && this.table) {
-        setTimeout(() => {
-          this.table.first = this.currentFirst;
-        }, 0);
-      }
-    });
+            return this.currentSortOrder * result;
+          });
+        }
+        this.filteredJobs = [...this.jobs];
+        this.totalJobs = res.data.totalactivejobs;
+        this.totalCompanies = res.data.totalcompanies;
+        this.totalVacancies = res.data.totalvacancies;
+        this.totalJobsExhausted = res.data.totalexhaustedjobs;
+        this.updateSummaryCards(res.data);
+        this.applyTabFilter();
+        if (isSortToggle && this.table) {
+          setTimeout(() => {
+            this.table.first = this.currentFirst;
+          }, 0);
+        }
+      });
   }
 
   goToViewTalent(jobId: number) {
@@ -827,8 +941,8 @@ export class JobsComponent {
   }
 
   goToViewTalentApplicants(appliedJobId: number) {
-    this.router.navigate(['/subscribers'], {
-      queryParams: { applied_jobid: appliedJobId }
+    this.router.navigate(["/subscribers"], {
+      queryParams: { applied_jobid: appliedJobId },
     });
   }
 }

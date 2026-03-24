@@ -1005,12 +1005,29 @@ export class SubscriberseditprofileComponent implements OnInit {
         }
         this.subscriberService.downloadUserDocument(payload).subscribe({
             next: (res: any) => {
-                const link = res?.data?.link || res?.link || res?.data?.download_link || res?.download_link || this.getDocumentLink(doc);
-                if(!link){
-                    this.toast.add({severity: "warn",summary: "Warning",detail: "Download link not available"});
+                const fileBlob = res?.body as Blob;
+                if(fileBlob && fileBlob.size > 0){
+                    const contentDisposition = res?.headers?.get("content-disposition");
+                    const serverFileName = this.getFileNameFromContentDisposition(contentDisposition);
+                    const fallbackName = (doc?.name || "document").toString();
+                    const fileName = serverFileName || fallbackName;
+                    const objectUrl = URL.createObjectURL(fileBlob);
+                    const anchor = document.createElement("a");
+                    anchor.href = objectUrl;
+                    anchor.download = fileName;
+                    anchor.target = "_blank";
+                    document.body.appendChild(anchor);
+                    anchor.click();
+                    document.body.removeChild(anchor);
+                    URL.revokeObjectURL(objectUrl);
                     return;
                 }
-                window.open(link,'_blank');
+                const link = this.getDocumentLink(doc);
+                if(link){
+                    window.open(link,'_blank');
+                    return;
+                }
+                this.toast.add({severity: "warn",summary: "Warning",detail: "Download data not available"});
             },
             error: (err) => {
                 if(err?.status === 404){
@@ -1023,6 +1040,20 @@ export class SubscriberseditprofileComponent implements OnInit {
                 this.toast.add({severity: "error",summary: "Error",detail: err?.error?.message || "Failed to download document"});
             },
         });
+    }
+    private getFileNameFromContentDisposition(contentDisposition: string | null): string {
+        if(!contentDisposition){
+            return "";
+        }
+        const utf8FileNameMatch = contentDisposition.match(/filename\*=UTF-8''([^;]+)/i);
+        if(utf8FileNameMatch?.[1]){
+            return decodeURIComponent(utf8FileNameMatch[1].replace(/["']/g,"")).trim();
+        }
+        const fileNameMatch = contentDisposition.match(/filename="?([^";]+)"?/i);
+        if(fileNameMatch?.[1]){
+            return fileNameMatch[1].trim();
+        }
+        return "";
     }
     renameDocument(doc: any){
         const newName = prompt("Enter new file name",doc?.name || '');
@@ -1095,7 +1126,7 @@ export class SubscriberseditprofileComponent implements OnInit {
             return;
         }
         this.subscriberService.deleteUserDocument(payload).subscribe({
-            next: (res: any) => {
+            next: (res: any) => { 
                 this.toast.add({severity: "success",summary: "Deleted",detail: res?.message || "Document deleted"});
                 this.getUserDocuments();
             },
